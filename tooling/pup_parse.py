@@ -17,7 +17,8 @@ VERIFIED OUTER FORMAT
 
   Entry record (0x30 bytes):
     +0x00  16   name, NUL-padded ASCII (e.g. "PS5UPDATE1.PUP")
-    +0x10  32   fields, format not yet understood
+    +0x10  16   unknown — all zero in every sample taken
+    +0x20  16   fields, format not yet understood
 
 The body (>= 0x200) is encrypted. There is no plaintext ELF and no nested SLB2 in
 the outer container — the inner PUP is not reachable without console-side keys.
@@ -105,14 +106,16 @@ def parse_entries(buf, hdr):
         base = HEADER_FIXED + i * ENTRY_SIZE
         raw = buf[base : base + NAME_LEN]
         name = raw.split(b"\x00")[0].decode("ascii", "replace")
-        fields = buf[base + NAME_LEN : base + ENTRY_SIZE]
+        unknown = buf[base + 0x10 : base + 0x20]
+        fields = buf[base + 0x20 : base + ENTRY_SIZE]
         u32a, u32b = struct.unpack_from("<II", fields, 0)
         out.append(
             {
                 "index": i,
                 "name": name,
-                "f_0x10_u32a": u32a,
-                "f_0x10_u32b": u32b,
+                "f_0x20_u32a": u32a,
+                "f_0x20_u32b": u32b,
+                "unknown_0x10": unknown.hex(" "),
                 "fields_hex": fields.hex(" "),
             }
         )
@@ -140,12 +143,12 @@ def report(hdr, entries, size=None, url=None):
 
     print()
     print("== entry records (outer: these are FILENAMES, not component IDs) ==")
-    print(f"  {'idx':>3}  {'name':<20} {'f+0x10 u32a':>14} {'u32b':>14}")
+    print(f"  {'idx':>3}  {'name':<20} {'f+0x20 u32a':>14} {'u32b':>14}")
     print(f"  {'-'*3}  {'-'*20} {'-'*14} {'-'*14}")
     for e in entries:
-        print(f"  {e['index']:>3}  {e['name']:<20} {e['f_0x10_u32a']:>14,} {e['f_0x10_u32b']:>14,}")
+        print(f"  {e['index']:>3}  {e['name']:<20} {e['f_0x20_u32a']:>14,} {e['f_0x20_u32b']:>14,}")
     for e in entries:
-        if e["f_0x10_u32a"]:
+        if e["f_0x20_u32a"] or e["f_0x20_u32b"]:
             print(f"\n  entry[{e['index']}] field bytes: {e['fields_hex']}")
 
     print()

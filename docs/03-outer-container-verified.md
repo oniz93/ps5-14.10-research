@@ -70,7 +70,9 @@ path changes each release, so scrape rather than hard-code.
 - **Entry record = 0x30 bytes**, confirmed by the two filenames landing 0x30 apart
   (0x30 and 0x60):
   - `+0x00` name[16], NUL-padded ASCII
-  - `+0x10` 32 bytes of fields, format unknown (see open questions)
+  - `+0x10` 16 bytes — **all zero in every sample taken**, purpose unknown
+  - `+0x20` 16 bytes of fields, format unknown (see open questions).
+    Only recovery entry[0] is non-zero: `002597c8` then `0962fab5`, then 8 zero bytes.
 
 ## Finding 1 — the container is two-level, and it carries *filenames*
 
