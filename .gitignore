@@ -1,0 +1,25 @@
+# Firmware images and extracted data — never commit, never leave this machine
+dumps/
+out/
+*.PUP
+*.pup
+*.PUP.dec
+*.dec
+*.bin
+*.img
+*.elf
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Ghidra project files
+*.gpr
+*.rep/
