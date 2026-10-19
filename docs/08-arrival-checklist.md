@@ -4,11 +4,17 @@ Do these in order. The first two cost nothing and one of them can save the conso
 
 ## 0. Before anything arrives
 
+- [ ] **Read the model number off the bottom sticker — no disassembly needed.**
+      `CFI-10xx` = 2020 launch, `CFI-11xx` = 2021, `CFI-12xx` = 2022. All of these are
+      the original Phat, which is the board the `ps5-uart` notes were written against.
+      A Slim (`CFI-20xx`) or Pro would be a different board and a different risk.
 - [ ] **Identify the mainboard revision.** Look for an `EDM-0xx` marking on the board.
       The documented pinout is **EDM-010**. The repo notes the salina PMIC differs
-      between EDM-010 (`rt5126`) and EDM-020 (`da9081`) — so a later revision is a
-      different board with a possibly different header. **Do not probe until this is
-      known.** A 14.x-era console may well be later than EDM-010.
+      between EDM-010 (`rt5126`) and EDM-020 (`da9081`) — both are Phat boards, so a
+      2022 unit may be either. **Record which one before probing.**
+- [ ] **Confirm the 24-pin header is actually populated** on your revision, and note
+      whether the duplicate near the BT/Wi-Fi module is reachable earlier in the
+      teardown (see `notes/emc_header_dupe_near_wifi.jpg`).
 - [ ] **Decide: is this console sacrificial?** If yes, everything below is lower
       stakes. If you want to keep a 14.x jailbreak option open, stop before any
       operation that can put the EMC into an unknown state.
