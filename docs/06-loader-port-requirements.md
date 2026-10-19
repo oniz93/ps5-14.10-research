@@ -108,10 +108,16 @@ public research changes that.**
 
 ## The two ways to actually get moving
 
-**A. Hardware, on the console you own.** EMC UART (`symbrkrs/ps5-uart` + RP2040) →
-EMC shell → NOR dump → empirical memory map. This works today, needs no jailbreak,
-and is the only self-service route to the numbers in section 7. It also produces the
-one thing this project cannot otherwise obtain: ground truth about your own hardware.
+**A. Hardware, on a console ≤ 5.02 firmware.** EMC UART (`symbrkrs/ps5-uart` + RP2040)
+→ EMC shell → NAND dump → empirical memory map.
+
+**This does not work on 14.x, or on anything past 5.02.** See `09-uart-firmware-gate.md`.
+The `emc.unlock()` step is an overflow in the EMC's UCMD parser, and the tool ships
+shellcode for exactly four EMC firmware versions, the newest being `E1E 0001 0008 0002
+1B03` (system FW 5.02). On any newer console the tool returns `kFwConstsVersionUnknown`
+and there is nothing to unlock.
+
+So this route requires buying a ≤5.02 console, not using the one you have.
 
 **B. Buy a second console on ≤7.61.** `ps5-linux` fully supports 3.00–7.61 with
 HDMI, M.2, USB, BD, Bluetooth and Ethernet. If the goal is to *do the work*, that is

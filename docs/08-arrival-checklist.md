@@ -4,6 +4,9 @@ Do these in order. The first two cost nothing and one of them can save the conso
 
 ## 0. Before anything arrives
 
+- [ ] **Read `09-uart-firmware-gate.md`.** On FW 14.10 the documented unlock flow
+      cannot run: there is no shellcode entry for your EMC firmware version. Decide
+      what you're actually attempting before the case comes off.
 - [ ] **Read the model number off the bottom sticker — no disassembly needed.**
       `CFI-10xx` = 2020 launch, `CFI-11xx` = 2021, `CFI-12xx` = 2022. All of these are
       the original Phat, which is the board the `ps5-uart` notes were written against.

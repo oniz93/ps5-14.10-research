@@ -1,5 +1,10 @@
 # ps5-uart: hardware requirements and what the notes already contain
 
+> **⚠ FIRMWARE GATE — read `09-uart-firmware-gate.md` first.** The `emc.unlock()`
+> step only works on EMC firmware with known shellcode, newest being system **FW 5.02**.
+> On a 14.x console it fails with `kFwConstsVersionUnknown`. The pinout and wiring
+> below are still correct — the *exploit* is what's gated, not the cable.
+
 From `symbrkrs/ps5-uart`. Two halves that meet at one cable.
 
 ## Board requirements
