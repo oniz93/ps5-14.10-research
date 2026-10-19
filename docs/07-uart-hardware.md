@@ -13,7 +13,13 @@ From `symbrkrs/ps5-uart`. Two halves that meet at one cable.
 | **3.3 V logic, common GND** | console header is 3.3 V |
 | 2 MB flash | stock Pico; firmware is small |
 
-**Do not buy a Pico 2 / RP2350.** The build targets RP2040 + Pico SDK with PIO.
+**Do not buy a Pico 2 or Pico 2 W (RP2350).** Three specific reasons, strongest first:
+
+1. **The board target is hard-coded.** `uart/CMakeLists.txt` contains `set(PICO_BOARD "pico")` — an RP2040 family ID. An RP2350 board will reject that UF2 outright. Fixable by editing one line and rebuilding, but you are then off the author's tested path.
+2. **`pio_ = pio0;` is hard-coded** (`ps5_uart.cpp:1023`). On W boards the CYW43 wireless driver takes a PIO block (prefers PIO1, falls back to PIO0). Not linked here, so probably survivable — but it's a variable you don't need.
+3. **RP2350 erratum E9** — GPIO inputs can latch at ~2 V and internal pull-downs are unreliable. The usual workaround is to enable the input only while reading, but **PIO cannot control `GPIO.IE`**, so on PIO-driven pins the only mitigation is an external ≤8.2 kΩ pull-down. This firmware runs PIO UART on six pins and reads `emc reset#` for liveness. Fixed in RP2350 A4 stepping, so recent boards may not exhibit it.
+
+**Buy a plain Pico (RP2040).** "Pico H" if you want headers pre-soldered. Pico W is still RP2040 and would most likely work, but there is no reason to take the extra variable.
 
 ### Wiring (physical pin numbers on a Pico)
 
