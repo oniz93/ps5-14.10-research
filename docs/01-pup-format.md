@@ -1,5 +1,13 @@
 # PUP / SLB2 / SELF format reference
 
+> **⚠ VERIFIED CORRECTION (2026-10-19).** This document describes the layout as
+> published by the community for a 5.50 Update PUP. We probed live 2026 firmware
+> ourselves and the **outer container does not match** — it is a two-level wrapper
+> carrying *filenames* (`PS5UPDATE1.PUP`, `PS5UPDATE2.PUP`), not a 95-entry component
+> table. See **`03-outer-container-verified.md`** for the raw bytes and the corrected
+> outer-format fields. Treat everything below as describing the *inner* PUP level,
+> still unverified.
+
 Everything below is documented for the **5.50 Update PUP** unless marked otherwise.
 Treat sizes as observations for that version, not constants.
 
