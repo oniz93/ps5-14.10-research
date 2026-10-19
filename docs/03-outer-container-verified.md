@@ -1,5 +1,10 @@
 # Outer SLB2 container — verified against live firmware (2026-10-19)
 
+> **⚠ SUPERSEDED by `04-slb2-format-confirmed.md`.** This was the first probe pass
+> and two fields were wrong: the entry table starts at `0x20` (not `0x30`), and
+> `0x24` is `entry[0].size`, not a format constant. The corrections are listed at
+> the bottom of the newer doc. Kept as the record of how the errors were caught.
+
 These are **our own measurements**, not quoted from community docs. Method and raw
 bytes below so anyone can reproduce or refute.
 

@@ -2,59 +2,52 @@
 """
 pup_parse.py — Parse the PS5 PUP outer SLB2 container. READ-ONLY.
 
-Format verified empirically against live 2026 firmware on 2026-10-19 by HTTP Range
-probing. See docs/03-outer-container-verified.md for the raw bytes and reasoning.
+Layout confirmed 2026-10-19 against two independent third-party implementations
+(`Whoisraeen/Raeen` crates/raeen-firmware/src/slb2.rs and
+`TINYTINY11/Kura-a-PS5-Emulator` docs/RE-pup.md), then validated numerically
+against live Sony firmware. See docs/03-outer-container-verified.md.
 
-VERIFIED OUTER FORMAT
-  0x00  4    magic                 "SLB2" = 53 4C 42 32
-  0x04  4    format version        3 on current firmware
-  0x08  4    flags                 bit 24 (0x01000000) set = recovery PUP
-  0x0C  4    entry count           1 for update, 2 for recovery
-  0x10  8    metadata size         differs per release
-  0x20  4    constant              2
-  0x24  4    format constant       0x4B2F8A3D (identical across files)
-  0x30  N*0x30  entry records
+CONFIRMED OUTER FORMAT
+  0x00  4    magic             "SLB2"
+  0x04  4    version           3
+  0x08  4    flags/blocksize   0x00010000 base; bit 24 (0x01000000) = recovery
+  0x0C  4    entry count       1 = system/update, 2 = recovery
+  0x10  8    (unknown)         0x2597C8 on current builds
+  0x18  8    (zero)
+  0x20  N*0x30  entry records
 
   Entry record (0x30 bytes):
-    +0x00  16   name, NUL-padded ASCII (e.g. "PS5UPDATE1.PUP")
-    +0x10  16   unknown — all zero in every sample taken
-    +0x20  16   fields, format not yet understood
+    +0x00  4   block offset      in units of 0x200 (512) bytes
+    +0x04  4   size              bytes
+    +0x08  8   zero
+    +0x10  0x20  name, NUL-padded ASCII
 
-The body (>= 0x200) is encrypted. There is no plaintext ELF and no nested SLB2 in
-the outer container — the inner PUP is not reachable without console-side keys.
+  Payload begins ~0x400 (a 32-byte digest sits at 0x200). Body is encrypted.
 
-NOTE: the community-published 5.50 layout (95 entries, component IDs like 0x1000
-kernel / 0x1100 bootloader0) does NOT describe this outer level. That layout likely
-applies to the decrypted inner PUP. It is retained in this file as PUBLISHED layout
-for cross-checking only.
+Every entry span is checked against the file size, so a wrong interpretation
+shows up as arithmetic that does not close rather than as a plausible-looking
+table. That check is what caught an earlier misreading of this very format.
 
 Usage:
-    python3 pup_parse.py <file.PUP>           # local file
-    python3 pup_parse.py --url <https-url>    # probe header via Range, no full download
-    python3 pup_parse.py --url <url> --csv entries.csv
+    python3 pup_parse.py <file.PUP>
+    python3 pup_parse.py --url <https-url>      # probe header via Range
+    python3 pup_parse.py --url <url> --json
 """
 
 import argparse
-import csv
+import json
 import struct
 import sys
 import urllib.request
 from pathlib import Path
 
 SLB2_MAGIC = b"SLB2"
-SLB2_CONST = 0x4B2F8A3D
 FLAG_RECOVERY = 0x01000000
-HEADER_FIXED = 0x30
+HEADER_SIZE = 0x20
 ENTRY_SIZE = 0x30
-NAME_LEN = 0x10
-
-# From the community writeup — describes the INNER (decrypted) PUP, not verified by us.
-PUBLISHED_ENTRY_IDS = {
-    0x0100: "eap_kernel", 0x0200: "emc_ipl", 0x0300: "tee", 0x0400: "bios",
-    0x0600: "smf_ipl", 0x1000: "kernel", 0x1100: "bootloader0", 0x1300: "psp_bl",
-    0x1400: "psp_kernel", 0x2000: "update_package", 0x4000: "version_info",
-    0x5000: "swu_manifest", 0x20000: "gpu_ucode", 0x30000: "sio_firmware",
-}
+BLOCK = 0x200
+NAME_OFF = 0x10
+NAME_LEN = 0x20
 
 
 def http_range(url, start, length):
@@ -62,123 +55,132 @@ def http_range(url, start, length):
         url,
         headers={"Range": f"bytes={start}-{start + length - 1}", "User-Agent": "Mozilla/5.0"},
     )
-    with urllib.request.urlopen(req, timeout=120) as resp:
-        note = f"HTTP {resp.status}"
-        if resp.status == 200:
-            note += "  (Range ignored — full body returned)"
-        return resp.read(), note
+    with urllib.request.urlopen(req, timeout=120) as r:
+        return r.read(), r.status
 
 
 def http_size(url):
     req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=60) as r:
-        return r.headers.get("Content-Length")
+        v = r.headers.get("Content-Length")
+        return int(v) if v else None
 
 
-def parse_header(buf):
-    if len(buf) < HEADER_FIXED:
-        raise ValueError(f"only {len(buf)} bytes — too short")
-    magic = buf[0:4]
-    version, flags, count = struct.unpack_from("<III", buf, 0x04)
-    meta_size = struct.unpack_from("<Q", buf, 0x10)[0]
-    const20 = struct.unpack_from("<I", buf, 0x20)[0]
-    const24 = struct.unpack_from("<I", buf, 0x24)[0]
-    return {
-        "magic": magic,
-        "version": version,
-        "flags": flags,
-        "entry_count": count,
-        "metadata_size": meta_size,
-        "const_0x20": const20,
-        "const_0x24": const24,
-    }
+def parse(buf):
+    if len(buf) < HEADER_SIZE or buf[:4] != SLB2_MAGIC:
+        raise ValueError(f"not SLB2: {buf[:8]!r}")
 
+    version = struct.unpack_from("<I", buf, 0x04)[0]
+    flags = struct.unpack_from("<I", buf, 0x08)[0]
+    count = struct.unpack_from("<I", buf, 0x0C)[0]
+    unknown10 = struct.unpack_from("<Q", buf, 0x10)[0]
 
-def parse_entries(buf, hdr):
-    n = hdr["entry_count"]
-    if n > 64:
-        raise ValueError(f"entry_count={n} implausible for the outer container — refusing")
-    need = HEADER_FIXED + n * ENTRY_SIZE
+    if count > 64:
+        raise ValueError(f"entry count {count} implausible for the outer wrapper")
+
+    need = HEADER_SIZE + count * ENTRY_SIZE
     if len(buf) < need:
         raise ValueError(f"need {need} bytes, have {len(buf)} — raise --header-bytes")
-    out = []
-    for i in range(n):
-        base = HEADER_FIXED + i * ENTRY_SIZE
-        raw = buf[base : base + NAME_LEN]
+
+    entries = []
+    for i in range(count):
+        base = HEADER_SIZE + i * ENTRY_SIZE
+        block_off, size = struct.unpack_from("<II", buf, base)
+        raw = buf[base + NAME_OFF : base + NAME_OFF + NAME_LEN]
         name = raw.split(b"\x00")[0].decode("ascii", "replace")
-        unknown = buf[base + 0x10 : base + 0x20]
-        fields = buf[base + 0x20 : base + ENTRY_SIZE]
-        u32a, u32b = struct.unpack_from("<II", fields, 0)
-        out.append(
+        entries.append(
             {
                 "index": i,
                 "name": name,
-                "f_0x20_u32a": u32a,
-                "f_0x20_u32b": u32b,
-                "unknown_0x10": unknown.hex(" "),
-                "fields_hex": fields.hex(" "),
+                "block_offset": block_off,
+                "byte_offset": block_off * BLOCK,
+                "size": size,
+                "end": block_off * BLOCK + size,
             }
         )
-    return out
+
+    return {
+        "version": version,
+        "flags": flags,
+        "recovery": bool(flags & FLAG_RECOVERY),
+        "entry_count": count,
+        "total_blocks": unknown10,
+        "total_bytes_from_header": unknown10 * BLOCK,
+        "entries": entries,
+    }
 
 
-def report(hdr, entries, size=None, url=None):
+def report(info, total):
     print()
     print("== outer SLB2 header ==")
-    print(f"  magic          : {hdr['magic']!r}  {'OK' if hdr['magic'] == SLB2_MAGIC else 'MISMATCH'}")
-    rec = bool(hdr["flags"] & FLAG_RECOVERY)
-    print(f"  format version : {hdr['version']}")
-    print(f"  flags          : {hdr['flags']:#010x}   recovery={rec}")
-    if hdr["const_0x24"] != SLB2_CONST:
-        print(f"  const @0x24    : {hdr['const_0x24']:#010x}  (expected {SLB2_CONST:#010x})")
+    print(f"  version          : {info['version']}")
+    print(f"  flags            : {info['flags']:#010x}   recovery={info['recovery']}")
+    print(f"  entry count      : {info['entry_count']}")
+    print(
+        f"  total size @0x10 : {info['total_blocks']:,} blocks  "
+        f"= {info['total_bytes_from_header']:,} bytes"
+    )
+    if total:
+        print(f"  file size        : {total:,} bytes  ({total/2**20:.2f} MiB)")
+
+    print()
+    print("== entries ==")
+    for e in info["entries"]:
+        print(f"  [{e['index']}] {e['name']}")
+        print(f"      block {e['block_offset']:>12,}  ->  byte {e['byte_offset']:>15,}")
+        print(f"      size  {e['size']:>12,}  ({e['size']/2**20:.2f} MiB)   end {e['end']:,}")
+
+    print()
+    print("== arithmetic check ==")
+    if total:
+        hb = info["total_bytes_from_header"]
+        verdict = "MATCHES file size" if hb == total else f"MISMATCH (file is {total:,})"
+        print(f"  header @0x10*512  : {hb:,}   {verdict}")
+    if not total:
+        print("  (no total size — skipped)")
+        return
+    last_end = max(e["end"] for e in info["entries"])
+    trailer = total - last_end
+    print(f"  last entry ends at : {last_end:,}")
+    print(f"  file size          : {total:,}")
+    print(f"  trailer            : {trailer:,} bytes")
+    if trailer < 0:
+        print("  >> NEGATIVE trailer — layout interpretation is WRONG")
+    elif trailer < 1 << 20:
+        print("  >> closes within 1 MiB — layout confirmed")
     else:
-        print(f"  const @0x24    : {hdr['const_0x24']:#010x}  OK")
-    print(f"  entry count    : {hdr['entry_count']}")
-    print(f"  metadata size  : {hdr['metadata_size']:#x}  ({hdr['metadata_size']:,})")
-    print(f"  const @0x20    : {hdr['const_0x20']}")
-    if size:
-        print(f"  total file     : {int(size):,} bytes  ({int(size)/2**20:.2f} MiB)")
-        if hdr['metadata_size']:
-            print(f"  body after meta: {int(size) - hdr['metadata_size']:,} bytes")
+        print("  >> large remainder — more entries than declared, or trailing padding")
 
-    print()
-    print("== entry records (outer: these are FILENAMES, not component IDs) ==")
-    print(f"  {'idx':>3}  {'name':<20} {'f+0x20 u32a':>14} {'u32b':>14}")
-    print(f"  {'-'*3}  {'-'*20} {'-'*14} {'-'*14}")
-    for e in entries:
-        print(f"  {e['index']:>3}  {e['name']:<20} {e['f_0x20_u32a']:>14,} {e['f_0x20_u32b']:>14,}")
-    for e in entries:
-        if e["f_0x20_u32a"] or e["f_0x20_u32b"]:
-            print(f"\n  entry[{e['index']}] field bytes: {e['fields_hex']}")
+    if len(info["entries"]) > 1:
+        a, b = info["entries"][0], info["entries"][1]
+        print(f"\n  gap between entry[0] and entry[1] : {b['byte_offset'] - a['end']:,} bytes")
 
-    print()
-    print("== note ==")
-    print("  The 95-entry component table (kernel / bootloader0 / gpu_ucode ...) is NOT")
-    print("  at this level. This container knows only about inner PUP filenames.")
-    print("  Getting component-level detail needs the inner PUP decrypted.")
-    if url:
-        print(f"\n  (probe only — nothing was written, nothing was downloaded in full)")
+    if info["recovery"] and info["entries"]:
+        print(
+            f"\n  entry[0].size = {info['entries'][0]['size']:,}"
+            "  (expect the standalone system PUP to be this + a small trailer)"
+        )
 
 
 def main():
     ap = argparse.ArgumentParser(description="Parse the PS5 PUP outer SLB2 container. Read-only.")
-    ap.add_argument("file", nargs="?", help="local .PUP file")
-    ap.add_argument("--url", help="probe a remote PUP via HTTP Range")
-    ap.add_argument("--header-bytes", type=int, default=0x10000)
-    ap.add_argument("--csv")
+    ap.add_argument("file", nargs="?")
+    ap.add_argument("--url")
+    ap.add_argument("--header-bytes", type=int, default=0x2000)
+    ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
-    size = None
+    total = None
     if args.url:
         print(f"probing {args.url}")
-        size = http_size(args.url)
-        buf, note = http_range(args.url, 0, args.header_bytes)
-        print(f"  fetched {len(buf):,} bytes  [{note}]")
+        total = http_size(args.url)
+        buf, status = http_range(args.url, 0, args.header_bytes)
+        print(f"  fetched {len(buf):,} bytes  [HTTP {status}]")
     elif args.file:
         p = Path(args.file).expanduser()
         if not p.exists():
             sys.exit(f"not found: {p}")
-        size = str(p.stat().st_size)
+        total = p.stat().st_size
         with open(p, "rb") as fh:
             buf = fh.read(args.header_bytes)
     else:
@@ -186,28 +188,16 @@ def main():
         sys.exit(2)
 
     try:
-        hdr = parse_header(buf)
+        info = parse(buf)
     except ValueError as e:
         print(f"first 64 bytes: {buf[:64].hex(' ')}")
-        sys.exit(f"header parse failed: {e}")
+        sys.exit(f"parse failed: {e}")
 
-    if hdr["magic"] != SLB2_MAGIC:
-        print(f"first 64 bytes: {buf[:64].hex(' ')}")
-        sys.exit(f"not SLB2 (magic={hdr['magic']!r})")
+    if args.json:
+        print(json.dumps({**info, "file_size": total}, indent=2))
+        return
 
-    try:
-        entries = parse_entries(buf, hdr)
-    except ValueError as e:
-        sys.exit(f"entry parse failed: {e}")
-
-    report(hdr, entries, size, args.url)
-
-    if args.csv:
-        with open(args.csv, "w", newline="") as fh:
-            w = csv.DictWriter(fh, fieldnames=list(entries[0].keys()))
-            w.writeheader()
-            w.writerows(entries)
-        print(f"\n  wrote {args.csv}")
+    report(info, total)
 
 
 if __name__ == "__main__":
