@@ -75,6 +75,62 @@ What this route cannot do: it is a separate sandboxed process, so no syscall pro
 kernel work, no hypervisor. It gives a *userland* primitive at best — which is exactly the
 rung the save exploit would have given, minus the syscall surface.
 
+## Running it through Pi-hole instead of the built-in DNS responder
+
+If the PS5 already uses a Pi-hole for DNS, drop `--dns` entirely: run the lab with
+`--https-only` and add two **Local DNS records** in Pi-hole (Settings → Local DNS →
+DNS Records, or the equivalent in your version) pointing at the Mac:
+
+| hostname | value |
+|---|---|
+| `ps5.np.playstation.net` | the Mac's LAN IP |
+| `manuals.playstation.net` | the Mac's LAN IP |
+
+Then `pihole restartdns`. Two things to check before blaming the harness:
+
+- **Port 443.** A DNS redirect does not carry a port, so the console will always hit
+  `https://<host>/`. The lab must own 443 (`sudo`, or sit behind whatever already owns
+  443 and reverse-proxy to it). A server on 8443 will never be reached this way.
+- **IPv6.** If the console has IPv6 DNS (router-advertised), it will bypass the Pi-hole
+  for these names. Disable IPv6 on the console's network profile while testing.
+
+If the Pi-hole currently points those names at a host serving a Relapse page, the entry
+mechanism is **already proven on your console** — the only work left is swapping what
+that host returns. That also answers a question this note could only guess at: Relapse's
+browser stage covers 7.00–13.60, so on 14.00 the page will load and the exploit will not.
+The page loading at all is the result that matters.
+
+## The corpus, ready to run
+
+The lab also serves the public 14.10 project's corpus contract, so their runner works
+unmodified:
+
+| route | what it serves |
+|---|---|
+| `/corpus/jsc.json` | manifest of harvested JavaScriptCore regression cases |
+| `/corpus/<case>.html` | one self-contained case page, which beacons `BEFORE-i`, then `OK-i`/`GAP-i`, then navigates back to the runner with the next index |
+| `/probe/<name>.js` | a probe, **wrapped in an HTML document** (served raw, the console renders the source as text and nothing executes) |
+| `/beacon/V172-<session>-<tag>` | the beacon sink the case pages use (a GET, not a POST) |
+
+Built and verified locally: 35 cases harvested from WebKit's JSTests crash fixes
+(`harvest → jsc-resolve → jsc-fetch → jsc-build`), manifest served at 200, a case page at
+200, `p172` wrapped and served at 200 as `text/html`, beacons accepted at 204, and
+`--report` correctly flagging case 7 as started-but-never-finished.
+
+Reproduce the corpus:
+
+```bash
+cd research/PS5-14.10-Research
+python3 tools/webkit_crash_corpus.py jsc-harvest --pages 2   # commit search
+python3 tools/webkit_crash_corpus.py jsc-resolve --limit 60   # find added tests
+python3 tools/webkit_crash_corpus.py jsc-fetch  --limit 40    # download
+python3 tools/webkit_crash_corpus.py jsc-build                # wrap into pages
+```
+
+Authentication: none needed. The tool drives the GitHub API through the `gh` CLI, which
+is already logged in (`oniz93`, 5,000 req/h). `harvest` alone consumes ~1 call per page
+of 100 commits; `resolve` is 1 call per commit.
+
 ## The other door, for completeness
 
 A used PS4 on ≤11.00 is the only way to reach the syscall probes: it unlocks Apollo, which

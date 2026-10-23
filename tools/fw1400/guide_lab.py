@@ -57,6 +57,9 @@ CERT = os.path.join(LAB, "cert.pem")
 KEY = os.path.join(LAB, "key.pem")
 RESULTS = os.path.join(LAB, "results")
 PAYLOAD = os.path.join(LAB, "www")
+RESEARCH = os.path.join(HERE, "..", "..", "research", "PS5-14.10-Research")
+PROBES = os.path.normpath(os.path.join(RESEARCH, "probes", "phase13_webkit"))
+CORPUS = os.path.normpath(os.path.join(RESEARCH, "results", "webkit", "corpus"))
 
 DOMAINS = ["ps5.np.playstation.net", "manuals.playstation.net"]
 SAN = ("DNS:ps5.np.playstation.net,DNS:manuals.playstation.net,"
@@ -194,8 +197,61 @@ class Handler(BaseHTTPRequestHandler):
         lost = sorted(started - done)
         return lost[0] if lost else 0
 
+    def _log_beacon(self, tag: str):
+        rec = {"t": dt.datetime.now().isoformat(timespec="milliseconds"),
+               "client": self.client_address[0], "path": self.path,
+               "ua": self.headers.get("User-Agent", ""), "body": tag}
+        os.makedirs(RESULTS, exist_ok=True)
+        with open(os.path.join(RESULTS, "beacons.jsonl"), "a") as f:
+            f.write(json.dumps(rec) + "\n")
+        sys.stderr.write(f"  beacon {rec['client']} {tag[:90]}\n")
+
+    def _send_bytes(self, data: bytes, ctype: str, code: int = 200):
+        self.send_response(code)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(data)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(data)
+
     def do_GET(self):
-        if urlparse(self.path).path == "/resume":
+        path = urlparse(self.path).path
+
+        # The console code beacons as a GET: /beacon/V172-<session>-<tag>?t=..&n=..
+        if path.startswith("/beacon/"):
+            tag = path[len("/beacon/"):]
+            self._log_beacon(tag)
+            self._send_bytes(b"", "text/plain", 204)
+            return
+
+        # Probe scripts are navigated to as documents, so they must be served as HTML.
+        if path.startswith("/probe/"):
+            name = os.path.basename(path)
+            full = os.path.join(PROBES, name)
+            if os.path.isfile(full):
+                # A probe is plain JS but the console navigates to it as a document,
+                # so it has to be wrapped or the browser renders the source as text.
+                src = open(full, "r", encoding="utf-8", errors="replace").read()
+                src = src.replace("</script", "<\\/script")
+                page = ("<!doctype html><meta charset=\"utf-8\"><title>probe</title>"
+                        "<body><script>\n" + src + "\n</script></body>")
+                self._send_bytes(page.encode("utf-8"), "text/html; charset=utf-8")
+            else:
+                self._send_bytes(b"probe not found\n", "text/plain", 404)
+            return
+
+        # Corpus pages and the manifest, from the harvested corpus directory.
+        if path.startswith("/corpus/"):
+            full = os.path.normpath(os.path.join(CORPUS, path[len("/corpus/"):]))
+            if CORPUS and full.startswith(CORPUS) and os.path.isfile(full):
+                ext = os.path.splitext(full)[1].lower()
+                self._send_bytes(open(full, "rb").read(),
+                                 CONTENT_TYPES.get(ext, "application/octet-stream"))
+            else:
+                self._send_bytes(b"corpus miss\n", "text/plain", 404)
+            return
+
+        if path == "/resume":
             n = self._resume_index()
             self.send_response(302)
             self.send_header("Location", f"/runner.html?i={n}")
@@ -266,18 +322,26 @@ def main():
         if not os.path.exists(path):
             raise SystemExit("no beacons yet")
         rows = [json.loads(l) for l in open(path) if l.strip()]
-        started, done = set(), set()
+        started, done, uas = set(), set(), []
         for r in rows:
-            b = r["body"]
+            b, ua = r["body"], r.get("ua", "")
+            if ua and ua not in uas:
+                uas.append(ua)
             if b.startswith("start:"):
                 started.add(b.split(":", 1)[1])
             elif b.startswith(("survived:", "threw:")):
                 done.add(b.split(":", 1)[1])
+            elif "V172-" in b:                       # /beacon/V172-<session>-<tag>
+                tag = b.split("V172-", 1)[1].split("-", 1)[-1]
+                if tag.startswith("BEFORE-"):
+                    started.add(tag[len("BEFORE-"):])
+                elif tag.startswith(("OK-", "GAP-")):
+                    done.add(tag.split("-", 1)[1])
         lost = sorted(started - done)
         print(json.dumps({"beacons": len(rows), "cases_started": len(started),
                           "cases_finished": len(done),
                           "started_but_never_finished": lost,
-                          "first_ua": next((r["ua"] for r in rows if r["ua"]), "")},
+                          "user_agents": uas[:4]},
                          indent=2))
         return
 
