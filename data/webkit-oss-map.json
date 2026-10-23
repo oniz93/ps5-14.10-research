@@ -1,0 +1,65 @@
+{
+  "question": "which exact WebKit does PS5 firmware 14.x run",
+  "answer": "616.1.27.211.1 - Safari 17.0 GA (2023-09-18), frozen through 14.x",
+  "source_of_truth": {
+    "kind": "Sony OSS source drop, published per system-software version",
+    "index": "https://www.playstation.com/en-us/oss/ps5/webkit/",
+    "jsc_index": "https://www.playstation.com/en-us/oss/ps5/webkit-javascriptcore/",
+    "how_mapped": "anchor text = firmware range, href = zip"
+  },
+  "drops": [
+    {
+      "zip": "WebKit-1200.zip",
+      "covers": "12.00 - 14.00",
+      "url": "https://www.playstation.com/content/dam/global_pdc/en-us/external-resources/oss/PS5/webkit/WebKit-1200.zip",
+      "version_file": "WebKit-1200/Configurations/Version.xcconfig",
+      "version": "616.1.27.211.1"
+    },
+    {
+      "zip": "WebKit_1400.zip",
+      "covers": "14.00 -",
+      "url": "https://www.playstation.com/content/dam/global_pdc/en-us/external-resources/oss/PS5/webkit/WebKit_1400.zip",
+      "bytes": 1637794253,
+      "members": 414182,
+      "last_modified": "2026-10-15T06:13:57Z",
+      "version_file": "WebKit-1400/WebKit-1400/Configurations/Version.xcconfig",
+      "version": "616.1.27.211.1",
+      "raw": "MAJOR_VERSION = 616; MINOR_VERSION = 1; TINY_VERSION = 27; MICRO_VERSION = 211; NANO_VERSION = 1;"
+    },
+    {
+      "zip": "JSC-800.zip",
+      "covers": "8.00 -",
+      "url": "https://www.playstation.com/content/dam/global_pdc/en-us/external-resources/oss/PS5/webkit-javascriptcore/JSC-800.zip",
+      "bytes": 1369859528,
+      "members": 377362,
+      "last_modified": "2026-08-07T18:19:51Z",
+      "version_file": "JSC-800/Source/JavaScriptCore/Configurations/Version.xcconfig",
+      "version": "613.1.17.1.14",
+      "changelog_head": "2022-01-09  Sam Weinig  <weinig@apple.com>",
+      "note": "stale relative to the WebKit drop; the UA (Version/17.0) matches 616.x, so WebKit_1400 is the tree that corresponds to retail"
+    }
+  ],
+  "full_firmware_map_webkit": {
+    "1.00 - 1.14": "WebKit-100.zip",
+    "2.00": "WebKit-200.zip",
+    "2.20 - 2.26": "WebKit-220.zip",
+    "2.30 - 2.70": "WebKit-230.zip",
+    "3.00 - 3.21": "WebKit-300.zip",
+    "4.00 - 4.51": "WebKit-400.zip",
+    "5.00 - 5.50": "WebKit-500.zip",
+    "6.00 - 6.50": "WebKit-600.zip",
+    "7.00 - 7.61": "WebKit-700.zip",
+    "8.00 - 8.60": "WebKit-800.zip",
+    "9.00 - 9.60": "WebKit_900.zip",
+    "10.00 - 10.60": "WebKit-1000.zip",
+    "11.00 - 11.60": "WebKit-1100.zip",
+    "12.00 - 14.00": "WebKit-1200.zip",
+    "14.00 -": "WebKit_1400.zip"
+  },
+  "cross_checks": [
+    "browser-compat-data: Safari 17 (2023-09-18) -> engine 616.1.27",
+    "Apple defaults: NewestLaunchedSafariBookmarksSyncAgentVersion = 616.1.27.211.1 - the same build seed",
+    "console UA on 14.10: Version/17.0"
+  ],
+  "reading_tool": "tools/fw1400/remote_zip.py (range-request zip reader; no full download)"
+}
