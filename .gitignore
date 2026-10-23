@@ -26,3 +26,6 @@ venv/
 
 # third-party clones: re-fetch, do not vendor
 research/ps5-uart-src/
+
+# third-party research clone (re-clone with: git clone --depth 1 https://github.com/ZigZagBoi1/PS5-14.10-Research)
+research/PS5-14.10-Research/
