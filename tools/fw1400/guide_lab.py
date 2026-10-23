@@ -63,6 +63,7 @@ CORPUS = os.path.normpath(os.path.join(RESEARCH, "results", "webkit", "corpus"))
 
 DOMAINS = ["ps5.np.playstation.net", "manuals.playstation.net"]
 SAN = ("DNS:ps5.np.playstation.net,DNS:manuals.playstation.net,"
+       "DNS:guides.playstation.com,DNS:*.playstation.com,"
        "DNS:*.np.playstation.net,DNS:*.playstation.net,DNS:*.np.dl.playstation.net")
 
 CONTENT_TYPES = {
@@ -77,12 +78,39 @@ def mkcert(force=False):
     if os.path.exists(CERT) and os.path.exists(KEY) and not force:
         print(f"cert already present: {CERT}")
         return
-    cmd = ["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes",
-           "-keyout", KEY, "-out", CERT, "-days", "365",
-           "-subj", "/CN=ps5.np.playstation.net",
-           "-addext", f"subjectAltName={SAN}"]
-    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    print(f"wrote {CERT} and {KEY}\nSANs: {SAN}")
+    ca_key = os.path.join(LAB, "ca.key")
+    ca_crt = os.path.join(LAB, "ca.pem")
+    csr = os.path.join(LAB, "leaf.csr")
+
+    # A bare self-signed leaf gets rejected outright by stricter TLS stacks with
+    # "certificate unknown". A private CA signing a proper leaf at least produces a
+    # normal chain, which known clients turn into an interstitial instead of a hard
+    # failure. It is still untrusted; it just fails the way browsers expect.
+    def run(*args):
+        subprocess.run(args, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    run("openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes",
+        "-keyout", ca_key, "-out", ca_crt, "-days", "3650",
+        "-subj", "/CN=PS5 Lab CA", "-addext", "basicConstraints=critical,CA:TRUE")
+
+    run("openssl", "req", "-newkey", "rsa:2048", "-nodes",
+        "-keyout", KEY, "-out", csr, "-subj", "/CN=ps5.np.playstation.net")
+
+    ext = os.path.join(LAB, "leaf.ext")
+    with open(ext, "w") as f:
+        f.write(f"subjectAltName={SAN}\nbasicConstraints=CA:FALSE\n"
+                "keyUsage=digitalSignature,keyEncipherment\n"
+                "extendedKeyUsage=serverAuth\n")
+
+    run("openssl", "x509", "-req", "-in", csr, "-CA", ca_crt, "-CAkey", ca_key,
+        "-CAcreateserial", "-out", os.path.join(LAB, "leaf.pem"),
+        "-days", "825", "-extfile", ext)
+
+    # serve leaf + CA so the client receives a chain
+    with open(CERT, "w") as out:
+        out.write(open(os.path.join(LAB, "leaf.pem")).read())
+        out.write(open(ca_crt).read())
+    print(f"wrote CA-signed chain: {CERT} (leaf + CA), key {KEY}\nSANs: {SAN}")
 
 
 # --------------------------------------------------------------------- DNS
@@ -94,7 +122,29 @@ def dns_answer(qname: str, ip: str):
     return socket.inet_aton(ip)
 
 
-def run_dns(lan_ip: str, port: int = 53, verbose: bool = True):
+def _log_dns(client: str, qname: str, qtype: int, answered: bool):
+    os.makedirs(RESULTS, exist_ok=True)
+    rec = {"t": dt.datetime.now().isoformat(timespec="milliseconds"),
+           "client": client, "qname": qname, "qtype": qtype, "answered": answered}
+    with open(os.path.join(RESULTS, "dns.jsonl"), "a") as f:
+        f.write(json.dumps(rec) + "\n")
+
+
+def _forward(data: bytes, upstream: str, timeout: float = 3.0):
+    """Relay a query to upstream and return its raw reply, or None."""
+    try:
+        up = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        up.settimeout(timeout)
+        up.sendto(data, (upstream, 53))
+        reply, _ = up.recvfrom(2048)
+        up.close()
+        return reply
+    except OSError:
+        return None
+
+
+def run_dns(lan_ip: str, port: int = 53, verbose: bool = True, catchall: bool = False,
+            upstream: str = "<resolver-ip>"):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
@@ -124,6 +174,25 @@ def run_dns(lan_ip: str, port: int = 53, verbose: bool = True):
         qtype = struct.unpack(">H", data[i + 1:i + 3])[0] if i + 3 <= len(data) else 0
         question = data[12:i + 5]
         ip = dns_answer(qname, lan_ip) if qtype == 1 else None
+        if catchall and qtype == 1:
+            ip = socket.inet_aton(lan_ip)
+
+        if not ip:
+            # Everything that is not one of the hijacked hosts must still resolve
+            # normally, or the guide app cannot fetch its own config and renders blank.
+            reply = _forward(data, upstream)
+            if reply:
+                s.sendto(reply, addr)
+                _log_dns(addr[0], qname, qtype, True)
+                if verbose:
+                    print(f"  DNS  {qname} (type {qtype}) -> upstream")
+            else:
+                _log_dns(addr[0], qname, qtype, False)
+                if verbose:
+                    print(f"  DNS  {qname} (type {qtype}) upstream FAILED")
+            continue
+
+        _log_dns(addr[0], qname, qtype, True)
         if ip:
             hdr = tid + b"\x81\x80" + struct.pack(">HHHH", 1, 1, 0, 0)
             ans = b"\xc0\x0c" + struct.pack(">HHIH", 1, 1, 60, 4) + ip
@@ -160,8 +229,32 @@ class Handler(BaseHTTPRequestHandler):
             full = os.path.join(full, "index.html")
         return full
 
+    def _current_probe(self):
+        """If www/current names a probe, the root serves that probe instead.
+
+        Lets a run be switched without restarting the server, which matters because
+        every restart means killing a sudo process and re-accepting the console's
+        certificate warning.
+        """
+        f = os.path.join(LAB, "current")
+        if not os.path.exists(f):
+            return None
+        name = open(f).read().strip()
+        if not name:
+            return None
+        full = os.path.join(PROBES, os.path.basename(name))
+        return full if os.path.isfile(full) else None
+
     def _serve_file(self):
         full = self._resolve()
+        probe = self._current_probe()
+        if probe and full and full.endswith("index.html"):
+            src = open(probe, encoding="utf-8", errors="replace").read()
+            src = src.replace("</script", "<\\/script")
+            page = ("<!doctype html><meta charset=\"utf-8\"><title>probe</title>"
+                    "<body><script>\n" + src + "\n</script></body>")
+            self._send_bytes(page.encode("utf-8"), "text/html; charset=utf-8")
+            return
         if not full or not os.path.isfile(full):
             body = b"not found\n"
             self.send_response(404)
@@ -291,12 +384,49 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
 
 
+def _log_conn(peer, ok, err=""):
+    os.makedirs(RESULTS, exist_ok=True)
+    rec = {"t": dt.datetime.now().isoformat(timespec="milliseconds"),
+           "peer": peer, "tls_ok": ok, "error": err[:200]}
+    with open(os.path.join(RESULTS, "conn.jsonl"), "a") as f:
+        f.write(json.dumps(rec) + "\n")
+    print(f"  conn {peer} tls_ok={ok} {err[:120]}")
+
+
+class TLSServer(ThreadingHTTPServer):
+    """Logs every accepted connection, including TLS handshake failures.
+
+    Without this a cert rejection or a half-open connection is invisible: the
+    request never reaches a handler, so the request log stays empty and it looks
+    like the client never connected.
+    """
+
+    def __init__(self, addr, handler, ctx):
+        self.ctx = ctx
+        super().__init__(addr, handler)
+
+    def get_request(self):
+        sock, addr = self.socket.accept()
+        peer = addr[0] if addr else "?"
+        try:
+            conn = self.ctx.wrap_socket(sock, server_side=True)
+            _log_conn(peer, True)
+            return conn, addr
+        except Exception as e:                                   # noqa: BLE001
+            _log_conn(peer, False, f"{type(e).__name__}: {e}")
+            try:
+                sock.close()
+            except OSError:
+                pass
+            raise
+
+
 def run_https(port: int, verbose=True):
     ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     ctx.load_cert_chain(CERT, KEY)
-    httpd = ThreadingHTTPServer(("0.0.0.0", port), Handler)
-    httpd.socket = ctx.wrap_socket(httpd.socket, server_side=True)
+    httpd = TLSServer(("0.0.0.0", port), Handler, ctx)
     print(f"HTTPS listening on 0.0.0.0:{port}, serving {PAYLOAD}")
+    print("connection log -> results/conn.jsonl  (logs TLS failures too)")
     httpd.serve_forever()
 
 
@@ -310,6 +440,11 @@ def main():
     ap.add_argument("--https-port", type=int, default=443)
     ap.add_argument("--dns-port", type=int, default=53)
     ap.add_argument("--https-only", action="store_true")
+    ap.add_argument("--upstream", default="<resolver-ip>",
+                    help="resolver to forward non-hijacked names to (default: the Pi-hole)")
+    ap.add_argument("--dns-catchall", action="store_true",
+                    help="answer every A query with --lan-ip and log every query name; "
+                         "use when you do not yet know which host the guide asks for")
     ap.add_argument("--report", action="store_true", help="summarise the beacon log")
     a = ap.parse_args()
 
@@ -324,7 +459,9 @@ def main():
         rows = [json.loads(l) for l in open(path) if l.strip()]
         started, done, uas = set(), set(), []
         for r in rows:
-            b, ua = r["body"], r.get("ua", "")
+            # sendBeacon POSTs carry an empty body and put the tag in the URL path,
+            # so the report must look at both.
+            b, ua = (r["body"] or r.get("path", "")), r.get("ua", "")
             if ua and ua not in uas:
                 uas.append(ua)
             if b.startswith("start:"):
@@ -352,10 +489,14 @@ def main():
             mkcert()
         threads = [threading.Thread(target=run_https, args=(a.https_port,), daemon=True)]
         if not a.https_only:
-            threads.append(threading.Thread(target=run_dns, args=(a.lan_ip, a.dns_port),
+            threads.append(threading.Thread(target=run_dns,
+                                            args=(a.lan_ip, a.dns_port, True, a.dns_catchall,
+                                                  a.upstream),
                                             daemon=True))
         for t in threads:
             t.start()
+        if a.dns_catchall:
+            print("DNS catch-all: every A query is answered with %s and logged." % a.lan_ip)
         print(f"\nConsole setup: DNS -> {a.lan_ip}; then open the User's Guide.")
         print(f"Beacons -> {os.path.join(RESULTS, 'beacons.jsonl')}\n")
         try:

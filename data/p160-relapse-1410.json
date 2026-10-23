@@ -1,0 +1,24 @@
+{
+ "firmware": "14.10",
+ "probe": "p160-relapse-test.js",
+ "client": "<console-ip>",
+ "beacons": [
+  "V160-BOOT",
+  "V160-P1-SCOPE-UNDEF",
+  "V160-P2-STUFFED",
+  "V160-P2-SYMOBJ-type=object",
+  "V160-P3-START",
+  "V160-P2-GETTER-READY",
+  "V160-P3-DEDUP-YES",
+  "V160-P3-CLONE-len=65536",
+  "V160-P3-STILL-SAME",
+  "V160-DONE"
+ ],
+ "verdict": {
+  "phase1_scope_leak": "dead - SCOPE-UNDEF (receiver was undefined, no JSScope leaked)",
+  "phase2_symbol_tostring": "dead - SYMOBJ-type=object (no string payload with heap pointers)",
+  "phase3_structuredclone": "dead - DEDUP-YES + CLONE-len=65536 + STILL-SAME (clone is correctly deduped, no type confusion)",
+  "all_three": "patched on 14.10"
+ },
+ "raw_log": "guide_lab server stdout, 2026-10-23 23:38"
+}

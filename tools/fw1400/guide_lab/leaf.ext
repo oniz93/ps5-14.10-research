@@ -1,0 +1,4 @@
+subjectAltName=DNS:ps5.np.playstation.net,DNS:manuals.playstation.net,DNS:guides.playstation.com,DNS:*.playstation.com,DNS:*.np.playstation.net,DNS:*.playstation.net,DNS:*.np.dl.playstation.net
+basicConstraints=CA:FALSE
+keyUsage=digitalSignature,keyEncipherment
+extendedKeyUsage=serverAuth
