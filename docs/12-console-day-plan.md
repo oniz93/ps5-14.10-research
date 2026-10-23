@@ -21,12 +21,11 @@ later claim hangs on, and the exact build number (`14.00.00.xx`) matters more th
 
 Everything downstream needs code execution inside some process. Two candidate routes:
 
-**A. mast1c0re (PS2 savegame escape) — the only route needing no other hardware.**
-Publicly documented as userland-only on 14.00. Open question: whether the SDK carries
-**14.00 `libkernel_sys.sprx` offsets**. Its releases added PS4 10.50/10.70 in July 2026,
-and the repo ships a Ghidra script (`scripts/`) to extract per-firmware offsets, which
-implies offsets are hand-maintained per build. If 14.00 is absent, this route needs a
-decrypted `libkernel_sys.sprx` to derive them — not day-one work.
+**A. mast1c0re (PS2 savegame escape) — RESOLVED: not available.**
+Its SDK ships PS5 `libkernel` offsets only for **3.00–3.21, 4.00–4.03, 4.50–4.51, 6.50**.
+There is no 14.00 support, and the offsets are hand-derived per build, so this route would
+need a decrypted `libkernel_sys.sprx` first. The "14.00 has mast1c0re userland" line in the
+status hubs describes the bug class, not a usable toolchain.
 
 > **Check first, in the repo:** the firmware table in `sdk/`, and whether the PS2 title
 > the save exploit needs is still purchasable on your store region. If the game is
@@ -38,8 +37,11 @@ TCP 9026. But the save must be decrypted and re-signed under a matching PSN Acco
 and the documented route for that is **a jailbroken PS4 + Apollo Save Tool**. Without
 either, route B is not available tomorrow.
 
-If neither is ready, the day's value is the four measurements in §2 that need no code
-execution, plus the physical inspection.
+**C. The Guide WebView — the only route actually available with no PS4.**
+DNS-redirect `ps5.np.playstation.net` and `manuals.playstation.net` to a LAN host with a
+self-signed cert and the console runs your JavaScript, no exploit required. Build and plan:
+`14-guide-webview-entry.md`, `tools/fw1400/guide_lab.py`. This does **not** give the syscall
+surface — for that, §3 below stays blocked on a jailbroken PS4.
 
 ## 2. Measurements that need no exploit
 

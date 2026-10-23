@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>guide lab</title>
+<style>
+  body { background:#111; color:#ddd; font:14px/1.5 -apple-system,system-ui,sans-serif; margin:2em; }
+  h1 { font-size:16px; font-weight:600; color:#fff; }
+  table { border-collapse:collapse; margin-top:1em; }
+  td, th { border-bottom:1px solid #333; padding:3px 10px; text-align:left; font-weight:400; }
+  .yes { color:#6ee7a0 } .no { color:#f08a8a }
+</style>
+</head>
+<body>
+<h1>guide lab &mdash; engine baseline</h1>
+<p id="ua"></p>
+<table id="t"></table>
+<script>
+(function () {
+  // This page is served from the console's Guide WebView. Everything it learns is
+  // beaconed back to the lab server, because reading the screen is the slow path.
+  var start = Date.now();
+  var out = {};
+
+  function beacon(kind, data) {
+    var body = kind + ':' + (typeof data === 'string' ? data : JSON.stringify(data));
+    try {
+      if (navigator.sendBeacon) { navigator.sendBeacon('/beacon', body); return; }
+    } catch (e) {}
+    try {
+      var x = new XMLHttpRequest();
+      x.open('POST', '/beacon', true);
+      x.setRequestHeader('Content-Type', 'text/plain');
+      x.send(body);
+    } catch (e) {}
+  }
+
+  function probe(name, fn) {
+    var v, note = '';
+    try { v = fn(); } catch (e) { v = undefined; note = String(e).slice(0, 40); }
+    out[name] = (typeof v === 'boolean') ? v : (v === undefined ? null : v);
+    if (note) out[name + '!'] = note;
+  }
+
+  out.ua = navigator.userAgent;
+  out.t0 = start;
+
+  probe('wasm', function () { return typeof WebAssembly === 'object'; });
+  probe('sab', function () { return typeof SharedArrayBuffer === 'function'; });
+  probe('webgl', function () { var c = document.createElement('canvas'); return !!(c.getContext('webgl') || c.getContext('experimental-webgl')); });
+  probe('webgl2', function () { var c = document.createElement('canvas'); return !!c.getContext('webgl2'); });
+  probe('webgpu', function () { return typeof navigator.gpu !== 'undefined'; });
+  probe('offscreen', function () { return typeof OffscreenCanvas === 'function'; });
+  probe('workers', function () { return typeof Worker === 'function'; });
+  probe('worklet', function () { return typeof AudioWorkletNode === 'function'; });
+  probe('sw', function () { return 'serviceWorker' in navigator; });
+  probe('idb', function () { return typeof indexedDB !== 'undefined'; });
+  probe('ls', function () { try { return localStorage.length >= 0; } catch (e) { return false; } });
+  probe('structuredClone', function () { return typeof structuredClone === 'function'; });
+  probe('at', function () { return typeof Array.prototype.at === 'function'; });
+  probe('findLast', function () { return typeof Array.prototype.findLast === 'function'; });
+  probe('hasOwn', function () { return typeof Object.hasOwn === 'function'; });
+  probe('replaceAll', function () { return typeof String.prototype.replaceAll === 'function'; });
+  probe('promiseAny', function () { return typeof Promise.any === 'function'; });
+  probe('regExpD', function () { try { new RegExp('a', 'd'); return true; } catch (e) { return false; } });
+  probe('regExpV', function () { try { new RegExp('a', 'v'); return true; } catch (e) { return false; } });
+  probe('segmenter', function () { return typeof Intl.Segmenter === 'function'; });
+  probe('temporal', function () { return typeof Temporal !== 'undefined'; });
+  probe('errorCause', function () { try { return !!new Error('x', { cause: 1 }).cause; } catch (e) { return false; } });
+  probe('bigint64', function () { return typeof BigInt64Array === 'function'; });
+  probe('atomics', function () { return typeof Atomics === 'object'; });
+  probe('globalProps', function () { return Object.getOwnPropertyNames(globalThis).length; });
+  probe('intlVersion', function () { return Intl.DateTimeFormat().resolvedOptions().timeZone + '|' + (Intl.DateTimeFormat.supportedLocalesOf(['en'])[0] || ''); });
+  probe('locale', function () { return navigator.language; });
+  probe('dpr', function () { return window.devicePixelRatio; });
+  probe('viewport', function () { return innerWidth + 'x' + innerHeight; });
+  probe('screen', function () { return screen.width + 'x' + screen.height; });
+  probe('timerRes', function () { var a = performance.now(), b = performance.now(); return (b - a) ? 'nonzero' : 'zero'; });
+  probe('stack', function () { try { null.x; } catch (e) { return (e.stack || '').split('\n')[0].slice(0, 60); } });
+  probe('nativeFn', function () { return String(Function.prototype.call).indexOf('[native code]') >= 0; });
+
+  out.elapsed = Date.now() - start;
+  document.getElementById('ua').textContent = out.ua;
+  var t = document.getElementById('t');
+  Object.keys(out).sort().forEach(function (k) {
+    var tr = document.createElement('tr');
+    var a = document.createElement('th'); a.textContent = k;
+    var b = document.createElement('td'); b.textContent = String(out[k]);
+    if (out[k] === true) b.className = 'yes';
+    if (out[k] === false) b.className = 'no';
+    tr.appendChild(a); tr.appendChild(b); t.appendChild(tr);
+  });
+
+  beacon('battery', out);
+  beacon('battery-done', 'ok');
+})();
+</script>
+</body>
+</html>

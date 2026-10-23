@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>case runner</title>
+<style>body{background:#111;color:#ddd;font:13px/1.5 ui-monospace,monospace;margin:2em}
+.ok{color:#6ee7a0}.bad{color:#f08a8a}.run{color:#f5d76e}</style></head>
+<body>
+<h1 style="font-size:15px">case runner</h1>
+<p id="s">starting…</p>
+<ol id="log" style="padding-left:1.2em"></ol>
+<script>
+(function () {
+  // Sequential case runner for the Guide WebView. Same beacon vocabulary as the
+  // 14.10 repo's fuzz runner: start:i / survived:i / threw:i / FUZZ-RUNNER-DONE.
+  // A case that beacons start and never survived/threw took the WebProcess down —
+  // that is the only crash signal available without a debugger.
+  // Resume after a crash with ?i=N, or hit /resume on the lab server.
+  function param(n, d) {
+    var m = new RegExp('[?&]' + n + '=([^&]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1]) : d;
+  }
+  function beacon(kind, id) {
+    var body = kind + (id === undefined ? '' : ':' + id);
+    try { navigator.sendBeacon('/beacon', body); return; } catch (e) {}
+    try { var x = new XMLHttpRequest(); x.open('POST', '/beacon', true);
+          x.setRequestHeader('Content-Type','text/plain'); x.send(body); } catch (e) {}
+  }
+  function line(cls, txt) {
+    var li = document.createElement('li');
+    li.className = cls; li.textContent = txt;
+    document.getElementById('log').appendChild(li);
+  }
+
+  var startAt = parseInt(param('i', '0'), 10) || 0;
+
+  fetch('/cases/manifest.json', { cache: 'no-store' }).then(function (r) { return r.json(); })
+  .then(function (cases) {
+    document.getElementById('s').textContent =
+      cases.length + ' case(s), starting at ' + startAt;
+    beacon('BOOT', cases.length + '-from-' + startAt);
+    var i = startAt;
+    (function next() {
+      if (i >= cases.length) { line('ok', 'DONE'); beacon('FUZZ-RUNNER-DONE', cases.length); return; }
+      var name = cases[i];
+      beacon('start', i);
+      line('run', i + ' ' + name);
+      var threw = false, why = '';
+      try {
+        var src = new XMLHttpRequest();
+        src.open('GET', '/cases/' + encodeURIComponent(name), false);   // sync on purpose:
+        src.send(null);                                                 // ordering must be exact
+        if (src.status !== 200) { why = 'HTTP ' + src.status; threw = true; }
+        else { (0, eval)(src.responseText); }
+      } catch (e) {
+        threw = true; why = String(e && e.message || e).slice(0, 80);
+      }
+      if (threw) { beacon('threw', i); line('bad', i + ' threw ' + why); }
+      else { beacon('survived', i); line('ok', i + ' survived'); }
+      i++;
+      setTimeout(next, 20);      // hand the event loop back so beacons flush
+    })();
+  })
+  .catch(function (e) {
+    document.getElementById('s').textContent = 'manifest error: ' + e;
+    beacon('MANIFEST-ERROR', String(e).slice(0, 80));
+  });
+})();
+</script>
+</body>
+</html>
