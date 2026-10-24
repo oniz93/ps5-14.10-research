@@ -1,0 +1,14 @@
+{
+  "probe": "poc-date-uaf.js",
+  "firmware": "14.10",
+  "observations": {
+    "keyboard_reaches_webview": true,
+    "keys_seen": ["9", "ArrowRight", "2", "0", "1", "Backspace", "End"],
+    "field_content": "922012",
+    "date_editor_rendered": false
+  },
+  "conclusion": "input.type = 'date' fell back to a plain text field: the digits were accepted as raw text and no segmented date editor appeared. InputType::create() gates each type behind a runtime setting (Settings::inputTypeDateEnabled, inputTypeColorEnabled, ...) and an unsupported type silently stays 'text', so BaseDateAndTimeInputType is never instantiated on this port.",
+  "effect_on_candidate": "date-input UAF (869d5c55 / 310544) is UNREACHABLE on 14.10 - not because of the UA shadow root, but because the input type does not exist here. Candidate closed.",
+  "worth_keeping": "a USB keyboard does deliver trusted keydowns into the Guide WebView, which is a capability several bug classes need",
+  "next": "poc-input-types.js maps which input types survive InputType::create(), so the form-control surface can be audited from facts rather than assumptions"
+}
