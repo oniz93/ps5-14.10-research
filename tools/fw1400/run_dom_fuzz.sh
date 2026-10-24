@@ -20,7 +20,7 @@ LAST=${2:-200}
 PER=${3:-15}
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
-BIN="${MINIBROWSER:-$HOME/wk/WebKit/WebKitBuild/Release/bin/MiniBrowser}"
+BIN="${MINIBROWSER:-$HOME/wk/WebKit/WebKitBuild/ASAN/bin/MiniBrowser}"
 OUT="$HERE/fuzz-out"
 mkdir -p "$OUT"
 
