@@ -28,6 +28,12 @@ REFACTOR = re.compile(r"(Adopt |Modernize|Rename|Move |Remove |Replace |Use |Red
                       r"unsafe-buffer|Werror|build fix|Fix build|Versioning|Unreviewed|Bump |"
                       r"Refactor|Clean up|CLEANUP|rebaseline|Update tests|Add a test|"
                       r"Improve |Simplify|Tidy|Convert |Port )", re.I)
+# A fix that adds an assertion or a "should crash" check is not a vulnerability fix: the
+# state it defends against could not be produced by the engine itself. Those commits look
+# identical to real fixes under the line-presence heuristic, so knock them down.
+HARDENING = re.compile(r"(should crash|should ASSERT|add an? assert|ASSERT_NOT_REACHED|"
+                       r"defense in depth|harden|belt.and.braces|speculative|"
+                       r"not a security|debug assert|sanity check)", re.I)
 DEAD = re.compile(r"(Worker|ServiceWorker|Worklet|WebGL|WebGPU|GPUProcess|IndexedDB|IDB|"
                   r"WebAssembly|Wasm|MediaSession|Speech|Payment|WebXR|FileSystem)", re.I)
 LIVE = re.compile(r"^Source/(WebCore|WebKit|WTF|JavaScriptCore)/")
@@ -44,6 +50,9 @@ def score(rec: dict) -> tuple[int, str]:
     if REFACTOR.search(title):
         s -= 3
         why.append("refactor/build")
+    if HARDENING.search(title):
+        s -= 4
+        why.append("hardening, not a fix")
     if LIVE.search(path):
         s += 2
         why.append("live surface")
