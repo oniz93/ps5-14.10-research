@@ -116,6 +116,34 @@ def mkcert(force=False):
 
 
 # --------------------------------------------------------------------- DNS
+#
+# Update containment. The console's resolver points at this box, so it is the one
+# place where a firmware update can be stopped before any packet leaves the LAN.
+# Anything under Sony's estate is refused outright (NXDOMAIN, no answer, both A and
+# AAAA) unless it is one of the names this lab hijacks — those are answered with the
+# local IP first, so the guide still loads while every update, content-delivery and
+# telemetry host is unreachable.
+#
+# Note that blocking the *owner* name is sufficient even when Sony's reply would
+# have been a CNAME into an Akamai edge: the client cannot get the CNAME without
+# first resolving the name that is refused here.
+BLOCK_SUFFIXES = (
+    "playstation.net",
+    "playstation.com",
+    "sony.com",
+    "sony.net",
+    "sonyentertainmentnetwork.com",
+    "sie.com",
+)
+
+
+def dns_blocked(qname: str) -> bool:
+    """True if this name belongs to Sony's estate and is not one of our hijacks."""
+    name = qname.lower().rstrip(".")
+    if name in DOMAINS:
+        return False          # hijacked names are answered locally, never forwarded
+    return any(name == s or name.endswith("." + s) for s in BLOCK_SUFFIXES)
+
 
 def dns_answer(qname: str, ip: str):
     """Build an A-record answer for qname, or None to leave it unanswered."""
@@ -124,10 +152,12 @@ def dns_answer(qname: str, ip: str):
     return socket.inet_aton(ip)
 
 
-def _log_dns(client: str, qname: str, qtype: int, answered: bool):
+def _log_dns(client: str, qname: str, qtype: int, answered: bool, blocked: bool = False):
     os.makedirs(RESULTS, exist_ok=True)
     rec = {"t": dt.datetime.now().isoformat(timespec="milliseconds"),
            "client": client, "qname": qname, "qtype": qtype, "answered": answered}
+    if blocked:
+        rec["blocked"] = True
     with open(os.path.join(RESULTS, "dns.jsonl"), "a") as f:
         f.write(json.dumps(rec) + "\n")
 
@@ -146,7 +176,7 @@ def _forward(data: bytes, upstream: str, timeout: float = 3.0):
 
 
 def run_dns(lan_ip: str, port: int = 53, verbose: bool = True, catchall: bool = False,
-            upstream: str = "<resolver-ip>"):
+            upstream: str = "<resolver-ip>", block_sony: bool = True):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
@@ -158,6 +188,9 @@ def run_dns(lan_ip: str, port: int = 53, verbose: bool = True, catchall: bool = 
         return
     if verbose:
         print(f"DNS listening on 0.0.0.0:{port}; {DOMAINS} -> {lan_ip}")
+        if block_sony:
+            print("Update containment ON: " + ", ".join(BLOCK_SUFFIXES) +
+                  " -> NXDOMAIN (never forwarded upstream)")
     while True:
         try:
             data, addr = s.recvfrom(512)
@@ -178,6 +211,17 @@ def run_dns(lan_ip: str, port: int = 53, verbose: bool = True, catchall: bool = 
         ip = dns_answer(qname, lan_ip) if qtype == 1 else None
         if catchall and qtype == 1:
             ip = socket.inet_aton(lan_ip)
+
+        if block_sony and dns_blocked(qname):
+            # Refuse locally and never ask upstream: NXDOMAIN with no records, which
+            # satisfies both A and AAAA lookups. This is what stops an update check
+            # before it can reach Sony, and the log entry is proof it was attempted.
+            hdr = tid + b"\x81\x83" + struct.pack(">HHHH", 1, 0, 0, 0)
+            s.sendto(hdr + question, addr)
+            _log_dns(addr[0], qname, qtype, False, blocked=True)
+            if verbose:
+                print(f"  DNS  {qname} (type {qtype}) BLOCKED - Sony estate, not forwarded")
+            continue
 
         if not ip:
             # Everything that is not one of the hijacked hosts must still resolve
@@ -497,6 +541,9 @@ def main():
     ap.add_argument("--https-port", type=int, default=443)
     ap.add_argument("--dns-port", type=int, default=53)
     ap.add_argument("--https-only", action="store_true")
+    ap.add_argument("--allow-sony", action="store_true",
+                    help="disable update containment: forward Sony/PlayStation names upstream "
+                         "again instead of refusing them (only for debugging the guide)")
     ap.add_argument("--upstream", default="<resolver-ip>",
                     help="resolver to forward non-hijacked names to (default: the Pi-hole)")
     ap.add_argument("--dns-catchall", action="store_true",
@@ -548,7 +595,7 @@ def main():
         if not a.https_only:
             threads.append(threading.Thread(target=run_dns,
                                             args=(a.lan_ip, a.dns_port, True, a.dns_catchall,
-                                                  a.upstream),
+                                                  a.upstream, not a.allow_sony),
                                             daemon=True))
         for t in threads:
             t.start()
