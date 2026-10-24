@@ -53,7 +53,7 @@ cmake -S . -B WebKitBuild/Release -G Ninja \
   -DUSE_SYSTEM_MALLOC=ON \
   -DENABLE_JIT=OFF -DENABLE_DFG_JIT=OFF -DENABLE_FTL_JIT=OFF \
   -DENABLE_WEBDRIVER=OFF -DENABLE_INTROSPECTION=OFF -DENABLE_DOCUMENTATION=OFF \
-  -DENABLE_WAYLAND_TARGET=OFF -DENABLE_VIDEO=OFF -DENABLE_WEB_AUDIO=OFF \
+  -DENABLE_WAYLAND_TARGET=OFF -DENABLE_VIDEO=ON -DENABLE_WEB_AUDIO=OFF \
   -DENABLE_BUBBLEWRAP_SANDBOX=OFF -DENABLE_SPELLCHECK=OFF -DENABLE_GAMEPAD=OFF
 ```
 
@@ -74,8 +74,20 @@ Then `ninja -C WebKitBuild/Release -j3 MiniBrowser` — 5464 edges.
 | `libcms2 is required for USE_LCMS` | `dnf install lcms2-devel` |
 | `libseccomp is needed for ENABLE_BUBBLEWRAP_SANDBOX` | `-DENABLE_BUBBLEWRAP_SANDBOX=OFF` |
 | `cannot load such file -- json (LoadError)` in the bytecode generator | `dnf install rubygem-json` — Fedora ships Ruby's stdlib as separate gems |
+| `invalid use of incomplete type 'HTMLVideoElement'` in `GPUExternalTextureDescriptor.h` | `-DENABLE_VIDEO=ON` — see below |
 
 Each one is a configure-time gate, so this list is the whole cost of standing the build up.
+
+Two traps worth spelling out, both of which cost a rebuild each:
+
+- **`-DENABLE_VIDEO=OFF` does not work.** `Modules/WebGPU/GPUExternalTextureDescriptor.h`
+  calls `videoSource->playerIdentifier()` on an `HTMLVideoElement*` that `Document.h` only
+  forward-declares when video is compiled out. WebGPU has no feature flag of its own in this
+  tree — passing `-DENABLE_WEBGPU=OFF` is silently ignored and CMake lists it under "unused
+  variables" — so video must stay on. Fedora's `gstreamer1-devel`,
+  `gstreamer1-plugins-base-devel` and `gstreamer1-plugins-bad-free-devel` are the cost.
+- **CMake caches feature flags.** Removing `-DENABLE_VIDEO=OFF` from the command line leaves
+  the cached `OFF` in force; the flag has to be set to `ON` explicitly, not merely dropped.
 
 ## Running a page headlessly
 
