@@ -1,0 +1,139 @@
+{
+  "base": "fmp4.mp4",
+  "base_bytes": 6053,
+  "base_sha256": "f410155659374090",
+  "cases": [
+    {
+      "name": "valid",
+      "bytes": 6053,
+      "sha256": "f410155659374090",
+      "note": "unmodified fragmented MP4 (control)"
+    },
+    {
+      "name": "cfg_sps_count_31",
+      "bytes": 6053,
+      "sha256": "680833dbd2729447",
+      "note": "avcC numOfSequenceParameterSets=0x1F with only one SPS present"
+    },
+    {
+      "name": "cfg_sps_len_zero",
+      "bytes": 6053,
+      "sha256": "eee195b41f6df393",
+      "note": "avcC SPS length prefix 0, so the parser reads a zero-length SPS"
+    },
+    {
+      "name": "cfg_sps_len_huge",
+      "bytes": 6053,
+      "sha256": "a271470fc61c9dbf",
+      "note": "avcC SPS length prefix 0xFFFE against a 20-byte SPS"
+    },
+    {
+      "name": "cfg_pps_count_255",
+      "bytes": 6053,
+      "sha256": "0b979b1cfea30fdb",
+      "note": "avcC numOfPictureParameterSets=0xFF"
+    },
+    {
+      "name": "sps_profile_ff",
+      "bytes": 6053,
+      "sha256": "0d69479eb589b4e7",
+      "note": "SPS profile_idc=0xFF, an undefined profile"
+    },
+    {
+      "name": "sps_level_ff",
+      "bytes": 6053,
+      "sha256": "7f0663418649affd",
+      "note": "SPS level_idc=0xFF"
+    },
+    {
+      "name": "sps_zero_bytes",
+      "bytes": 6053,
+      "sha256": "558366fb4319418a",
+      "note": "SPS body replaced by zeroes, so every Exp-Golomb read decodes 0"
+    },
+    {
+      "name": "sps_ff_bytes",
+      "bytes": 6053,
+      "sha256": "3646dde2b60d163d",
+      "note": "SPS body replaced by 0xFF, the densest Exp-Golomb encoding"
+    },
+    {
+      "name": "pps_zero_bytes",
+      "bytes": 6053,
+      "sha256": "254a4bba15f36b07",
+      "note": "PPS body replaced by zeroes, so slice headers reference parameter set 0"
+    },
+    {
+      "name": "pps_id_31",
+      "bytes": 6053,
+      "sha256": "3449d6656281d8f3",
+      "note": "PPS pic_parameter_set_id forced to 31"
+    },
+    {
+      "name": "cfg_lengthsize_3of4",
+      "bytes": 6053,
+      "sha256": "4320efbd74f68bed",
+      "note": "avcC lengthSizeMinusOne=2 (3-byte prefixes) while the stream uses 4"
+    },
+    {
+      "name": "nal_len_zero",
+      "bytes": 6053,
+      "sha256": "64de648e9b53129a",
+      "note": "first NAL length prefix 0"
+    },
+    {
+      "name": "nal_len_huge",
+      "bytes": 6053,
+      "sha256": "33d6e61b3ef25b70",
+      "note": "first NAL length prefix 0x7FFFFFFF"
+    },
+    {
+      "name": "nal_forbidden_bit",
+      "bytes": 6053,
+      "sha256": "ed85c25eaf291c9e",
+      "note": "first NAL header has forbidden_zero_bit set"
+    },
+    {
+      "name": "nal_type_zero",
+      "bytes": 6053,
+      "sha256": "54d780a0933957c5",
+      "note": "first NAL header type 0 (unspecified)"
+    },
+    {
+      "name": "nal_type_31",
+      "bytes": 6053,
+      "sha256": "fb6dc4cffdf6ff11",
+      "note": "first NAL header type 31 (reserved)"
+    },
+    {
+      "name": "nal_zero_body",
+      "bytes": 6053,
+      "sha256": "47caea1f236bacb1",
+      "note": "first NAL body replaced by zeroes"
+    },
+    {
+      "name": "nal_ff_body",
+      "bytes": 6053,
+      "sha256": "d5ac56d3826fa145",
+      "note": "first NAL body replaced by 0xFF"
+    },
+    {
+      "name": "nal_startcode_injected",
+      "bytes": 6053,
+      "sha256": "0c6e1b2b4739fa10",
+      "note": "an Annex-B start code injected into the first NAL body"
+    },
+    {
+      "name": "nal_len_swallows_mdat",
+      "bytes": 6053,
+      "sha256": "80a19aca095453a8",
+      "note": "first NAL length set to the remainder of mdat"
+    },
+    {
+      "name": "au_truncated_at_last_nal",
+      "bytes": 5801,
+      "sha256": "474a591767e8367e",
+      "note": "file cut immediately before the final NAL unit"
+    }
+  ]
+}

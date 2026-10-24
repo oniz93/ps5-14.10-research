@@ -94,4 +94,32 @@ Two facts visible only in the beacon output:
 Round 2 is `probes/corpus-v2.js`: fonts first, then MP4, one reload, roughly four minutes.
 `F2-*` and `M2-*` prefixes keep its beacons distinguishable from round 1 in the same log.
 
-Stamp: 28 font cases + 32 MP4 cases, both reachable from a page with no prerequisites.
+## Round 2: real coverage, two solid negatives
+
+**Fonts.** `FALLBACK-LEPCHA-w112` against `w152` for every loaded case proves the font's own
+outlines were used rather than a substitute. Two cases carry the weight: `fpgm_inflated` and
+`prep_huge` both rendered at **w0**, which means the TrueType bytecode interpreter processed 4 KiB
+and 64 KiB of hostile hinting programs. That is the historically richest FreeType surface, and it
+was exercised for the first time here. Rejections were again exactly the four that 2.15.0 rejects.
+
+**MP4.** The container parser is now properly cleared: nine cases reached `deep=playing`, i.e. the
+demuxer *and* decoder ran — `valid`, `ftyp_type_swap`, `mdat_size_beyond_file`,
+`mvhd_timescale_zero`, `mvhd_duration_huge`, `tfhd_flags_all`, `trunc_in_moof`, `trunc_in_mdat`,
+`moof_alias_moov_offset`. Four were cleanly rejected with `M2-VERR deep=none`
+(`moov_size_lt_header`, `moov_type_swap`, `trak_type_swap`, `moof_type_swap`). Nothing crashed.
+
+## What is left: the codec layer
+
+Every mutation so far changed box structure. None touched the bitstream — the `avcC`
+configuration record (SPS/PPS, parsed at init) or the length-prefixed NAL units in `mdat`. Those
+reach a different parser, and a hostile SPS is the classic route to making a decoder allocate by
+numbers it was told but never validated.
+
+`tools/fw1400/avc_mutate.py` emits 22 cases: `avcC` count/length abuse, `SPS` profile/level/
+body replacement (zeros and 0xFF, the densest Exp-Golomb encoding), `PPS` id out of range,
+`lengthSize` mismatch, NAL length zero and 0x7FFFFFFF, forbidden bit, reserved types, body
+replacement, an injected Annex-B start code, a length that swallows the rest of `mdat`, and a
+truncated access unit. `probes/bitstream-probe.js` plays and seeks each one and records the
+deepest event, so "accepted and stalled" cannot be mistaken for "decoded".
+
+Stamp: 28 font cases, 32 container cases, 22 bitstream cases — all reachable from a page with no prerequisites.
