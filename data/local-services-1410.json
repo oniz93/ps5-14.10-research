@@ -1,0 +1,13 @@
+{
+  "probe": "poc-local-services.js",
+  "firmware": "14.10",
+  "ports_probed_from_page": [9515, 9516, 4444, 9222, 9223, 8080, 3000],
+  "page_results": "all errTypeError, all within ~2 ms of each other",
+  "interpretation": "NOT a measurement of the services. A synchronous TypeError that fast is mixed-content blocking: WebKit refused http://127.0.0.1 from the https page before any network I/O. The probe could not see anything either way.",
+  "lan_scan_from_mac": {
+    "host": "<console-ip>",
+    "ports": [80, 443, 5000, 8000, 8080, 8081, 8443, 9000, 9222, 9223, 9515, 9516, 4444, 3000],
+    "result": "all closed"
+  },
+  "conclusion": "nothing listens on a routable interface. WebDriver and the inspector socket server are compiled in but are either not started or bound to loopback only, where page JS cannot reach them. No automation shortcut; real key events remain the only way to drive the date field."
+}
