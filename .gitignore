@@ -37,3 +37,6 @@ out/jsc-stress-run.log
 out/yarr-results.jsonl
 out/yarr-run.log
 out/yarr-findings/
+out/frontend-results.jsonl
+out/frontend-run.log
+out/frontend-findings/

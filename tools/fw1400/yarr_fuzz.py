@@ -96,7 +96,8 @@ def run_batch(batch: list[tuple[str, str, str]], timeout: int) -> tuple[bool, st
     except subprocess.TimeoutExpired:
         return False, "timeout"
     err = p.stderr or ""
-    return ("AddressSanitizer" in err), err
+    crashed = p.returncode in (-11, -6, 139, 134, 138)
+    return ("AddressSanitizer" in err or crashed), err or f"rc={p.returncode}"
 
 
 def bisect(batch, timeout):
