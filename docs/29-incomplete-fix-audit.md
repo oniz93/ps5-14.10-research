@@ -79,10 +79,38 @@ console can settle it, and only via reachability first.
 
 | # | target | question | how to answer |
 |---|---|---|---|
-| 1 | `SerializedScriptValue` pool desync | is there a tag pair the two sides disagree on? | read both `apiSerialize`/`apiDeserialize` tag handling side by side; the checker tells you exactly which tags are pool-eligible |
-| 2 | media append contract | does the backend retain the pointer? | console probe first (`cap-sony-surface.js`), then append/remove churn |
+| ~~1~~ | ~~`SerializedScriptValue` pool desync~~ | **closed by inspection** — see below | no interleaving point exists single-threaded |
+| 1 | media append contract | does the backend retain the pointer? | console probe first (`cap-sony-surface.js`), then append/remove churn |
 | 3 | CDM callback ordering | can two requests be in flight and reorder? | trigger `requestMediaKeySystemAccess` for two sessions |
 | 4 | remaining behavioural patches | `YarrPattern.cpp` (+8), `XMLDocumentParserLibxml2.cpp` (+17), `TransformStream.cpp` (+14/−2), `ProxyHelpers.js` (+4/−4) | same 6-step method |
+
+## Rank 1 closed, and why the reason matters
+
+The serializer and deserializer push the same 14 tags, so there is no *static* asymmetry. The
+only remaining desync mechanism is timing, and Sony's code is:
+
+```cpp
+if (arrayBuffer->isResizableOrGrowableShared()) {
+    write(ResizableArrayBufferTag);
+    uint64_t byteLength = arrayBuffer->byteLength();
+    write(byteLength);
+    uint64_t maxByteLength = arrayBuffer->maxByteLength().value_or(0);
+    write(maxByteLength);
+    write(static_cast<const uint8_t*>(arrayBuffer->data()), byteLength);   // pre-fix ordering
+    return true;
+}
+```
+
+`byteLength()` and `data()` are adjacent statements — **no JavaScript runs between them**, and
+there is no getter, hook or finalizer in that window, so a resizable buffer cannot change size
+between the length being written and the bytes being copied. The race in bug 278657 therefore
+needs genuine concurrency: another thread resizing a *shared* buffer while this one copies.
+
+The console reports `SharedArrayBuffer: false`, and this engine has no workers able to resize
+one. So 278657 is dead here for a structural reason — the interleaving point does not exist —
+rather than merely "the feature is switched off". That is a stronger negative than the one we
+recorded earlier, and it is worth keeping the distinction: the earlier note would have sent a
+future reader looking for a way to enable SAB, which would not have helped.
 
 ## Standing rule
 
