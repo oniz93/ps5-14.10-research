@@ -82,9 +82,11 @@ change available to this project.
 
 ## 4. Fuzzing
 
-Roughly 200,000 additional cases through the interpreter-only ASAN `jsc` (fresh seeds 111,
-222, 333): Yarr regex and the JS parser. **Zero reports**, consistent with the earlier
-150,000. The engine floor is tight and further blind fuzzing of it is not worth the cycles.
+Exactly **160,500 additional cases** through the interpreter-only ASAN `jsc` (seeds 111, 222,
+333 — three runs of 150 Yarr batches x 250 cases plus 80 parser batches x 200 cases each).
+**Zero reports**, consistent with the earlier ~186,000. Running total across the session:
+about 346,000 generated cases plus the 4,022-file regression corpus, and not one sanitizer
+report. The engine floor is tight and further blind fuzzing of it is not worth the cycles.
 
 ## 5. Console queue for the morning
 
