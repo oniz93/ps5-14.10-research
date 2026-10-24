@@ -245,6 +245,23 @@ class Handler(BaseHTTPRequestHandler):
             full = os.path.join(full, "index.html")
         return full
 
+    def _current_page(self):
+        """If `current` names an .html file in www/pages, serve it as the document.
+
+        The console only ever asks for its own guide paths, so it cannot be pointed at
+        /page/<name> by hand. Naming the file in `current` makes the guide document *be*
+        that file, which keeps the parser honest: the bytes the app receives are the
+        original reproducer, error recovery and all.
+        """
+        f = os.path.join(LAB, "current")
+        if not os.path.exists(f):
+            return None
+        name = open(f).read().strip()
+        if not name.lower().endswith(".html"):
+            return None
+        full = os.path.join(LAB, "www", "pages", os.path.basename(name))
+        return full if os.path.isfile(full) else None
+
     def _current_probe(self):
         """If www/current names a probe, the root serves that probe instead.
 
@@ -267,6 +284,10 @@ class Handler(BaseHTTPRequestHandler):
 
     def _serve_file(self):
         full = self._resolve()
+        page_file = self._current_page()
+        if page_file and full and full.endswith("index.html"):
+            self._send_bytes(open(page_file, "rb").read(), "text/html; charset=utf-8")
+            return
         probe = self._current_probe()
         if probe and full and full.endswith("index.html"):
             src = open(probe, encoding="utf-8", errors="replace").read()
