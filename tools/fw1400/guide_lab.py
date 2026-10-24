@@ -208,6 +208,20 @@ def run_dns(lan_ip: str, port: int = 53, verbose: bool = True, catchall: bool = 
 # ------------------------------------------------------------------- HTTPS
 
 class Handler(BaseHTTPRequestHandler):
+    def end_headers(self):
+        """Every response carries cross-origin isolation headers.
+
+        Without COOP+COEP the page is not crossOriginIsolated and SharedArrayBuffer
+        stays undefined, no matter what the engine supports. The resizable-ArrayBuffer
+        serialization bug fixed upstream in Oct 2024 needs a second thread to mutate the
+        buffer mid-serialization, so without SAB it is unreachable and the whole lead
+        dies. CORP is cross-origin so subresources still load.
+        """
+        self.send_header("Cross-Origin-Opener-Policy", "same-origin")
+        self.send_header("Cross-Origin-Embedder-Policy", "require-corp")
+        self.send_header("Cross-Origin-Resource-Policy", "cross-origin")
+        super().end_headers()
+
     server_version = "guide-lab"
     protocol_version = "HTTP/1.1"
 
