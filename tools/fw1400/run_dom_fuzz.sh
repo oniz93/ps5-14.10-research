@@ -33,6 +33,29 @@ fi
 # GTK needs a display; Xvfb gives each run a throwaway one and -a picks a free number.
 command -v Xvfb >/dev/null || { echo "Xvfb missing: sudo dnf install -y xorg-x11-server-Xvfb" >&2; exit 2; }
 
+# Preflight: a clean sweep is worthless if the binary was not actually instrumented.
+# Check the dynamic dependency rather than the build flags - ldd is harder to fool.
+if ! ldd "$BIN" 2>/dev/null | grep -q libasan; then
+    echo "PREFLIGHT FAILED: $BIN does not link libasan, so a clean run would prove nothing." >&2
+    ldd "$BIN" 2>/dev/null | grep -iE "asan|ubsan" >&2 || echo "  (no sanitizer runtime linked)" >&2
+    exit 3
+fi
+echo "preflight: ASAN runtime linked"
+
+# And confirm the sanitizer reports rather than merely links: a deliberate UAF must be caught.
+PROBE=$(mktemp -d)
+printf '#include <stdlib.h>\nint main(void){char *p=malloc(8);free(p);p[0]=1;return 0;}\n' > "$PROBE/t.c"
+if cc -fsanitize=address -O0 -o "$PROBE/t" "$PROBE/t.c" 2>/dev/null; then
+    if ! "$PROBE/t" 2>&1 | grep -q "AddressSanitizer"; then
+        echo "PREFLIGHT FAILED: a deliberate heap-use-after-free produced no report" >&2
+        exit 3
+    fi
+    echo "preflight: deliberate use-after-free detected (oracle works)"
+else
+    echo "preflight: could not build the ASAN probe - continuing anyway" >&2
+fi
+rm -rf "$PROBE"
+
 export ASAN_OPTIONS="detect_leaks=0:abort_on_error=1:symbolize=1:handle_abort=1"
 export WEBKIT_DISABLE_COMPOSITING_MODE=1        # keep rendering in-process, so faults land here
 export GDK_BACKEND=x11
