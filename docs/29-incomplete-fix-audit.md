@@ -112,6 +112,47 @@ rather than merely "the feature is switched off". That is a stronger negative th
 recorded earlier, and it is worth keeping the distinction: the earlier note would have sent a
 future reader looking for a way to enable SAB, which would not have helped.
 
+## Round 1 result: Sony's patchset is competent
+
+Every behavioural patch in the 59-file set has now been examined against step 4 ("find the path
+that violates the assumption"). None is a memory-safety gap.
+
+| patch | verdict |
+|---|---|
+| `BMPImageReader.cpp` RLE re-basing | sound — `startX` is a no-op on the non-RLE path, a negative column cannot bypass `endX > width`, reads stay inside `paddedNumBytes` |
+| `TransformStream.cpp` | properly fixed — the `ASSERT(size == 3)` became a checked return, and both `jsDynamicCast`s are null-checked before use |
+| `YarrPattern.cpp` forward references | complete — the unconditional-looking append is unreachable in forward direction because the `if (parenthesisMatchDirection() == Forward) { … return; }` above it returns first. Confirmed empirically: eight candidate patterns (named backref before its group, quantified `{0}`, with a trailing lookbehind) run clean under the ASAN `jsc` built from this same tree |
+| `XMLDocumentParserLibxml2.cpp` | complete for its site — post-constructor validation of parent/document before `parserAppendChild`, with a `stopParsing()` bail |
+| `ProxyHelpers.js` `@toThis(receiver)` | spec-correctness hardening, not memory safety |
+| `EventTarget.cpp` (`auto&` → `Ref`) | a real lifetime fix, and correctly generalised below |
+| `FontPlatformDataFreeType.cpp` | build-only (`#if PLATFORM(PLAYSTATION)` around a Cairo feature macro) |
+| `CSSParserImpl.cpp` nesting cap | **incomplete** — see below |
+
+### The one incomplete fix: selector recursion is still uncapped
+
+Sony added a nesting check to `consumeStyleRule` and hoisted `maximumRuleListNestingLevel = 128`
+to file scope, closing deep *rule* nesting. `parseCSSSelector` has no depth counter, so a chain
+like `:is(:is(:is(…)))` still recurses without bound and exhausts the stack. That is a
+WebProcess crash, i.e. denial of service, **not** a code-execution primitive — recorded because
+it is a genuine gap in the fix, and because a crash is a usable oracle even when it is not a
+vulnerability.
+
+### The EventTarget pattern, swept
+
+`auto& context = *scriptExecutionContext();` appears at 17 more sites. The class only bites when
+the reference is held across a **JS-reentrant** call, and that is rare:
+
+- `XMLHttpRequest::prepareToSend` — spans `shouldIgnoreSyncXHRs`, `readyState`, CSP evaluation;
+  no script runs, safe.
+- `WebSocket::connect` — spans URL validation, console messages, CSP upgrade; safe.
+- `MessagePort::disentangle` — spans channel-provider notification and three bookkeeping calls;
+  safe.
+
+`EventTarget` was the dangerous one precisely because it loops over listeners, and each listener
+is arbitrary script. The sweep found no second site of that shape that is reachable on this
+build. That is the useful form of a negative: the class is real, Sony fixed the instance that
+mattered, and the neighbours are clean rather than unexplored.
+
 ## Standing rule
 
 Do not count a patch as a fix until you can name the path it fails to cover, or prove there is
