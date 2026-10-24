@@ -1,0 +1,190 @@
+{
+  "base": "NotoSansLepcha-Regular.ttf",
+  "base_bytes": 24500,
+  "base_sha256": "6019ed0497ddf6d0",
+  "base_tables": [
+    "GDEF",
+    "GPOS",
+    "GSUB",
+    "OS/2",
+    "cmap",
+    "glyf",
+    "head",
+    "hhea",
+    "hmtx",
+    "loca",
+    "maxp",
+    "name",
+    "post"
+  ],
+  "cases": [
+    {
+      "name": "valid",
+      "bytes": 24500,
+      "sha256": "6019ed0497ddf6d0",
+      "note": "unmodified base font (control)"
+    },
+    {
+      "name": "hdmx_numrecords_huge",
+      "bytes": 24500,
+      "sha256": "42f982cf971c1d00",
+      "note": "hdmx numRecords=0xFFFF with a two-byte record, so the table is far shorter than it claims"
+    },
+    {
+      "name": "hdmx_sizedevice_zero",
+      "bytes": 24500,
+      "sha256": "42f982cf971c1d00",
+      "note": "hdmx sizeDeviceRecord=0: recordCount*size == 0, so the stride is zero"
+    },
+    {
+      "name": "hdmx_count_times_size_overflow",
+      "bytes": 24500,
+      "sha256": "42f982cf971c1d00",
+      "note": "hdmx 0xFFFF*0xFFFF: the 16-bit multiply overflows if done in 16 bits"
+    },
+    {
+      "name": "maxp_numglyphs_huge",
+      "bytes": 24500,
+      "sha256": "6044712eb3d65231",
+      "note": "maxp numGlyphs=0xFFFE while loca still describes the original count"
+    },
+    {
+      "name": "maxp_numglyphs_zero",
+      "bytes": 24500,
+      "sha256": "c0a695be1af47539",
+      "note": "maxp numGlyphs=0 against a non-empty loca"
+    },
+    {
+      "name": "loca_short",
+      "bytes": 24288,
+      "sha256": "c39aee670b97aa61",
+      "note": "loca truncated to a quarter of its length, so glyph indices run off the end"
+    },
+    {
+      "name": "loca_empty",
+      "bytes": 24220,
+      "sha256": "f20de054194d07b3",
+      "note": "loca replaced by four bytes of zeroes"
+    },
+    {
+      "name": "loca_offsets_past_glyf",
+      "bytes": 24232,
+      "sha256": "a7c1d5fb7e596ebd",
+      "note": "every loca entry points beyond the end of glyf"
+    },
+    {
+      "name": "glyf_glyph_span_huge",
+      "bytes": 24500,
+      "sha256": "250813673ac1acfc",
+      "note": "loca entries that describe a single glyph spanning the whole font"
+    },
+    {
+      "name": "cmap_subtable_offset_oob",
+      "bytes": 24500,
+      "sha256": "fe07b13ce5221dce",
+      "note": "cmap encoding record points 2 GB past the start of the table"
+    },
+    {
+      "name": "cmap_format4_segcount_huge",
+      "bytes": 24500,
+      "sha256": "28bc645a20d1e63b",
+      "note": "format 4 subtable segCountX2=0xFFFF with no matching arrays"
+    },
+    {
+      "name": "head_unitsperem_zero",
+      "bytes": 24500,
+      "sha256": "a5d8f6b1c8aca3bb",
+      "note": "head unitsPerEm=0, so every scaled metric collapses"
+    },
+    {
+      "name": "head_magic_bad",
+      "bytes": 24500,
+      "sha256": "d6a49428d1cb954f",
+      "note": "head magicNumber replaced"
+    },
+    {
+      "name": "head_locformat_bad",
+      "bytes": 24500,
+      "sha256": "622894e7b6990d48",
+      "note": "head indexToLocFormat=0x7FFF, neither short nor long"
+    },
+    {
+      "name": "name_count_huge",
+      "bytes": 24500,
+      "sha256": "147028c14408a9a2",
+      "note": "name count=0xFFFF with a two-entry string table"
+    },
+    {
+      "name": "post_numglyphs_huge",
+      "bytes": 24500,
+      "sha256": "0b738ef9338a8d8c",
+      "note": "post numGlyphs=0xFFFF"
+    },
+    {
+      "name": "fpgm_inflated",
+      "bytes": 28612,
+      "sha256": "a9d4996188b945e2",
+      "note": "fpgm (font program) present with a length that implies deep instruction nesting"
+    },
+    {
+      "name": "prep_huge",
+      "bytes": 57284,
+      "sha256": "7a35da2cb968e9a4",
+      "note": "prep table of 64 KiB of malformed hinting bytecode"
+    },
+    {
+      "name": "dirent_numtables_huge",
+      "bytes": 24500,
+      "sha256": "9339e284810583f8",
+      "note": "sfnt numTables=0xFFFE with a directory that holds only the original count"
+    },
+    {
+      "name": "dirent_numtables_zero",
+      "bytes": 24500,
+      "sha256": "50b11ef1b052999e",
+      "note": "sfnt numTables=0: no tables at all"
+    },
+    {
+      "name": "dirent_offset_overflow",
+      "bytes": 24500,
+      "sha256": "a0a1be88debc4bd1",
+      "note": "first table offset 0xFFFFFF00 with length 0x200: the end wraps 32 bits"
+    },
+    {
+      "name": "dirent_length_huge",
+      "bytes": 24500,
+      "sha256": "8da9cf65968233e2",
+      "note": "first table claims a 2 GB length"
+    },
+    {
+      "name": "dirent_overlap",
+      "bytes": 24500,
+      "sha256": "52954e4fd6b88d1e",
+      "note": "second table shares the first table's offset, so two parsers read one blob"
+    },
+    {
+      "name": "trunc_8",
+      "bytes": 8,
+      "sha256": "805a97817fa1c885",
+      "note": "file truncated to 8 of 24500 bytes"
+    },
+    {
+      "name": "trunc_header",
+      "bytes": 490,
+      "sha256": "3a8938031b6d610b",
+      "note": "file truncated to 490 of 24500 bytes"
+    },
+    {
+      "name": "trunc_half",
+      "bytes": 12250,
+      "sha256": "a98f2208c40e18dc",
+      "note": "file truncated to 12250 of 24500 bytes"
+    },
+    {
+      "name": "trunc_tail",
+      "bytes": 23765,
+      "sha256": "348e431c756d7804",
+      "note": "file truncated to 23765 of 24500 bytes"
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "base": "fmp4.mp4",
+  "base_bytes": 6053,
+  "base_sha256": "f410155659374090",
+  "base_boxes": [
+    "ftyp",
+    "moov",
+    "moof",
+    "mdat",
+    "mfra"
+  ],
+  "cases": [
+    {
+      "name": "valid",
+      "bytes": 6053,
+      "sha256": "f410155659374090",
+      "note": "unmodified fragmented MP4 (control)"
+    },
+    {
+      "name": "ftyp_size_zero",
+      "bytes": 6053,
+      "sha256": "9abc44714a3dd0b7",
+      "note": "ftyp box size set to 0, so it extends to end of file"
+    },
+    {
+      "name": "ftyp_size_one_lying_largesize",
+      "bytes": 6053,
+      "sha256": "40159ca9f9c842dd",
+      "note": "ftyp box claims size 1 (64-bit) and a largesize past EOF"
+    },
+    {
+      "name": "ftyp_size_lt_header",
+      "bytes": 6053,
+      "sha256": "a0ba938e8f5ea143",
+      "note": "ftyp box size 4, below the 8-byte header minimum"
+    },
+    {
+      "name": "ftyp_size_beyond_file",
+      "bytes": 6053,
+      "sha256": "ddb9c310d62f548c",
+      "note": "ftyp box claims 0x7FFFF000 bytes"
+    },
+    {
+      "name": "ftyp_type_swap",
+      "bytes": 6053,
+      "sha256": "6a0b90e189655eb1",
+      "note": "ftyp box relabelled as 'free', so a strict parser skips its payload"
+    },
+    {
+      "name": "moov_size_zero",
+      "bytes": 6053,
+      "sha256": "8360b7d9224aabbd",
+      "note": "moov box size set to 0, so it extends to end of file"
+    },
+    {
+      "name": "moov_size_one_lying_largesize",
+      "bytes": 6053,
+      "sha256": "ec66bb67c1649dd5",
+      "note": "moov box claims size 1 (64-bit) and a largesize past EOF"
+    },
+    {
+      "name": "moov_size_lt_header",
+      "bytes": 6053,
+      "sha256": "96b561864292ac72",
+      "note": "moov box size 4, below the 8-byte header minimum"
+    },
+    {
+      "name": "moov_size_beyond_file",
+      "bytes": 6053,
+      "sha256": "9e6f3a815ac1f786",
+      "note": "moov box claims 0x7FFFF000 bytes"
+    },
+    {
+      "name": "moov_type_swap",
+      "bytes": 6053,
+      "sha256": "1bccda2982bb44b7",
+      "note": "moov box relabelled as 'free', so a strict parser skips its payload"
+    },
+    {
+      "name": "moof_size_zero",
+      "bytes": 6053,
+      "sha256": "a80a28006b04ef56",
+      "note": "moof box size set to 0, so it extends to end of file"
+    },
+    {
+      "name": "moof_size_one_lying_largesize",
+      "bytes": 6053,
+      "sha256": "ed926eeb79c3fe52",
+      "note": "moof box claims size 1 (64-bit) and a largesize past EOF"
+    },
+    {
+      "name": "moof_size_lt_header",
+      "bytes": 6053,
+      "sha256": "a4904454f6fbc617",
+      "note": "moof box size 4, below the 8-byte header minimum"
+    },
+    {
+      "name": "moof_size_beyond_file",
+      "bytes": 6053,
+      "sha256": "9bf4da4f50486bf5",
+      "note": "moof box claims 0x7FFFF000 bytes"
+    },
+    {
+      "name": "moof_type_swap",
+      "bytes": 6053,
+      "sha256": "88b8376d290854d6",
+      "note": "moof box relabelled as 'free', so a strict parser skips its payload"
+    },
+    {
+      "name": "mdat_size_zero",
+      "bytes": 6053,
+      "sha256": "c330af7051f471f1",
+      "note": "mdat box size set to 0, so it extends to end of file"
+    },
+    {
+      "name": "mdat_size_one_lying_largesize",
+      "bytes": 6053,
+      "sha256": "ba7dc031aab0a14c",
+      "note": "mdat box claims size 1 (64-bit) and a largesize past EOF"
+    },
+    {
+      "name": "mdat_size_lt_header",
+      "bytes": 6053,
+      "sha256": "ae0e34681e5e2861",
+      "note": "mdat box size 4, below the 8-byte header minimum"
+    },
+    {
+      "name": "mdat_size_beyond_file",
+      "bytes": 6053,
+      "sha256": "45a4eb928b82fb53",
+      "note": "mdat box claims 0x7FFFF000 bytes"
+    },
+    {
+      "name": "mdat_type_swap",
+      "bytes": 6053,
+      "sha256": "835a7c1f85759210",
+      "note": "mdat box relabelled as 'free', so a strict parser skips its payload"
+    },
+    {
+      "name": "mvhd_timescale_zero",
+      "bytes": 6053,
+      "sha256": "f410155659374090",
+      "note": "mvhd timescale 0, so every time computation divides by zero"
+    },
+    {
+      "name": "mvhd_duration_huge",
+      "bytes": 6053,
+      "sha256": "0acb6456b9272828",
+      "note": "mvhd duration 0xFFFFFFFF with a small timescale"
+    },
+    {
+      "name": "trak_type_swap",
+      "bytes": 6053,
+      "sha256": "9a3b0a15ba4c3872",
+      "note": "trak relabelled 'free' inside moov"
+    },
+    {
+      "name": "tfhd_flags_all",
+      "bytes": 6053,
+      "sha256": "aa3723f101637e0b",
+      "note": "tfhd flags 0x00FFFFFF so every optional field is read"
+    },
+    {
+      "name": "trun_sample_count_huge",
+      "bytes": 6053,
+      "sha256": "e9db1059e19593c8",
+      "note": "trun sample_count 0x00FFFFFF against a tiny mdat"
+    },
+    {
+      "name": "moov_nesting_64",
+      "bytes": 6053,
+      "sha256": "c21be7261c8f61dc",
+      "note": "64 nested 8-byte boxes prepended inside moov"
+    },
+    {
+      "name": "moof_alias_moov_offset",
+      "bytes": 6053,
+      "sha256": "5441d7c98574baa4",
+      "note": "moof size field points at moov, so two containers share bytes"
+    },
+    {
+      "name": "trunc_in_ftyp",
+      "bytes": 907,
+      "sha256": "5a38ee0ffec8fa23",
+      "note": "cut 15% in, inside the leading boxes"
+    },
+    {
+      "name": "trunc_in_moov",
+      "bytes": 2118,
+      "sha256": "75df5cac09e0df1c",
+      "note": "cut 35% in, mid-moov"
+    },
+    {
+      "name": "trunc_in_moof",
+      "bytes": 4539,
+      "sha256": "9f8a64082223ea21",
+      "note": "cut 75% in, mid-moof"
+    },
+    {
+      "name": "trunc_in_mdat",
+      "bytes": 5931,
+      "sha256": "3620db506d6df5da",
+      "note": "cut 98% in, near the end of mdat"
+    }
+  ]
+}
