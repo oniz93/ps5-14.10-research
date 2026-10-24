@@ -1,0 +1,14 @@
+{
+  "probe": "poc-input-types.js",
+  "firmware": "14.10",
+  "supported": ["text", "range", "number", "search", "email", "url", "tel", "file", "checkbox", "radio"],
+  "rejected_to_text": ["date", "time", "datetime-local", "month", "week", "color"],
+  "count": "10 of 16",
+  "cause": "InputType::create() gates each type behind a runtime setting (Settings::inputTypeDateEnabled, inputTypeColorEnabled, ...); a rejected type silently stays text",
+  "effect_on_hunt": [
+    "every chooser-based reentrancy surface is gone: no date/time picker, no colour picker",
+    "range survives, but RangeInputType::handleKeydownEvent wraps its dispatch in EventQueueScope and HTMLInputElement::stepUp passes DispatchNoEvent, so that path is guarded",
+    "TextFieldInputType::setValue (text/number/search/email/url/tel) holds Ref<HTMLInputElement> input(*element()) explicitly to survive a handler that changes the input type - hardened",
+    "remaining form-control surface: FileInputType (native dialog) only"
+  ]
+}
