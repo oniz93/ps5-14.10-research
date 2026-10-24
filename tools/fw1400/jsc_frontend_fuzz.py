@@ -60,19 +60,30 @@ def gen_tokens(rng: random.Random, n: int) -> str:
 
 
 def gen_json(rng: random.Random) -> str:
-    depth = rng.randint(1, 200)
+    """Node-budgeted generator. The first version rolled depth up to 200 with up to four
+    children per level, which is exponential - every batch hit the timeout instead of
+    fuzzing. Depth is capped at 8 and the total node count is bounded."""
+    # deep chains exercise the recursive descent path directly, which is the shape that
+    # exhausts the stack; the budgeted trees below cover structural variety instead
+    if rng.random() < 0.12:
+        k = rng.choice([64, 128, 256, 512, 1024])
+        pair = rng.choice([("[", "]"), ("{", "}")])
+        return pair[0] * k + pair[1] * rng.choice([k, k - 1, k + 1])
 
-    def value(d):
-        r = rng.random()
-        if d <= 0 or r < 0.35:
-            return rng.choice(['0', '-0', '1e309', '-1e-309', '"\\ud800"', '"\\u0000"',
-                               'true', 'false', 'null', '"' + "x" * rng.randint(0, 40) + '"',
-                               str(rng.randint(-2**63, 2**63))])
-        if r < 0.7:
-            return "[" + ",".join(value(d - 1) for _ in range(rng.randint(0, 4))) + "]"
-        return "{" + ",".join(f'"k{i}":{value(d - 1)}' for i in range(rng.randint(0, 4))) + "}"
+    budget = [rng.randint(30, 300)]
+    literals = ['0', '-0', '1e309', '-1e-309', '"\\ud800"', '"\\u0000"', 'true', 'false',
+                'null', str(rng.randint(-2**63, 2**63)),
+                '"' + "x" * rng.randint(0, 40) + '"']
 
-    return value(depth)
+    def value(d: int) -> str:
+        budget[0] -= 1
+        if d <= 0 or budget[0] <= 0 or rng.random() < 0.28:
+            return rng.choice(literals)
+        if rng.random() < 0.55:
+            return "[" + ",".join(value(d - 1) for _ in range(rng.randint(0, 3))) + "]"
+        return "{" + ",".join(f'"k{i}":{value(d - 1)}' for i in range(rng.randint(0, 3))) + "}"
+
+    return value(rng.randint(1, 8))
 
 
 def gen_intl(rng: random.Random) -> str:
