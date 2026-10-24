@@ -122,4 +122,28 @@ replacement, an injected Annex-B start code, a length that swallows the rest of 
 truncated access unit. `probes/bitstream-probe.js` plays and seeks each one and records the
 deepest event, so "accepted and stalled" cannot be mistaken for "decoded".
 
+## Round 3 and the instrument problem, twice over
+
+Round 3 (22 bitstream cases) resolved completely with no crash. Sixteen reported `deep=playing`,
+including `sps_zero_bytes` and `sps_ff_bytes` — cases where the file's *only* parameter sets had
+been replaced by all zeros or all 0xFF.
+
+Checked locally first: the `mdat` carries `SEI, IDR, slice×9` and **no in-band SPS or PPS**, so the
+mutated `avcC` really was the only configuration record. An all-zero SPS therefore cannot have
+decoded. The conclusion is that `playing` never meant "decoded" in the first place.
+
+**Why:** for MediaSource playback, `loadedmetadata`, `canplay` and `playing` are driven by the
+demuxer's track information from `moov` — which every mutation in this corpus deliberately left
+intact. The element transitions to "playing" with a buffer no decoder can turn into a picture.
+This is the same class of mistake as round 1's `w150`: an event that fires for reasons other than
+the one being tested.
+
+**Fix:** `probes/bitstream-v2.js` uses `requestVideoFrameCallback`, which fires only when a frame is
+actually presented, and reports `frames=N` plus a canvas `nonblack=` pixel count. `deep=` is kept
+for diagnosis but is no longer evidence of anything.
+
+The general rule this run earned: every oracle here must be verified against a case whose outcome
+is known in advance. `FALLBACK-LEPCHA-w112` was that check for the fonts, and it is the reason the
+font conclusion is trustworthy; the media conclusions before this round were not.
+
 Stamp: 28 font cases, 32 container cases, 22 bitstream cases — all reachable from a page with no prerequisites.
