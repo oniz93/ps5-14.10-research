@@ -34,7 +34,7 @@ Of 348 commits, **11 memory-safety fixes land in that window**. Of those:
 |---|---|---|---|
 | 2023-11-02 | VULN-SHAPE | **Style::Scope UAF** | live, probe armed |
 | 2024-01-24 | VULN-SHAPE | `ShadowBlur::blurLayerImage` heap-buffer-overflow | tested on console — does not reproduce (layer size is clamped to the clip) |
-| 2024-08-05 | VULN-SHAPE | `RenderMenuList::setTextFromOption` UAF (`<select>` + `multiple`) | untested; needs `usesMenuList()` to be true on this theme |
+| 2024-08-05 | VULN-SHAPE | `RenderMenuList::setTextFromOption` UAF (`<select>` + `multiple`) | **live**: `usesMenuList()` is `!multiple && size <= 1`, so every plain `<select>` uses this renderer. Probe armed |
 | 2024-09-04 | NOFILE | image frame size integer overflow | file did not exist in 2023 |
 | 2024-04-15/20 | NOFILE | two `ViewTransition` UAFs | feature did not exist in 2023 |
 | 2023-10-09 → 2024-08-02 | dead | four WebCodecs heap overflows | `ENABLE_WEB_CODECS` defaults OFF and the port does not override it |
@@ -88,10 +88,14 @@ In order. Each is a two-minute test with the lab running.
 1. **`poc-style-scope-uaf.js`** — the UAF. Expect `SCOPE-SURVIVED` on a patched engine, a
    blank WebView on a vulnerable one. If it blanks, the last `SCOPE-ITER-<n>` beacon tells
    us roughly how many teardowns it takes, which is the starting point for making it reliable.
-2. **`poc-sab-gates.js`** — the clone-race prerequisites (`crossOriginIsolated`,
+2. **`poc-select-uaf.js`** — the second UAF. Four lines upstream: `select { container: a1 / inline-size }`,
+   mutate `options[1]`, then `select.multiple = true`. Sony's `itemStyle()` still dereferences
+   `*element->computedStyle()` with no null check, and the fix's whole point is that a full
+   style resolution there can free the renderer that is executing.
+3. **`poc-sab-gates.js`** — the clone-race prerequisites (`crossOriginIsolated`,
    `SharedArrayBuffer`, resizable/growable buffers, worker round-trip). One gate decides
    whether the 2024 `CloneSerializer` bug is reachable at all.
-3. **`poc-css-nesting-inval.js`** — `cssNestingEnabled` plus the bug 276942 crash path.
+4. **`poc-css-nesting-inval.js`** — `cssNestingEnabled` plus the bug 276942 crash path.
 
 The lab now sends `COOP`/`COEP`/`CORP` on every response, so the SAB probe measures what
 isolation unlocks rather than the non-isolated baseline.
