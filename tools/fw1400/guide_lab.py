@@ -59,6 +59,8 @@ RESULTS = os.path.join(LAB, "results")
 PAYLOAD = os.path.join(LAB, "www")
 RESEARCH = os.path.join(HERE, "..", "..", "research", "PS5-14.10-Research")
 PROBES = os.path.normpath(os.path.join(RESEARCH, "probes", "phase13_webkit"))
+# repo-local probes win over the third-party clone, so our own PoCs stay tracked
+LOCAL_PROBES = os.path.join(HERE, "probes")
 CORPUS = os.path.normpath(os.path.join(RESEARCH, "results", "webkit", "corpus"))
 
 DOMAINS = ["ps5.np.playstation.net", "manuals.playstation.net"]
@@ -242,8 +244,12 @@ class Handler(BaseHTTPRequestHandler):
         name = open(f).read().strip()
         if not name:
             return None
-        full = os.path.join(PROBES, os.path.basename(name))
-        return full if os.path.isfile(full) else None
+        base = os.path.basename(name)
+        for d in (LOCAL_PROBES, PROBES):
+            full = os.path.join(d, base)
+            if os.path.isfile(full):
+                return full
+        return None
 
     def _serve_file(self):
         full = self._resolve()

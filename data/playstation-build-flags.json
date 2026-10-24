@@ -1,0 +1,286 @@
+{
+ "source": "Source/cmake/OptionsPlayStation.cmake",
+ "firmware": "14.00+ drop",
+ "overrides": [
+  {
+   "line": 197,
+   "feature": "ENABLE_API_TESTS",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 198,
+   "feature": "ENABLE_LAYOUT_TESTS",
+   "visibility": "PUBLIC",
+   "value": "${USE_WPE_BACKEND_PLAYSTATION}"
+  },
+  {
+   "line": 199,
+   "feature": "ENABLE_MINIBROWSER",
+   "visibility": "PUBLIC",
+   "value": "${ENABLE_WEBKIT}"
+  },
+  {
+   "line": 206,
+   "feature": "ENABLE_JIT",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 207,
+   "feature": "ENABLE_FTL_JIT",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 208,
+   "feature": "ENABLE_DFG_JIT",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 211,
+   "feature": "USE_ISO_MALLOC",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 214,
+   "feature": "ENABLE_ACCESSIBILITY",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 215,
+   "feature": "ENABLE_FULLSCREEN_API",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 216,
+   "feature": "ENABLE_TRACKING_PREVENTION",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 217,
+   "feature": "ENABLE_NETWORK_CACHE_SPECULATIVE_REVALIDATION",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 218,
+   "feature": "ENABLE_NETWORK_CACHE_STALE_WHILE_REVALIDATE",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 219,
+   "feature": "ENABLE_PERIODIC_MEMORY_MONITOR",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 220,
+   "feature": "ENABLE_REMOTE_INSPECTOR",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 221,
+   "feature": "ENABLE_RESOURCE_USAGE",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 222,
+   "feature": "ENABLE_SMOOTH_SCROLLING",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 223,
+   "feature": "ENABLE_WEB_CRYPTO",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 226,
+   "feature": "ENABLE_WEBDRIVER",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 230,
+   "feature": "ENABLE_ACCESSIBILITY",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 231,
+   "feature": "ENABLE_LAYOUT_TESTS",
+   "visibility": "PRIVATE",
+   "value": "${ENABLE_WEBCORE}"
+  },
+  {
+   "line": 232,
+   "feature": "ENABLE_VIDEO",
+   "visibility": "PRIVATE",
+   "value": "ON"
+  },
+  {
+   "line": 233,
+   "feature": "ENABLE_WEBDRIVER",
+   "visibility": "PUBLIC",
+   "value": "${ENABLE_WEBCORE}"
+  },
+  {
+   "line": 236,
+   "feature": "ENABLE_APPLICATION_MANIFEST",
+   "visibility": "PRIVATE",
+   "value": "${ENABLE_EXPERIMENTAL_FEATURES}"
+  },
+  {
+   "line": 237,
+   "feature": "ENABLE_CSS_PAINTING_API",
+   "visibility": "PRIVATE",
+   "value": "${ENABLE_EXPERIMENTAL_FEATURES}"
+  },
+  {
+   "line": 238,
+   "feature": "ENABLE_FILTERS_LEVEL_2",
+   "visibility": "PRIVATE",
+   "value": "${ENABLE_EXPERIMENTAL_FEATURES}"
+  },
+  {
+   "line": 239,
+   "feature": "ENABLE_LAYER_BASED_SVG_ENGINE",
+   "visibility": "PRIVATE",
+   "value": "${ENABLE_EXPERIMENTAL_FEATURES}"
+  },
+  {
+   "line": 240,
+   "feature": "ENABLE_SERVICE_WORKER",
+   "visibility": "PRIVATE",
+   "value": "${ENABLE_EXPERIMENTAL_FEATURES}"
+  },
+  {
+   "line": 243,
+   "feature": "ENABLE_GAMEPAD",
+   "visibility": "PRIVATE",
+   "value": "${ENABLE_EXPERIMENTAL_FEATURES}"
+  },
+  {
+   "line": 249,
+   "feature": "USE_AVIF",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 250,
+   "feature": "USE_JPEGXL",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 254,
+   "feature": "ENABLE_ASYNC_SCROLLING",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 255,
+   "feature": "ENABLE_GPU_PROCESS",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 256,
+   "feature": "ENABLE_WEB_AUDIO",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 259,
+   "feature": "ENABLE_VARIATION_FONTS",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 262,
+   "feature": "ENABLE_CONTEXT_MENUS",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 265,
+   "feature": "ENABLE_FTPDIR",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 266,
+   "feature": "ENABLE_GEOLOCATION",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 267,
+   "feature": "ENABLE_IMAGE_DIFF",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 268,
+   "feature": "ENABLE_MATHML",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 269,
+   "feature": "ENABLE_NETSCAPE_PLUGIN_API",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 270,
+   "feature": "ENABLE_NOTIFICATIONS",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 271,
+   "feature": "ENABLE_USER_MESSAGE_HANDLERS",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 272,
+   "feature": "ENABLE_WEBGL",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 273,
+   "feature": "ENABLE_XSLT",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  },
+  {
+   "line": 281,
+   "feature": "ENABLE_CSS_COMPOSITING",
+   "visibility": "PRIVATE",
+   "value": "OFF"
+  }
+ ],
+ "key_findings": [
+  "ENABLE_JIT/DFG_JIT/FTL_JIT OFF -> interpreter only",
+  "ENABLE_XSLT OFF",
+  "ENABLE_GPU_PROCESS OFF",
+  "ENABLE_WEBGL OFF",
+  "ENABLE_WEB_AUDIO OFF",
+  "ENABLE_ASYNC_SCROLLING OFF",
+  "ENABLE_REMOTE_INSPECTOR ON",
+  "ENABLE_WEBDRIVER ON"
+ ]
+}
