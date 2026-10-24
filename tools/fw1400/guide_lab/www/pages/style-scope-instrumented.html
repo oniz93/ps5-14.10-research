@@ -1,78 +1,102 @@
 This test passes if it doesn't crash.
 <script>
-// Instrumented copy of LayoutTests/fast/css/style-scope-destruction-crash.html.
-// The markup below is the authentic fuzzer case, byte for byte. Only the script is
-// changed: every step beacons, and main() is wrapped so a thrown exception is reported
-// instead of silently aborting the test. Without this, "the page rendered" cannot be
-// told apart from "main() threw on the first line and nothing ever ran".
+// v2 of the instrumented copy of LayoutTests/fast/css/style-scope-destruction-crash.html.
+// The markup below is the authentic fuzzer case, byte for byte; only the script is ours.
+//
+// v1 proved the parser builds the expected tree (x5 came out in the XHTML namespace via the
+// foreign-content breakout rule, x11/x18 in SVG) but never destroyed anything, so it could
+// not have triggered a Scope teardown bug: the shadow root and its Style::Scope lived for
+// the whole run. v2 removes the shadow host - destroying the shadow root and its scope
+// while the RenderStyle cycle keeps the SVG alive - then repeats, because a single teardown
+// may simply never win the allocation race.
+//
+// Every beacon is numbered, because POSTs arrive interleaved and the log order is not the
+// execution order.
+var N = 0;
 function beacon(tag) {
-    // The lab routes beacons by PATH (/beacon/<tag>), not by query string.
     try {
-        var u = '/beacon/' + encodeURIComponent(tag);
+        var u = '/beacon/' + (++N) + '-' + encodeURIComponent(tag);
         if (navigator.sendBeacon) navigator.sendBeacon(u, '');
         else { var x = new XMLHttpRequest(); x.open('GET', u, false); x.send(); }
     } catch (e) {}
-    try { document.title = tag; } catch (e) {}
+    try { document.title = N + ' ' + tag; } catch (e) {}
 }
 
-window.onerror = function (m, s, l) {
-    beacon('SS-ERROR:' + m + '@' + l);
-    return true;
-};
+window.onerror = function (m, s, l) { beacon('ERROR:' + m + '@' + l); return true; };
 
 function gc() {
-    if (window.GCController) {
-        GCController.collect();
-        return;
-    }
-    for (var i = 0; i < 100; i++) {
-        new Uint8Array(1024 * 1024);
-    }
+    if (window.GCController) { GCController.collect(); return; }
+    for (var i = 0; i < 100; i++) { new Uint8Array(1024 * 1024); }
 }
 
 function main() {
-    beacon('SS-ENTER');
-    beacon('SS-X5=' + (typeof x5) + '/' + (x5 ? x5.namespaceURI : 'null'));
-    beacon('SS-X11=' + (typeof x11) + '/' + (x11 ? x11.namespaceURI : 'null'));
-    beacon('SS-X18=' + (typeof x18) + '/' + (x18 ? x18.namespaceURI : 'null'));
+    beacon('ENTER');
+    beacon('X5=' + (typeof x5) + '/' + (x5 ? x5.namespaceURI : 'null'));
+    beacon('X11=' + (typeof x11) + '/' + (x11 ? x11.namespaceURI : 'null'));
 
     var v63;
     try {
         v63 = x5.attachShadow({ mode: 'open', delegatesFocus: false });
-        beacon('SS-AFTER-ATTACH');
+        beacon('AFTER-ATTACH');
     } catch (e) {
-        beacon('SS-THREW-ATTACH:' + e.name);
+        beacon('THREW-ATTACH:' + e.name);
         return;
     }
 
-    try { x18.scrollTop; } catch (e) { beacon('SS-THREW-SCROLL:' + e.name); }
+    try { x18.scrollTop; } catch (e) { beacon('THREW-SCROLL:' + e.name); }
 
     try {
         v63.appendChild(x11);
-        beacon('SS-AFTER-APPEND');
+        beacon('AFTER-APPEND');
     } catch (e) {
-        beacon('SS-THREW-APPEND:' + e.name);
+        beacon('THREW-APPEND:' + e.name);
         return;
     }
 
     gc();
-    beacon('SS-AFTER-GC');
+    beacon('AFTER-GC');
 
-    // The upstream case stops here. Forcing the teardown is what makes the dangling
-    // scope dereference happen on this engine, so run it explicitly and report.
-    setTimeout(function () {
+    // The step v1 was missing: destroy the shadow root, and with it the Style::Scope, while
+    // the SVG's RenderStyle still references an element in the tree.
+    beacon('BEFORE-REMOVE-HOST');
+    try {
+        x5.remove();
+        beacon('AFTER-REMOVE-HOST');
+    } catch (e) {
+        beacon('THREW-REMOVE:' + e.name);
+    }
+    gc();
+    beacon('AFTER-GC2');
+
+    // Repeat the cycle. Cloning the parsed subtree reproduces exactly the shape the parser
+    // produced (breakout, duplicate ids and all) without re-parsing.
+    var proto = v63.firstChild;
+    var i;
+    for (i = 1; i <= 60; i++) {
+        var host, sr, svg;
         try {
-            var d = document.createElement('div');
-            d.textContent = 'x';
-            document.body.appendChild(d);
-            d.remove();
-            beacon('SS-AFTER-CHURN');
+            host = document.createElement('blockquote');
+            sr = host.attachShadow({ mode: 'open', delegatesFocus: false });
+            svg = proto.cloneNode(true);
+            sr.appendChild(svg);
+            document.body.appendChild(host);
+            beacon('B' + i);
         } catch (e) {
-            beacon('SS-THREW-CHURN:' + e.name);
+            beacon('THREW-BUILD:' + e.name + '@' + i);
+            break;
         }
-        gc();
-        beacon('SS-SURVIVED');
-    }, 50);
+        try { svg.firstChild.scrollTop; } catch (e) {}
+        try {
+            host.remove();
+            beacon('R' + i);
+        } catch (e) {
+            beacon('THREW-REMOVE2:' + e.name + '@' + i);
+        }
+        if (i % 5 === 0) gc();
+    }
+
+    gc();
+    beacon('Z-SURVIVED');
 }
 </script>
 </head>
