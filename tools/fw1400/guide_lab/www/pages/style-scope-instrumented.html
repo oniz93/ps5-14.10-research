@@ -97,6 +97,41 @@ function main() {
 
     gc();
     beacon('Z-SURVIVED');
+
+    // v3: the one shape v2 did not test. Upstream's harness destroys the whole document at
+    // the end of the test, which is a different teardown from removing a shadow host - the
+    // document owns the Style::Scope that the SVGStyleElement's destructor reaches into. So
+    // reload: if the crash lands during the outgoing document's destruction, the next
+    // document never beacons ENTER and the count stops here.
+    var n = 0;
+    try { n = parseInt(sessionStorage.getItem('ssdoc') || '0', 10) || 0; } catch (e) {}
+    n++;
+    try { sessionStorage.setItem('ssdoc', String(n)); } catch (e) {}
+    beacon('DOC-' + n);
+
+    // Keep 24 live hosts across a GC first: a host that is still referenced cannot be
+    // collected, so its shadow root and scope stay alive while the SVG inside them is only
+    // reachable through the render-style cycle.
+    var keep = [], k;
+    for (k = 0; k < 24; k++) {
+        try {
+            var h2 = document.createElement('blockquote');
+            var s2 = h2.attachShadow({ mode: 'open' });
+            s2.appendChild(proto.cloneNode(true));
+            document.body.appendChild(h2);
+            keep.push(h2);
+        } catch (e) {}
+    }
+    gc();
+    beacon('KEEP-GC');
+    keep.length = 0;
+    gc();
+    beacon('KEEP-DROPPED');
+
+    setTimeout(function () {
+        beacon('RELOADING');
+        location.reload();
+    }, 250);
 }
 </script>
 </head>
