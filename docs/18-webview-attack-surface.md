@@ -12,16 +12,17 @@ ENABLE_DFG_JIT   PRIVATE OFF
 ENABLE_FTL_JIT   PRIVATE OFF
 ```
 
-JSC on this port is **interpreter-only (LLInt)**. If that holds for the retail binary,
+JSC on this port is **interpreter-only (LLInt)** — **confirmed on the retail console**
+(`data/jit-oracle-1410.json`): cold 33.0 ms, warm 29.0 ms after ~8x10^7 warm-up
+operations, ratio **1.14**, verdict **JIT-OFF**. A DFG/FTL build would have shown the
+warmed run several times faster. If it holds for the retail binary,
 it removes most of the modern WebKit exploit literature at a stroke: no DFG/FTL type
 confusion, no JIT spray, no inline-cache-driven confusion, and every bug whose PoC needs
 an optimising tier never reproduces.
 
-It also explains last night's corpus result: 35 JSC crash regressions harvested from
-post-Safari-17.0 fixes produced zero crashes, and several of those cases are JIT-only.
-That is consistent with — not proof of — JIT being off at runtime. **Verify with the
-timing oracle** (`www/poc-jit-oracle.html`): interpreter-only shows almost no warm-up
-speed-up; a JIT shows a large one.
+It also explains the corpus result: 35 JSC crash regressions harvested from
+post-Safari-17.0 fixes produced zero crashes, several of which are JIT-only repros. The
+oracle (`tools/fw1400/probes/poc-jit-oracle.js`) then settled it on hardware.
 
 ## What else is compiled out
 
@@ -68,7 +69,34 @@ Reachable from a plain page on this build:
 Dead by build config: GPU, WebGL, audio, XSLT, MathML, workers, async scrolling,
 compositing paths.
 
-## Candidate #1 — `BaseDateAndTimeInputType::didChangeValueFromControl`
+## Candidate #1 — `ShadowBlur::blurShadowBuffer` heap-buffer-overflow
+
+Upstream fix `1e8c797c` (bug 264978), one-line change:
+
+```diff
+-    blurLayerImage(layerData->bytes(), blurRect.size(), blurRect.width() * 4);
++    blurLayerImage(layerData->bytes(), layerData->size(), layerData->size().width() * 4);
+```
+
+`getPixelBuffer()` clamps what it hands back to the image bounds, but the old call kept
+passing the *requested* rect. When the shadow's template size exceeds what the
+ImageBuffer could allocate, the blur walks off the end of the buffer. Sony's tree still
+has the old form verbatim.
+
+**Why this is now the top candidate:** it is pure CSS. No keyboard, no user gesture, no
+JIT — a `div` with absurd dimensions, a box-shadow and a filter is enough, which is
+exactly what the upstream regression test does:
+
+```css
+div { box-shadow: blue 1.76px 0px 10px 24px inset;
+      width: 33554432px; height: 33554432px;
+      border-radius: 5px; filter: sepia(1); }
+```
+
+Probe: `tools/fw1400/probes/poc-shadowblur-oob.js` (four size variants, beacon before and
+after each rendering update, so a crash names itself).
+
+## Candidate #2 — `BaseDateAndTimeInputType::didChangeValueFromControl`
 
 Upstream fix `869d5c55` (bug 310544, 2026-05-29): the function dispatches `input` without
 protecting itself; a handler that changes `input.type` destroys the object, and the code
@@ -99,7 +127,7 @@ Triggering needs real key events, i.e. a **USB keyboard** on the console typing 
 focused `<input type=date>` — or WebDriver, if it is live. `www/poc-date-uaf.html` sets
 that up with on-screen instructions.
 
-## Candidate #2 — `JSAttr::visitAdditionalChildren` / XHR `m_responseDocument`
+## Candidate #3 — `JSAttr::visitAdditionalChildren` / XHR `m_responseDocument`
 
 Upstream `8d71b724` and `a8140803`: GC-thread visiting of `Attr::m_element` and
 `XMLHttpRequest::optionalResponseXML()` races with main-thread mutation; the fixes add
@@ -122,15 +150,21 @@ came back `DIVERGED`, and reading the code showed why — upstream introduced th
 in a later refactor that Sony's frozen tree never received. Being frozen protects against
 newer bugs as much as it exposes older ones. Only the pre-fix-shape test is evidence.
 
-Status of the first 40 `use-after-free` commits since the cut:
+Status after four queries (`use-after-free`, `out-of-bounds`, `heap-buffer-overflow`,
+`type confusion`), with JIT/GPU/worker/XSLT paths filtered out by build flag:
 
 | verdict | count | meaning |
 |---|---|---|
-| VULN-SHAPE | 7 | pre-fix code present, fix absent → candidates |
-| BACKPORTED | 2 | Sony took the fix |
-| DIVERGED | 5 | code shape never existed here → not a bug here |
-| NOFILE | 5 | file/feature absent from the port |
-| SKIP-DEAD | 1 | feature compiled out |
+| VULN-SHAPE | 16 | pre-fix code present, fix absent → candidates |
+| BACKPORTED | 6 | Sony took the fix |
+| DIVERGED | 15 | code shape never existed here → not a bug here |
+| NOFILE | 12 | file/feature absent from the port |
+| SKIP-DEAD | 4 | feature compiled out |
+
+Two cross-checks worth noting: `Out-of-bounds read in BMP RLE24 absolute-mode decoding`
+came back DIVERGED, matching the earlier drop-diff which showed Sony already patched
+`BMPImageReader.cpp`; and most `type confusion` hits are NOFILE/DIVERGED, which is what
+you expect when the optimising tiers are gone.
 
 ## Next
 

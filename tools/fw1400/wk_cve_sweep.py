@@ -35,6 +35,9 @@ PATCH_CACHE = os.path.join("out", "patch-cache")
 
 # surface the console cannot reach (measured on 14.10)
 DEAD = re.compile(r"(Worker|ServiceWorker|Worklet|WebGL|WebGPU|GPUProcess|IndexedDB|IDB|Wasm|WebAssembly|AudioWorklet|MediaSession|Speech|Payment|WebXR|FileSystemAccess)", re.I)
+# measured on 14.10: ENABLE_JIT/DFG_JIT/FTL_JIT are OFF, so optimising-tier code paths
+# cannot be reached at runtime however true the bug is upstream
+JIT_OFF = re.compile(r"(/Source/JavaScriptCore/(dfg|ftl|b3|air|jit|wasm)/|\b(DFG|FTL|B3|Air|JIT|Wasm)\b)")
 LIVE = ("Source/JavaScriptCore/", "Source/WebCore/", "Source/WebKit/", "Source/WTF/")
 
 SEC = re.compile(r"(use.after.free|out.of.bounds|overflow|underflow|type.confusion|uninitiali[sz]ed|null.?deref|race|dangling|buffer|double.free|stale|leak|crash|assert|memory|security|sandbox)", re.I)
@@ -138,6 +141,7 @@ def main() -> int:
     ap.add_argument("--since", default="2023-09-09")
     ap.add_argument("--limit", type=int, default=40)
     ap.add_argument("--json", default="out/sweep.json")
+    ap.add_argument("--append", action="store_true", help="merge into an existing json instead of overwriting")
     a = ap.parse_args()
 
     q = f"repo:WebKit/WebKit {a.query} committer-date:>{a.since}"
@@ -160,7 +164,7 @@ def main() -> int:
         for path, patch in split_patch(patch_text):
             if not patch or not path.startswith(LIVE):
                 continue
-            if DEAD.search(path) or DEAD.search(msg):
+            if DEAD.search(path) or DEAD.search(msg) or JIT_OFF.search(path) or JIT_OFF.search(msg):
                 verdicts.append(("SKIP-DEAD", path, ""))
                 continue
             post = signature_lines(patch, side="+")
@@ -193,7 +197,13 @@ def main() -> int:
         time.sleep(0.2)
 
     os.makedirs(os.path.dirname(a.json) or ".", exist_ok=True)
-    json.dump(results, open(a.json, "w"), indent=1)
+    if a.append and os.path.exists(a.json):
+        old = json.load(open(a.json))
+        seen = {r["sha"] for r in old}
+        merged = old + [r for r in results if r["sha"] not in seen]
+    else:
+        merged = results
+    json.dump(merged, open(a.json, "w"), indent=1)
     tally = {}
     for r in results:
         tally[r["worst"]] = tally.get(r["worst"], 0) + 1

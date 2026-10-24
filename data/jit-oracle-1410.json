@@ -1,0 +1,27 @@
+{
+  "probe": "poc-jit-oracle.js",
+  "firmware": "26.06-14.10.00.03 (14.10)",
+  "console": "<console-ip>",
+  "host": "<host-ip>",
+  "method": "same workload (200k iterations of x = (x*31+i)>>>0) measured cold, then again after 400 warm-up calls (~8e7 operations, far past any tier-up threshold)",
+  "measurement": {
+    "cold_ms": 33.0,
+    "warm_ms": 29.0,
+    "ratio": 1.14,
+    "per_iteration_ns": 165
+  },
+  "verdict": "JIT-OFF",
+  "corroboration": {
+    "source": "Source/cmake/OptionsPlayStation.cmake",
+    "flags": ["ENABLE_JIT OFF", "ENABLE_DFG_JIT OFF", "ENABLE_FTL_JIT OFF"],
+    "corpus": "35 post-Safari-17.0 JSC crash regressions produced zero crashes, several of which are JIT-only repros"
+  },
+  "implications": [
+    "JSC runs LLInt/interpreter only on retail 14.10",
+    "DFG/FTL type confusion, JIT spray, inline-cache confusion: not applicable",
+    "any PoC requiring an optimising tier will not reproduce here",
+    "remaining JSC surface: parser, bytecode generator, object model, GC, Yarr interpreter, LLInt",
+    "heap primitives must be built with ordinary objects/ArrayBuffers, no JIT-assisted primitives"
+  ],
+  "captured": "2026-10-24, screenshot from the console"
+}
