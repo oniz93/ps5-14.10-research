@@ -15,6 +15,11 @@ This is the first memory-corruption bug in this whole project that is (a) confir
 in the code Sony ships, (b) reachable from a page, and (c) a use-after-free rather than a
 crash. Probe is armed: `poc-style-scope-uaf.js`.
 
+The dangling operation is a `WeakListHashSet::remove` **on the freed `Scope` object**, and
+the RenderStyle→DOM cycle means the dangling call happens later, during GC, with JavaScript
+running in between. That gap is what makes reclaim plausible — see the exploitation notes at
+the end of `docs/23`.
+
 ## 2. How the candidate list was narrowed
 
 Three sweeps, **348 unique upstream commits** scored against Sony's extracted tree. Raw

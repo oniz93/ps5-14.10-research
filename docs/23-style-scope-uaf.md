@@ -81,6 +81,46 @@ this repository can answer yet. What is established here is: the vulnerability i
 in the shipped code, it is reachable from a page, and it corrupts memory rather than merely
 crashing.
 
+## What the dangling pointer actually operates on
+
+Worth being concrete, because it decides whether this is a crash or a primitive.
+
+```cpp
+// WebCore/style/StyleScope.h:69,223
+class Scope : public CanMakeWeakPtr<Scope> {
+    ...
+    WeakListHashSet<Node, WeakPtrImplWithEventTargetData> m_styleSheetCandidateNodes;
+```
+
+and the function in the crash title is two lines:
+
+```cpp
+// WebCore/style/StyleScope.cpp:351
+void Scope::removeStyleSheetCandidateNode(Node& node)
+{
+    if (m_styleSheetCandidateNodes.remove(node))
+        didChangeActiveStyleSheetCandidates();
+}
+```
+
+So the dangling access is a **hash-set removal on a freed object**. That is not a null
+dereference: `WeakListHashSet::remove` reads the table pointer and size out of the freed
+`Scope`, hashes the node pointer, and probes the table. If the freed allocation has been
+reused with attacker-chosen bytes, the table pointer is attacker-chosen, and the probe turns
+into a read (and, on a hit, an erase) at a controlled address — the standard shape for
+turning a style-system UAF into an arbitrary read.
+
+The reason there is *time* to do that reuse is precisely the bug's structure: the
+RenderStyle → DOM cycle keeps the SVG element alive past the point where the `Scope` died, so
+the dangling call happens later — during GC — with arbitrary JavaScript running in between.
+That is what makes this more interesting than the many teardown crashes that turn out to be
+unreachable in practice.
+
+What is *not* established here: the exact allocation size of `Scope` (it needs a debug build
+to print, and ours is on hold), whether bmalloc or FastMalloc services it, and whether a
+JavaScript-controllable allocation lands in the same bucket. Those three questions are the
+next hour of work once the bug reproduces on the console at all.
+
 ## Reachability
 
 The upstream reproducer is a fuzzer artefact (`fast/css/style-scope-destruction-crash.html`):
