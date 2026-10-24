@@ -16,17 +16,23 @@
 
 set -u
 
-JOBS=${JOBS:-4}
+JOBS=${JOBS:-6}
 DIR=${DIR:-$HOME/wk/WebKit}
 LOG=${LOG:-$HOME/wk/build-asan.log}
 NINJA=${NINJA:-WebKitBuild/ASAN}
 
 cd "$DIR" || { echo "no build dir at $DIR" >&2; exit 2; }
 
-# setsid detaches from the controlling terminal so SIGHUP on disconnect does not reach ninja.
+# Three layers, because this build has now been killed twice by things other than the code:
+#   setsid          - detaches from the controlling terminal, so SIGHUP on disconnect misses it
+#   systemd-inhibit - blocks idle/sleep for the duration, in case a power profile asks anyway
+#   KillUserProcesses=no (set by bc250-fix.sh) - stops logind reaping the build on SSH logout
+INHIBIT=""
+command -v systemd-inhibit >/dev/null && INHIBIT="systemd-inhibit --what=idle:sleep:shutdown --mode=block --who=webkit-asan --why=build"
+
 {
     echo "=== resume $(date -Is) jobs=$JOBS target=$NINJA ==="
-    setsid ninja -C "$NINJA" -j"$JOBS" >> "$LOG" 2>&1
+    setsid $INHIBIT ninja -C "$NINJA" -j"$JOBS" >> "$LOG" 2>&1
     echo "EXIT=$?" >> "$LOG"
     echo "=== done $(date -Is) ==="
 } </dev/null >/dev/null 2>&1 &
