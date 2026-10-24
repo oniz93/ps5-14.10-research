@@ -1,0 +1,39 @@
+--- a/Source/WebCore/platform/sql/SQLiteDatabase.cpp
++++ b/Source/WebCore/platform/sql/SQLiteDatabase.cpp
+@@ -443,16 +443,32 @@
+         LOG(SQLDatabase, "Busy handler set on non-open database");
+ }
+ 
++int SQLiteDatabase::executeSlow(StringView query)
++{
++    auto statement = prepareStatementSlow(query);
++    if (!statement)
++        return statement.error();
++
++    return statement->step();
++}
++
++int SQLiteDatabase::execute(ASCIILiteral query)
++{
++    auto statement = prepareStatement(query);
++    if (!statement)
++        return statement.error();
++
++    return statement->step();
++}
++
+ bool SQLiteDatabase::executeCommandSlow(StringView query)
+ {
+-    auto statement = prepareStatementSlow(query);
+-    return statement && statement->executeCommand();
++    return executeSlow(query) == SQLITE_DONE;
+ }
+ 
+ bool SQLiteDatabase::executeCommand(ASCIILiteral query)
+ {
+-    auto statement = prepareStatement(query);
+-    return statement && statement->executeCommand();
++    return execute(query) == SQLITE_DONE;
+ }
+ 
+ bool SQLiteDatabase::tableExists(StringView tableName)

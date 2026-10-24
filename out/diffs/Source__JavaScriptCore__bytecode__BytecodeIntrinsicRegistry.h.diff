@@ -1,0 +1,10 @@
+--- a/Source/JavaScriptCore/bytecode/BytecodeIntrinsicRegistry.h
++++ b/Source/JavaScriptCore/bytecode/BytecodeIntrinsicRegistry.h
+@@ -98,6 +98,7 @@
+     macro(toString) \
+     macro(toPropertyKey) \
+     macro(toObject) \
++    macro(toThis) \
+     macro(mustValidateResultOfProxyGetAndSetTraps) \
+     macro(mustValidateResultOfProxyTrapsExceptGetAndSet) \
+     macro(newArrayWithSize) \

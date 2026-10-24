@@ -1,0 +1,22 @@
+--- a/Source/cmake/OptionsPlayStation.cmake
++++ b/Source/cmake/OptionsPlayStation.cmake
+@@ -25,6 +25,11 @@
+ 
+ # bug-224462
+ WEBKIT_PREPEND_GLOBAL_COMPILER_FLAGS(-Wno-dll-attribute-on-redeclaration)
++
++# FIXME: https://bugs.webkit.org/show_bug.cgi?id=299689
++if (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER_EQUAL 21)
++    WEBKIT_PREPEND_GLOBAL_COMPILER_FLAGS(-Wno-character-conversion)
++endif ()
+ 
+ set(ENABLE_WEBKIT_LEGACY OFF)
+ set(ENABLE_WEBINSPECTORUI OFF)
+@@ -270,6 +275,7 @@
+ # Enabled features
+ WEBKIT_OPTION_DEFINE(ENABLE_CURSOR_NAVIGATION PRIVATE "Toggle cursor navigation support" ON)
+ WEBKIT_OPTION_DEFINE(ENABLE_PUNCH_HOLE PRIVATE "Toggle Punch Hole support" ON)
++WEBKIT_OPTION_DEFINE(ENABLE_DIRECT_DRAWING_PLAYSTATION PRIVATE "Toggle direct drawing" OFF)
+ 
+ # Disable CSS_COMPOSITING because it doesn't work well with PUNCH_HOLE feature
+ WEBKIT_OPTION_DEFAULT_PORT_VALUE(ENABLE_CSS_COMPOSITING PRIVATE OFF)

@@ -1,0 +1,17 @@
+--- a/Source/JavaScriptCore/yarr/YarrPattern.cpp
++++ b/Source/JavaScriptCore/yarr/YarrPattern.cpp
+@@ -1528,6 +1528,14 @@
+         ASSERT(m_alternative->m_terms.size());
+ 
+         if (!max) {
++            // In a case of backwards parentheses matching, we may have a forward reference that has
++            // been quantified with {0}, meaning that we can elide it. We should check if we added an
++            // UnresolvedForwardReference object for this term, and if so, pop it.
++            if (parenthesisMatchDirection() == Backward && m_forwardReferencesInLookbehind.size()) {
++                UnresolvedForwardReference& mostRecentForwardReference = m_forwardReferencesInLookbehind.last();
++                if (mostRecentForwardReference.term() == &m_alternative->lastTerm())
++                    m_forwardReferencesInLookbehind.removeLast();
++            }
+             m_alternative->removeLastTerm();
+             return;
+         }

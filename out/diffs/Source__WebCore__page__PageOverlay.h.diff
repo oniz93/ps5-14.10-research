@@ -1,0 +1,17 @@
+--- a/Source/WebCore/page/PageOverlay.h
++++ b/Source/WebCore/page/PageOverlay.h
+@@ -73,12 +73,12 @@
+     };
+ 
+     WEBCORE_EXPORT static Ref<PageOverlay> create(Client&, OverlayType = OverlayType::View, AlwaysTileOverlayLayer = AlwaysTileOverlayLayer::No);
+-    WEBCORE_EXPORT virtual ~PageOverlay();
++    WEBCORE_EXPORT ~PageOverlay();
+ 
+     WEBCORE_EXPORT PageOverlayController* controller() const;
+ 
+     typedef uint64_t PageOverlayID;
+-    virtual PageOverlayID pageOverlayID() const { return m_pageOverlayID; }
++    PageOverlayID pageOverlayID() const { return m_pageOverlayID; }
+ 
+     void setPage(Page*);
+     WEBCORE_EXPORT Page* page() const;

@@ -1,0 +1,11 @@
+--- a/Source/WebCore/rendering/RenderListBox.h
++++ b/Source/WebCore/rendering/RenderListBox.h
+@@ -105,7 +105,7 @@
+     void autoscroll(const IntPoint&) override;
+     void stopAutoscroll() override;
+ 
+-    virtual bool shouldPanScroll() const { return true; }
++    bool shouldPanScroll() const { return true; }
+     void panScroll(const IntPoint&) override;
+ 
+     int verticalScrollbarWidth() const override;

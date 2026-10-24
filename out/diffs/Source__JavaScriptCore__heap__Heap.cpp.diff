@@ -1,0 +1,43 @@
+--- a/Source/JavaScriptCore/heap/Heap.cpp
++++ b/Source/JavaScriptCore/heap/Heap.cpp
+@@ -1,5 +1,5 @@
+ /*
+- *  Copyright (C) 2003-2023 Apple Inc. All rights reserved.
++ *  Copyright (C) 2003-2026 Apple Inc. All rights reserved.
+  *  Copyright (C) 2007 Eric Seidel <eric@webkit.org>
+  *
+  *  This library is free software; you can redistribute it and/or
+@@ -59,7 +59,6 @@
+ #include "JSWeakSet.h"
+ #include "MachineStackMarker.h"
+ #include "MarkStackMergingConstraint.h"
+-#include "MarkedJSValueRefArray.h"
+ #include "MarkedSpaceInlines.h"
+ #include "MarkingConstraintSet.h"
+ #include "MegamorphicCache.h"
+@@ -2912,13 +2911,6 @@
+             }
+ 
+             {
+-                SetRootMarkReasonScope rootScope(visitor, RootMarkReason::MarkedJSValueRefArray);
+-                m_markedJSValueRefArrays.forEach([&] (MarkedJSValueRefArray* array) {
+-                    array->visitAggregate(visitor);
+-                });
+-            }
+-
+-            {
+                 SetRootMarkReasonScope rootScope(visitor, RootMarkReason::VMExceptions);
+                 visitor.appendUnbarriered(vm.exception());
+                 visitor.appendUnbarriered(vm.lastException());
+@@ -3185,11 +3177,6 @@
+ }
+ 
+ 
+-void Heap::addMarkedJSValueRefArray(MarkedJSValueRefArray* array)
+-{
+-    m_markedJSValueRefArrays.append(array);
+-}
+-
+ void Heap::runTaskInParallel(RefPtr<SharedTask<void(SlotVisitor&)>> task)
+ {
+     unsigned initialRefCount = task->refCount();

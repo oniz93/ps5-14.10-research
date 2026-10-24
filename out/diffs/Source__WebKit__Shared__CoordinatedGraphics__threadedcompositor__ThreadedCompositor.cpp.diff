@@ -1,0 +1,19 @@
+--- a/Source/WebKit/Shared/CoordinatedGraphics/threadedcompositor/ThreadedCompositor.cpp
++++ b/Source/WebKit/Shared/CoordinatedGraphics/threadedcompositor/ThreadedCompositor.cpp
+@@ -241,8 +241,15 @@
+ 
+     m_client.willRenderFrame();
+ 
+-    if (needsResize)
++    if (needsResize) {
++#if ENABLE(DIRECT_DRAWING_PLAYSTATION)
++        // to adjust Minibrowser frame position
++        int height = viewportSize.width() * 9 / 16;
++        glViewport(0, height - viewportSize.height(), viewportSize.width(), viewportSize.height());
++#else
+         glViewport(0, 0, viewportSize.width(), viewportSize.height());
++#endif
++    }
+ 
+     glClearColor(0, 0, 0, 0);
+     glClear(GL_COLOR_BUFFER_BIT);

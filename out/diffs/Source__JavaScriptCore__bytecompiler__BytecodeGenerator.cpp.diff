@@ -1,0 +1,16 @@
+--- a/Source/JavaScriptCore/bytecompiler/BytecodeGenerator.cpp
++++ b/Source/JavaScriptCore/bytecompiler/BytecodeGenerator.cpp
+@@ -5507,9 +5507,10 @@
+     }
+ }
+ 
+-void BytecodeGenerator::emitToThis()
+-{
+-    OpToThis::emit(this, kill(&m_thisRegister), ecmaMode());
++RegisterID* BytecodeGenerator::emitToThis(RegisterID* srcDst)
++{
++    OpToThis::emit(this, kill(srcDst), ecmaMode());
++    return srcDst;
+ }
+ 
+ ForInContext* BytecodeGenerator::findForInContext(RegisterID* property)

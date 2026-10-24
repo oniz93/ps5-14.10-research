@@ -1,0 +1,10 @@
+--- a/Source/JavaScriptCore/API/JSRemoteInspector.h
++++ b/Source/JavaScriptCore/API/JSRemoteInspector.h
+@@ -34,6 +34,7 @@
+ typedef int JSProcessID;
+ #else
+ #include <unistd.h>
++#include <stdint.h>
+ typedef pid_t JSProcessID;
+ #endif
+ 

@@ -1,0 +1,68 @@
+--- a/Source/JavaScriptCore/runtime/ArgList.cpp
++++ b/Source/JavaScriptCore/runtime/ArgList.cpp
+@@ -26,7 +26,7 @@
+ using std::min;
+ 
+ namespace JSC {
+-
++#if 0
+ void MarkedVectorBase::addMarkSet(JSValue v)
+ {
+     if (m_markSet)
+@@ -39,7 +39,7 @@
+     m_markSet = &heap->markListSet();
+     m_markSet->add(this);
+ }
+-
++#endif
+ void ArgList::getSlice(int startIndex, ArgList& result) const
+ {
+     if (startIndex <= 0 || startIndex >= m_argCount) {
+@@ -58,13 +58,14 @@
+     for (ListSet::iterator it = markSet.begin(); it != end; ++it) {
+         MarkedVectorBase* list = *it;
+         for (int i = 0; i < list->m_size; ++i)
+-            visitor.appendUnbarriered(JSValue::decode(list->slotFor(i)));
++            visitor.appendUnbarriered(JSValue::decode(list->jsValueSlotFor(i)));
+     }
+ }
+ 
+ template void MarkedVectorBase::markLists(AbstractSlotVisitor&, ListSet&);
+ template void MarkedVectorBase::markLists(SlotVisitor&, ListSet&);
+ 
++#if 0
+ auto MarkedVectorBase::slowEnsureCapacity(size_t requestedCapacity) -> Status
+ {
+     setNeedsOverflowCheck();
+@@ -94,8 +95,8 @@
+     if (!newBuffer)
+         return Status::Overflowed;
+     for (int i = 0; i < m_size; ++i) {
+-        newBuffer[i] = m_buffer[i];
+-        addMarkSet(JSValue::decode(m_buffer[i]));
++        newBuffer[i] = static_cast<EncodedJSValue*>(m_buffer)[i];
++        addMarkSet(JSValue::decode(newBuffer[i]));
+     }
+ 
+     if (EncodedJSValue* base = mallocBase())
+@@ -105,7 +106,6 @@
+     m_capacity = newCapacity;
+     return Status::Success;
+ }
+-
+ auto MarkedVectorBase::slowAppend(JSValue v) -> Status
+ {
+     ASSERT(m_size <= m_capacity);
+@@ -116,10 +116,11 @@
+             return status;
+         }
+     }
+-    slotFor(m_size) = JSValue::encode(v);
++    jsValueSlotFor(m_size) = JSValue::encode(v);
+     ++m_size;
+     addMarkSet(v);
+     return Status::Success;
+ }
++#endif
+ 
+ } // namespace JSC

@@ -1,0 +1,14 @@
+--- a/Source/WebKit/UIProcess/API/C/neko/WKRunLoop.cpp
++++ b/Source/WebKit/UIProcess/API/C/neko/WKRunLoop.cpp
+@@ -40,6 +40,11 @@
+     RunLoop::main().stop();
+ }
+ 
++void WKRunLoopCycleMain()
++{
++    RunLoop::main().cycle();
++}
++
+ void WKRunLoopCallOnMainThread(WKRunLoopCallback callback, void* userData)
+ {
+     if (!callback)

@@ -1,0 +1,21 @@
+--- a/Source/WebCore/platform/graphics/playstation/mse/SourceBufferPrivatePlayStation.cpp
++++ b/Source/WebCore/platform/graphics/playstation/mse/SourceBufferPrivatePlayStation.cpp
+@@ -83,12 +83,16 @@
+ 
+ MediaPlayer::ReadyState SourceBufferPrivatePlayStation::readyState() const
+ {
+-    return m_mediaSource->readyState();
++    if (m_mediaSource)
++        return m_mediaSource->readyState();
++
++    return MediaPlayer::ReadyState::HaveNothing;
+ }
+ 
+ void SourceBufferPrivatePlayStation::setReadyState(MediaPlayer::ReadyState state)
+ {
+-    m_mediaSource->setReadyState(state);
++    if (m_mediaSource)
++        m_mediaSource->setReadyState(state);
+ }
+ 
+ bool SourceBufferPrivatePlayStation::canSwitchToType(const ContentType& contentType)

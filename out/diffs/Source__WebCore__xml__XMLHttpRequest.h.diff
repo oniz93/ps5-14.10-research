@@ -1,0 +1,11 @@
+--- a/Source/WebCore/xml/XMLHttpRequest.h
++++ b/Source/WebCore/xml/XMLHttpRequest.h
+@@ -68,7 +68,7 @@
+         DONE = 4
+     };
+ 
+-    virtual void didReachTimeout();
++    void didReachTimeout();
+ 
+     EventTargetInterface eventTargetInterface() const override { return XMLHttpRequestEventTargetInterfaceType; }
+     ScriptExecutionContext* scriptExecutionContext() const override { return ActiveDOMObject::scriptExecutionContext(); }

@@ -1,0 +1,25 @@
+--- a/Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.h
++++ b/Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.h
+@@ -52,7 +52,9 @@
+     bool shouldPaintMirrored() const override;
+     void initialize() override;
+     void finalize() override;
++#if !ENABLE(DIRECT_DRAWING_PLAYSTATION)
+     void willRenderFrame() override;
++#endif
+     void didRenderFrame() override;
+ 
+ #if ENABLE(PUNCH_HOLE)
+@@ -61,10 +63,12 @@
+ 
+ private:
+     AcceleratedSurfacePlayStation(WebPage&, Client&);
++#if !ENABLE(DIRECT_DRAWING_PLAYSTATION)
+ #if ENABLE(PUNCH_HOLE)
+     std::unique_ptr<canvas::IndirectCanvas> m_canvas;
+ #else
+     std::unique_ptr<canvas::Canvas> m_canvas;
++#endif
+ #endif
+ 
+     std::unique_ptr<VBlankMonitor> m_vBlankMonitor;

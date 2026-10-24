@@ -1,0 +1,34 @@
+--- a/Source/WebCore/page/playstation/FocusControllerPlayStation.cpp
++++ b/Source/WebCore/page/playstation/FocusControllerPlayStation.cpp
+@@ -32,6 +32,7 @@
+ #include "Element.h"
+ #include "HTMLElement.h"
+ #include "HTMLInputElement.h"
++#include "HTMLTextAreaElement.h"
+ #include "Page.h"
+ 
+ namespace WebCore {
+@@ -53,14 +54,21 @@
+     if (!is<HTMLElement>(element))
+         return false;
+ 
++    // Target tag: input.
+     if (element->hasTagName(HTMLNames::inputTag)) {
+         HTMLInputElement* input = downcast<HTMLInputElement>(element);
+         return (input->isTextField() && !input->isReadOnly());
+     }
+ 
+-    if (element->hasTagName(HTMLNames::textareaTag))
+-        return downcast<HTMLElement>(element)->hasEditableStyle();
++    // Target tag: textarea.
++    if (element->hasTagName(HTMLNames::textareaTag)) {
++        HTMLTextAreaElement* textarea = downcast<HTMLTextAreaElement>(element);
++        return !textarea->isReadOnly();
++    }
+ 
++    // Target tag: Other than input and textarea (div, p, etc).
++    // isContentEditable:
++    //   Returns whether the element is editable by the contenteditable attribute or -webkit-user-modify.
+     return downcast<HTMLElement>(element)->isContentEditable();
+ }
+ 

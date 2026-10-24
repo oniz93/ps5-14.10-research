@@ -1,0 +1,18 @@
+--- a/Source/JavaScriptCore/CMakeLists.txt
++++ b/Source/JavaScriptCore/CMakeLists.txt
+@@ -850,6 +850,7 @@
+     inspector/augmentable/AugmentableInspectorControllerClient.h
+ 
+     inspector/remote/RemoteAutomationTarget.h
++    inspector/remote/RemoteConnectionToTarget.h
+     inspector/remote/RemoteControllableTarget.h
+     inspector/remote/RemoteInspectionTarget.h
+     inspector/remote/RemoteInspector.h
+@@ -1148,6 +1149,7 @@
+     runtime/LeafExecutable.h
+     runtime/Lookup.h
+     runtime/MapConstructor.h
++    runtime/MarkedVector.h
+     runtime/MatchResult.h
+     runtime/MathCommon.h
+     runtime/MegamorphicCache.h

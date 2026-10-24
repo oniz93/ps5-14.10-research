@@ -1,0 +1,11 @@
+--- a/Source/WebCore/html/track/VideoTrack.h
++++ b/Source/WebCore/html/track/VideoTrack.h
+@@ -52,7 +52,7 @@
+     static const AtomString& signKeyword();
+ 
+     bool selected() const { return m_selected; }
+-    virtual void setSelected(const bool);
++    void setSelected(const bool);
+ 
+     void addClient(VideoTrackClient&);
+     void clearClient(VideoTrackClient&);

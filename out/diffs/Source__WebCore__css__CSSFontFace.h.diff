@@ -1,0 +1,11 @@
+--- a/Source/WebCore/css/CSSFontFace.h
++++ b/Source/WebCore/css/CSSFontFace.h
+@@ -61,7 +61,7 @@
+     WTF_MAKE_FAST_ALLOCATED_WITH_HEAP_IDENTIFIER(CSSFontFace);
+ public:
+     static Ref<CSSFontFace> create(CSSFontSelector&, StyleRuleFontFace* cssConnection = nullptr, FontFace* wrapper = nullptr, bool isLocalFallback = false);
+-    virtual ~CSSFontFace();
++    ~CSSFontFace();
+ 
+     void setFamilies(CSSValueList&);
+     void setStyle(CSSValue&);

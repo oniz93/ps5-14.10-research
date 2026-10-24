@@ -1,0 +1,10 @@
+--- a/Source/WebKit/WebProcess/Storage/WebSWContextManagerConnection.cpp
++++ b/Source/WebKit/WebProcess/Storage/WebSWContextManagerConnection.cpp
+@@ -79,6 +79,7 @@
+ 
+ #if ENABLE(REMOTE_INSPECTOR)
+ #include "ServiceWorkerDebuggableFrontendChannel.h"
++#include "WebProcessProxyMessages.h"
+ #endif
+ 
+ namespace WebKit {

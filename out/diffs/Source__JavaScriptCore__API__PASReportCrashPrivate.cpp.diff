@@ -1,0 +1,10 @@
+--- a/Source/JavaScriptCore/API/PASReportCrashPrivate.cpp
++++ b/Source/JavaScriptCore/API/PASReportCrashPrivate.cpp
+@@ -30,6 +30,7 @@
+ #include <bmalloc/pas_report_crash.h>
+ #endif
+ 
++WTF_IGNORE_WARNINGS_IN_THIRD_PARTY_CODE_END
+ using namespace JSC;
+ 
+ #ifdef __APPLE__

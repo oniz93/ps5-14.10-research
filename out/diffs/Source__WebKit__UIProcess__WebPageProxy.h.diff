@@ -1,0 +1,24 @@
+--- a/Source/WebKit/UIProcess/WebPageProxy.h
++++ b/Source/WebKit/UIProcess/WebPageProxy.h
+@@ -1313,7 +1313,7 @@
+     void setValueToFocusedNode(const String&);
+     void setCaretVisible(bool);
+ 
+-    virtual void launchOpenGLServerProcess(CompletionHandler<void(IPC::Attachment)>&&);
++    void launchOpenGLServerProcess(CompletionHandler<void(IPC::Attachment)>&&);
+ 
+ #if ENABLE(ACCESSIBILITY)
+     void accessibilityNotification(const WebAccessibilityObjectData&, uint32_t notification);
+@@ -1456,9 +1456,9 @@
+     void gpuProcessExited(ProcessTerminationReason);
+ #endif
+ 
+-    virtual void enterAcceleratedCompositingMode(const LayerTreeContext&);
+-    virtual void exitAcceleratedCompositingMode();
+-    virtual void updateAcceleratedCompositingMode(const LayerTreeContext&);
++    void enterAcceleratedCompositingMode(const LayerTreeContext&);
++    void exitAcceleratedCompositingMode();
++    void updateAcceleratedCompositingMode(const LayerTreeContext&);
+     void didFirstLayerFlush(const LayerTreeContext&);
+ 
+     void addEditCommand(WebEditCommandProxy&);

@@ -1,0 +1,31 @@
+--- a/Source/WebCore/css/parser/CSSParserImpl.cpp
++++ b/Source/WebCore/css/parser/CSSParserImpl.cpp
+@@ -63,6 +63,8 @@
+ #include <memory>
+ 
+ namespace WebCore {
++
++static constexpr auto maximumRuleListNestingLevel = 128;
+ 
+ CSSParserImpl::CSSParserImpl(const CSSParserContext& context, StyleSheetContents* styleSheet)
+     : m_context(context)
+@@ -581,7 +583,6 @@
+ {
+     NestingLevelIncrementer incrementer { m_ruleListNestingLevel };
+ 
+-    static constexpr auto maximumRuleListNestingLevel = 128;
+     if (m_ruleListNestingLevel > maximumRuleListNestingLevel)
+         return { };
+ 
+@@ -1081,6 +1082,11 @@
+ 
+ RefPtr<StyleRuleBase> CSSParserImpl::consumeStyleRule(CSSParserTokenRange prelude, CSSParserTokenRange block)
+ {
++    NestingLevelIncrementer incrementer { m_ruleListNestingLevel };
++
++    if (m_ruleListNestingLevel > maximumRuleListNestingLevel)
++        return nullptr;
++
+     auto selectorList = parseCSSSelector(prelude, m_context, m_styleSheet.get(), isNestedContext() ? CSSParserEnum::IsNestedContext::Yes : CSSParserEnum::IsNestedContext::No);
+     if (!selectorList)
+         return nullptr; // Parse error, invalid selector list

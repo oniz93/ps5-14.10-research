@@ -1,0 +1,192 @@
+--- a/Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.cpp
++++ b/Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.cpp
+@@ -34,8 +34,13 @@
+ #include <thread>
+ 
+ namespace {
++#if ENABLE(DIRECT_DRAWING_PLAYSTATION)
++const int AcceleratedWindowInitialWidth = 1920 * 2;
++const int AcceleratedWindowInitialHeight = 1080 * 2;
++#else
+ const int AcceleratedWindowInitialWidth = 1920;
+ const int AcceleratedWindowInitialHeight = 1080;
++#endif
+ }
+ 
+ namespace WebKit {
+@@ -53,6 +58,13 @@
+ 
+ void AcceleratedSurfacePlayStation::initialize()
+ {
++#if ENABLE(DIRECT_DRAWING_PLAYSTATION)
++    // if m_size has 1 value, we set window size to 4K
++    // otherwize, set m_size value.
++    m_window.uHeight = m_size.height() != 1 ? m_size.height() : AcceleratedWindowInitialHeight;
++    m_window.uWidth = m_size.width() != 1 ? m_size.width() : AcceleratedWindowInitialWidth;
++    m_window.uID = 0;
++#else
+     m_window.uHeight = AcceleratedWindowInitialHeight;
+     m_window.uWidth = AcceleratedWindowInitialWidth;
+     m_window.uID = canvas::Canvas::kInvalidIdValue;
+@@ -62,14 +74,16 @@
+ #else
+     m_canvas = canvas::Canvas::create();
+ #endif
++#endif
+ }
+ 
+ void AcceleratedSurfacePlayStation::finalize()
+ {
++#if !ENABLE(DIRECT_DRAWING_PLAYSTATION)
+     // We don't have GLContext here, m_canvas requires it to delete framebuffer.
+     WebCore::PlatformDisplay::sharedDisplayForCompositing().sharingGLContext()->makeContextCurrent();
+     m_canvas = nullptr;
+-
++#endif
+     // FIXME: We should unbind the context, but there is not API to do that.
+ }
+ 
+@@ -101,16 +115,27 @@
+ // That's why we return canvas handle instead of canvas id.
+ uint64_t AcceleratedSurfacePlayStation::surfaceID() const
+ {
++#if ENABLE(DIRECT_DRAWING_PLAYSTATION)
++    // FIXME
++    // return Invalid Value to avoid using this value.
++    return 0x000000FF;
++#else
+     ASSERT(m_canvas);
+     // AcceleratedSurfacePlayStation::surfaceID is const member function, so m_canvas->handle also must be const.
+     return m_canvas->handle();
++#endif
+ }
+ 
+ bool AcceleratedSurfacePlayStation::shouldPaintMirrored() const
+ {
++#if ENABLE(DIRECT_DRAWING_PLAYSTATION)
++    return false;
++#else
+     return true;
+-}
+-
++#endif
++}
++
++#if !ENABLE(DIRECT_DRAWING_PLAYSTATION)
+ // Bind Framebuffer which is backed by canvas.
+ void AcceleratedSurfacePlayStation::willRenderFrame()
+ {
+@@ -121,9 +146,13 @@
+ #endif
+     m_canvas->activateAsFrameBuffer();
+ }
++#endif
+ 
+ void AcceleratedSurfacePlayStation::didRenderFrame()
+ {
++#if ENABLE(DIRECT_DRAWING_PLAYSTATION)
++    m_client.frameComplete();
++#else
+     ASSERT(m_canvas);
+     glFlush();
+     m_canvas->swapBuffers();
+@@ -163,6 +192,7 @@
+         m_client.frameComplete();
+     });
+     t.detach();
++#endif
+ }
+ 
+ #if ENABLE(PUNCH_HOLE)
+@@ -172,7 +202,68 @@
+     std::vector<mediaplayer::PSMediaCompositionControl> compositionControls;
+ 
+     for (const auto& hole : holes) {
+-        if (shouldPaintMirrored()) {
++        if (!shouldPaintMirrored()) {
++            if (canvas::CanvasUtil::isTransparentCanvas(hole.canvasHandle)) {
++                // OpenGL's screen space is the follwoing
++                // (-1, 1)          (1, 1)
++                //     +---------------+
++                //     |               |
++                //     |               |
++                //     +---------------+
++                // (-1, -1)          (1, -1)
++                // and we need to convert to
++                // (0, 0)            (1, 0)
++                //     +---------------+
++                //     |               |
++                //     |               |
++                //     +---------------+
++                // (0, 1)            (1, 1)
++                const auto leftAndRight = std::minmax({
++                    (hole.quad.p1().x() + 1) / 2,
++                    (hole.quad.p2().x() + 1) / 2,
++                    (hole.quad.p3().x() + 1) / 2,
++                    (hole.quad.p4().x() + 1) / 2,
++                });
++                const auto topAndBottom = std::minmax({
++                    (-hole.quad.p1().y() + 1) / 2,
++                    (-hole.quad.p2().y() + 1) / 2,
++                    (-hole.quad.p3().y() + 1) / 2,
++                    (-hole.quad.p4().y() + 1) / 2,
++                });
++
++                // v0(left, top)       v2(right, top)
++                //     +---------------+
++                //     |               |
++                //     |               |
++                //     +---------------+
++                // v1(left, bottom)    v3(right, bottom)
++                const float left = leftAndRight.first;
++                const float right = leftAndRight.second;
++                const float top = topAndBottom.first;
++                const float bottom = topAndBottom.second;
++
++                mediaplayer::PSMediaCompositionControl composition = { };
++                // v0 (left, top)
++                composition.vert[0].f[0] = left;
++                composition.vert[0].f[1] = top;
++                // v1 (left, bottom)
++                composition.vert[1].f[0] = left;
++                composition.vert[1].f[1] = bottom;
++                // v2 (right, top)
++                composition.vert[2].f[0] = right;
++                composition.vert[2].f[1] = top;
++                // v3 (right, bottom)
++                composition.vert[3].f[0] = right;
++                composition.vert[3].f[1] = bottom;
++
++                composition.canvasHandle = hole.canvasHandle;
++
++                compositionControls.push_back(composition);
++            } else {
++                // No mirror No IndirectCompositing support
++                ASSERT_NOT_REACHED();
++            }
++        } else {
+             if (canvas::CanvasUtil::isTransparentCanvas(hole.canvasHandle)) {
+                 // OpenGL's screen space is the follwoing
+                 // (-1, 1)          (1, 1)
+@@ -245,16 +336,15 @@
+                 source.vertices[3][1] = -hole.quad.p3().y();
+                 sources.push_back(source);
+             }
+-        } else {
+-            // not supported yet.
+-            ASSERT_NOT_REACHED();
+         }
+     }
+ 
+     if (!compositionControls.empty())
+         mediaplayer::PSMediaPlayerBackend::setTransparentCanvasCompositionCommand(compositionControls.data(), compositionControls.size());
+ 
++#if !ENABLE(DIRECT_DRAWING_PLAYSTATION)
+     m_canvas->setIndirectCompositingSource(WTFMove(sources));
+-}
+-#endif
+-}
++#endif
++}
++#endif
++}

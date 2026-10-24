@@ -18,8 +18,10 @@ from __future__ import annotations
 
 import argparse
 import re
+import ssl
 import struct
 import sys
+import time
 import urllib.request
 import zlib
 
@@ -39,9 +41,33 @@ class RemoteZip:
         self._load_central_directory()
 
     # ---- plumbing -------------------------------------------------------
+    def _contexts(self) -> list:
+        """PlayStation's CDN intermittently serves a chain without intermediates.
+        The default store usually works; certifi's bundle often succeeds on the same
+        edge, so cycle through both before giving up."""
+        out = [ssl.create_default_context()]
+        try:
+            import certifi  # noqa: PLC0415
+            out.append(ssl.create_default_context(cafile=certifi.where()))
+        except Exception:  # noqa: BLE001
+            pass
+        return out
+
+    def _open(self, req, attempts: int = 8):
+        last = None
+        ctxs = self._contexts()
+        for i in range(attempts):
+            ctx = ctxs[i % len(ctxs)]
+            try:
+                return urllib.request.urlopen(req, timeout=self.timeout, context=ctx)
+            except Exception as exc:  # noqa: BLE001
+                last = exc
+                time.sleep(1.0 + 1.0 * i)
+        raise last
+
     def _size(self) -> int:
         req = urllib.request.Request(self.url, method="HEAD")
-        with urllib.request.urlopen(req, timeout=self.timeout) as r:
+        with self._open(req) as r:
             n = r.headers.get("Content-Length")
             if not n:
                 raise RuntimeError("server did not send Content-Length")
@@ -51,7 +77,7 @@ class RemoteZip:
         if start < 0:
             start = self.size + start
         req = urllib.request.Request(self.url, headers={"Range": f"bytes={start}-{end}"})
-        with urllib.request.urlopen(req, timeout=self.timeout) as r:
+        with self._open(req) as r:
             data = r.read()
         want = end - start + 1
         if len(data) != want:
@@ -85,6 +111,7 @@ class RemoteZip:
         seen = 0
         while pos + 46 <= len(cd) and cd[pos:pos + 4] == CEN:
             (method,) = struct.unpack_from("<H", cd, pos + 10)
+            (crc,) = struct.unpack_from("<I", cd, pos + 16)
             csize, usize = struct.unpack_from("<II", cd, pos + 20)
             nlen, elen, clen = struct.unpack_from("<HHH", cd, pos + 28)
             (lho,) = struct.unpack_from("<I", cd, pos + 42)
@@ -118,6 +145,7 @@ class RemoteZip:
 
             yield {
                 "name": name,
+                "crc": crc,
                 "method": method,
                 "csize": csize,
                 "usize": usize,
@@ -160,10 +188,17 @@ def main() -> int:
     ap.add_argument("--grep", metavar="REGEX", help="search member contents (needs --name filter)")
     ap.add_argument("--name", metavar="REGEX", default=".", help="filename filter for --grep")
     ap.add_argument("--count", type=int, default=25)
+    ap.add_argument("--manifest", metavar="PATH", help="write name/crc/size for every member, then exit")
     ap.add_argument("--max-bytes", type=int, default=20000, help="truncate --read/--grep output")
     a = ap.parse_args()
 
     z = RemoteZip(a.url)
+    if a.manifest:
+        import json as _json
+        man = {e["name"]: [e["crc"], e["usize"], e["csize"]] for e in z._cd}
+        _json.dump(man, open(a.manifest, "w"))
+        print(f"{len(man)} members -> {a.manifest}", file=sys.stderr)
+        return 0
     print(f"{a.url}\n  size {z.size:,} bytes, {len(z._cd):,} members", file=sys.stderr)
 
     if a.read:

@@ -1,0 +1,11 @@
+--- a/Source/WebKit/UIProcess/neko/PlayStationWebView.cpp
++++ b/Source/WebKit/UIProcess/neko/PlayStationWebView.cpp
+@@ -46,7 +46,7 @@
+ 
+ PlayStationWebView::PlayStationWebView(const API::PageConfiguration& conf)
+     : m_pageClient(makeUnique<PageClientImpl>(*this))
+-    , m_viewStateFlags { WebCore::ActivityState::WindowIsActive, WebCore::ActivityState::IsFocused, WebCore::ActivityState::IsVisible, WebCore::ActivityState::IsInWindow }
++    , m_viewStateFlags { WebCore::ActivityState::WindowIsActive, WebCore::ActivityState::IsVisible, WebCore::ActivityState::IsInWindow }
+ {
+     auto configuration = conf.copy();
+     auto* preferences = configuration->preferences();

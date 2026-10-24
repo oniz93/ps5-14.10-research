@@ -1,0 +1,11 @@
+--- a/Source/JavaScriptCore/API/JSBase.cpp
++++ b/Source/JavaScriptCore/API/JSBase.cpp
+@@ -152,6 +152,8 @@
+ #if PLATFORM(PLAYSTATION) // for downstream-only
+     JSC::Options::initialize();
+     JSC::Options::setOptions(args);
++#else
++    UNUSED_PARAM(args);
+ #endif
+ }
+ 

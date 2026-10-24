@@ -1,0 +1,415 @@
+[
+ {
+  "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+  "plus": 475,
+  "minus": 134,
+  "guardish": 16,
+  "traceish": 3
+ },
+ {
+  "file": "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.cpp",
+  "plus": 38,
+  "minus": 2,
+  "guardish": 5,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.cpp",
+  "plus": 100,
+  "minus": 10,
+  "guardish": 5,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/builtins/ProxyHelpers.js",
+  "plus": 4,
+  "minus": 4,
+  "guardish": 4,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/Modules/indexeddb/server/SQLiteIDBCursor.cpp",
+  "plus": 13,
+  "minus": 12,
+  "guardish": 3,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/bytecompiler/NodesCodegen.cpp",
+  "plus": 9,
+  "minus": 0,
+  "guardish": 2,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/ProxyObject.cpp",
+  "plus": 2,
+  "minus": 2,
+  "guardish": 2,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/platform/sql/SQLiteDatabase.cpp",
+  "plus": 20,
+  "minus": 4,
+  "guardish": 2,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/platform/sql/SQLiteDatabase.h",
+  "plus": 4,
+  "minus": 2,
+  "guardish": 2,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/platform/sql/SQLiteTransaction.cpp",
+  "plus": 22,
+  "minus": 15,
+  "guardish": 2,
+  "traceish": 2
+ },
+ {
+  "file": "Source/WebCore/platform/sql/SQLiteTransaction.h",
+  "plus": 3,
+  "minus": 2,
+  "guardish": 2,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.h",
+  "plus": 4,
+  "minus": 0,
+  "guardish": 2,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/bytecode/BytecodeIntrinsicRegistry.h",
+  "plus": 1,
+  "minus": 0,
+  "guardish": 1,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/yarr/YarrPattern.cpp",
+  "plus": 8,
+  "minus": 0,
+  "guardish": 1,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/Modules/streams/TransformStream.cpp",
+  "plus": 14,
+  "minus": 2,
+  "guardish": 1,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/page/playstation/FocusControllerPlayStation.cpp",
+  "plus": 10,
+  "minus": 2,
+  "guardish": 1,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/egl/GLContext.cpp",
+  "plus": 7,
+  "minus": 0,
+  "guardish": 1,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/xml/parser/XMLDocumentParserLibxml2.cpp",
+  "plus": 17,
+  "minus": 0,
+  "guardish": 1,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/API/APICast.h",
+  "plus": 13,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/API/JSBase.cpp",
+  "plus": 2,
+  "minus": 0,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/API/JSRemoteInspector.h",
+  "plus": 1,
+  "minus": 0,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/API/JSValue.mm",
+  "plus": 17,
+  "minus": 14,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/API/PASReportCrashPrivate.cpp",
+  "plus": 1,
+  "minus": 0,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/API/tests/testapi.cpp",
+  "plus": 15,
+  "minus": 12,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/CMakeLists.txt",
+  "plus": 2,
+  "minus": 0,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/Sources.txt",
+  "plus": 2,
+  "minus": 2,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/bytecompiler/BytecodeGenerator.cpp",
+  "plus": 4,
+  "minus": 3,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/bytecompiler/BytecodeGenerator.h",
+  "plus": 2,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/dfg/DFGByteCodeParser.cpp",
+  "plus": 2,
+  "minus": 13,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/heap/Heap.cpp",
+  "plus": 1,
+  "minus": 14,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/heap/Heap.h",
+  "plus": 2,
+  "minus": 9,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/heap/RootMarkReason.h",
+  "plus": 1,
+  "minus": 2,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/inspector/remote/RemoteInspector.h",
+  "plus": 1,
+  "minus": 2,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/ArgList.cpp",
+  "plus": 8,
+  "minus": 7,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/ArgList.h",
+  "plus": 14,
+  "minus": 213,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/JSCell.cpp",
+  "plus": 19,
+  "minus": 20,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/OptionsList.h",
+  "plus": 1,
+  "minus": 0,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WTF/wtf/CheckedPtr.h",
+  "plus": 5,
+  "minus": 8,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WTF/wtf/CheckedRef.h",
+  "plus": 6,
+  "minus": 10,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/Modules/indexeddb/server/SQLiteIDBBackingStore.cpp",
+  "plus": 1,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 1
+ },
+ {
+  "file": "Source/WebCore/Modules/webaudio/AudioWorkletProcessor.h",
+  "plus": 3,
+  "minus": 3,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/css/CSSFontFace.h",
+  "plus": 1,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/css/parser/CSSParserImpl.cpp",
+  "plus": 7,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/dom/EventTarget.cpp",
+  "plus": 3,
+  "minus": 3,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/html/track/VideoTrack.h",
+  "plus": 1,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/page/PageOverlay.h",
+  "plus": 2,
+  "minus": 2,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp",
+  "plus": 2,
+  "minus": 0,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/SourceBufferPrivatePlayStation.cpp",
+  "plus": 6,
+  "minus": 2,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.h",
+  "plus": 0,
+  "minus": 33,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderListBox.h",
+  "plus": 1,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/svg/SVGStyleElement.h",
+  "plus": 1,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebCore/xml/XMLHttpRequest.h",
+  "plus": 1,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebKit/Shared/CoordinatedGraphics/threadedcompositor/ThreadedCompositor.cpp",
+  "plus": 8,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebKit/UIProcess/API/C/neko/WKRunLoop.cpp",
+  "plus": 5,
+  "minus": 0,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebKit/UIProcess/API/C/neko/WKRunLoop.h",
+  "plus": 1,
+  "minus": 0,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebPageProxy.h",
+  "plus": 4,
+  "minus": 4,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebKit/UIProcess/neko/PlayStationWebView.cpp",
+  "plus": 1,
+  "minus": 1,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/WebKit/WebProcess/Storage/WebSWContextManagerConnection.cpp",
+  "plus": 1,
+  "minus": 0,
+  "guardish": 0,
+  "traceish": 0
+ },
+ {
+  "file": "Source/cmake/OptionsPlayStation.cmake",
+  "plus": 6,
+  "minus": 0,
+  "guardish": 0,
+  "traceish": 0
+ }
+]

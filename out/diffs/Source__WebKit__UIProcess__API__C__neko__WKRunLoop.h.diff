@@ -1,0 +1,10 @@
+--- a/Source/WebKit/UIProcess/API/C/neko/WKRunLoop.h
++++ b/Source/WebKit/UIProcess/API/C/neko/WKRunLoop.h
+@@ -35,6 +35,7 @@
+ 
+ WK_EXPORT void WKRunLoopRunMain();
+ WK_EXPORT void WKRunLoopStopMain();
++WK_EXPORT void WKRunLoopCycleMain();
+ WK_EXPORT void WKRunLoopCallOnMainThread(WKRunLoopCallback, void* userData);
+ WK_EXPORT void WKRunLoopInitializeMain();
+ 

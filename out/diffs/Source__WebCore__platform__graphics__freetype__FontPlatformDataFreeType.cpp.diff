@@ -1,0 +1,14 @@
+--- a/Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp
++++ b/Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp
+@@ -124,9 +124,11 @@
+ 
+     buildScaledFont(fontFace);
+ 
++#if PLATFORM(PLAYSTATION)
+ #if CAIRO_HAS_FT_SYNTHESIZE_WEIGHT
+     // We don't use synthetic bold.
+     m_syntheticBold = false;
++#endif
+ #endif
+ #ifdef FT_HAS_COLOR
+     CairoFtFaceLocker cairoFtFaceLocker(m_scaledFont.get());

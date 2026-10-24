@@ -1,0 +1,28 @@
+--- a/Source/WebCore/platform/graphics/egl/GLContext.cpp
++++ b/Source/WebCore/platform/graphics/egl/GLContext.cpp
+@@ -210,10 +210,13 @@
+         };
+     }
+ #endif
++
++#if !ENABLE(DIRECT_DRAWING_PLAYSTATION)
+ #if PLATFORM(PLAYSTATION)
+     // Will use PBufferContext, so we just return here for PlayStation.
+     if (platformDisplay.type() == PlatformDisplay::Type::PlayStation)
+         return nullptr;
++#endif
+ #endif
+ 
+     EGLConfig config;
+@@ -251,7 +254,11 @@
+         RELEASE_ASSERT_NOT_REACHED();
+ #if PLATFORM(PLAYSTATION)
+     case PlatformDisplay::Type::PlayStation :
++#if ENABLE(DIRECT_DRAWING_PLAYSTATION)
++        surface = eglCreateWindowSurface(display, config, (EGLNativeWindowType) window, nullptr);
++#else
+         UNUSED_PARAM(window);
++#endif
+         break;
+ #endif
+     default:

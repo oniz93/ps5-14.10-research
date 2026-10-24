@@ -1,0 +1,356 @@
+[
+ {
+  "path": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+  "added": 475,
+  "removed": 134,
+  "diff_file": "Source__WebCore__bindings__js__SerializedScriptValue.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/runtime/ArgList.h",
+  "added": 14,
+  "removed": 213,
+  "diff_file": "Source__JavaScriptCore__runtime__ArgList.h.diff"
+ },
+ {
+  "path": "Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.cpp",
+  "added": 100,
+  "removed": 10,
+  "diff_file": "Source__WebKit__WebProcess__WebPage__neko__AcceleratedSurfacePlayStation.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.cpp",
+  "added": 38,
+  "removed": 2,
+  "diff_file": "Source__WebCore__platform__image-decoders__bmp__BMPImageReader.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/runtime/JSCell.cpp",
+  "added": 19,
+  "removed": 20,
+  "diff_file": "Source__JavaScriptCore__runtime__JSCell.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/platform/sql/SQLiteTransaction.cpp",
+  "added": 22,
+  "removed": 15,
+  "diff_file": "Source__WebCore__platform__sql__SQLiteTransaction.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.h",
+  "added": 0,
+  "removed": 33,
+  "diff_file": "Source__WebCore__platform__image-decoders__bmp__BMPImageReader.h.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/API/JSValue.mm",
+  "added": 17,
+  "removed": 14,
+  "diff_file": "Source__JavaScriptCore__API__JSValue.mm.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/API/tests/testapi.cpp",
+  "added": 15,
+  "removed": 12,
+  "diff_file": "Source__JavaScriptCore__API__tests__testapi.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/Modules/indexeddb/server/SQLiteIDBCursor.cpp",
+  "added": 13,
+  "removed": 12,
+  "diff_file": "Source__WebCore__Modules__indexeddb__server__SQLiteIDBCursor.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/platform/sql/SQLiteDatabase.cpp",
+  "added": 20,
+  "removed": 4,
+  "diff_file": "Source__WebCore__platform__sql__SQLiteDatabase.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/xml/parser/XMLDocumentParserLibxml2.cpp",
+  "added": 17,
+  "removed": 0,
+  "diff_file": "Source__WebCore__xml__parser__XMLDocumentParserLibxml2.cpp.diff"
+ },
+ {
+  "path": "Source/WTF/wtf/CheckedRef.h",
+  "added": 6,
+  "removed": 10,
+  "diff_file": "Source__WTF__wtf__CheckedRef.h.diff"
+ },
+ {
+  "path": "Source/WebCore/Modules/streams/TransformStream.cpp",
+  "added": 14,
+  "removed": 2,
+  "diff_file": "Source__WebCore__Modules__streams__TransformStream.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/heap/Heap.cpp",
+  "added": 1,
+  "removed": 14,
+  "diff_file": "Source__JavaScriptCore__heap__Heap.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/dfg/DFGByteCodeParser.cpp",
+  "added": 2,
+  "removed": 13,
+  "diff_file": "Source__JavaScriptCore__dfg__DFGByteCodeParser.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/runtime/ArgList.cpp",
+  "added": 8,
+  "removed": 7,
+  "diff_file": "Source__JavaScriptCore__runtime__ArgList.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/API/APICast.h",
+  "added": 13,
+  "removed": 1,
+  "diff_file": "Source__JavaScriptCore__API__APICast.h.diff"
+ },
+ {
+  "path": "Source/WTF/wtf/CheckedPtr.h",
+  "added": 5,
+  "removed": 8,
+  "diff_file": "Source__WTF__wtf__CheckedPtr.h.diff"
+ },
+ {
+  "path": "Source/WebCore/page/playstation/FocusControllerPlayStation.cpp",
+  "added": 10,
+  "removed": 2,
+  "diff_file": "Source__WebCore__page__playstation__FocusControllerPlayStation.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/heap/Heap.h",
+  "added": 2,
+  "removed": 9,
+  "diff_file": "Source__JavaScriptCore__heap__Heap.h.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/bytecompiler/NodesCodegen.cpp",
+  "added": 9,
+  "removed": 0,
+  "diff_file": "Source__JavaScriptCore__bytecompiler__NodesCodegen.cpp.diff"
+ },
+ {
+  "path": "Source/WebKit/Shared/CoordinatedGraphics/threadedcompositor/ThreadedCompositor.cpp",
+  "added": 8,
+  "removed": 1,
+  "diff_file": "Source__WebKit__Shared__CoordinatedGraphics__threadedcompositor__ThreadedCompositor.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/builtins/ProxyHelpers.js",
+  "added": 4,
+  "removed": 4,
+  "diff_file": "Source__JavaScriptCore__builtins__ProxyHelpers.js.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/yarr/YarrPattern.cpp",
+  "added": 8,
+  "removed": 0,
+  "diff_file": "Source__JavaScriptCore__yarr__YarrPattern.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/css/parser/CSSParserImpl.cpp",
+  "added": 7,
+  "removed": 1,
+  "diff_file": "Source__WebCore__css__parser__CSSParserImpl.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/platform/graphics/playstation/mse/SourceBufferPrivatePlayStation.cpp",
+  "added": 6,
+  "removed": 2,
+  "diff_file": "Source__WebCore__platform__graphics__playstation__mse__SourceBufferPrivatePlayStation.cpp.diff"
+ },
+ {
+  "path": "Source/WebKit/UIProcess/WebPageProxy.h",
+  "added": 4,
+  "removed": 4,
+  "diff_file": "Source__WebKit__UIProcess__WebPageProxy.h.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/bytecompiler/BytecodeGenerator.cpp",
+  "added": 4,
+  "removed": 3,
+  "diff_file": "Source__JavaScriptCore__bytecompiler__BytecodeGenerator.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/platform/graphics/egl/GLContext.cpp",
+  "added": 7,
+  "removed": 0,
+  "diff_file": "Source__WebCore__platform__graphics__egl__GLContext.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/Modules/webaudio/AudioWorkletProcessor.h",
+  "added": 3,
+  "removed": 3,
+  "diff_file": "Source__WebCore__Modules__webaudio__AudioWorkletProcessor.h.diff"
+ },
+ {
+  "path": "Source/WebCore/dom/EventTarget.cpp",
+  "added": 3,
+  "removed": 3,
+  "diff_file": "Source__WebCore__dom__EventTarget.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/platform/sql/SQLiteDatabase.h",
+  "added": 4,
+  "removed": 2,
+  "diff_file": "Source__WebCore__platform__sql__SQLiteDatabase.h.diff"
+ },
+ {
+  "path": "Source/cmake/OptionsPlayStation.cmake",
+  "added": 6,
+  "removed": 0,
+  "diff_file": "Source__cmake__OptionsPlayStation.cmake.diff"
+ },
+ {
+  "path": "Source/WebCore/platform/sql/SQLiteTransaction.h",
+  "added": 3,
+  "removed": 2,
+  "diff_file": "Source__WebCore__platform__sql__SQLiteTransaction.h.diff"
+ },
+ {
+  "path": "Source/WebKit/UIProcess/API/C/neko/WKRunLoop.cpp",
+  "added": 5,
+  "removed": 0,
+  "diff_file": "Source__WebKit__UIProcess__API__C__neko__WKRunLoop.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/Sources.txt",
+  "added": 2,
+  "removed": 2,
+  "diff_file": "Source__JavaScriptCore__Sources.txt.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/runtime/ProxyObject.cpp",
+  "added": 2,
+  "removed": 2,
+  "diff_file": "Source__JavaScriptCore__runtime__ProxyObject.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/page/PageOverlay.h",
+  "added": 2,
+  "removed": 2,
+  "diff_file": "Source__WebCore__page__PageOverlay.h.diff"
+ },
+ {
+  "path": "Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.h",
+  "added": 4,
+  "removed": 0,
+  "diff_file": "Source__WebKit__WebProcess__WebPage__neko__AcceleratedSurfacePlayStation.h.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/bytecompiler/BytecodeGenerator.h",
+  "added": 2,
+  "removed": 1,
+  "diff_file": "Source__JavaScriptCore__bytecompiler__BytecodeGenerator.h.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/heap/RootMarkReason.h",
+  "added": 1,
+  "removed": 2,
+  "diff_file": "Source__JavaScriptCore__heap__RootMarkReason.h.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/inspector/remote/RemoteInspector.h",
+  "added": 1,
+  "removed": 2,
+  "diff_file": "Source__JavaScriptCore__inspector__remote__RemoteInspector.h.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/API/JSBase.cpp",
+  "added": 2,
+  "removed": 0,
+  "diff_file": "Source__JavaScriptCore__API__JSBase.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/CMakeLists.txt",
+  "added": 2,
+  "removed": 0,
+  "diff_file": "Source__JavaScriptCore__CMakeLists.txt.diff"
+ },
+ {
+  "path": "Source/WebCore/Modules/indexeddb/server/SQLiteIDBBackingStore.cpp",
+  "added": 1,
+  "removed": 1,
+  "diff_file": "Source__WebCore__Modules__indexeddb__server__SQLiteIDBBackingStore.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/css/CSSFontFace.h",
+  "added": 1,
+  "removed": 1,
+  "diff_file": "Source__WebCore__css__CSSFontFace.h.diff"
+ },
+ {
+  "path": "Source/WebCore/html/track/VideoTrack.h",
+  "added": 1,
+  "removed": 1,
+  "diff_file": "Source__WebCore__html__track__VideoTrack.h.diff"
+ },
+ {
+  "path": "Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp",
+  "added": 2,
+  "removed": 0,
+  "diff_file": "Source__WebCore__platform__graphics__freetype__FontPlatformDataFreeType.cpp.diff"
+ },
+ {
+  "path": "Source/WebCore/svg/SVGStyleElement.h",
+  "added": 1,
+  "removed": 1,
+  "diff_file": "Source__WebCore__svg__SVGStyleElement.h.diff"
+ },
+ {
+  "path": "Source/WebCore/rendering/RenderListBox.h",
+  "added": 1,
+  "removed": 1,
+  "diff_file": "Source__WebCore__rendering__RenderListBox.h.diff"
+ },
+ {
+  "path": "Source/WebCore/xml/XMLHttpRequest.h",
+  "added": 1,
+  "removed": 1,
+  "diff_file": "Source__WebCore__xml__XMLHttpRequest.h.diff"
+ },
+ {
+  "path": "Source/WebKit/UIProcess/neko/PlayStationWebView.cpp",
+  "added": 1,
+  "removed": 1,
+  "diff_file": "Source__WebKit__UIProcess__neko__PlayStationWebView.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/API/JSRemoteInspector.h",
+  "added": 1,
+  "removed": 0,
+  "diff_file": "Source__JavaScriptCore__API__JSRemoteInspector.h.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/API/PASReportCrashPrivate.cpp",
+  "added": 1,
+  "removed": 0,
+  "diff_file": "Source__JavaScriptCore__API__PASReportCrashPrivate.cpp.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/bytecode/BytecodeIntrinsicRegistry.h",
+  "added": 1,
+  "removed": 0,
+  "diff_file": "Source__JavaScriptCore__bytecode__BytecodeIntrinsicRegistry.h.diff"
+ },
+ {
+  "path": "Source/JavaScriptCore/runtime/OptionsList.h",
+  "added": 1,
+  "removed": 0,
+  "diff_file": "Source__JavaScriptCore__runtime__OptionsList.h.diff"
+ },
+ {
+  "path": "Source/WebKit/UIProcess/API/C/neko/WKRunLoop.h",
+  "added": 1,
+  "removed": 0,
+  "diff_file": "Source__WebKit__UIProcess__API__C__neko__WKRunLoop.h.diff"
+ },
+ {
+  "path": "Source/WebKit/WebProcess/Storage/WebSWContextManagerConnection.cpp",
+  "added": 1,
+  "removed": 0,
+  "diff_file": "Source__WebKit__WebProcess__Storage__WebSWContextManagerConnection.cpp.diff"
+ }
+]
