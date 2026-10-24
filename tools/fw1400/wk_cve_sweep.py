@@ -79,15 +79,25 @@ def split_patch(text: str) -> list[tuple[str, str]]:
 
 
 def search(q: str, limit: int) -> list[dict]:
+    """GitHub commit search via curl.
+
+    urllib on this machine's framework Python cannot verify GitHub's chain
+    ("unable to get local issuer certificate") and that killed a whole sweep with zero
+    results, which looks exactly like "nothing found". curl uses the system trust store
+    and works, so use it for both the search and the patch fetches.
+    """
     url = "https://api.github.com/search/commits?q=" + urllib.parse.quote(q, safe=":>/-") + f"&per_page={min(limit, 100)}"
     tok = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True).stdout.strip()
-    req = urllib.request.Request(url, headers={
-        "Accept": "application/vnd.github+json",
-        "Authorization": f"Bearer {tok}",
-        "X-GitHub-Api-Version": "2022-11-28",
-    })
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return json.load(r).get("items", [])
+    out = subprocess.run([
+        "curl", "-sL", "--max-time", "60", url,
+        "-H", "Accept: application/vnd.github+json",
+        "-H", f"Authorization: Bearer {tok}",
+        "-H", "X-GitHub-Api-Version: 2022-11-28",
+    ], capture_output=True, text=True)
+    try:
+        return json.loads(out.stdout or "{}").get("items", [])
+    except json.JSONDecodeError:
+        raise RuntimeError(f"search failed: {out.stdout[:200]}")
 
 
 def signature_lines(patch: str, limit: int = 3, side: str = "+") -> list[str]:
@@ -117,16 +127,36 @@ def signature_lines(patch: str, limit: int = 3, side: str = "+") -> list[str]:
     return out
 
 
+# A full extraction of the drop is far better than range reads: no CDN dependency (the
+# PlayStation edge intermittently serves a chain without intermediates and every range
+# request then fails), and orders of magnitude faster. Point SONY_TREE_LOCAL at it.
+LOCAL_ROOT = os.environ.get("SONY_TREE_LOCAL") or os.path.join(
+    os.getcwd(), "out", "sony", "full", "WebKit-1400", "WebKit-1400")
+
+
 class SonyTree:
     def __init__(self) -> None:
-        self.z = RemoteZip(SONY_ZIP)
-        self.names = {e["name"] for e in self.z._cd}
+        self.local = LOCAL_ROOT if os.path.isdir(LOCAL_ROOT) else None
+        if self.local:
+            print(f"tree: local {self.local}", file=sys.stderr)
+            self.z = None
+            self.names = set()
+        else:
+            print("tree: remote zip", file=sys.stderr)
+            self.z = RemoteZip(SONY_ZIP)
+            self.names = {e["name"] for e in self.z._cd}
         os.makedirs(CACHE, exist_ok=True)
 
     def get(self, path: str) -> str | None:
+        if self.local:
+            fp = os.path.join(self.local, path)
+            if not os.path.exists(fp):
+                return None
+            return open(fp, encoding="utf-8", errors="replace").read()
         member = SONY_ROOT + path
         if member not in self.names:
             return None
+        assert self.z is not None  # local mode returned above
         fp = os.path.join(CACHE, member.replace("/", "__"))
         if os.path.exists(fp):
             return open(fp, encoding="utf-8", errors="replace").read()

@@ -1,0 +1,474 @@
+[
+ {
+  "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+  "add": 475,
+  "rem": 134,
+  "logic_add": 432,
+  "logic_rem": 133,
+  "logic": 565
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/ArgList.h",
+  "add": 14,
+  "rem": 213,
+  "logic_add": 14,
+  "logic_rem": 203,
+  "logic": 217
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.cpp",
+  "add": 100,
+  "rem": 10,
+  "logic_add": 99,
+  "logic_rem": 9,
+  "logic": 108
+ },
+ {
+  "file": "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.cpp",
+  "add": 38,
+  "rem": 2,
+  "logic_add": 37,
+  "logic_rem": 2,
+  "logic": 39
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/JSCell.cpp",
+  "add": 19,
+  "rem": 20,
+  "logic_add": 19,
+  "logic_rem": 19,
+  "logic": 38
+ },
+ {
+  "file": "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.h",
+  "add": 0,
+  "rem": 33,
+  "logic_add": 0,
+  "logic_rem": 32,
+  "logic": 32
+ },
+ {
+  "file": "Source/JavaScriptCore/API/JSValue.mm",
+  "add": 17,
+  "rem": 14,
+  "logic_add": 17,
+  "logic_rem": 14,
+  "logic": 31
+ },
+ {
+  "file": "Source/WebCore/platform/sql/SQLiteTransaction.cpp",
+  "add": 22,
+  "rem": 15,
+  "logic_add": 17,
+  "logic_rem": 12,
+  "logic": 29
+ },
+ {
+  "file": "Source/JavaScriptCore/API/tests/testapi.cpp",
+  "add": 15,
+  "rem": 12,
+  "logic_add": 15,
+  "logic_rem": 12,
+  "logic": 27
+ },
+ {
+  "file": "Source/WebCore/Modules/indexeddb/server/SQLiteIDBCursor.cpp",
+  "add": 13,
+  "rem": 12,
+  "logic_add": 13,
+  "logic_rem": 12,
+  "logic": 25
+ },
+ {
+  "file": "Source/WebCore/platform/sql/SQLiteDatabase.cpp",
+  "add": 20,
+  "rem": 4,
+  "logic_add": 20,
+  "logic_rem": 4,
+  "logic": 24
+ },
+ {
+  "file": "Source/WebCore/xml/parser/XMLDocumentParserLibxml2.cpp",
+  "add": 17,
+  "rem": 0,
+  "logic_add": 17,
+  "logic_rem": 0,
+  "logic": 17
+ },
+ {
+  "file": "Source/JavaScriptCore/dfg/DFGByteCodeParser.cpp",
+  "add": 2,
+  "rem": 13,
+  "logic_add": 2,
+  "logic_rem": 13,
+  "logic": 15
+ },
+ {
+  "file": "Source/JavaScriptCore/heap/Heap.cpp",
+  "add": 1,
+  "rem": 14,
+  "logic_add": 1,
+  "logic_rem": 14,
+  "logic": 15
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/ArgList.cpp",
+  "add": 8,
+  "rem": 7,
+  "logic_add": 8,
+  "logic_rem": 7,
+  "logic": 15
+ },
+ {
+  "file": "Source/WebCore/Modules/streams/TransformStream.cpp",
+  "add": 14,
+  "rem": 2,
+  "logic_add": 14,
+  "logic_rem": 1,
+  "logic": 15
+ },
+ {
+  "file": "Source/JavaScriptCore/API/APICast.h",
+  "add": 13,
+  "rem": 1,
+  "logic_add": 13,
+  "logic_rem": 1,
+  "logic": 14
+ },
+ {
+  "file": "Source/WTF/wtf/CheckedRef.h",
+  "add": 6,
+  "rem": 10,
+  "logic_add": 5,
+  "logic_rem": 8,
+  "logic": 13
+ },
+ {
+  "file": "Source/WebCore/page/playstation/FocusControllerPlayStation.cpp",
+  "add": 10,
+  "rem": 2,
+  "logic_add": 10,
+  "logic_rem": 2,
+  "logic": 12
+ },
+ {
+  "file": "Source/JavaScriptCore/heap/Heap.h",
+  "add": 2,
+  "rem": 9,
+  "logic_add": 2,
+  "logic_rem": 9,
+  "logic": 11
+ },
+ {
+  "file": "Source/WTF/wtf/CheckedPtr.h",
+  "add": 5,
+  "rem": 8,
+  "logic_add": 4,
+  "logic_rem": 6,
+  "logic": 10
+ },
+ {
+  "file": "Source/WebKit/Shared/CoordinatedGraphics/threadedcompositor/ThreadedCompositor.cpp",
+  "add": 8,
+  "rem": 1,
+  "logic_add": 8,
+  "logic_rem": 1,
+  "logic": 9
+ },
+ {
+  "file": "Source/JavaScriptCore/builtins/ProxyHelpers.js",
+  "add": 4,
+  "rem": 4,
+  "logic_add": 4,
+  "logic_rem": 4,
+  "logic": 8
+ },
+ {
+  "file": "Source/JavaScriptCore/bytecompiler/NodesCodegen.cpp",
+  "add": 9,
+  "rem": 0,
+  "logic_add": 8,
+  "logic_rem": 0,
+  "logic": 8
+ },
+ {
+  "file": "Source/JavaScriptCore/yarr/YarrPattern.cpp",
+  "add": 8,
+  "rem": 0,
+  "logic_add": 8,
+  "logic_rem": 0,
+  "logic": 8
+ },
+ {
+  "file": "Source/WebCore/css/parser/CSSParserImpl.cpp",
+  "add": 7,
+  "rem": 1,
+  "logic_add": 7,
+  "logic_rem": 1,
+  "logic": 8
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/SourceBufferPrivatePlayStation.cpp",
+  "add": 6,
+  "rem": 2,
+  "logic_add": 6,
+  "logic_rem": 2,
+  "logic": 8
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebPageProxy.h",
+  "add": 4,
+  "rem": 4,
+  "logic_add": 4,
+  "logic_rem": 4,
+  "logic": 8
+ },
+ {
+  "file": "Source/JavaScriptCore/bytecompiler/BytecodeGenerator.cpp",
+  "add": 4,
+  "rem": 3,
+  "logic_add": 4,
+  "logic_rem": 3,
+  "logic": 7
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/egl/GLContext.cpp",
+  "add": 7,
+  "rem": 0,
+  "logic_add": 7,
+  "logic_rem": 0,
+  "logic": 7
+ },
+ {
+  "file": "Source/WebCore/Modules/webaudio/AudioWorkletProcessor.h",
+  "add": 3,
+  "rem": 3,
+  "logic_add": 3,
+  "logic_rem": 3,
+  "logic": 6
+ },
+ {
+  "file": "Source/WebCore/dom/EventTarget.cpp",
+  "add": 3,
+  "rem": 3,
+  "logic_add": 3,
+  "logic_rem": 3,
+  "logic": 6
+ },
+ {
+  "file": "Source/WebCore/platform/sql/SQLiteDatabase.h",
+  "add": 4,
+  "rem": 2,
+  "logic_add": 4,
+  "logic_rem": 2,
+  "logic": 6
+ },
+ {
+  "file": "Source/cmake/OptionsPlayStation.cmake",
+  "add": 6,
+  "rem": 0,
+  "logic_add": 6,
+  "logic_rem": 0,
+  "logic": 6
+ },
+ {
+  "file": "Source/WebCore/platform/sql/SQLiteTransaction.h",
+  "add": 3,
+  "rem": 2,
+  "logic_add": 3,
+  "logic_rem": 2,
+  "logic": 5
+ },
+ {
+  "file": "Source/WebKit/UIProcess/API/C/neko/WKRunLoop.cpp",
+  "add": 5,
+  "rem": 0,
+  "logic_add": 5,
+  "logic_rem": 0,
+  "logic": 5
+ },
+ {
+  "file": "Source/JavaScriptCore/Sources.txt",
+  "add": 2,
+  "rem": 2,
+  "logic_add": 2,
+  "logic_rem": 2,
+  "logic": 4
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/ProxyObject.cpp",
+  "add": 2,
+  "rem": 2,
+  "logic_add": 2,
+  "logic_rem": 2,
+  "logic": 4
+ },
+ {
+  "file": "Source/WebCore/page/PageOverlay.h",
+  "add": 2,
+  "rem": 2,
+  "logic_add": 2,
+  "logic_rem": 2,
+  "logic": 4
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.h",
+  "add": 4,
+  "rem": 0,
+  "logic_add": 4,
+  "logic_rem": 0,
+  "logic": 4
+ },
+ {
+  "file": "Source/JavaScriptCore/bytecompiler/BytecodeGenerator.h",
+  "add": 2,
+  "rem": 1,
+  "logic_add": 2,
+  "logic_rem": 1,
+  "logic": 3
+ },
+ {
+  "file": "Source/JavaScriptCore/heap/RootMarkReason.h",
+  "add": 1,
+  "rem": 2,
+  "logic_add": 1,
+  "logic_rem": 2,
+  "logic": 3
+ },
+ {
+  "file": "Source/JavaScriptCore/inspector/remote/RemoteInspector.h",
+  "add": 1,
+  "rem": 2,
+  "logic_add": 1,
+  "logic_rem": 2,
+  "logic": 3
+ },
+ {
+  "file": "Source/JavaScriptCore/API/JSBase.cpp",
+  "add": 2,
+  "rem": 0,
+  "logic_add": 2,
+  "logic_rem": 0,
+  "logic": 2
+ },
+ {
+  "file": "Source/JavaScriptCore/CMakeLists.txt",
+  "add": 2,
+  "rem": 0,
+  "logic_add": 2,
+  "logic_rem": 0,
+  "logic": 2
+ },
+ {
+  "file": "Source/WebCore/css/CSSFontFace.h",
+  "add": 1,
+  "rem": 1,
+  "logic_add": 1,
+  "logic_rem": 1,
+  "logic": 2
+ },
+ {
+  "file": "Source/WebCore/html/track/VideoTrack.h",
+  "add": 1,
+  "rem": 1,
+  "logic_add": 1,
+  "logic_rem": 1,
+  "logic": 2
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp",
+  "add": 2,
+  "rem": 0,
+  "logic_add": 2,
+  "logic_rem": 0,
+  "logic": 2
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderListBox.h",
+  "add": 1,
+  "rem": 1,
+  "logic_add": 1,
+  "logic_rem": 1,
+  "logic": 2
+ },
+ {
+  "file": "Source/WebCore/svg/SVGStyleElement.h",
+  "add": 1,
+  "rem": 1,
+  "logic_add": 1,
+  "logic_rem": 1,
+  "logic": 2
+ },
+ {
+  "file": "Source/WebCore/xml/XMLHttpRequest.h",
+  "add": 1,
+  "rem": 1,
+  "logic_add": 1,
+  "logic_rem": 1,
+  "logic": 2
+ },
+ {
+  "file": "Source/WebKit/UIProcess/neko/PlayStationWebView.cpp",
+  "add": 1,
+  "rem": 1,
+  "logic_add": 1,
+  "logic_rem": 1,
+  "logic": 2
+ },
+ {
+  "file": "Source/JavaScriptCore/API/JSRemoteInspector.h",
+  "add": 1,
+  "rem": 0,
+  "logic_add": 1,
+  "logic_rem": 0,
+  "logic": 1
+ },
+ {
+  "file": "Source/JavaScriptCore/API/PASReportCrashPrivate.cpp",
+  "add": 1,
+  "rem": 0,
+  "logic_add": 1,
+  "logic_rem": 0,
+  "logic": 1
+ },
+ {
+  "file": "Source/JavaScriptCore/bytecode/BytecodeIntrinsicRegistry.h",
+  "add": 1,
+  "rem": 0,
+  "logic_add": 1,
+  "logic_rem": 0,
+  "logic": 1
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/OptionsList.h",
+  "add": 1,
+  "rem": 0,
+  "logic_add": 1,
+  "logic_rem": 0,
+  "logic": 1
+ },
+ {
+  "file": "Source/WebCore/Modules/indexeddb/server/SQLiteIDBBackingStore.cpp",
+  "add": 1,
+  "rem": 1,
+  "logic_add": 0,
+  "logic_rem": 1,
+  "logic": 1
+ },
+ {
+  "file": "Source/WebKit/UIProcess/API/C/neko/WKRunLoop.h",
+  "add": 1,
+  "rem": 0,
+  "logic_add": 1,
+  "logic_rem": 0,
+  "logic": 1
+ },
+ {
+  "file": "Source/WebKit/WebProcess/Storage/WebSWContextManagerConnection.cpp",
+  "add": 1,
+  "rem": 0,
+  "logic_add": 1,
+  "logic_rem": 0,
+  "logic": 1
+ }
+]

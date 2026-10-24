@@ -1,0 +1,727 @@
+[
+ {
+  "sha": "6c6ce2d397",
+  "date": "2024-04-14",
+  "title": "Adopt std::span in GIFImageReader",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/image-decoders/gif/GIFImageReader.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 3/3",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/platform/image-decoders/gif/GIFImageDecoder.cpp",
+    "fix 1/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/image-decoders/gif/GIFImageReader.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/image-decoders/gif/GIFImageReader.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ]
+  ]
+ },
+ {
+  "sha": "d950ca99af",
+  "date": "2025-01-07",
+  "title": "Fix various -Werror=unsafe-buffer-usage build failures",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/opentype/OpenTypeMathData.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 3/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/SharedBufferChunkReader.cpp",
+    "fix 0/3 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/opentype/OpenTypeMathData.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/graphics/skia/ImageBufferUtilitiesSkia.cpp",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/image-decoders/gif/GIFImageDecoder.cpp",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/image-decoders/gif/GIFImageReader.cpp",
+    "fix 0/3 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/image-decoders/jpeg/JPEGImageDecoder.cpp",
+    "fix 0/3 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "334ca27934",
+  "date": "2025-01-05",
+  "title": "Reduce use of WTF_ALLOW_UNSAFE_BUFFER_USAGE in WebCore/platform/image-decoders",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/image-decoders/ico/ICOImageDecoder.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 3/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/image-decoders/ScalableImageDecoder.h",
+    "fix 0/0 \u00b7 pre 0/2"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.cpp",
+    "fix 0/1 \u00b7 pre 1/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/image-decoders/gif/GIFImageDecoder.cpp",
+    "fix 0/0 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/image-decoders/gif/GIFImageReader.cpp",
+    "fix 0/0 \u00b7 pre 0/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/image-decoders/ico/ICOImageDecoder.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/image-decoders/jpeg/JPEGImageDecoder.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ]
+  ]
+ },
+ {
+  "sha": "095152b0f5",
+  "date": "2024-03-06",
+  "title": "Ignore unsupported disposal methods when decoding GIF",
+  "worst": "BACKPORTED",
+  "file": "Source/WebCore/platform/image-decoders/gif/GIFImageReader.cpp",
+  "sigs": "fix 1/3 \u00b7 pre 2/2",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/platform/image-decoders/gif/GIFImageReader.cpp",
+    "fix 1/3 \u00b7 pre 2/2"
+   ]
+  ]
+ },
+ {
+  "sha": "cd22602acd",
+  "date": "2025-01-25",
+  "title": "Reduce use of strcmp() / strncmp() in the codebase",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/page/PrintContext.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 2/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/PAL/pal/spi/cg/CoreGraphicsSPI.h",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/PAL/pal/text/TextCodecICU.cpp",
+    "fix 0/1 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/css/typedom/CSSNumericValue.cpp",
+    "fix 0/2 \u00b7 pre 0/1"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/dom/TextDecoder.cpp",
+    "fix 0/1 \u00b7 pre 1/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/page/PrintContext.cpp",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/page/PrintContext.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/SharedMemory.cpp",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/cocoa/AGXCompilerService.cpp",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/cocoa/WebMAudioUtilitiesCocoa.mm",
+    "fix 0/1 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/image-decoders/gif/GIFImageReader.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/image-decoders/png/PNGImageDecoder.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/mac/CursorMac.mm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/sql/SQLiteFileSystem.cpp",
+    "fix 0/1 \u00b7 pre 1/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/testing/Internals.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/xml/parser/XMLDocumentParserLibxml2.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/Shared/API/Cocoa/_WKRemoteObjectRegistry.mm",
+    "fix 0/2 \u00b7 pre 1/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/WebProcess/Plugins/PDF/PDFScriptEvaluation.mm",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "a74b4b24af",
+  "date": "2026-03-02",
+  "title": "Adopt `LIFETIME_BOUND` annotation in more places in WebCore/platform",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/ContentFilterUnblockHandler.h",
+  "sigs": "fix 0/3 \u00b7 pre 2/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/accessibility/cocoa/AccessibilityObjectCocoa.mm",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/accessibility/ios/AccessibilityObjectIOS.mm",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/editing/Editor.cpp",
+    "fix 1/1 \u00b7 pre 0/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/editing/cocoa/EditingHTMLConverter.mm",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/layout/formattingContexts/inline/InlineItemsBuilder.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/layout/formattingContexts/inline/InlineLineBoxBuilder.cpp",
+    "fix 1/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/layout/formattingContexts/inline/text/TextUtil.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/layout/integration/LayoutIntegrationBoxGeometryUpdater.cpp",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/layout/integration/inline/LayoutIntegrationInlineContentBuilder.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/layout/integration/inline/LayoutIntegrationLineLayout.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/loader/cache/CachedImage.cpp",
+    "fix 0/2 \u00b7 pre 0/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/ContentFilterUnblockHandler.h",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/ContentType.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/ContextMenu.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/ContextMenuItem.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/Cursor.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/Decimal.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/DragData.h",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/DragImage.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/FileChooser.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/MIMETypeRegistry.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/Pasteboard.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/animation/AcceleratedEffect.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/animation/AcceleratedEffectStack.h",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/animation/AcceleratedTimeline.h",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/animation/TimingFunction.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/AudioBus.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/audio/AudioDestination.h",
+    "fix 0/2 \u00b7 pre 0/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/FFTFrame.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/HRTFDatabaseLoader.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/HRTFElevation.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/HRTFKernel.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/ReverbConvolver.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/ReverbConvolverStage.cpp",
+    "fix 0/1 \u00b7 pre 1/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/cocoa/AudioSampleBufferList.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/cocoa/CAAudioStreamDescription.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/cocoa/CARingBuffer.h",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/audio/cocoa/PlatformRawAudioDataCocoa.h",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/cocoa/WebAudioBufferList.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/gstreamer/GStreamerAudioData.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/gstreamer/GStreamerAudioStreamDescription.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/audio/gstreamer/PlatformRawAudioDataGStreamer.h",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/audio/ios/AudioSessionIOS.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/audio/ios/MediaDeviceRoute.h",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/cocoa/VideoPresentationLayerProvider.h",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/encryptedmedia/CDMProxy.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/PlatformGamepad.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/cocoa/GameControllerGamepad.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/cocoa/GameControllerGamepadProvider.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/cocoa/GameControllerHapticEngines.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/libwpe/GamepadLibWPE.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/libwpe/GamepadProviderLibWPE.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/mac/HIDGamepad.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/mac/HIDGamepadProvider.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/mac/MultiGamepadProvider.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/manette/ManetteGamepad.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/gamepad/manette/ManetteGamepadProvider.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/glib/SelectionData.h",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/glib/SystemSettings.h",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/graphics/BitmapImageSource.h",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/ComplexTextController.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/Font.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/platform/graphics/FontCascade.cpp",
+    "fix 1/2 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/FontCascade.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/graphics/FontPlatformData.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/GraphicsLayer.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/graphics/coretext/ComplexTextControllerCoreText.mm",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/displaylists/DisplayListItems.h",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/image-decoders/ScalableImageDecoderFrame.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/image-decoders/gif/GIFImageReader.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/ios/LegacyTileGridTile.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/ios/VideoPresentationInterfaceIOS.h",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/mac/DataDetectorHighlight.h",
+    "fix 0/2 \u00b7 pre 1/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/mac/HIDDevice.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/mac/HIDElement.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/mac/ScrollAnimationRubberBand.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/mediarecorder/MediaRecorderPrivateGStreamer.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/mediastream/CaptureDevice.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/mediastream/MediaConstraints.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/mediastream/MediaStreamTrackPrivate.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/mediastream/RTCSessionDescriptionDescriptor.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/mediastream/RealtimeMediaSource.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/mediastream/RealtimeMediaSourceCapabilities.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/mediastream/RealtimeMediaSourceSettings.h",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/mock/MockRealtimeMediaSourceCenter.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/mock/mediasource/MockBox.h",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/network/ResourceRequestBase.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/network/ResourceResponseBase.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/sql/SQLiteDatabase.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/text/BidiResolver.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/text/BidiRunList.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/text/TextChecking.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/win/WindowMessageBroadcaster.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/rendering/RenderBlock.cpp",
+    "fix 1/1 \u00b7 pre 0/1"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/rendering/RenderTextControlSingleLine.cpp",
+    "fix 1/1 \u00b7 pre 0/1"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/rendering/mathml/MathOperator.cpp",
+    "fix 2/2 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/style/RenderStyle.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/WebProcess/Plugins/PDF/UnifiedPDF/PDFScrollingPresentationController.mm",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/WebCoreSupport/mac/WebPopupMenuMac.mm",
+    "fix 0/2 \u00b7 pre 0/2"
+   ]
+  ]
+ }
+]
