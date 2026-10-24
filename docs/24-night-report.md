@@ -90,9 +90,15 @@ Roughly 200,000 additional cases through the interpreter-only ASAN `jsc` (fresh 
 
 In order. Each is a two-minute test with the lab running.
 
-1. **`poc-style-scope-uaf.js`** — the UAF. Expect `SCOPE-SURVIVED` on a patched engine, a
-   blank WebView on a vulnerable one. If it blanks, the last `SCOPE-ITER-<n>` beacon tells
-   us roughly how many teardowns it takes, which is the starting point for making it reliable.
+1. **`/page/style-scope-upstream.html` first**, then `poc-style-scope-uaf.js` — the UAF.
+   The upstream file is the fuzzer case verbatim and is the higher-fidelity test; the scripted
+   probe approximates it. One correction worth recording: the crash stack is
+   `SVGStyleElement::~SVGStyleElement → Scope::removeStyleSheetCandidateNode`, so the dying
+   node is an **SVG `<style>` element**, and a probe without one cannot trigger this bug — the
+   probe now inserts one, but that is exactly the kind of detail a hand-rebuilt reproducer
+   gets wrong, which is why the authentic file is listed first. Expect `SCOPE-SURVIVED` on a
+   patched engine, a blank WebView on a vulnerable one; the last `SCOPE-ITER-<n>` beacon gives
+   the iteration count.
 2. **`poc-select-uaf.js`** — the second UAF. Four lines upstream: `select { container: a1 / inline-size }`,
    mutate `options[1]`, then `select.multiple = true`. Sony's `itemStyle()` still dereferences
    `*element->computedStyle()` with no null check, and the fix's whole point is that a full

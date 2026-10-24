@@ -73,13 +73,22 @@
     inner.setAttribute('height', '8');
     clip.appendChild(inner);
 
-    // the element that creates a ReferencePathOperation in its RenderStyle
+    // An SVG <style> element is essential, not decoration: the crash stack is
+    // SVGStyleElement::~SVGStyleElement -> Style::Scope::removeStyleSheetCandidateNode,
+    // so the dying node is the SVG style element, not the rect. Its destructor goes through
+    // StyleSheetOwner::removedFromDocument, which calls into the document's style scope.
+    const styleEl = document.createElementNS(NS, 'style');
+    styleEl.textContent = 'rect { fill: red; }';
+
+    // the element that creates a ReferencePathOperation in its RenderStyle, and therefore
+    // the RenderStyle -> DOM cycle that outlives the scope
     const target = document.createElementNS(NS, 'rect');
     target.setAttribute('width', '64');
     target.setAttribute('height', '64');
     target.setAttribute('clip-path', 'url(#clip' + i + ')');
     target.style.clipPath = 'url(#clip' + i + ')';
 
+    svg.appendChild(styleEl);
     svg.appendChild(clip);
     svg.appendChild(target);
     sr.appendChild(svg);
