@@ -39,7 +39,11 @@ systemctl is-enabled sleep.target suspend.target hibernate.target 2>&1 | tr '\n'
 echo
 echo "=== 1. logind: no idle action, no key handling, keep user processes ==="
 install -d /etc/systemd/logind.conf.d
-cat > /etc/systemd/logind.conf.d/99-bc250-nosleep.conf <<'EOF'
+# The filename must sort AFTER deck.conf, because drop-ins merge in ASCII order and later wins.
+# "99-..." sorts BEFORE "deck.conf" (digits precede letters), which is why the first attempt
+# left KillUserProcesses=true. "zz-" is the reliable prefix here.
+rm -f /etc/systemd/logind.conf.d/99-bc250-nosleep.conf
+cat > /etc/systemd/logind.conf.d/zz-bc250-nosleep.conf <<'EOF'
 # Added for this board: the machine is used as a headless build host, and a Steam-Deck-style
 # profile was suspending it after a few idle minutes and killing user processes on logout.
 [Login]
@@ -53,7 +57,7 @@ HandleHibernateKey=ignore
 HandlePowerKey=ignore
 KillUserProcesses=no
 EOF
-echo "wrote /etc/systemd/logind.conf.d/99-bc250-nosleep.conf"
+echo "wrote /etc/systemd/logind.conf.d/zz-bc250-nosleep.conf"
 
 echo
 echo "=== 2. mask sleep targets so any suspend request fails ==="
@@ -62,11 +66,20 @@ systemctl mask --quiet sleep.target suspend.target hibernate.target hybrid-sleep
     systemd-suspend-then-hibernate.service 2>/dev/null || true
 systemctl daemon-reload
 systemctl restart systemd-logind
+sleep 1
 echo "masked: $(systemctl is-enabled sleep.target suspend.target hibernate.target 2>&1 | tr '\n' ' ')"
+# Verify the merged value rather than trusting the file: this is what actually governs whether
+# an SSH logout reaps a running build.
+echo "effective KillUserProcesses: $(busctl get-property org.freedesktop.login1 /org/freedesktop/login1 \
+    org.freedesktop.login1.Manager KillUserProcesses 2>/dev/null || echo unknown)"
 
 echo
 echo "=== 3. VRAM split -> ${VRAM_MB} MB (from extended CMOS, no BIOS flash) ==="
-MEMCFG="$HOME/bc250_memcfg/bc250memcfg"
+# $HOME is /root when this runs under sudo, so derive the invoking user's home instead.
+# Getting this wrong is silent: the tool simply is not found and the split never changes.
+REAL_USER=${SUDO_USER:-$(id -un)}
+REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+MEMCFG="$REAL_HOME/bc250_memcfg/bc250memcfg"
 if [ -x "$MEMCFG" ]; then
     "$MEMCFG" UMA_SIZE "$VRAM_MB" || echo "memcfg failed - nothing changed"
     echo "--- current CMOS values ---"
