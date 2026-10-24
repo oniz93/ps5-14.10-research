@@ -62,4 +62,36 @@ flags all-set, 64-deep nesting, a container aliasing another's bytes, and four t
 `probes/mp4-fuzz.js` gives **each case a fresh video + MediaSource + SourceBuffer**, so a
 poisoned pipeline cannot taint later results and a crash names exactly one input.
 
+## Round 1 on hardware: clean, and shallower than it looked
+
+Both corpora ran end to end on retail 14.10 with no crash.
+
+**Fonts.** All 28 cases, twice through (forward sweep `F-DONE n=28`, reverse `F-ALL-DONE`). Four
+rejections, all `NetworkError`, and they are *exactly* the four FreeType 2.15.0 rejects:
+`head_unitsperem_zero`, `dirent_numtables_zero`, `trunc_8`, `trunc_header`. The other 24 loaded.
+
+That match is the useful part: on these discriminators the console's FreeType behaves like a
+current, fully-patched build. Nothing in this corpus is near a pre-2.12 validation gap.
+
+**MP4.** All 32 cases produced `updateend`, including `moov_size_lt_header` (a box size of 4,
+below the header minimum). That is not credible as "fully parsed" — which is the tell.
+
+### Why round 1 was shallow, and what round 2 changes
+
+Two facts visible only in the beacon output:
+
+1. **Every font reported `w150`.** The base font is NotoSans**Lepcha**, so rendering `AaBbGg019`
+   fell back to the system font every time. Face creation *was* exercised — that is where the
+   four rejections came from — but glyph outlines and the TrueType hinting interpreter were not.
+   Round 2 renders real Lepcha codepoints (U+1C00–U+1C07) and reports `applied=yes` only when the
+   measured width differs from the monospace fallback, so a substituted font can no longer look
+   like a successful parse.
+
+2. **`updateend` means accepted, not demuxed.** Nothing ever played the media, so the demuxer was
+   barely driven. Round 2 plays each case, seeks to 0.15 s, and reports the deepest event reached
+   (`metadata`, `data`, `canplay`, `timeupdate`, `playing`) alongside the outcome.
+
+Round 2 is `probes/corpus-v2.js`: fonts first, then MP4, one reload, roughly four minutes.
+`F2-*` and `M2-*` prefixes keep its beacons distinguishable from round 1 in the same log.
+
 Stamp: 28 font cases + 32 MP4 cases, both reachable from a page with no prerequisites.
