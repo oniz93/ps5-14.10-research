@@ -1,0 +1,1198 @@
+[
+ {
+  "sha": "c1787ccc4e",
+  "date": "2023-12-20",
+  "title": "jsc_fuz/wktr: heap-buffer-overflow in  WebCore::WebCodecsVideoFrame::copyTo(...) WebCodecs",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/Modules/webcodecs/WebCodecsVideoFrameAlgorithms.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/Modules/webcodecs/WebCodecsVideoFrameAlgorithms.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "1e8c797c87",
+  "date": "2024-01-24",
+  "title": "heap-buffer-overflow: crash under WebCore::ShadowBlur::blurLayerImage().",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/ShadowBlur.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/ShadowBlur.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "869d5c5531",
+  "date": "2026-05-29",
+  "title": "Use-After-Free in `BaseDateAndTimeInputType::didChangeValueFromControl`",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/html/BaseDateAndTimeInputType.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/2",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/html/BaseDateAndTimeInputType.cpp",
+    "fix 0/1 \u00b7 pre 1/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/BaseDateAndTimeInputType.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/html/shadow/DateTimeEditElement.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/shadow/DateTimeEditElement.h",
+    "fix 0/2 \u00b7 pre 0/3"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "8d71b72447",
+  "date": "2026-06-15",
+  "title": "Potential use-after-free under JSAttr::visitAdditionalChildren()",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/bindings/js/JSAttrCustom.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 2/3",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/bindings/js/JSAttrCustom.cpp",
+    "fix 0/1 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/dom/Attr.cpp",
+    "fix 0/3 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/dom/Attr.h",
+    "fix 0/3 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "d2af128b14",
+  "date": "2026-06-18",
+  "title": "Crash when rehashing DOMWrapperWorld::m_wrappers hash map",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/bindings/js/DOMWrapperWorld.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/bindings/js/DOMWrapperWorld.cpp",
+    "fix 0/3 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/bindings/js/DOMWrapperWorld.h",
+    "fix 0/3 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/bindings/js/JSDOMWrapperCache.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "97d2c63b0b",
+  "date": "2026-06-29",
+  "title": "FontCascadeCacheKey has uninitialized fontSelectorId and fontSelectorVersion members",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/FontCascadeCache.h",
+  "sigs": "fix 0/2 \u00b7 pre 2/2",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/FontCascadeCache.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "bb98ffd5c7",
+  "date": "2026-06-30",
+  "title": "FilterImage may return uninitialized PixelBuffer",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/filters/FilterImage.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 3/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/cpu/arm/filters/FEBlendNeonApplier.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/filters/FilterImage.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/filters/FilterImage.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "b690833969",
+  "date": "2026-06-30",
+  "title": "Uninitialized-heap disclosure in convertImagePixelsFromFloat16ToFloat16 via color-space ea",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/PixelBufferConversion.cpp",
+  "sigs": "fix 0/0 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/PixelBufferConversion.cpp",
+    "fix 0/0 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "0f4651107b",
+  "date": "2026-07-01",
+  "title": "PopoverData::m_popoverState and m_visibilityState are uninitialized",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/dom/PopoverData.h",
+  "sigs": "fix 0/2 \u00b7 pre 2/2",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/dom/PopoverData.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "a8459d453b",
+  "date": "2026-07-02",
+  "title": "Heap use-after-free of XSLStyleSheet::m_stylesheetDoc after libxslt frees imported doc on ",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/xml/XSLStyleSheetLibxslt.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/dom/Document.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/xml/XSLStyleSheetLibxslt.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/xml/XSLTProcessorLibxslt.cpp",
+    "fix 1/2 \u00b7 pre 0/0"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "576ee4a20b",
+  "date": "2026-07-02",
+  "title": "Data race on MIMETypeCache::m_cachedResults / m_supportedTypes in MIMETypeCache::canDecode",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/avfoundation/objc/AVStreamDataParserMIMETypeCache.mm",
+  "sigs": "fix 0/3 \u00b7 pre 2/3",
+  "all": [
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/graphics/MIMETypeCache.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/MIMETypeCache.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/avfoundation/objc/AVStreamDataParserMIMETypeCache.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/avfoundation/objc/AVStreamDataParserMIMETypeCache.mm",
+    "fix 0/3 \u00b7 pre 2/3"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "122493b27e",
+  "date": "2026-07-03",
+  "title": "Out-of-bounds read in InspectorAnimationAgent when parsedKeyframes is shorter than blendin",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/inspector/agents/InspectorAnimationAgent.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/inspector/agents/InspectorAnimationAgent.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "ed517e4120",
+  "date": "2026-07-06",
+  "title": "Zero-initialize CSSParserToken union to fix valgrind uninitialised value error",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/css/parser/CSSParserToken.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/css/parser/CSSParserToken.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "66df0f0c6b",
+  "date": "2026-07-26",
+  "title": "DelayDSPKernel::m_desiredDelayFrames is uninitialized, causing undefined behavior in proce",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/Modules/webaudio/DelayDSPKernel.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/Modules/webaudio/DelayDSPKernel.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "8728f4ed1f",
+  "date": "2026-07-26",
+  "title": "OscillatorNode::m_type has no default member initializer, leaving it uninitialized on exce",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/Modules/webaudio/OscillatorNode.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/Modules/webaudio/OscillatorNode.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "808e77190f",
+  "date": "2026-07-27",
+  "title": "Out-of-bounds read in CtapHidDriver when a CTAPHID_INIT response is too short",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/UIProcess/WebAuthentication/fido/CtapHidDriver.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/2",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/testing/MockWebAuthenticationConfiguration.idl",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/WebAuthentication/Mock/MockHidConnection.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/WebAuthentication/fido/CtapHidDriver.cpp",
+    "fix 0/1 \u00b7 pre 1/2"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "ba64b8f513",
+  "date": "2026-09-01",
+  "title": "NavigationAction::m_type is left uninitialized by the default constructor",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/loader/NavigationAction.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/loader/NavigationAction.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "430a7b5b2f",
+  "date": "2026-09-14",
+  "title": "AX: Fix use-after-free of accessibilityRootObjectWrapper",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/WebProcess/WebPage/mac/WKAccessibilityWebPageObjectBase.mm",
+  "sigs": "fix 0/2 \u00b7 pre 1/2",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/WebPage/mac/WKAccessibilityWebPageObjectBase.mm",
+    "fix 0/2 \u00b7 pre 1/2"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "b72f728779",
+  "date": "2026-10-07",
+  "title": "RenderFragmentContainerRange::m_rangeInvalidated is uninitialized when default-constructed",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/rendering/RenderFragmentedFlow.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/rendering/RenderFragmentedFlow.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "1690e041eb",
+  "date": "2026-10-23",
+  "title": "Initialize uninitialized members and locals in SVG animation and path blending code",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/svg/SVGGraphicsElement.cpp",
+  "sigs": "fix 0/0 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/SVGGraphicsElement.cpp",
+    "fix 0/0 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/SVGPathBlender.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/svg/SVGStopElement.cpp",
+    "fix 0/0 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/properties/SVGAnimatedPropertyAnimatorImpl.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/svg/properties/SVGAnimationAdditiveValueFunction.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/svg/properties/SVGAnimationDiscreteFunction.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ]
+  ],
+  "score": 7,
+  "why": "memory-safety title, live surface, pre-fix lines present"
+ },
+ {
+  "sha": "6ae0641076",
+  "date": "2024-05-23",
+  "title": "Race condition in LibWebRTCVPXInternalVideoDecoder::pixelBufferPool leading to memory corr",
+  "worst": "PARTIAL",
+  "file": "Source/WebCore/platform/libwebrtc/LibWebRTCVPXVideoDecoder.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 1/3",
+  "all": [
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/libwebrtc/LibWebRTCVPXVideoDecoder.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "60c138fa85",
+  "date": "2025-12-03",
+  "title": "Downcast crash when grid item requests fullscreen with container-type parent",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/rendering/RenderBox.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderBox.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "65303ca72a",
+  "date": "2026-03-25",
+  "title": "IPC::Decoder::markInvalid() should not leave the m_bufferPosition iterator dangling",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/Platform/IPC/Decoder.h",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/Platform/IPC/Decoder.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "4f359a0df3",
+  "date": "2026-05-30",
+  "title": "Crash when recreating option::checkmark",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/rendering/updating/RenderTreeBuilderFormControls.cpp",
+  "sigs": "fix 0/2 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/updating/RenderTreeBuilderFormControls.cpp",
+    "fix 0/2 \u00b7 pre 0/0"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "9d60567537",
+  "date": "2026-06-02",
+  "title": "Fix use-after-free in ~WebProcessProxy() when replying to pending IPC messages",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/UIProcess/WebProcessProxy.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/WebProcessProxy.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "1c9e3e8e8b",
+  "date": "2026-06-03",
+  "title": "Out-of-bounds read in WebM MIME sniffer when iter reaches length()",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/platform/graphics/MIMESniffer.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/platform/graphics/MIMESniffer.cpp",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "96ec73a1e5",
+  "date": "2026-06-05",
+  "title": "Type confusion in ReadableStream when cancel returns a fake Promise object",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/Modules/streams/StreamPipeToUtilities.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/streams/StreamPipeToUtilities.cpp",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "8384c8455e",
+  "date": "2026-06-15",
+  "title": "Type Confusion in RTCEncodedStreamProducer.cpp Results in OOB Read",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/Modules/mediastream/RTCEncodedStreamProducer.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/mediastream/RTCEncodedStreamProducer.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/mediastream/RTCEncodedStreamProducer.h",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/mediastream/RTCRtpScriptTransformer.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/mediastream/RTCRtpTransformableFrame.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "e147963ac4",
+  "date": "2026-06-30",
+  "title": "use-after-free in WebCodecsAudioData::memoryCost() via concurrent GC marker / close()",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/Modules/webcodecs/WebCodecsAudioData.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/webcodecs/WebCodecsAudioData.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/webcodecs/WebCodecsAudioData.h",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "a93904b977",
+  "date": "2026-06-30",
+  "title": "Use-after-free in SVGGeometryElement::getPointAtLength \u2014 raw renderer pointer held across ",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/svg/SVGGeometryElement.h",
+  "sigs": "fix 0/2 \u00b7 pre 0/0",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/svg/SVGGeometryElement.cpp",
+    "fix 1/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/svg/SVGGeometryElement.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "3a88b7cf55",
+  "date": "2026-06-30",
+  "title": "Use-after-free in XRSessionInit dictionary conversion via sequence<any>",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/bindings/js/JSDOMConvertSequences.h",
+  "sigs": "fix 0/3 \u00b7 pre 0/2",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/webxr/WebXRSystem.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/webxr/WebXRSystem.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/webxr/XRSessionInit.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/webxr/XRSessionInit.idl",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/bindings/js/JSDOMConvertSequences.h",
+    "fix 0/3 \u00b7 pre 0/2"
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/testing/WebXRTest.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/testing/WebXRTest.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/testing/WebXRTest.idl",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "d3cffddf14",
+  "date": "2026-06-30",
+  "title": "Uninitialized result of FEGaussianBlur if the input isAlphaImage",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/graphics/filters/software/FEGaussianBlurSoftwareApplier.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/filters/software/FEGaussianBlurSoftwareApplier.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "6d6ea48e7e",
+  "date": "2026-07-01",
+  "title": "heap-use-after-free in WebExtensionRegisteredScriptsSQLiteStore::addScripts",
+  "worst": "NOFILE",
+  "file": "Source/WebKit/Shared/Extensions/WebExtensionRegisteredScriptsSQLiteStore.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Extensions/WebExtensionRegisteredScriptsSQLiteStore.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Extensions/WebExtensionRegisteredScriptsSQLiteStore.h",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/Extensions/WebExtensionDeclarativeNetRequestSQLiteStore.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/Extensions/WebExtensionDeclarativeNetRequestSQLiteStore.h",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "ea3fbf953c",
+  "date": "2026-07-01",
+  "title": "Use-after-free in -[_WKWebExtensionDeclarativeNetRequestRule _resourcesToTargetWhenNoneAre",
+  "worst": "NOFILE",
+  "file": "Source/WebKit/UIProcess/Extensions/Cocoa/_WKWebExtensionDeclarativeNetRequestRule.mm",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/Extensions/Cocoa/_WKWebExtensionDeclarativeNetRequestRule.mm",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "e75354878c",
+  "date": "2026-07-01",
+  "title": "Type confusion via raw Exception cell returned to script from callPromisePairFunction when",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/bindings/js/JSDOMPromiseDeferred.h",
+  "sigs": "fix 0/2 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/bindings/js/JSDOMPromiseDeferred.h",
+    "fix 0/2 \u00b7 pre 0/1"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "6a97574d77",
+  "date": "2026-07-02",
+  "title": "Fix Cross-thread use-after-free in RemoteScrollingTree::m_progressBasedTimelineRegistry",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingTree.h",
+  "sigs": "fix 0/3 \u00b7 pre 0/2",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingTree.cpp",
+    "fix 1/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingTree.h",
+    "fix 0/3 \u00b7 pre 0/2"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "87d203651d",
+  "date": "2026-07-02",
+  "title": "Type confusion in ReadableStream.cancel() via jsCast<JSPromise*>",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/Modules/streams/ReadableStreamDefaultReader.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/streams/ReadableStream.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/streams/ReadableStreamDefaultReader.cpp",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "e8a476cd12",
+  "date": "2026-07-02",
+  "title": "Stack buffer overflow in WebKit libwebrtc VideoCodecInitializer via remote SDP simulcast l",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/platform/mediastream/cocoa/RealtimeOutgoingVideoSourceCocoa.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/platform/mediastream/cocoa/RealtimeOutgoingVideoSourceCocoa.cpp",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "94ff9f23ee",
+  "date": "2026-07-12",
+  "title": "Off-by-one out-of-bounds read in KanjiCode::judge()",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/loader/TextResourceDecoder.cpp",
+  "sigs": "fix 0/2 \u00b7 pre 0/2",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/loader/TextResourceDecoder.cpp",
+    "fix 0/2 \u00b7 pre 0/2"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "340be14e84",
+  "date": "2026-07-13",
+  "title": "WTFReportBacktraceWithStackDepth may print uninitialized stack frames when the captured st",
+  "worst": "DIVERGED",
+  "file": "Source/WTF/wtf/Assertions.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/Assertions.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "bc564ecb10",
+  "date": "2026-07-13",
+  "title": "Fold uninitialized RenderTable local in RenderTreeBuilder::attachToRenderElement",
+  "worst": "PARTIAL",
+  "file": "Source/WebCore/rendering/updating/RenderTreeBuilder.cpp",
+  "sigs": "fix 0/2 \u00b7 pre 1/3",
+  "all": [
+   [
+    "PARTIAL",
+    "Source/WebCore/rendering/updating/RenderTreeBuilder.cpp",
+    "fix 0/2 \u00b7 pre 1/3"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "163805a73a",
+  "date": "2026-07-18",
+  "title": "Web Inspector: InspectorThreadableLoaderClient::m_statusCode is uninitialized",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/inspector/InspectorThreadableLoaderClient.h",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/inspector/InspectorThreadableLoaderClient.h",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "e08a16763c",
+  "date": "2026-07-20",
+  "title": "Fix out-of-bounds buffer index in userVisibleURL when probing for xn--",
+  "worst": "DIVERGED",
+  "file": "Source/WTF/wtf/URLHelpers.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/URLHelpers.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "2a2036f697",
+  "date": "2026-07-28",
+  "title": "AudioParam::finalValue() returns an uninitialized float when calculateFinalValues() bails ",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/Modules/webaudio/AudioParam.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/webaudio/AudioParam.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "ef325e63cb",
+  "date": "2026-07-30",
+  "title": "Out-of-bounds read in WebM MIME sniffer at the 0x42 0x82 DocType check",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/platform/graphics/MIMESniffer.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/platform/graphics/MIMESniffer.cpp",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "54f47259ff",
+  "date": "2026-08-06",
+  "title": "sort-Xcode-project-file emits \"uninitialized value\" warnings: WebKit.xcodeproj contains ob",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/WebKit.xcodeproj/project.pbxproj",
+  "sigs": "fix 0/3 \u00b7 pre 0/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/WebKit.xcodeproj/project.pbxproj",
+    "fix 0/3 \u00b7 pre 0/3"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "e269e1967d",
+  "date": "2026-08-20",
+  "title": "Out-of-bounds read in BMP RLE24 absolute-mode decoding",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.h",
+  "sigs": "fix 0/0 \u00b7 pre 0/3",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.cpp",
+    "fix 2/3 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.h",
+    "fix 0/0 \u00b7 pre 0/3"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "4847c476a8",
+  "date": "2026-09-05",
+  "title": "Anchor positioned element with position-visibility crashes when its default anchor is a <b",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/style/AnchorPositionEvaluator.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/style/AnchorPositionEvaluator.cpp",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "e410d5cb1d",
+  "date": "2026-09-09",
+  "title": "Heap Buffer Overflow in WebRTC VP9 Encoder",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/Modules/webcodecs/WebCodecsVideoEncoder.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/webcodecs/WebCodecsVideoEncoder.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "dd06e977ec",
+  "date": "2026-09-13",
+  "title": "BlobResourceHandle::readSync() forwards uninitialized buffer tail when blob is shorter tha",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/network/BlobResourceHandle.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/network/BlobResourceHandle.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "9d94c4a1b1",
+  "date": "2026-09-13",
+  "title": "GraphicsLayerCA::m_tileCoverage is read uninitialized by changeLayerTypeTo()",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/graphics/ca/GraphicsLayerCA.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/ca/GraphicsLayerCA.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "f83706791b",
+  "date": "2026-09-17",
+  "title": "Crash under configureForAdvancedPrivacyProtections() due to thread safety issue",
+  "worst": "PARTIAL",
+  "file": "Source/WebKit/Platform/cocoa/WebPrivacyHelpers.mm",
+  "sigs": "fix 0/3 \u00b7 pre 1/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/text/CString.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/Platform/cocoa/WebPrivacyHelpers.mm",
+    "fix 0/3 \u00b7 pre 1/3"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "f457aa2ebe",
+  "date": "2026-09-18",
+  "title": "heap-use-after-free in Style::commitRelations via MatchResultCache",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/style/MatchResultCache.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/style/MatchResultCache.cpp",
+    ""
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "790f56e77c",
+  "date": "2026-10-07",
+  "title": "WebCodecs VP8/VP9/AV1 encoder encodes uninitialized data when given 10-bit frames",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/libwebrtc/LibWebRTCVPXVideoEncoder.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/libwebrtc/LibWebRTCVPXVideoEncoder.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "e35f75c5b9",
+  "date": "2026-10-14",
+  "title": "Crash in IdTargetObserver::~IdTargetObserver() when a <link rel=expect> outlives its shado",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/html/HTMLLinkElement.cpp",
+  "sigs": "fix 0/2 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLLinkElement.cpp",
+    "fix 0/2 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLLinkElement.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "37dc45c0c9",
+  "date": "2026-10-15",
+  "title": "RemoteScrollingCoordinatorProxy::rootScrollingNodeID() is a flaky crash",
+  "worst": "PARTIAL",
+  "file": "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingCoordinatorProxy.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 1/3",
+  "all": [
+   [
+    "PARTIAL",
+    "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingCoordinatorProxy.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingCoordinatorProxy.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "354fb3b075",
+  "date": "2026-10-19",
+  "title": "Grid with a subgrid whose item has an aspect-ratio and a percentage height crashes in Grid",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/rendering/RenderGrid.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderGrid.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ },
+ {
+  "sha": "b6f26e020f",
+  "date": "2026-10-22",
+  "title": "Avoid out-of-bounds read in isPlayReadySanitizedInitializationData",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/Modules/encryptedmedia/InitDataRegistry.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/encryptedmedia/InitDataRegistry.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ],
+  "score": 5,
+  "why": "memory-safety title, live surface"
+ }
+]

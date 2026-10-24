@@ -1,0 +1,3677 @@
+[
+ {
+  "sha": "e0558372aa",
+  "date": "2026-09-18",
+  "title": "Use-after-free in CanvasRenderingContext2DBase::beginLayer via realizeSavesLoop early exit",
+  "worst": "BACKPORTED",
+  "file": "Source/WebCore/html/canvas/CanvasRenderingContext2DBase.cpp",
+  "sigs": "fix 1/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/html/canvas/CanvasRenderingContext2DBase.cpp",
+    "fix 1/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "fb20d4d63b",
+  "date": "2026-09-11",
+  "title": "PlatformSpeechSynthesizerClient should prevent use-after-free via weak back-reference to c",
+  "worst": "SKIP-DEAD",
+  "file": "Source/WebCore/platform/PlatformSpeechSynthesizer.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/platform/PlatformSpeechSynthesizer.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/platform/PlatformSpeechSynthesizer.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/platform/cocoa/PlatformSpeechSynthesizerCocoa.mm",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/platform/gstreamer/PlatformSpeechSynthesizerGStreamer.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/platform/mock/PlatformSpeechSynthesizerMock.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/platform/spiel/PlatformSpeechSynthesizerSpiel.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/testing/Internals.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "f457aa2ebe",
+  "date": "2026-09-18",
+  "title": "heap-use-after-free in Style::commitRelations via MatchResultCache",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/style/MatchResultCache.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/style/MatchResultCache.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "c5036aadbd",
+  "date": "2026-07-01",
+  "title": "Heap use-after-free in ClipboardItemBindingsDataSource::clearItemTypeLoaders()",
+  "worst": "BACKPORTED",
+  "file": "Source/WebCore/Modules/async-clipboard/ClipboardItemBindingsDataSource.cpp",
+  "sigs": "fix 2/2 \u00b7 pre 2/2",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/Modules/async-clipboard/ClipboardItemBindingsDataSource.cpp",
+    "fix 2/2 \u00b7 pre 2/2"
+   ]
+  ]
+ },
+ {
+  "sha": "8a2b066102",
+  "date": "2026-09-15",
+  "title": "getComputedStyle computes wrong grid-template-columns for an empty grid using repeat(auto-",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/rendering/GridTrackSizingAlgorithm.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/rendering/GridTrackSizingAlgorithm.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "6d6ea48e7e",
+  "date": "2026-07-01",
+  "title": "heap-use-after-free in WebExtensionRegisteredScriptsSQLiteStore::addScripts",
+  "worst": "NOFILE",
+  "file": "Source/WebKit/Shared/Extensions/WebExtensionRegisteredScriptsSQLiteStore.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Extensions/WebExtensionRegisteredScriptsSQLiteStore.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Extensions/WebExtensionRegisteredScriptsSQLiteStore.h",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/Extensions/WebExtensionDeclarativeNetRequestSQLiteStore.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/Extensions/WebExtensionDeclarativeNetRequestSQLiteStore.h",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "ea3fbf953c",
+  "date": "2026-07-01",
+  "title": "Use-after-free in -[_WKWebExtensionDeclarativeNetRequestRule _resourcesToTargetWhenNoneAre",
+  "worst": "NOFILE",
+  "file": "Source/WebKit/UIProcess/Extensions/Cocoa/_WKWebExtensionDeclarativeNetRequestRule.mm",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/Extensions/Cocoa/_WKWebExtensionDeclarativeNetRequestRule.mm",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "6cf979a79f",
+  "date": "2026-10-04",
+  "title": "Stop leaking a JSHeapData per VM, and remove its useGlobalGC singleton",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/bindings/js/WebCoreJSClientData.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 2/3",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/bindings/js/WebCoreJSClientData.cpp",
+    "fix 0/1 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/bindings/js/WebCoreJSClientData.h",
+    "fix 0/2 \u00b7 pre 3/3"
+   ]
+  ]
+ },
+ {
+  "sha": "9d60567537",
+  "date": "2026-06-02",
+  "title": "Fix use-after-free in ~WebProcessProxy() when replying to pending IPC messages",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/UIProcess/WebProcessProxy.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/WebProcessProxy.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "e147963ac4",
+  "date": "2026-06-30",
+  "title": "use-after-free in WebCodecsAudioData::memoryCost() via concurrent GC marker / close()",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/Modules/webcodecs/WebCodecsAudioData.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/webcodecs/WebCodecsAudioData.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/webcodecs/WebCodecsAudioData.h",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "4e721b046f",
+  "date": "2026-07-01",
+  "title": "Cherry-pick 0a9952c703a7. rdar://176483124",
+  "worst": "NOFILE",
+  "file": "Source/WebKit/Shared/Extensions/WebExtensionSQLiteDatabase.h",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Extensions/WebExtensionSQLiteDatabase.h",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "a93904b977",
+  "date": "2026-06-30",
+  "title": "Use-after-free in SVGGeometryElement::getPointAtLength \u2014 raw renderer pointer held across ",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/svg/SVGGeometryElement.h",
+  "sigs": "fix 0/2 \u00b7 pre 0/0",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/svg/SVGGeometryElement.cpp",
+    "fix 1/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/svg/SVGGeometryElement.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "6a97574d77",
+  "date": "2026-07-02",
+  "title": "Fix Cross-thread use-after-free in RemoteScrollingTree::m_progressBasedTimelineRegistry",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingTree.h",
+  "sigs": "fix 0/3 \u00b7 pre 0/2",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingTree.cpp",
+    "fix 1/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingTree.h",
+    "fix 0/3 \u00b7 pre 0/2"
+   ]
+  ]
+ },
+ {
+  "sha": "869d5c5531",
+  "date": "2026-05-29",
+  "title": "Use-After-Free in `BaseDateAndTimeInputType::didChangeValueFromControl`",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/html/BaseDateAndTimeInputType.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/2",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/html/BaseDateAndTimeInputType.cpp",
+    "fix 0/1 \u00b7 pre 1/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/BaseDateAndTimeInputType.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/html/shadow/DateTimeEditElement.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/shadow/DateTimeEditElement.h",
+    "fix 0/2 \u00b7 pre 0/3"
+   ]
+  ]
+ },
+ {
+  "sha": "430a7b5b2f",
+  "date": "2026-09-14",
+  "title": "AX: Fix use-after-free of accessibilityRootObjectWrapper",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/WebProcess/WebPage/mac/WKAccessibilityWebPageObjectBase.mm",
+  "sigs": "fix 0/2 \u00b7 pre 1/2",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/WebPage/mac/WKAccessibilityWebPageObjectBase.mm",
+    "fix 0/2 \u00b7 pre 1/2"
+   ]
+  ]
+ },
+ {
+  "sha": "8d71b72447",
+  "date": "2026-06-15",
+  "title": "Potential use-after-free under JSAttr::visitAdditionalChildren()",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/bindings/js/JSAttrCustom.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 2/3",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/bindings/js/JSAttrCustom.cpp",
+    "fix 0/1 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/dom/Attr.cpp",
+    "fix 0/3 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/dom/Attr.h",
+    "fix 0/3 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "a814080321",
+  "date": "2026-05-28",
+  "title": "Potential use after free of m_responseDocument in XMLHttpRequest::visitAdditionalChildren(",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/bindings/js/JSXMLHttpRequestCustom.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 2/3",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/bindings/js/JSXMLHttpRequestCustom.cpp",
+    "fix 0/1 \u00b7 pre 2/3"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/xml/XMLHttpRequest.cpp",
+    "fix 2/3 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/xml/XMLHttpRequest.h",
+    "fix 0/3 \u00b7 pre 2/3"
+   ]
+  ]
+ },
+ {
+  "sha": "a8459d453b",
+  "date": "2026-07-02",
+  "title": "Heap use-after-free of XSLStyleSheet::m_stylesheetDoc after libxslt frees imported doc on ",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/xml/XSLStyleSheetLibxslt.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/dom/Document.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/xml/XSLStyleSheetLibxslt.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/xml/XSLTProcessorLibxslt.cpp",
+    "fix 1/2 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "de6ac853eb",
+  "date": "2026-08-06",
+  "title": "LibWebRTCAudioModule can use the audio transport after it is unregistered and destroyed",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/mediastream/libwebrtc/LibWebRTCAudioModule.h",
+  "sigs": "fix 0/3 \u00b7 pre 0/1",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/platform/mediastream/libwebrtc/LibWebRTCAudioModule.cpp",
+    "fix 1/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/mediastream/libwebrtc/LibWebRTCAudioModule.h",
+    "fix 0/3 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "3a88b7cf55",
+  "date": "2026-06-30",
+  "title": "Use-after-free in XRSessionInit dictionary conversion via sequence<any>",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/bindings/js/JSDOMConvertSequences.h",
+  "sigs": "fix 0/3 \u00b7 pre 0/2",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/webxr/WebXRSystem.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/webxr/WebXRSystem.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/webxr/XRSessionInit.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/webxr/XRSessionInit.idl",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/bindings/js/JSDOMConvertSequences.h",
+    "fix 0/3 \u00b7 pre 0/2"
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/testing/WebXRTest.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/testing/WebXRTest.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/testing/WebXRTest.idl",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "e410d5cb1d",
+  "date": "2026-09-09",
+  "title": "Heap Buffer Overflow in WebRTC VP9 Encoder",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/Modules/webcodecs/WebCodecsVideoEncoder.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/webcodecs/WebCodecsVideoEncoder.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ]
+  ]
+ },
+ {
+  "sha": "94ff9f23ee",
+  "date": "2026-07-12",
+  "title": "Off-by-one out-of-bounds read in KanjiCode::judge()",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/loader/TextResourceDecoder.cpp",
+  "sigs": "fix 0/2 \u00b7 pre 0/2",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/loader/TextResourceDecoder.cpp",
+    "fix 0/2 \u00b7 pre 0/2"
+   ]
+  ]
+ },
+ {
+  "sha": "176844ce6b",
+  "date": "2023-10-09",
+  "title": "Heap-buffer-overflow in WebCore::VideoFrame::createNV12.",
+  "worst": "BACKPORTED",
+  "file": "Source/WebCore/Modules/webcodecs/WebCodecsVideoFrameAlgorithms.cpp",
+  "sigs": "fix 1/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/Modules/webcodecs/WebCodecsVideoFrameAlgorithms.cpp",
+    "fix 1/1 \u00b7 pre 0/1"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/platform/graphics/cv/VideoFrameCV.mm",
+    "fix 3/3 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "c031542a9d",
+  "date": "2023-10-09",
+  "title": "Heap-buffer-overflow in I420ToNV12 when the length of the given data buffer is higher than",
+  "worst": "BACKPORTED",
+  "file": "Source/WebCore/Modules/webcodecs/WebCodecsVideoFrameAlgorithms.cpp",
+  "sigs": "fix 2/2 \u00b7 pre 0/0",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/Modules/webcodecs/WebCodecsVideoFrameAlgorithms.cpp",
+    "fix 2/2 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "1e8c797c87",
+  "date": "2024-01-24",
+  "title": "heap-buffer-overflow: crash under WebCore::ShadowBlur::blurLayerImage().",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/ShadowBlur.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/ShadowBlur.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "0aff48e975",
+  "date": "2026-08-14",
+  "title": "Remove blocking for initialisation message in IPC StreamClientConnection",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/CMakeLists.txt",
+  "sigs": "fix 0/0 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/CMakeLists.txt",
+    "fix 0/0 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/DerivedSources-input.xcfilelist",
+    "fix 0/0 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/DerivedSources-output.xcfilelist",
+    "fix 0/0 \u00b7 pre 0/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/DerivedSources.make",
+    "fix 0/0 \u00b7 pre 1/1"
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteGraphicsContextGL.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteRenderingBackend.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/WebGPU/RemoteGPU.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/ModelProcess/ModelProcess.h",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/ModelProcess/cocoa/ModelProcessCocoa.mm",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Platform/IPC/IPCEvent.h",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/Platform/IPC/StreamClientConnection.cpp",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/Platform/IPC/StreamClientConnection.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/Platform/IPC/StreamClientConnectionBuffer.h",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/Platform/IPC/StreamServerConnection.cpp",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/Platform/IPC/StreamServerConnection.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Platform/IPC/StreamServerConnection.serialization.in",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Platform/IPC/darwin/IPCEventDarwin.cpp",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/Scripts/webkit/model.py",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/Scripts/webkit/tests/MessageNames.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/Scripts/webkit/tests/MessageNames.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/Shared/AuxiliaryProcess.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/Shared/Cocoa/AuxiliaryProcessCocoa.mm",
+    "fix 0/1 \u00b7 pre 0/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/Shared/IPCStreamTester.cpp",
+    "fix 0/0 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/Shared/IPCStreamTesterProxy.h",
+    "fix 0/0 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/Shared/IPCStreamTesterProxy.messages.in",
+    "fix 0/0 \u00b7 pre 3/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/LogStream.h",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/LogStream.mm",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/Sources.txt",
+    "fix 0/0 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/AuxiliaryProcessProxy.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/Cocoa/AuxiliaryProcessProxyCocoa.mm",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/Model/ModelProcessProxy.messages.in",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/WebProcessProxy.messages.in",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebKit.xcodeproj/project.pbxproj",
+    "fix 0/0 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteGraphicsContextGLProxy.cpp",
+    "fix 0/1 \u00b7 pre 1/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteGraphicsContextGLProxy.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteGraphicsContextGLProxy.messages.in",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteRenderingBackendProxy.cpp",
+    "fix 0/1 \u00b7 pre 1/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteRenderingBackendProxy.h",
+    "fix 0/0 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteRenderingBackendProxy.messages.in",
+    "fix 0/0 \u00b7 pre 0/1"
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/WebProcess/GPU/graphics/WebGPU/RemoteGPUProxy.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/WebProcess/GPU/graphics/WebGPU/RemoteGPUProxy.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/WebProcess/GPU/graphics/WebGPU/RemoteGPUProxy.messages.in",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/WebPage/IPCTestingAPI.cpp",
+    "fix 0/0 \u00b7 pre 2/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/WebProcess.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/cocoa/WebProcessCocoa.mm",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "c1787ccc4e",
+  "date": "2023-12-20",
+  "title": "jsc_fuz/wktr: heap-buffer-overflow in  WebCore::WebCodecsVideoFrame::copyTo(...) WebCodecs",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/Modules/webcodecs/WebCodecsVideoFrameAlgorithms.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/Modules/webcodecs/WebCodecsVideoFrameAlgorithms.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "4e588185b2",
+  "date": "2023-11-08",
+  "title": "Security hardening for SincResampler",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/audio/AudioBus.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 3/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/Algorithms.h",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/audio/AudioArray.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/AudioBus.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/audio/AudioChannel.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/MultiChannelResampler.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/MultiChannelResampler.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/SincResampler.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/audio/SincResampler.h",
+    "fix 0/3 \u00b7 pre 2/3"
+   ]
+  ]
+ },
+ {
+  "sha": "5f4a567017",
+  "date": "2025-02-06",
+  "title": "JSC tests should have use an adaptive loop count",
+  "worst": "DIVERGED",
+  "file": "Source/JavaScriptCore/jsc.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/JavaScriptCore/jsc.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "f8d5c15c07",
+  "date": "2024-07-27",
+  "title": "Rename WebAssembly JSC options to Wasm",
+  "worst": "SKIP-DEAD",
+  "file": "Source/JavaScriptCore/assembler/LinkBuffer.h",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/assembler/LinkBuffer.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/assembler/MacroAssemblerARM64.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/assembler/MacroAssemblerCodeRef.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/assembler/MacroAssemblerX86_64.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/b3/B3LowerToAir.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/b3/B3LowerToAir32_64.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/b3/B3Procedure.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/b3/B3Validate.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/b3/air/AirAllocateRegistersAndStackAndGenerateCode.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/b3/air/AirHelpers.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/b3/air/AirLogRegisterPressure.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/b3/air/AirRegLiveness.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/b3/air/AirValidate.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/b3/testb3_1.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/bytecode/Repatch.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/jit/RegisterAtOffset.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/jit/RegisterAtOffsetList.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/jit/ScratchRegisterAllocator.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/runtime/BufferMemoryHandle.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/runtime/BufferMemoryHandle.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/runtime/InitializeThreading.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/runtime/JSGlobalObject.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/runtime/Options.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/runtime/OptionsList.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmBBQJIT.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmBBQPlan.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmCallee.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmCalleeGroup.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmCalleeGroup.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmCapabilities.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmConstExprGenerator.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmEntryPlan.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmFaultSignalHandler.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmFormat.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmFunctionCodeBlockGenerator.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmFunctionParser.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmIPIntGenerator.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmIPIntPlan.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmIPIntSlowPaths.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmIPIntTierUpCounter.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmLLIntGenerator.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmLLIntPlan.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmLLIntTierUpCounter.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmMemory.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmModule.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmModuleInformation.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmOMGIRGenerator.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmOMGIRGenerator32_64.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmOMGPlan.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmOperations.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmParser.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmSectionParser.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmSectionParser.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmSlowPaths.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmStreamingParser.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmTable.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmTypeDefinition.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmWorklist.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/js/JSToWasm.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/js/JSWebAssemblyHelpers.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/js/JSWebAssemblyInstance.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/js/WasmToJS.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/js/WebAssemblyMemoryConstructor.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/js/WebAssemblyModuleRecord.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/js/WebAssemblyTablePrototype.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "0a0a5367fd",
+  "date": "2026-10-23",
+  "title": "visionOS <model> ignores stage upAxis for Z-up USD",
+  "worst": "NOFILE",
+  "file": "Source/WebKit/WebKitSwift/RealityKit/WKRKEntity.swift",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/Model/ModelTypes.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/Model/USDModel.swift",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/WebKitSwift/RealityKit/WKRKEntity.swift",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/WebProcess/Model/WebModelPlayer.mm",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "268a25f376",
+  "date": "2026-08-25",
+  "title": "AudioBufferSourceNode renders only silence for an out-of-bounds start() offset with a nega",
+  "worst": "BACKPORTED",
+  "file": "Source/WebCore/Modules/webaudio/AudioBufferSourceNode.cpp",
+  "sigs": "fix 1/3 \u00b7 pre 0/1",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/Modules/webaudio/AudioBufferSourceNode.cpp",
+    "fix 1/3 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "560f0ec358",
+  "date": "2026-09-12",
+  "title": "CertificateInfo::containsNonRootSHA1SignedCertificate() bounds the certificate chain loop ",
+  "worst": "BACKPORTED",
+  "file": "Source/WebCore/platform/network/cf/CertificateInfoCFNet.cpp",
+  "sigs": "fix 1/3 \u00b7 pre 1/3",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/platform/network/cf/CertificateInfoCFNet.cpp",
+    "fix 1/3 \u00b7 pre 1/3"
+   ]
+  ]
+ },
+ {
+  "sha": "d343d17321",
+  "date": "2026-06-10",
+  "title": "TrackPrivateBase::removeClient has an inverted bounds check",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/graphics/TrackPrivateBase.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/TrackPrivateBase.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "808e77190f",
+  "date": "2026-07-27",
+  "title": "Out-of-bounds read in CtapHidDriver when a CTAPHID_INIT response is too short",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/UIProcess/WebAuthentication/fido/CtapHidDriver.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/2",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/testing/MockWebAuthenticationConfiguration.idl",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/WebAuthentication/Mock/MockHidConnection.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/WebAuthentication/fido/CtapHidDriver.cpp",
+    "fix 0/1 \u00b7 pre 1/2"
+   ]
+  ]
+ },
+ {
+  "sha": "2d540c3a65",
+  "date": "2026-09-22",
+  "title": "TransformationMatrix::clampedBoundsOfProjectedQuad() mirrors corners behind the eye",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/transforms/TransformationMatrix.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 3/3",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/transforms/TransformationMatrix.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/transforms/TransformationMatrix.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ]
+  ]
+ },
+ {
+  "sha": "3c0232a5d3",
+  "date": "2026-09-04",
+  "title": "CanvasNoiseInjection misclassifies the bottom-left pixel due to an off-by-one in the botto",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/html/CanvasNoiseInjection.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/html/CanvasNoiseInjection.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "5590f2e706",
+  "date": "2026-07-29",
+  "title": "AdaptiveStringSearcher good-suffix shift table is one element too small",
+  "worst": "NOFILE",
+  "file": "Source/WTF/wtf/text/AdaptiveStringSearcher.h",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WTF/wtf/text/AdaptiveStringSearcher.h",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "e269e1967d",
+  "date": "2026-08-20",
+  "title": "Out-of-bounds read in BMP RLE24 absolute-mode decoding",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.h",
+  "sigs": "fix 0/0 \u00b7 pre 0/3",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.cpp",
+    "fix 2/3 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/image-decoders/bmp/BMPImageReader.h",
+    "fix 0/0 \u00b7 pre 0/3"
+   ]
+  ]
+ },
+ {
+  "sha": "e08a16763c",
+  "date": "2026-07-20",
+  "title": "Fix out-of-bounds buffer index in userVisibleURL when probing for xn--",
+  "worst": "DIVERGED",
+  "file": "Source/WTF/wtf/URLHelpers.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/URLHelpers.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "122493b27e",
+  "date": "2026-07-03",
+  "title": "Out-of-bounds read in InspectorAnimationAgent when parsedKeyframes is shorter than blendin",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/inspector/agents/InspectorAnimationAgent.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/inspector/agents/InspectorAnimationAgent.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "ef325e63cb",
+  "date": "2026-07-30",
+  "title": "Out-of-bounds read in WebM MIME sniffer at the 0x42 0x82 DocType check",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/platform/graphics/MIMESniffer.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/platform/graphics/MIMESniffer.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "b6f26e020f",
+  "date": "2026-10-22",
+  "title": "Avoid out-of-bounds read in isPlayReadySanitizedInitializationData",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/Modules/encryptedmedia/InitDataRegistry.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/encryptedmedia/InitDataRegistry.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "354fb3b075",
+  "date": "2026-10-19",
+  "title": "Grid with a subgrid whose item has an aspect-ratio and a percentage height crashes in Grid",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/rendering/RenderGrid.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderGrid.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ]
+  ]
+ },
+ {
+  "sha": "1c9e3e8e8b",
+  "date": "2026-06-03",
+  "title": "Out-of-bounds read in WebM MIME sniffer when iter reaches length()",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/platform/graphics/MIMESniffer.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/platform/graphics/MIMESniffer.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "efcd462e77",
+  "date": "2026-10-21",
+  "title": "Decode most LEBs with a branchless fast path",
+  "worst": "VULN-SHAPE",
+  "file": "Source/JavaScriptCore/offlineasm/risc.rb",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "NOFILE",
+    "Source/JavaScriptCore/llint/InPlaceInterpreter.asm",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/JavaScriptCore/llint/InPlaceInterpreter64.asm",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/JavaScriptCore/offlineasm/risc.rb",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "PARTIAL",
+    "Source/WTF/wtf/LEBDecoder.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ]
+  ]
+ },
+ {
+  "sha": "0d0080ea53",
+  "date": "2026-07-30",
+  "title": "Enable WebAssembly Memory64 feature flag",
+  "worst": "SKIP-DEAD",
+  "file": "Source/WTF/Scripts/Preferences/UnifiedWebPreferences.yaml",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WTF/Scripts/Preferences/UnifiedWebPreferences.yaml",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "96ec73a1e5",
+  "date": "2026-06-05",
+  "title": "Type confusion in ReadableStream when cancel returns a fake Promise object",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/Modules/streams/StreamPipeToUtilities.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/streams/StreamPipeToUtilities.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "87d203651d",
+  "date": "2026-07-02",
+  "title": "Type confusion in ReadableStream.cancel() via jsCast<JSPromise*>",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/Modules/streams/ReadableStreamDefaultReader.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/streams/ReadableStream.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/streams/ReadableStreamDefaultReader.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "e75354878c",
+  "date": "2026-07-01",
+  "title": "Type confusion via raw Exception cell returned to script from callPromisePairFunction when",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/bindings/js/JSDOMPromiseDeferred.h",
+  "sigs": "fix 0/2 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/bindings/js/JSDOMPromiseDeferred.h",
+    "fix 0/2 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "8384c8455e",
+  "date": "2026-06-15",
+  "title": "Type Confusion in RTCEncodedStreamProducer.cpp Results in OOB Read",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/Modules/mediastream/RTCEncodedStreamProducer.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/mediastream/RTCEncodedStreamProducer.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/Modules/mediastream/RTCEncodedStreamProducer.h",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/mediastream/RTCRtpScriptTransformer.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/mediastream/RTCRtpTransformableFrame.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ]
+  ]
+ },
+ {
+  "sha": "d6629ed7cb",
+  "date": "2026-01-14",
+  "title": "Rename to textIndicatorDataForAnimationID to textIndicatorForAnimationID for clarity.",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/UIProcess/Cocoa/WebPageProxyCocoa.mm",
+  "sigs": "fix 0/2 \u00b7 pre 0/2",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/Cocoa/WebPageProxyCocoa.mm",
+    "fix 0/2 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/WebPageProxyInternals.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "60c138fa85",
+  "date": "2025-12-03",
+  "title": "Downcast crash when grid item requests fullscreen with container-type parent",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/rendering/RenderBox.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderBox.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "134f5f2101",
+  "date": "2026-01-28",
+  "title": "Swift WebBackForwardList (off by default) - incl WebKit-Swift.h",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/UIProcess/API/mac/WKWebViewMac.mm",
+  "sigs": "fix 0/2 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/API/mac/WKWebViewMac.mm",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/Automation/WebAutomationSession.cpp",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/ProvisionalPageProxy.cpp",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/RemotePageProxy.cpp",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/ViewGestureController.cpp",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/WebBackForwardList.cpp",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/WebPageProxy.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/mac/ViewGestureControllerMac.mm",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/mac/WebViewImpl.mm",
+    "fix 0/2 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "cc67b1bc75",
+  "date": "2025-07-24",
+  "title": "Use enum class in speech/SpeechSynthesis",
+  "worst": "SKIP-DEAD",
+  "file": "Source/WebCore/Modules/speech/SpeechSynthesis.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/speech/SpeechSynthesis.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/speech/SpeechSynthesis.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/html/HTMLMediaElement.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "93d4115769",
+  "date": "2025-04-16",
+  "title": "Use enum class in webaudio/AudioContext",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/Modules/webaudio/AudioContext.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 3/3",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/Modules/webaudio/AudioContext.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/Modules/webaudio/AudioContext.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/testing/Internals.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ]
+  ]
+ },
+ {
+  "sha": "9c42a4084e",
+  "date": "2025-04-24",
+  "title": "Use enum class in airplay/WebMediaSessionManager",
+  "worst": "SKIP-DEAD",
+  "file": "Source/WebCore/Modules/airplay/WebMediaSessionManager.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/airplay/WebMediaSessionManager.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/Modules/airplay/WebMediaSessionManager.h",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "26b41e6069",
+  "date": "2024-05-18",
+  "title": "Cleanup various \"nil vs empty\" confusions in serializaiton of some ObjC types",
+  "worst": "NOFILE",
+  "file": "Source/WebKit/Shared/Cocoa/CoreIPCPassKit.h",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Cocoa/CoreIPCPassKit.h",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Cocoa/CoreIPCPassKit.mm",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Cocoa/CoreIPCPassKit.serialization.in",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Cocoa/CoreIPCPersonNameComponents.mm",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "25f27158a9",
+  "date": "2025-04-08",
+  "title": "WebPage::getPlatformEditorStateCommon can be slow, flushing layout for computed styles and",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/editing/ApplyStyleCommand.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/editing/ApplyStyleCommand.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/editing/DeleteSelectionCommand.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/editing/EditingStyle.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/editing/EditingStyle.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/editing/InsertParagraphSeparatorCommand.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/WebPage/Cocoa/WebPageCocoa.mm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ]
+  ]
+ },
+ {
+  "sha": "5dea043b68",
+  "date": "2025-03-27",
+  "title": "Clarify RemoteDisplayListRecorder ownership",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/WebProcess/GPU/graphics/RemoteResourceCacheProxy.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 2/3",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/RemoteSharedResourceCache.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/RemoteSharedResourceCache.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/RemoteSharedResourceCache.messages.in",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteDisplayListRecorder.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteDisplayListRecorder.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteImageBuffer.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteImageBuffer.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteImageBufferSet.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteImageBufferSet.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteRenderingBackend.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteRenderingBackend.h",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteRenderingBackend.messages.in",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteResourceCache.cpp",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteResourceCache.h",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Platform/IPC/ObjectIdentifierReference.serialization.in",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/Scripts/webkit/messages.py",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/Scripts/webkit/tests/MessageArgumentDescriptions.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/RemoteLayerTree/RemoteLayerWithRemoteRenderingBackingStore.mm",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/Shared/WTFArgumentCoders.serialization.in",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebKit.xcodeproj/project.pbxproj",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteDisplayListRecorderIdentifier.h",
+    ""
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteDisplayListRecorderProxy.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteDisplayListRecorderProxy.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteImageBufferProxy.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteImageBufferProxy.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteImageBufferSetProxy.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteImageBufferSetProxy.h",
+    ""
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteRenderingBackendProxy.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteRenderingBackendProxy.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteResourceCacheProxy.cpp",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteResourceCacheProxy.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/GPU/graphics/RemoteSerializedImageBufferIdentifier.h",
+    "fix 0/2 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/WebPage/WebPage.cpp",
+    "fix 0/3 \u00b7 pre 2/3"
+   ]
+  ]
+ },
+ {
+  "sha": "0fd9dfa52f",
+  "date": "2025-02-23",
+  "title": "RetainPtr\u2019s leakRef() and move constructors are incorrect when ARC is enabled",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WTF/wtf/cocoa/TypeCastsCocoa.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/RetainPtr.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WTF/wtf/cocoa/TypeCastsCocoa.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/platform/PlatformSpeechSynthesisUtterance.h",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "3a900e192f",
+  "date": "2023-12-14",
+  "title": "An Array index in CloneSerializer and CloneDeserializer can be confused for NonIndexProper",
+  "worst": "BACKPORTED",
+  "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+  "sigs": "fix 1/3 \u00b7 pre 2/3",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+    "fix 1/3 \u00b7 pre 2/3"
+   ]
+  ]
+ },
+ {
+  "sha": "d154d61d96",
+  "date": "2023-12-19",
+  "title": "Tighten RenderObject's type specific flags",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/rendering/svg/legacy/LegacyRenderSVGModelObject.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderBox.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderBox.h",
+    "fix 0/2 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderBoxModelObject.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderBoxModelObject.h",
+    "fix 0/2 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderElement.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderElement.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderFrameSet.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderInline.cpp",
+    "fix 0/2 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderLayerModelObject.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderLayerModelObject.h",
+    "fix 0/2 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderLineBreak.cpp",
+    "fix 0/1 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderListMarker.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderObject.cpp",
+    "fix 0/2 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderObject.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderReplaced.cpp",
+    "fix 0/2 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderReplica.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderTableCol.cpp",
+    "fix 0/2 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderTableRow.cpp",
+    "fix 0/2 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderTableSection.cpp",
+    "fix 0/2 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/RenderText.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/svg/RenderSVGGradientStop.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/svg/RenderSVGModelObject.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/rendering/svg/legacy/LegacyRenderSVGModelObject.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "0939ea95ba",
+  "date": "2026-10-15",
+  "title": "CheckedPtr to a ::checkmark, ::picker-icon or inside ::marker renderer outlives its destru",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/rendering/updating/RenderTreeBuilderFormControls.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/2",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/updating/RenderTreeBuilderFormControls.cpp",
+    "fix 0/1 \u00b7 pre 0/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/updating/RenderTreeBuilderList.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "e35f75c5b9",
+  "date": "2026-10-14",
+  "title": "Crash in IdTargetObserver::~IdTargetObserver() when a <link rel=expect> outlives its shado",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/html/HTMLLinkElement.cpp",
+  "sigs": "fix 0/2 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLLinkElement.cpp",
+    "fix 0/2 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLLinkElement.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "162a937a10",
+  "date": "2026-10-19",
+  "title": "New Test(322321@main): [ iOS ] TestWebKitAPI.SiteIsolation.SelectPositionAtBoundaryInCross",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/UIProcess/ios/WKContentViewInteraction.mm",
+  "sigs": "fix 0/3 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/ios/WKContentViewInteraction.mm",
+    "fix 0/3 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "a030dbafac",
+  "date": "2026-10-02",
+  "title": "Add moving steps handling for various tree scoped maps",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/dom/Element.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/dom/Element.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLImageElement.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLInputElement.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLInputElement.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLLabelElement.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLLabelElement.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLMapElement.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLMapElement.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "1ca60460dc",
+  "date": "2026-10-12",
+  "title": "Treat media track constraint displaySurface as a string constraint.",
+  "worst": "PARTIAL",
+  "file": "Source/WebCore/platform/mediastream/MediaConstraints.h",
+  "sigs": "fix 0/3 \u00b7 pre 1/3",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/Modules/mediastream/MediaDevices.cpp",
+    "fix 1/1 \u00b7 pre 1/1"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/platform/mediastream/MediaConstraints.cpp",
+    "fix 2/3 \u00b7 pre 1/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/mediastream/MediaConstraints.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/platform/mediastream/RealtimeMediaSource.cpp",
+    "fix 1/1 \u00b7 pre 1/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/WebCoreArgumentCodersMedia.serialization.in",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "83cd40f4fb",
+  "date": "2026-10-19",
+  "title": "WebBackForwardList: restore an empty list when the current index is invalid, and don't cra",
+  "worst": "NOFILE",
+  "file": "Source/WebKit/UIProcess/WebBackForwardList.swift",
+  "sigs": "",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebKit/UIProcess/WebBackForwardList.cpp",
+    "fix 2/3 \u00b7 pre 0/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/WebBackForwardList.swift",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "bb5913e37d",
+  "date": "2026-10-11",
+  "title": "Implement moving steps for optgroup and hr",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/html/HTMLHRElement.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLHRElement.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLHRElement.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLOptGroupElement.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/html/HTMLOptGroupElement.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "2f932d6f92",
+  "date": "2026-10-19",
+  "title": "Destroy provisional frame when removing a frame from the tree",
+  "worst": "PARTIAL",
+  "file": "Source/WebKit/WebProcess/WebPage/RemoteLayerTree/RemoteLayerTreeDrawingArea.mm",
+  "sigs": "fix 0/0 \u00b7 pre 1/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/WebPage/DrawingArea.h",
+    "fix 0/0 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/WebPage/RemoteLayerTree/RemoteLayerTreeDrawingArea.h",
+    "fix 0/0 \u00b7 pre 0/1"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/WebProcess/WebPage/RemoteLayerTree/RemoteLayerTreeDrawingArea.mm",
+    "fix 0/0 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/WebPage/WebFrame.cpp",
+    "fix 0/1 \u00b7 pre 0/3"
+   ]
+  ]
+ },
+ {
+  "sha": "37dc45c0c9",
+  "date": "2026-10-15",
+  "title": "RemoteScrollingCoordinatorProxy::rootScrollingNodeID() is a flaky crash",
+  "worst": "PARTIAL",
+  "file": "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingCoordinatorProxy.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 1/3",
+  "all": [
+   [
+    "PARTIAL",
+    "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingCoordinatorProxy.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/RemoteLayerTree/RemoteScrollingCoordinatorProxy.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "c422431124",
+  "date": "2026-09-28",
+  "title": "Notification.requestPermission() in a sandboxed top level document crashes the UI process",
+  "worst": "BACKPORTED",
+  "file": "Source/WebKit/UIProcess/WebPageProxy.cpp",
+  "sigs": "fix 1/2 \u00b7 pre 1/1",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebKit/UIProcess/WebPageProxy.cpp",
+    "fix 1/2 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "b59033bd02",
+  "date": "2026-09-14",
+  "title": "AX: Cyclic and deeply chained accname computations can cause stack overflow crashes",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/accessibility/AccessibilityNodeObject.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/accessibility/AccessibilityNodeObject.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "e8a476cd12",
+  "date": "2026-07-02",
+  "title": "Stack buffer overflow in WebKit libwebrtc VideoCodecInitializer via remote SDP simulcast l",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/platform/mediastream/cocoa/RealtimeOutgoingVideoSourceCocoa.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/platform/mediastream/cocoa/RealtimeOutgoingVideoSourceCocoa.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "4847c476a8",
+  "date": "2026-09-05",
+  "title": "Anchor positioned element with position-visibility crashes when its default anchor is a <b",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/style/AnchorPositionEvaluator.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/style/AnchorPositionEvaluator.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "d2af128b14",
+  "date": "2026-06-18",
+  "title": "Crash when rehashing DOMWrapperWorld::m_wrappers hash map",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/bindings/js/DOMWrapperWorld.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/bindings/js/DOMWrapperWorld.cpp",
+    "fix 0/3 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/bindings/js/DOMWrapperWorld.h",
+    "fix 0/3 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/bindings/js/JSDOMWrapperCache.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "c195e933ce",
+  "date": "2026-06-04",
+  "title": "createVideoInfoFromAVCC() forms a span past the end of AVCC buffer for malformed input",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/platform/graphics/cocoa/H264UtilitiesCocoa.mm",
+  "sigs": "",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/WebCore.xcodeproj/project.pbxproj",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebCore/platform/graphics/cocoa/H264UtilitiesCocoa.mm",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "224847f703",
+  "date": "2025-04-02",
+  "title": "Reduce use of memcpy/memset in CryptoAlgorithmAESCFBOpenSSL.cpp",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/crypto/openssl/CryptoAlgorithmAESCFBOpenSSL.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/crypto/openssl/CryptoAlgorithmAESCFBOpenSSL.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "9d24299753",
+  "date": "2025-03-29",
+  "title": "Reduce use of memcpy in ConnectionUnix.cpp",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/Platform/IPC/unix/ConnectionUnix.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 2/3",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/Platform/IPC/unix/ConnectionUnix.cpp",
+    "fix 0/3 \u00b7 pre 2/3"
+   ]
+  ]
+ },
+ {
+  "sha": "11716e6c06",
+  "date": "2025-03-20",
+  "title": "Add assert to make sure WKRemoteObjects are only used on the main thread",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/Shared/API/Cocoa/_WKRemoteObjectRegistry.mm",
+  "sigs": "fix 0/2 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/Shared/API/Cocoa/_WKRemoteObjectRegistry.mm",
+    "fix 0/2 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "256512ca68",
+  "date": "2025-07-18",
+  "title": "Add logging when mouse events are ignored in WebViewImpl",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/UIProcess/mac/WebViewImpl.mm",
+  "sigs": "fix 0/3 \u00b7 pre 2/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/API/mac/WKWebViewMac.mm",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/mac/WebViewImpl.mm",
+    "fix 0/3 \u00b7 pre 2/3"
+   ]
+  ]
+ },
+ {
+  "sha": "207db7247e",
+  "date": "2024-08-08",
+  "title": "Check for runs of zero-bytes when linking AssemblerBuffer on x86",
+  "worst": "DIVERGED",
+  "file": "Source/JavaScriptCore/jit/ExecutableAllocator.h",
+  "sigs": "fix 0/3 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/JavaScriptCore/jit/ExecutableAllocator.h",
+    "fix 0/3 \u00b7 pre 0/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/PlatformEnable.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "6ae0641076",
+  "date": "2024-05-23",
+  "title": "Race condition in LibWebRTCVPXInternalVideoDecoder::pixelBufferPool leading to memory corr",
+  "worst": "PARTIAL",
+  "file": "Source/WebCore/platform/libwebrtc/LibWebRTCVPXVideoDecoder.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 1/3",
+  "all": [
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/libwebrtc/LibWebRTCVPXVideoDecoder.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ]
+  ]
+ },
+ {
+  "sha": "bfc8bf8236",
+  "date": "2023-10-21",
+  "title": "Don't adopt result of NSURLSession.sessionWithConfiguration",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/NetworkProcess/PrivateClickMeasurement/cocoa/PrivateClickMeasurementNetworkLoaderCocoa.mm",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/NetworkProcess/PrivateClickMeasurement/cocoa/PrivateClickMeasurementNetworkLoaderCocoa.mm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "d5e7d2a3ee",
+  "date": "2025-08-17",
+  "title": "Harden the interpreter dispatchers more for ARM64E.",
+  "worst": "VULN-SHAPE",
+  "file": "Source/JavaScriptCore/llint/LLIntData.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 3/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/JavaScriptCore/interpreter/VMEntryRecord.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "NOFILE",
+    "Source/JavaScriptCore/llint/InPlaceInterpreter.asm",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/JavaScriptCore/llint/InPlaceInterpreter.cpp",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/JavaScriptCore/llint/InPlaceInterpreter.h",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/JavaScriptCore/llint/InPlaceInterpreter64.asm",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/JavaScriptCore/llint/LLIntData.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/JavaScriptCore/llint/LLIntData.h",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/JavaScriptCore/llint/LowLevelInterpreter.asm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/JavaScriptCore/llint/LowLevelInterpreter64.asm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/llint/WebAssembly.asm",
+    ""
+   ],
+   [
+    "BACKPORTED",
+    "Source/JavaScriptCore/offlineasm/arm64e.rb",
+    "fix 1/1 \u00b7 pre 1/1"
+   ],
+   [
+    "PARTIAL",
+    "Source/JavaScriptCore/runtime/InitializeThreading.cpp",
+    "fix 0/0 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/JavaScriptCore/runtime/JSCConfig.h",
+    "fix 0/0 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/JavaScriptCore/runtime/JSCJSValue.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/JavaScriptCore/runtime/JSCPtrTag.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/JavaScriptCore/runtime/ParseInt.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/WTFConfig.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/WTFConfig.h",
+    "fix 0/3 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "3a0671fdf8",
+  "date": "2024-03-25",
+  "title": "Add missing stack check to bbq->omg OSR",
+  "worst": "SKIP-DEAD",
+  "file": "Source/JavaScriptCore/wasm/WasmOperations.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/wasm/WasmOperations.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "fea7751ece",
+  "date": "2025-04-05",
+  "title": "Avoid autoreleasing NSStrings in WebKit/ when not strictly necessary",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/Shared/Cocoa/DefaultWebBrowserChecks.mm",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/cocoa/GPUConnectionToWebProcessCocoa.mm",
+    ""
+   ],
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/mac/GPUProcessMac.mm",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/NetworkProcess/mac/NetworkProcessMac.mm",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/SaferCPPExpectations/UnretainedLocalVarsCheckerExpectations",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/Shared/Cocoa/DefaultWebBrowserChecks.mm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Extensions/WebExtensionUtilities.mm",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Extensions/_WKWebExtensionRegisteredScriptsSQLiteStore.mm",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/Shared/Extensions/_WKWebExtensionSQLiteStore.mm",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/API/Cocoa/WKContentRuleList.mm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/API/Cocoa/WKContentRuleListStore.mm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/API/Cocoa/WKWebView.mm",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/API/Cocoa/_WKInspector.mm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/API/Cocoa/_WKProcessPoolConfiguration.mm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/API/Cocoa/_WKTextManipulationItem.mm",
+    "fix 0/2 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/API/Cocoa/_WKWebAuthenticationPanel.mm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/API/Cocoa/_WKWebPushAction.mm",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/API/ios/WKWebViewIOS.mm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/Automation/ios/WebAutomationSessionIOS.mm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/Automation/mac/WebAutomationSessionMac.mm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/Cocoa/BrowsingWarningCocoa.mm",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/Cocoa/MediaPermissionUtilities.mm",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/UIProcess/Cocoa/WKStorageAccessAlert.mm",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/Extensions/Cocoa/_WKWebExtensionDeclarativeNetRequestRule.mm",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/UIProcess/Extensions/Cocoa/_WKWebExtensionDeclarativeNetRequestSQLiteStore.mm",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/Inspector/mac/WKInspectorResourceURLSchemeHandler.mm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/Inspector/mac/WKInspectorViewController.mm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/UIProcess/Inspector/mac/WebInspectorUIProxyMac.mm",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/RemoteLayerTree/RemoteLayerTreeNode.mm",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/WebsiteData/Cocoa/WebsiteDataStoreCocoa.mm",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/ios/WKActionSheetAssistant.mm",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/ios/WKContentViewInteraction.mm",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/ios/WKPDFView.mm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/ios/WKWebGeolocationPolicyDeciderIOS.mm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/ios/forms/WKDateTimeInputControl.mm",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/ios/forms/WKFormSelectPopover.mm",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/ios/fullscreen/WKFullScreenViewController.mm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/mac/DisplayCaptureSessionManager.mm",
+    "fix 0/3 \u00b7 pre 2/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/mac/WKPrintingView.mm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/UIProcess/mac/WebDataListSuggestionsDropdownMac.mm",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/mac/WebViewImpl.mm",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/WebProcess/Extensions/API/Cocoa/WebExtensionAPIActionCocoa.mm",
+    ""
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/WebProcess/Extensions/API/Cocoa/WebExtensionAPISidebarActionCocoa.mm",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/Extensions/API/Cocoa/WebExtensionAPITestCocoa.mm",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "NOFILE",
+    "Source/WebKit/WebProcess/Extensions/API/Cocoa/WebExtensionAPIWebRequestCocoa.mm",
+    ""
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/Extensions/Cocoa/_WKWebExtensionWebNavigationURLFilter.mm",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/WebPage/mac/WKAccessibilityWebPageObjectMac.mm",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/WebProcess/cocoa/WebProcessCocoa.mm",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebKit/webpushd/WebPushDaemon.mm",
+    "fix 0/2 \u00b7 pre 0/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/webpushd/webpushtool/WebPushToolMain.mm",
+    "fix 0/2 \u00b7 pre 2/2"
+   ]
+  ]
+ },
+ {
+  "sha": "4955ef671c",
+  "date": "2026-10-13",
+  "title": "GraphicsContext::hasBlurredDropShadow()/hasDropShadow() make redundant copies of the drop ",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/graphics/GraphicsContext.h",
+  "sigs": "fix 0/2 \u00b7 pre 0/2",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/GraphicsContext.h",
+    "fix 0/2 \u00b7 pre 0/2"
+   ]
+  ]
+ },
+ {
+  "sha": "e73be17fcf",
+  "date": "2026-09-29",
+  "title": "document.activeElement should return the document element for bodyless documents (SVG/XML)",
+  "worst": "BACKPORTED",
+  "file": "Source/WebCore/dom/Document.cpp",
+  "sigs": "fix 1/2 \u00b7 pre 1/1",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/dom/Document.cpp",
+    "fix 1/2 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "cec9d207c1",
+  "date": "2026-08-27",
+  "title": ":target should keep matching a target element that is removed and reinserted",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/dom/Element.cpp",
+  "sigs": "fix 0/0 \u00b7 pre 1/2",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/dom/Element.cpp",
+    "fix 0/0 \u00b7 pre 1/2"
+   ]
+  ]
+ },
+ {
+  "sha": "55d9d9007f",
+  "date": "2026-08-23",
+  "title": "Use-after-free in MediaElementAudioSourceNode::provideInput when iframe is detached",
+  "worst": "BACKPORTED",
+  "file": "Source/WebCore/html/HTMLMediaElement.cpp",
+  "sigs": "fix 1/3 \u00b7 pre 1/1",
+  "all": [
+   [
+    "BACKPORTED",
+    "Source/WebCore/html/HTMLMediaElement.cpp",
+    "fix 1/3 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "f83706791b",
+  "date": "2026-09-17",
+  "title": "Crash under configureForAdvancedPrivacyProtections() due to thread safety issue",
+  "worst": "PARTIAL",
+  "file": "Source/WebKit/Platform/cocoa/WebPrivacyHelpers.mm",
+  "sigs": "fix 0/3 \u00b7 pre 1/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/text/CString.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "PARTIAL",
+    "Source/WebKit/Platform/cocoa/WebPrivacyHelpers.mm",
+    "fix 0/3 \u00b7 pre 1/3"
+   ]
+  ]
+ },
+ {
+  "sha": "9c6099bea0",
+  "date": "2026-08-17",
+  "title": "Keep observed nodes alive across MutationObserver delivery",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/dom/MutationObserver.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/dom/MutationObserver.cpp",
+    "fix 0/3 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "576ee4a20b",
+  "date": "2026-07-02",
+  "title": "Data race on MIMETypeCache::m_cachedResults / m_supportedTypes in MIMETypeCache::canDecode",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/avfoundation/objc/AVStreamDataParserMIMETypeCache.mm",
+  "sigs": "fix 0/3 \u00b7 pre 2/3",
+  "all": [
+   [
+    "PARTIAL",
+    "Source/WebCore/platform/graphics/MIMETypeCache.cpp",
+    "fix 0/3 \u00b7 pre 1/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/MIMETypeCache.h",
+    "fix 0/3 \u00b7 pre 0/3"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/avfoundation/objc/AVStreamDataParserMIMETypeCache.h",
+    "fix 0/1 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/avfoundation/objc/AVStreamDataParserMIMETypeCache.mm",
+    "fix 0/3 \u00b7 pre 2/3"
+   ]
+  ]
+ },
+ {
+  "sha": "5c3bc51f9e",
+  "date": "2026-06-16",
+  "title": "FontCache::purgeInactiveFontData: clear shaped text caches when purging fonts",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/graphics/FontCache.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/FontCache.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "eb617fc289",
+  "date": "2026-07-06",
+  "title": "SVGProperty::contextElement after stopAnimation drops m_animVal without detach()",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/svg/properties/SVGAnimatedPropertyList.h",
+  "sigs": "fix 0/3 \u00b7 pre 1/2",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/properties/SVGAnimatedPropertyList.h",
+    "fix 0/3 \u00b7 pre 1/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/properties/SVGAnimatedValueProperty.h",
+    "fix 0/3 \u00b7 pre 1/2"
+   ]
+  ]
+ },
+ {
+  "sha": "4f359a0df3",
+  "date": "2026-05-30",
+  "title": "Crash when recreating option::checkmark",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/rendering/updating/RenderTreeBuilderFormControls.cpp",
+  "sigs": "fix 0/2 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/rendering/updating/RenderTreeBuilderFormControls.cpp",
+    "fix 0/2 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "bdc3067a39",
+  "date": "2026-09-15",
+  "title": "Number input does not fire a beforeinput event when stepped via arrow keys or spin buttons",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/html/InputType.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/html/InputType.cpp",
+    "fix 0/3 \u00b7 pre 0/0"
+   ],
+   [
+    "BACKPORTED",
+    "Source/WebCore/html/shadow/SpinButtonElement.cpp",
+    "fix 1/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "b63b114eda",
+  "date": "2026-07-01",
+  "title": "Dynamic content scaling display lists should not be requested while preparing for display",
+  "worst": "SKIP-DEAD",
+  "file": "Source/WebKit/GPUProcess/graphics/RemoteImageBufferSet.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteImageBufferSet.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "f93d156f7e",
+  "date": "2026-06-08",
+  "title": "WebPageProxy::flushPending{Mouse,Key}EventCallbacks can corrupt their iteration on re-entr",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/UIProcess/WebPageProxy.cpp",
+  "sigs": "fix 0/2 \u00b7 pre 2/3",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/UIProcess/WebPageProxy.cpp",
+    "fix 0/2 \u00b7 pre 2/3"
+   ]
+  ]
+ },
+ {
+  "sha": "65303ca72a",
+  "date": "2026-03-25",
+  "title": "IPC::Decoder::markInvalid() should not leave the m_bufferPosition iterator dangling",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/Platform/IPC/Decoder.h",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/Platform/IPC/Decoder.h",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "a01d26f0dd",
+  "date": "2026-09-02",
+  "title": "De-flake some ITP test cases",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/NetworkProcess/Classifier/ResourceLoadStatisticsStore.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/NetworkProcess/Classifier/ResourceLoadStatisticsStore.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "1690e041eb",
+  "date": "2026-10-23",
+  "title": "Initialize uninitialized members and locals in SVG animation and path blending code",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/svg/SVGGraphicsElement.cpp",
+  "sigs": "fix 0/0 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/SVGGraphicsElement.cpp",
+    "fix 0/0 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/SVGPathBlender.cpp",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/svg/SVGStopElement.cpp",
+    "fix 0/0 \u00b7 pre 0/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/properties/SVGAnimatedPropertyAnimatorImpl.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/svg/properties/SVGAnimationAdditiveValueFunction.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ],
+   [
+    "DIVERGED",
+    "Source/WebCore/svg/properties/SVGAnimationDiscreteFunction.h",
+    "fix 0/2 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "dd06e977ec",
+  "date": "2026-09-13",
+  "title": "BlobResourceHandle::readSync() forwards uninitialized buffer tail when blob is shorter tha",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/network/BlobResourceHandle.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/network/BlobResourceHandle.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "dd14326b38",
+  "date": "2026-10-08",
+  "title": "Resolve missing-designated-field-initializers",
+  "worst": "NOFILE",
+  "file": "Source/JavaScriptCore/corpse/CorpseMemory.h",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/JavaScriptCore/corpse/CorpseMemory.h",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "790f56e77c",
+  "date": "2026-10-07",
+  "title": "WebCodecs VP8/VP9/AV1 encoder encodes uninitialized data when given 10-bit frames",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/libwebrtc/LibWebRTCVPXVideoEncoder.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 0/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/libwebrtc/LibWebRTCVPXVideoEncoder.cpp",
+    "fix 0/3 \u00b7 pre 0/3"
+   ]
+  ]
+ },
+ {
+  "sha": "b72f728779",
+  "date": "2026-10-07",
+  "title": "RenderFragmentContainerRange::m_rangeInvalidated is uninitialized when default-constructed",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/rendering/RenderFragmentedFlow.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/rendering/RenderFragmentedFlow.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "340be14e84",
+  "date": "2026-07-13",
+  "title": "WTFReportBacktraceWithStackDepth may print uninitialized stack frames when the captured st",
+  "worst": "DIVERGED",
+  "file": "Source/WTF/wtf/Assertions.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/1",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WTF/wtf/Assertions.cpp",
+    "fix 0/1 \u00b7 pre 0/1"
+   ]
+  ]
+ },
+ {
+  "sha": "66df0f0c6b",
+  "date": "2026-07-26",
+  "title": "DelayDSPKernel::m_desiredDelayFrames is uninitialized, causing undefined behavior in proce",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/Modules/webaudio/DelayDSPKernel.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/Modules/webaudio/DelayDSPKernel.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "8728f4ed1f",
+  "date": "2026-07-26",
+  "title": "OscillatorNode::m_type has no default member initializer, leaving it uninitialized on exce",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/Modules/webaudio/OscillatorNode.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/Modules/webaudio/OscillatorNode.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "6b90afd01f",
+  "date": "2026-10-05",
+  "title": "WebGL: Uninitialized heap memory leak via GL_READ_BUFFER desync in readPixelsForPaintResul",
+  "worst": "SKIP-DEAD",
+  "file": "Source/WebCore/platform/graphics/angle/GraphicsContextGLANGLE.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebCore/platform/graphics/angle/GraphicsContextGLANGLE.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "60b2353eaf",
+  "date": "2026-10-08",
+  "title": "Followup(323123@main): Possible crash when drawing a badge SystemImage",
+  "worst": "SKIP-DEAD",
+  "file": "Source/WebKit/GPUProcess/graphics/RemoteGraphicsContext.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteGraphicsContext.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "54f47259ff",
+  "date": "2026-08-06",
+  "title": "sort-Xcode-project-file emits \"uninitialized value\" warnings: WebKit.xcodeproj contains ob",
+  "worst": "DIVERGED",
+  "file": "Source/WebKit/WebKit.xcodeproj/project.pbxproj",
+  "sigs": "fix 0/3 \u00b7 pre 0/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebKit/WebKit.xcodeproj/project.pbxproj",
+    "fix 0/3 \u00b7 pre 0/3"
+   ]
+  ]
+ },
+ {
+  "sha": "163805a73a",
+  "date": "2026-07-18",
+  "title": "Web Inspector: InspectorThreadableLoaderClient::m_statusCode is uninitialized",
+  "worst": "NOFILE",
+  "file": "Source/WebCore/inspector/InspectorThreadableLoaderClient.h",
+  "sigs": "",
+  "all": [
+   [
+    "NOFILE",
+    "Source/WebCore/inspector/InspectorThreadableLoaderClient.h",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "bc564ecb10",
+  "date": "2026-07-13",
+  "title": "Fold uninitialized RenderTable local in RenderTreeBuilder::attachToRenderElement",
+  "worst": "PARTIAL",
+  "file": "Source/WebCore/rendering/updating/RenderTreeBuilder.cpp",
+  "sigs": "fix 0/2 \u00b7 pre 1/3",
+  "all": [
+   [
+    "PARTIAL",
+    "Source/WebCore/rendering/updating/RenderTreeBuilder.cpp",
+    "fix 0/2 \u00b7 pre 1/3"
+   ]
+  ]
+ },
+ {
+  "sha": "d3cffddf14",
+  "date": "2026-06-30",
+  "title": "Uninitialized result of FEGaussianBlur if the input isAlphaImage",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/graphics/filters/software/FEGaussianBlurSoftwareApplier.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/filters/software/FEGaussianBlurSoftwareApplier.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "2a2036f697",
+  "date": "2026-07-28",
+  "title": "AudioParam::finalValue() returns an uninitialized float when calculateFinalValues() bails ",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/Modules/webaudio/AudioParam.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/Modules/webaudio/AudioParam.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "ba64b8f513",
+  "date": "2026-09-01",
+  "title": "NavigationAction::m_type is left uninitialized by the default constructor",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/loader/NavigationAction.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/loader/NavigationAction.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "9d94c4a1b1",
+  "date": "2026-09-13",
+  "title": "GraphicsLayerCA::m_tileCoverage is read uninitialized by changeLayerTypeTo()",
+  "worst": "DIVERGED",
+  "file": "Source/WebCore/platform/graphics/ca/GraphicsLayerCA.cpp",
+  "sigs": "fix 0/1 \u00b7 pre 0/0",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/ca/GraphicsLayerCA.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ]
+  ]
+ },
+ {
+  "sha": "0f4651107b",
+  "date": "2026-07-01",
+  "title": "PopoverData::m_popoverState and m_visibilityState are uninitialized",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/dom/PopoverData.h",
+  "sigs": "fix 0/2 \u00b7 pre 2/2",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/dom/PopoverData.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ]
+  ]
+ },
+ {
+  "sha": "feef6b15dd",
+  "date": "2026-09-02",
+  "title": "putPixelBuffer() and getPixelBuffer() are not applicable for LayerBacking()",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebKit/WebProcess/GPU/graphics/cocoa/ImageBufferShareableMappedIOSurfaceBitmapBackend.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 1/1",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteImageBuffer.cpp",
+    ""
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebKit/WebProcess/GPU/graphics/cocoa/ImageBufferShareableMappedIOSurfaceBitmapBackend.cpp",
+    "fix 0/3 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "1fec4985d1",
+  "date": "2026-08-24",
+  "title": "Require GCC 13.1.0 and remove dead checks for older GCC versions",
+  "worst": "SKIP-DEAD",
+  "file": "Source/JavaScriptCore/jit/JIT.h",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/JavaScriptCore/jit/JIT.h",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "ed517e4120",
+  "date": "2026-07-06",
+  "title": "Zero-initialize CSSParserToken union to fix valgrind uninitialised value error",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/css/parser/CSSParserToken.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/css/parser/CSSParserToken.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "bb98ffd5c7",
+  "date": "2026-06-30",
+  "title": "FilterImage may return uninitialized PixelBuffer",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/filters/FilterImage.cpp",
+  "sigs": "fix 0/3 \u00b7 pre 3/3",
+  "all": [
+   [
+    "DIVERGED",
+    "Source/WebCore/platform/graphics/cpu/arm/filters/FEBlendNeonApplier.cpp",
+    "fix 0/1 \u00b7 pre 0/0"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/filters/FilterImage.cpp",
+    "fix 0/3 \u00b7 pre 3/3"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/filters/FilterImage.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "b690833969",
+  "date": "2026-06-30",
+  "title": "Uninitialized-heap disclosure in convertImagePixelsFromFloat16ToFloat16 via color-space ea",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/PixelBufferConversion.cpp",
+  "sigs": "fix 0/0 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/PixelBufferConversion.cpp",
+    "fix 0/0 \u00b7 pre 1/1"
+   ]
+  ]
+ },
+ {
+  "sha": "96ee85e3da",
+  "date": "2026-08-04",
+  "title": "Use default member initializers for uninitialized data members in WebCore/svg",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/svg/SVGDocumentExtensions.h",
+  "sigs": "fix 0/1 \u00b7 pre 1/1",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/SVGDocumentExtensions.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/SVGPathSegListSource.cpp",
+    "fix 0/1 \u00b7 pre 1/2"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/SVGPathSegListSource.h",
+    "fix 0/2 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/SVGPathStringViewSource.h",
+    "fix 0/1 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/animation/SMILTime.h",
+    "fix 0/2 \u00b7 pre 1/1"
+   ],
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/svg/properties/SVGAnimationAdditiveFunction.h",
+    "fix 0/3 \u00b7 pre 3/3"
+   ]
+  ]
+ },
+ {
+  "sha": "8c0e20bc65",
+  "date": "2026-06-30",
+  "title": "WebGL: Uninitialized FastMalloc heap disclosure in RemoteGraphicsContextGL::readPixelsInli",
+  "worst": "SKIP-DEAD",
+  "file": "Source/WebKit/GPUProcess/graphics/RemoteGraphicsContextGL.cpp",
+  "sigs": "",
+  "all": [
+   [
+    "SKIP-DEAD",
+    "Source/WebKit/GPUProcess/graphics/RemoteGraphicsContextGL.cpp",
+    ""
+   ]
+  ]
+ },
+ {
+  "sha": "97d2c63b0b",
+  "date": "2026-06-29",
+  "title": "FontCascadeCacheKey has uninitialized fontSelectorId and fontSelectorVersion members",
+  "worst": "VULN-SHAPE",
+  "file": "Source/WebCore/platform/graphics/FontCascadeCache.h",
+  "sigs": "fix 0/2 \u00b7 pre 2/2",
+  "all": [
+   [
+    "VULN-SHAPE",
+    "Source/WebCore/platform/graphics/FontCascadeCache.h",
+    "fix 0/2 \u00b7 pre 2/2"
+   ]
+  ]
+ }
+]
