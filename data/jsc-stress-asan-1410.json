@@ -1,0 +1,10 @@
+{
+  "target": "Sony WebKit_1400 JavaScriptCore, interpreter-only (ENABLE_JIT/DFG/FTL OFF), AddressSanitizer, Debug",
+  "corpus": "JSTests/stress from the same source drop",
+  "files": 4022,
+  "run": {"ok": 3176, "fail": 333, "timeout": 453, "asan_reports": 0},
+  "run_env": {"ASAN_OPTIONS": "detect_leaks=0:abort_on_error=1:print_summary=1", "JSC_useJIT": "false"},
+  "timeout_s": 20,
+  "interpretation": "No sanitizer report across ~4,000 regression tests. That is a clean bill of health for the shipped interpreter against bugs WebKit already knows about - it does not probe for unknown ones. Failures and timeouts are expected: much of JSTests needs the $vm test harness, and interpreter-only execution makes the heavy tests slow.",
+  "value": "Establishes a trustworthy baseline: if a generated case later trips ASAN, the build is not simply noisy."
+}
