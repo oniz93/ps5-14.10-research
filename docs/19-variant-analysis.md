@@ -72,3 +72,38 @@ why six of the nine `VULN-SHAPE` hits died on inspection.
 
 What the pipeline is genuinely good at: turning "is this worth any of my time?" into a
 two-minute read of the shipped source.
+
+## First pass of the greps — results
+
+The full tree is now local (`out/sony/tree/WebKit-1400/WebKit-1400/Source`, 726 MB,
+8,271 `.cpp` + 17,623 `.h`), so these are greps over Sony's actual code rather than
+samples fetched one file at a time.
+
+**Reentrancy scan (the `EventTarget` class).** 17 sites take a raw
+`auto& x = *scriptExecutionContext()`; a scan for those followed by any
+`dispatchEvent` / `fireEvent` / `willDispatchEvent` within 160 lines returns six:
+
+```
+OffscreenCanvas::scheduleCommitToPlaceholderCanvas
+MessagePort::disentangle
+ServiceWorkerContainer::{updateRegistration,getRegistration,getRegistrations,postMessage}
+```
+
+Five are in subsystems this port compiles out (OffscreenCanvas measured `false` at
+runtime, service workers off). `MessagePort::disentangle` reads its context before any
+script can run, so it is not the pattern. **No reachable sibling of the EventTarget fix.**
+
+**`JSCell` downcast class.** `jsSecureCast` exists in the tree and `JSCell::toPrimitive`
+/`toNumber`/`toObject` use it, so that fix was backported. Only 1
+`static_cast<const JSObject*>` and 6 `static_cast<JSObject*>` remain in all of
+JavaScriptCore — the class is effectively cleaned up.
+
+**BMP RLE re-audit.** The backported fix is complete for `processNonRLEData`: reads are
+indexed from `startX`, `endX > width` fails the image, and every paletted path validates
+`colorIndex < biClrUsed`. `processRLEData` allows `x == width` (the delta check uses `>`
+rather than `>=`) but every downstream consumer is a no-op at that coordinate, and
+`pastEndOfImage` only inspects `y` — verified contained, not exploitable as written.
+
+Net: three of the four classes Sony patched are either fully fixed or unreachable here.
+The remaining surface is the one the sweep found — `ShadowBlur` — plus whatever a
+sustained audit of the reachable parsers (CSS, HTML, image decoders, Yarr) turns up.
