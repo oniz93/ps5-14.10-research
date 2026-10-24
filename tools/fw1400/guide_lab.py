@@ -337,6 +337,22 @@ class Handler(BaseHTTPRequestHandler):
             self._send_bytes(b"", "text/plain", 204)
             return
 
+        # Raw pages, served byte-for-byte.
+        #
+        # Some upstream reproducers cannot be rebuilt from script: they depend on the HTML
+        # parser's error recovery (misnested tags, duplicate ids) to produce the tree that
+        # crashes. innerHTML cannot reproduce that -- the parser already fixed the markup
+        # when it was authored. Serving the original file verbatim is the only faithful way
+        # to test those cases.
+        if path.startswith("/page/"):
+            name = os.path.basename(path)
+            full = os.path.join(LAB, "www", "pages", name)
+            if os.path.isfile(full):
+                self._send_bytes(open(full, "rb").read(), "text/html; charset=utf-8")
+            else:
+                self._send_bytes(b"no such page\n", "text/plain", 404)
+            return
+
         # Probe scripts are navigated to as documents, so they must be served as HTML.
         if path.startswith("/probe/"):
             name = os.path.basename(path)

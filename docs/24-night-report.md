@@ -100,6 +100,37 @@ In order. Each is a two-minute test with the lab running.
 The lab now sends `COOP`/`COEP`/`CORP` on every response, so the SAB probe measures what
 isolation unlocks rather than the non-isolated baseline.
 
+There is also a new **`/page/<file>` route** that serves a file from
+`tools/fw1400/guide_lab/www/pages/` byte-for-byte. This matters more than it sounds: some
+upstream reproducers cannot be rebuilt from script, because they depend on the HTML parser's
+error recovery (misnested tags, duplicate ids) to produce the tree that crashes — and
+`innerHTML` cannot reproduce that, since the parser already normalised the markup when the
+file was authored. Two authentic reproducers are in place:
+
+| URL | content |
+|---|---|
+| `https://<mac>/page/style-scope-upstream.html` | bug 260896's original fuzzer case, verbatim |
+| `https://<mac>/page/select-multiple-upstream.html` | bug 272882's four-line case, verbatim |
+
+So the highest-fidelity test costs nothing extra: navigate the guide's WebView at those
+paths instead of the wrapped probe. Both files are the upstream tests with only the
+`testRunner` shim removed.
+
+### Running the queue
+
+```bash
+cd ~/Documents/ps5-bootchain
+python3 tools/fw1400/guide_lab.py --serve --lan-ip <mac-ip> --https-only         --https-port 8443 --dns-port 5353
+# arm a scripted probe by name (this file, not guide_lab/www/current):
+echo poc-style-scope-uaf.js > tools/fw1400/guide_lab/current
+# or test an authentic reproducer by URL:
+#   https://<mac>/page/style-scope-upstream.html
+tail -f tools/fw1400/guide_lab/results/beacons.jsonl
+```
+
+A blank WebView plus a beacon sequence that stops at a known tag is a crash; the last tag
+names the step.
+
 ## 6. Traps recorded, so they are not re-learned
 
 - `guide_lab.py` reads `guide_lab/current`, **not** `guide_lab/www/current`. Arming the wrong
