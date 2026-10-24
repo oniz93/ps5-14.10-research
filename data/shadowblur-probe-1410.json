@@ -1,0 +1,19 @@
+{
+  "probe": "poc-shadowblur-oob.js",
+  "candidate": "ShadowBlur::blurShadowBuffer heap-buffer-overflow (upstream 1e8c797c / bug 264978)",
+  "firmware": "14.10",
+  "result": "all 4 variants survived - no crash",
+  "verdict": "not reproduced with these shapes",
+  "why_it_probably_missed": [
+    "the buggy blurShadowBuffer() is only reached on the WITHOUT-TILING path (ShadowBlur.cpp:568-575): DPRINT templateSize.width() > rect.width() routes to drawRectShadowWithTiling()",
+    "without-tiling creates ImageBuffer::create(expandedIntSize(layerSize)) and returns early when that fails (line 609-611), so a 33M px element never reaches the blur at all",
+    "layerSize comes from calculateLayerBoundingRect() intersected with the clip, so the giant element collapses to the viewport before allocation - the allocation therefore succeeds and blurRect matches it, leaving no mismatch",
+    "precondition still untested: a layer image that is created but smaller than the blurRect handed to blurLayerImage"
+  ],
+  "next_shapes_to_try": [
+    "element near the ImageBuffer size cap with a large blur radius, so the shadow rect is clipped by the buffer limit rather than by the viewport",
+    "inset shadows over a rounded rect at the tiling boundary",
+    "very large blur radius on a small element (templateSize driven by radius, not by element size)"
+  ],
+  "captured": "2026-10-24, reported by user from the console"
+}
