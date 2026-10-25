@@ -19,12 +19,15 @@ FIRST=${1:-1}
 LAST=${2:-200}
 # A full 220-iteration run takes about one second; the wall clock is dominated by MiniBrowser
 # startup. 15s leaves ample margin without wasting 90x per seed.
-PER=${3:-15}
+PER=${3:-10}
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 BIN="${MINIBROWSER:-$HOME/wk/WebKit/WebKitBuild/ASAN/bin/MiniBrowser}"
 OUT="$HERE/fuzz-out"
 mkdir -p "$OUT"
+# Results are per-sweep. Leftover files from an earlier run made a clean 300-seed sweep summarise as
+# "nonzero=46" because those seeds came from a run where the browser could not start at all.
+rm -f "$OUT/nonzero.txt" "$OUT/crashes.txt" "$OUT/incomplete.txt"
 
 if [ ! -x "$BIN" ]; then
     echo "no MiniBrowser at $BIN" >&2
@@ -117,7 +120,20 @@ for seed in $(seq "$FIRST" "$LAST"); do
     wrapper="$OUT/beacon/run-$seed.html"
     cp "$HERE/dom_fuzz.js" "$OUT/beacon/dom_fuzz.js"
     printf '<!doctype html><meta charset="utf-8"><script>window.__SEED=%d;window.__BEACON="%s";</script><script src="dom_fuzz.js"></script>\n' "$seed" "$BEACON" > "$wrapper"
-    timeout "$PER" xvfb-run -a "$BIN" "http://127.0.0.1:$BEACON_PORT/run-$seed.html" >"$log" 2>&1
+    # Wait for DONE rather than for the timeout. The fuzzer needs about a second of real work; the
+    # rest of the per-seed cost is MiniBrowser startup, so blocking for the full timeout meant ~12
+    # of every 13 seconds were idle. setsid makes $spid a process-group leader, so one signal takes
+    # down xvfb-run, Xvfb and MiniBrowser together instead of orphaning them.
+    setsid timeout "$PER" xvfb-run -a "$BIN" "http://127.0.0.1:$BEACON_PORT/run-$seed.html" >"$log" 2>&1 &
+    spid=$!
+    finished=0
+    for _ in $(seq 1 $((PER * 10))); do
+        if grep -q "DONE-seed$seed" "$OUT/http.log" 2>/dev/null; then finished=1; break; fi
+        kill -0 "$spid" 2>/dev/null || break
+        sleep 0.1
+    done
+    kill -TERM -"$spid" 2>/dev/null
+    wait "$spid" 2>/dev/null
     rc=$?
     rm -f "$wrapper"
 
@@ -129,8 +145,8 @@ for seed in $(seq "$FIRST" "$LAST"); do
         continue
     fi
 
-    if [ "$rc" -eq 124 ] || [ "$rc" -eq 0 ]; then
-        if grep -q "DONE-seed$seed" "$OUT/http.log" 2>/dev/null; then
+    if [ "$finished" -eq 1 ] || [ "$rc" -eq 124 ] || [ "$rc" -eq 0 ]; then
+        if [ "$finished" -eq 1 ]; then
             completed=$((completed + 1))
         else
             echo "NOT-COMPLETED seed=$seed rc=$rc (page never reached DONE - result discarded)"
