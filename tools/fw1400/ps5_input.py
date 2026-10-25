@@ -13,8 +13,9 @@ Wire protocol (line-oriented ASCII, so a human can drive it with a serial termin
     HOLD <btn>           -> OK
     RELEASE <btn>        -> OK
     SEQUENCE <b1,b2,..> [gap]  -> OK      one press per button, gap ms apart
-    Buttons: cross circle square triangle up down left right l1 r1 l2 r2 l3 r3
-             options create ps touchpad
+    Keys: enter escape tab space backspace delete up down left right f1..f4 home end
+
+    On the Guide: arrows move, Enter is OK, Escape backs out, F3 is the Options button (closes it).
 
 The Mac side is deliberately tolerant: it reconnects if the port disappears (a Pico reset drops the
 port), and every command has a timeout so a wedged bridge cannot hang a test loop.
@@ -28,11 +29,12 @@ import termios
 import time
 import tty
 
+# Keyboard usages, matching ps5key.py. The console accepts ordinary USB keyboards, so this is the
+# whole input vocabulary: arrows move, Enter is OK, Escape backs out, F3 is the Options button.
 BUTTONS = {
-    "cross", "circle", "square", "triangle",
+    "enter", "escape", "tab", "space", "backspace", "delete",
     "up", "down", "left", "right",
-    "l1", "r1", "l2", "r2", "l3", "r3",
-    "options", "create", "ps", "touchpad",
+    "f1", "f2", "f3", "f4", "home", "end",
 }
 
 
@@ -81,11 +83,58 @@ class Bridge:
         raise TimeoutError(f"no reply to {line!r} within {self.timeout}s")
 
 
+class TcpBridge(Bridge):
+    """Same interface as the serial bridge, over a socket.
+
+    Pico W builds expose TCP, which removes the UART wiring entirely - and with it the unknown of
+    which GPIOs a given RP2040 board breaks out.
+    """
+
+    def __init__(self, host: str, port: int, timeout: float = 2.0):
+        super().__init__(port=host, timeout=timeout)
+        self.host = host
+        self.tcp_port = port
+        self.sock = None
+        self.buf = b""
+
+    def open(self) -> None:
+        import socket
+        self.sock = socket.create_connection((self.host, self.tcp_port), timeout=self.timeout)
+        self.sock.settimeout(self.timeout)
+
+    def close(self) -> None:
+        if self.sock is not None:
+            try:
+                self.sock.close()
+            finally:
+                self.sock = None
+
+    def command(self, line: str) -> str:
+        if self.sock is None:
+            raise RuntimeError("bridge not open")
+        self.sock.sendall((line.strip() + "\n").encode())
+        deadline = time.time() + self.timeout
+        while time.time() < deadline:
+            if b"\n" in self.buf:
+                line_out, self.buf = self.buf.split(b"\n", 1)
+                return line_out.decode("utf-8", "replace").strip()
+            try:
+                chunk = self.sock.recv(256)
+            except Exception:
+                continue
+            if not chunk:
+                break
+            self.buf += chunk
+        raise TimeoutError(f"no reply to {line!r} within {self.timeout}s")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", help="serial device, e.g. /dev/tty.usbserial-XXXX")
+    ap.add_argument("--host", help="bridge host (Pico W TCP mode)")
     ap.add_argument("--baud", type=int, default=115200)
     ap.add_argument("--timeout", type=float, default=2.0)
+    ap.add_argument("--tcp-port", type=int, default=8000, help="Pico W TCP port")
     ap.add_argument("--dry-run", action="store_true", help="print commands instead of sending")
     ap.add_argument("--selftest", action="store_true",
                     help="verify framing against a pseudo-terminal loopback")
@@ -93,6 +142,7 @@ def main() -> int:
 
     sub.add_parser("ping")
     sub.add_parser("status")
+    sub.add_parser("allup")
     p = sub.add_parser("press"); p.add_argument("button"); p.add_argument("ms", nargs="?", type=int, default=120)
     p = sub.add_parser("hold"); p.add_argument("button")
     p = sub.add_parser("release"); p.add_argument("button")
@@ -114,6 +164,8 @@ def main() -> int:
         line = "PING"
     elif args.cmd == "status":
         line = "STATUS"
+    elif args.cmd == "allup":
+        line = "ALLUP"
     elif args.cmd == "press":
         line = f"PRESS {args.button} {args.ms}"
     elif args.cmd == "hold":
@@ -123,11 +175,12 @@ def main() -> int:
     else:
         line = f"SEQUENCE {args.buttons} {args.gap}"
 
-    if args.dry_run or not args.port:
+    if args.dry_run or (not args.port and not args.host):
         print(line)
         return 0
 
-    bridge = Bridge(args.port, args.baud, args.timeout)
+    bridge = (TcpBridge(args.host, args.tcp_port, args.timeout) if args.host
+              else Bridge(args.port, args.baud, args.timeout))
     bridge.open()
     try:
         print(bridge.command(line))
