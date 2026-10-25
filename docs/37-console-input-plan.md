@@ -42,13 +42,28 @@ reverse-engineering is needed. All the controller work in this document's first 
 
 ## Hardware choice
 
-The command channel is the only reason to connect anything else:
+**Raspberry Pi Zero W / Zero 2 W - recommended.** Its OTG port is a full USB device port and it runs
+Linux, so the kernel's configfs gadget stack presents a boot-protocol keyboard with no firmware, no
+toolchain and no second wire: WiFi carries commands. `pi_gadget_setup.sh` creates the gadget and
+`pi_kbd_daemon.py` translates the line protocol into 8-byte reports on `/dev/hidg0`.
 
-- **Pico W** (about 6 GBP) - WiFi, so no wires at all, and a standard 40-pin board. Recommended.
-- **RoundyPi** (already owned) - RP2040 with a micro-USB port that faces the console, but its SD and
-  LCD pins consume most GPIOs and only 4 are broken out. UART needs 2 of them plus GND, wired to a
-  Pi 3 running a TCP-to-UART bridge. Workable, but the exposed GPIO numbers are not documented, so
-  they would have to be found empirically.
+Requirements: a **W** variant (the single OTG port faces the console, so a non-W Zero has no command
+channel), and two boot-config lines:
+
+    # /boot/firmware/config.txt
+    dtoverlay=dwc2
+    # /boot/firmware/cmdline.txt (same line as rootwait)
+    modules-load=dwc2,libcomposite
+
+Power: the OTG port can power the board from the console, but if it browns out use PWR IN and keep USB
+for data only.
+
+Alternatives:
+
+- **Pico W** (about 6 GBP) - MicroPython, `ps5key.py`, WiFi. Equivalent capability, more setup.
+- **RoundyPi** (already owned) - RP2040, but its only USB port faces the console and just 4 GPIO are
+  broken out with no published numbering, so UART to a Pi 3 means probing pads blind.
+- **Pi 1/2/3** cannot do this at all: none of them has a USB device controller.
 
 ## Milestones
 
