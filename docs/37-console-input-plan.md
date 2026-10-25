@@ -1,63 +1,65 @@
-# 37 - Console input: design and milestones
+# 37 - Console input: a USB keyboard, not a controller
 
-## Why the shape is dictated by PS5
+## The discovery that deleted most of this problem
 
-PS5 does not merely pair a controller, it **verifies** it. The DualSense speaks Bluetooth Classic
-L2CAP on PSMs `0x11`/`0x13` and needs a feature-set handshake plus a CRC32 on its reports; over USB it
-still runs a verification handshake. Synthesising a controller therefore means reimplementing Sony's
-protocol from scratch with no guarantee of success.
+PS5 verifies controllers: the DualSense speaks Bluetooth Classic L2CAP on PSMs `0x11`/`0x13`, needs a
+feature-set handshake and carries a CRC32, and the USB path runs a verification handshake too. That
+made emulating a controller a reverse-engineering project.
 
-The design that avoids all of that: **put a genuine DualSense behind the Pico and let it answer the
-handshake.** The bridge forwards its reports and ORs button bits into them on request. Consequences:
+It accepts an **ordinary USB keyboard** with none of that. Tested on the console:
 
-- the controller needs no modification and stays usable as a normal controller
-- PS5 sees a real controller, so verification, pairing and firmware questions disappear
-- we only need to rewrite report bytes in flight, not to understand the handshake
+| key | effect on the Guide |
+|---|---|
+| arrows | move focus |
+| Enter | OK / activate |
+| Escape | back out |
+| F3 | the Options button - closes the Guide |
 
-## Topology
+So the input device is a standard HID keyboard, the DualSense is never touched, and no protocol
+reverse-engineering is needed. All the controller work in this document's first draft is obsolete.
 
-    Mac                          Pico (RP2040)                 PS5
-    console_watch.py  --UART-->  bridge firmware  --USB dev-->  console
-      (camera + OCR)             ^      |
-                                 |      +--USB host (PIO)--> genuine DualSense
-                                 |
-                            USB-serial adapter
+## Design
 
-Two USB links on one RP2040: the native controller is the USB *device* facing the PS5, and PIO-USB
-provides the *host* port facing the controller. A spare ESP32 can serve as a wireless UART bridge if
-no USB-serial adapter is available.
+    Mac                                  RP2040                     PS5
+    console_watch.py --(TCP/UART)--> ps5key.py --(USB HID)--> console
+      camera + OCR                     keyboard + command loop
+
+- `tools/fw1400/ps5key.py` - MicroPython firmware: presents as a boot-protocol HID keyboard and
+  accepts `PING / PRESS / HOLD / RELEASE / SEQUENCE / ALLUP` over TCP (Pico W) or UART.
+- `tools/fw1400/ps5_input.py` - host client, serial or TCP, with a pty selftest.
+- `tools/fw1400/fake_bridge.py` - stand-in implementing the firmware's replies so host-side changes
+  can be tested without hardware. It already caught two real bugs: the CLI still validated controller
+  buttons after the device became a keyboard, and the fake server accepted only one connection.
+
+## Safety interlocks
+
+1. `UPDATE_PROMPT` is a distinct state in `console_watch.py` and is **never** acted on. Enter on that
+   dialog could accept an update to 14.20, which adds the generation-ID check that kills the
+   kernel-side work. The watcher only alerts.
+2. The firmware has a deadman timer: if no command arrives for `DEADMAN_S` (15 s), every key is
+   released. A stuck key on a console that is expensive to recover is not an acceptable failure mode.
+3. `ALLUP` releases everything immediately, for when a run goes wrong.
+
+## Hardware choice
+
+The command channel is the only reason to connect anything else:
+
+- **Pico W** (about 6 GBP) - WiFi, so no wires at all, and a standard 40-pin board. Recommended.
+- **RoundyPi** (already owned) - RP2040 with a micro-USB port that faces the console, but its SD and
+  LCD pins consume most GPIOs and only 4 are broken out. UART needs 2 of them plus GND, wired to a
+  Pi 3 running a TCP-to-UART bridge. Workable, but the exposed GPIO numbers are not documented, so
+  they would have to be found empirically.
 
 ## Milestones
 
-**M0 - prerequisites (owner: Teo)**
-- grant camera access to the app running this (System Settings -> Privacy & Security -> Camera); live
-  capture currently fails with `Input/output error`, which is TCC, not ffmpeg
-- confirm the Pico exposes ~4 free GPIO pads (2 for PIO-USB D+/D-, 2 for UART) and whether it is a
-  Pico W; a watch-form board may have none broken out, which would change the plan
+- **M1** flash firmware, confirm the console sees a keyboard and `PING` answers.
+- **M2** `ps5_input.py press enter` dismisses a real dialog.
+- **M3** `console_watch.py --on-recover` closes the loop unattended.
+- **M4** run a candidate N times and record a crash rate.
 
-**M1 - transparent passthrough.** Pico forwards controller to console untouched. Success: console
-accepts it, controller behaves normally, no dropouts over 10 minutes. This is the make-or-break step;
-if passthrough cannot be made transparent, nothing above it matters.
-
-**M2 - injection.** UART commands OR button bits into forwarded reports. Success:
-`ps5_input.py press cross` dismisses an on-screen dialog.
-
-**M3 - closed loop.** `console_watch.py --on-recover "ps5_input.py --port ... press cross"` with
-`--input serial`. Success: a WebProcess crash is detected and cleared without a human, and the loop
-keeps running unattended.
-
-**M4 - reliability measurement.** Run a candidate N times, record crash count and timing, correlate
-with the lab's guide beacons (which already prove whether the page executed). This is the actual
-deliverable: a crash *rate* on real hardware.
+M3/M4 still have nothing to measure until a candidate exists; discovery continues on the BC-250.
 
 ## What this does not do
 
 It does not find the bug. Discovery happens on the BC-250 against the ASAN build. This harness makes
-validation cheap once a candidate exists, and until one exists M3/M4 have nothing to measure.
-
-## Fallbacks
-
-- Passthrough too lossy (timing/descriptor mismatch) -> mechanical actuation on the real controller;
-  crude but bulletproof.
-- Pico unavailable -> ESP32 Bluetooth emulation, which means implementing the PSMs and the CRC the
-  hard way, so only if the Pico path dies.
+validation cheap once a candidate exists.
