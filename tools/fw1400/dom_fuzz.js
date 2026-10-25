@@ -23,11 +23,35 @@
 (function () {
   'use strict';
 
+  // The runner loads this from a file:// wrapper that sets window.__SEED. A query string is not
+  // dependable on file URLs (WebKit may drop it), and a seed that silently collapses to 1 makes
+  // every run identical while still reporting "clean", which is the worst possible failure mode.
   var seed = 1;
-  var m = /[?&]seed=(\d+)/.exec(location.search);
-  if (m) seed = parseInt(m[1], 10) || 1;
+  if (typeof window.__SEED === 'number' && window.__SEED > 0)
+    seed = window.__SEED;
+  else {
+    var m = /[?&]seed=(\d+)/.exec(location.search);
+    if (m) seed = parseInt(m[1], 10) || 1;
+  }
 
   var ITER = 220;
+
+  // Optional out-of-band channel: the runner sets window.__BEACON to a local HTTP origin and reads
+  // its access log. Exit codes alone cannot distinguish "the fuzzer ran to completion" from "the
+  // page never loaded", and MiniBrowser does not forward console output, so without this a sweep
+  // proves nothing. Requests are fire-and-forget image loads, ignored on failure.
+  function beacon(tag) {
+    if (!window.__BEACON) return;
+    try { (new Image()).src = window.__BEACON + '/' + encodeURIComponent(tag); } catch (e) {}
+  }
+  beacon('BOOT-seed' + seed);
+
+  // An uncaught exception ends the run silently: the page stays loaded, the runner sees a clean
+  // timeout, and the sweep falsely looks healthy. Report it instead.
+  window.onerror = function (msg) {
+    beacon('ERR-seed' + seed + '-' + String(msg).slice(0, 60).replace(/[^A-Za-z0-9 ._-]/g, '_'));
+    return false;
+  };
 
   // xorshift32: reproducible, and the seed uniquely identifies a crash
   var s = seed | 0 || 1;
@@ -40,7 +64,10 @@
   function pick(a) { return a[Math.floor(rnd() * a.length) % a.length]; }
   function maybe(p) { return rnd() < p; }
 
-  var root = document.getElementById('sandbox') || document.body;
+  // Resolved on DOMContentLoaded, not here: this script runs in <head>, where document.body is
+  // still null. Taking it eagerly made root null and threw TypeError on the first tick of every
+  // run, which the runner then reported as a clean timeout - a silent no-op sweep.
+  var root = null;
 
   function el(tag, ns) {
     return ns ? document.createElementNS(ns, tag) : document.createElement(tag);
@@ -227,7 +254,12 @@
     v.remove();
   }
 
-  var OPS = [doShadow, doShadow, doSvg, doSvg, doCss, doClone, doSlots, doAnim, doRange, doMO, doIframe, doMedia];
+  // doMedia is deliberately NOT scheduled. MediaPlayerPrivateGStreamer::createAudioSink() holds
+  // RELEASE_ASSERT(audioSink), and this container has no audio device, so every <video> load aborts
+  // the process - an environment gap, not a WebKit bug, and not the console's code either (Sony's
+  // media stack is proprietary and absent from the OSS drop). Media is unobservable here for the
+  // same reason it was unobservable on-console: the oracle dies before the parser is reached.
+  var OPS = [doShadow, doShadow, doSvg, doSvg, doCss, doClone, doSlots, doAnim, doRange, doMO, doIframe];
 
   // ---------------------------------------------------------------- driver
 
@@ -237,15 +269,25 @@
       // force collection of everything the run allocated
       for (var k = 0; k < 3; k++) { var junk = []; for (var j = 0; j < 4000; j++) junk.push({ a: j }); }
       document.title = 'DONE:' + seed;
+      beacon('DONE-seed' + seed);
       return;
     }
     i += 1;
+    if (i % 25 === 0) beacon('P' + i + '-s' + seed);
     try { pick(OPS)(); } catch (e) {}
     if (rnd() < 0.05) { root.innerHTML = ''; }
     // alternate between macrotask and immediate, so teardown lands in different task shapes
-    if (maybe(0.5)) setTimeout(tick, 0); else tick();
+    if (maybe(0.5)) setTimeout(tick, 0);
+    else Promise.resolve().then(tick);
   }
 
-  document.addEventListener('DOMContentLoaded', tick);
+  document.addEventListener('DOMContentLoaded', function () {
+    root = document.getElementById('sandbox') || document.body;
+    if (!root) {
+      beacon('NOROOT-seed' + seed);
+      return;
+    }
+    tick();
+  });
   if (document.readyState !== 'loading') tick();
 })();

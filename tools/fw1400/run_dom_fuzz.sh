@@ -17,6 +17,8 @@ set -u
 
 FIRST=${1:-1}
 LAST=${2:-200}
+# A full 220-iteration run takes about one second; the wall clock is dominated by MiniBrowser
+# startup. 15s leaves ample margin without wasting 90x per seed.
 PER=${3:-15}
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -44,8 +46,15 @@ echo "preflight: ASAN runtime linked"
 
 # And confirm the sanitizer reports rather than merely links: a deliberate UAF must be caught.
 PROBE=$(mktemp -d)
-printf '#include <stdlib.h>\nint main(void){char *p=malloc(8);free(p);p[0]=1;return 0;}\n' > "$PROBE/t.c"
-if cc -fsanitize=address -O0 -o "$PROBE/t" "$PROBE/t.c" 2>/dev/null; then
+# The read must be volatile and feed a printf: a plain store after free is dead code and GCC at
+# -O1 removes it, which made a working sanitizer look silent during bring-up.
+cat > "$PROBE/t.c" <<'EOF'
+#include <stdlib.h>
+#include <stdio.h>
+int main(void) { volatile char *p = malloc(8); if (!p) return 2; p[0] = 7; free((void*)p);
+    printf("%d\n", p[0]); return 0; }
+EOF
+if cc -fsanitize=address -O1 -o "$PROBE/t" "$PROBE/t.c" 2>/dev/null; then
     if ! "$PROBE/t" 2>&1 | grep -q "AddressSanitizer"; then
         echo "PREFLIGHT FAILED: a deliberate heap-use-after-free produced no report" >&2
         exit 3
@@ -56,17 +65,61 @@ else
 fi
 rm -rf "$PROBE"
 
-export ASAN_OPTIONS="detect_leaks=0:abort_on_error=1:symbolize=1:handle_abort=1"
+# Beacon server: proves the page actually executed. MiniBrowser does not forward console output,
+# and an exit code cannot tell a completed run from a page that never loaded.
+BEACON_PORT=${BEACON_PORT:-8123}
+mkdir -p "$OUT/beacon"
+
+# Reclaim the port first. A leftover server from a previous sweep keeps the socket and silently
+# swallows every beacon while its own log file has been deleted, so the sweep reports clean with
+# zero evidence - which happened once already.
+old_pid=$(ss -ltnp 2>/dev/null | awk -v port=":$BEACON_PORT" '$4 ~ port {print $NF}' | sed -n 's/.*pid=\([0-9]*\).*/\1/p' | head -1)
+if [ -n "${old_pid:-}" ]; then
+    kill "$old_pid" 2>/dev/null && echo "preflight: reclaimed port $BEACON_PORT from pid $old_pid"
+    sleep 1
+fi
+
+# -u matters: http.server prints its banner to stdout, which is block-buffered when redirected, so
+# the readiness check below could never see it and the server looked dead while running fine.
+( cd "$OUT/beacon" && exec python3 -u -m http.server "$BEACON_PORT" --bind 127.0.0.1 > "$OUT/http.log" 2>&1 ) &
+echo $! > "$OUT/http.pid"
+trap '[ -f "$OUT/http.pid" ] && kill "$(cat "$OUT/http.pid")" 2>/dev/null' EXIT
+
+# Do not sweep against a server that never came up.
+for _ in 1 2 3 4 5 6; do
+    grep -q "Serving HTTP" "$OUT/http.log" 2>/dev/null && break
+    sleep 0.5
+done
+if ! grep -q "Serving HTTP" "$OUT/http.log" 2>/dev/null; then
+    echo "PREFLIGHT FAILED: beacon server did not start on port $BEACON_PORT" >&2
+    sed -n '1,6p' "$OUT/http.log" >&2
+    exit 4
+fi
+echo "preflight: beacon server up on $BEACON_PORT"
+BEACON="http://127.0.0.1:$BEACON_PORT"
+
+# detect_stack_use_after_return=0 is mandatory, not tuning: JSC finds roots by scanning the raw
+# stack (ConservativeRoots::genericAddSpan), and ASAN's fake stack puts frames in a separate region,
+# so the scanner walks addresses that are not mapped and SEGVs. Every run aborted in the GC that way
+# and looked like a WebKit crash. WebKit's own run-webkit-tests sets this too.
+export ASAN_OPTIONS="detect_leaks=0:detect_stack_use_after_return=0:abort_on_error=1:symbolize=1:handle_abort=1"
 export WEBKIT_DISABLE_COMPOSITING_MODE=1        # keep rendering in-process, so faults land here
 export GDK_BACKEND=x11
 
 crashes=0
 clean=0
+completed=0
 
 for seed in $(seq "$FIRST" "$LAST"); do
     log="$OUT/seed-$seed.log"
-    timeout "$PER" xvfb-run -a "$BIN" "file://$HERE/dom_fuzz.js?seed=$seed" >"$log" 2>&1
+    # A wrapper page rather than a ?seed= query: file:// URLs may drop the query, which would run
+    # seed 1 for every iteration and still report clean.
+    wrapper="$OUT/beacon/run-$seed.html"
+    cp "$HERE/dom_fuzz.js" "$OUT/beacon/dom_fuzz.js"
+    printf '<!doctype html><meta charset="utf-8"><script>window.__SEED=%d;window.__BEACON="%s";</script><script src="dom_fuzz.js"></script>\n' "$seed" "$BEACON" > "$wrapper"
+    timeout "$PER" xvfb-run -a "$BIN" "http://127.0.0.1:$BEACON_PORT/run-$seed.html" >"$log" 2>&1
     rc=$?
+    rm -f "$wrapper"
 
     if grep -q "AddressSanitizer" "$log"; then
         crashes=$((crashes + 1))
@@ -77,6 +130,12 @@ for seed in $(seq "$FIRST" "$LAST"); do
     fi
 
     if [ "$rc" -eq 124 ] || [ "$rc" -eq 0 ]; then
+        if grep -q "DONE-seed$seed" "$OUT/http.log" 2>/dev/null; then
+            completed=$((completed + 1))
+        else
+            echo "NOT-COMPLETED seed=$seed rc=$rc (page never reached DONE - result discarded)"
+            echo "$seed" >> "$OUT/incomplete.txt"
+        fi
         clean=$((clean + 1))
         rm -f "$log"
         [ $((clean % 20)) -eq 0 ] && echo "  clean=$clean last_seed=$seed"
@@ -89,5 +148,7 @@ for seed in $(seq "$FIRST" "$LAST"); do
 done
 
 echo
-echo "done: clean=$clean asan_crashes=$crashes nonzero=$(wc -l < "$OUT/nonzero.txt" 2>/dev/null || echo 0)"
+[ -f "$OUT/http.pid" ] && kill "$(cat "$OUT/http.pid")" 2>/dev/null
+rmdir "$OUT/beacon" 2>/dev/null
+echo "done: clean=$clean completed=$completed asan_crashes=$crashes nonzero=$([ -f "$OUT/nonzero.txt" ] && wc -l < "$OUT/nonzero.txt" || echo 0) incomplete=$([ -f "$OUT/incomplete.txt" ] && wc -l < "$OUT/incomplete.txt" || echo 0)"
 [ -f "$OUT/crashes.txt" ] && echo "seeds: $(tr '\n' ' ' < "$OUT/crashes.txt")"
