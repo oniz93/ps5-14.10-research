@@ -78,3 +78,20 @@ M3/M4 still have nothing to measure until a candidate exists; discovery continue
 
 It does not find the bug. Discovery happens on the BC-250 against the ASAN build. This harness makes
 validation cheap once a candidate exists.
+
+## As built on the Pi Zero (deployed)
+
+Pi Zero W running DietPi (Trixie, kernel 6.18.50, armv6), hostname `ps5kbd`:
+
+- `dtoverlay=dwc2` in `/boot/firmware/config.txt` and `modules-load=dwc2,libcomposite` appended to
+  `cmdline.txt`; UDC `20980000.usb` then appears and `pi_gadget_setup.sh` binds the gadget, creating
+  `/dev/hidg0`.
+- **No Python on DietPi minimal**, and installing it means waiting out a full `dist-upgrade` on an
+  armv6 core, so the bridge is `hid_key.sh` (bash, writes 8-byte reports directly) driven per command
+  over SSH with `ps5_input.py --ssh root@<pi>`.
+- Consequence of the per-invocation model: `HOLD`/`RELEASE` cannot work and are rejected explicitly.
+  `PRESS`, `SEQUENCE` and `ALLUP` cover everything the Guide needs.
+
+Verified so far: `PING` -> `PONG`, `STATUS` -> `READY udc=configured`, and `PRESS` -> `OK` with a host
+attached. Whether the keystroke lands on the console still has to be confirmed visually - camera
+capture is blocked by macOS TCC, so that check is manual until permission is granted.

@@ -128,10 +128,52 @@ class TcpBridge(Bridge):
         raise TimeoutError(f"no reply to {line!r} within {self.timeout}s")
 
 
+class SshBridge(Bridge):
+    """Drive the Pi's shell bridge over SSH, one command per invocation.
+
+    Used when the Pi has no Python (DietPi minimal) and installing it would mean waiting on a
+    dist-upgrade. Costs an SSH round-trip per press, which is irrelevant next to a 120 ms keypress,
+    and has no persistent state - so HOLD/RELEASE are refused rather than silently mishandled.
+    """
+
+    def __init__(self, target: str, key: "str | None" = None, remote_cmd: str = "/root/hid_key.sh",
+                 timeout: float = 15.0):
+        self.target = target
+        self.key = key
+        self.remote_cmd = remote_cmd
+        self.timeout = timeout
+
+    def open(self) -> None:
+        pass
+
+    def close(self) -> None:
+        pass
+
+    def command(self, line: str) -> str:
+        import shlex as _shlex
+        import subprocess
+        cmd = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=5"]
+        if self.key:
+            cmd += ["-i", self.key]
+        cmd += [self.target, f"{self.remote_cmd} {_shlex.quote(line)}"]
+        try:
+            r = subprocess.run(cmd, capture_output=True, timeout=self.timeout)
+        except subprocess.TimeoutExpired:
+            raise TimeoutError(f"ssh to {self.target} timed out")
+        out = r.stdout.decode("utf-8", "replace").strip().splitlines()
+        if out:
+            return out[-1]
+        err = r.stderr.decode("utf-8", "replace").strip().splitlines()
+        return f"ERR rc={r.returncode} {err[-1] if err else ''}".strip()
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", help="serial device, e.g. /dev/tty.usbserial-XXXX")
-    ap.add_argument("--host", help="bridge host (Pico W TCP mode)")
+    ap.add_argument("--host", help="bridge host (TCP daemon mode)")
+    ap.add_argument("--ssh", help="user@host driving hid_key.sh over ssh (no Python needed)")
+    ap.add_argument("--ssh-key", default=str(__import__("pathlib").Path.home() / ".ssh" / "id_rsa"),
+                    help="identity file for --ssh")
     ap.add_argument("--baud", type=int, default=115200)
     ap.add_argument("--timeout", type=float, default=2.0)
     ap.add_argument("--tcp-port", type=int, default=8000, help="Pico W TCP port")
@@ -175,12 +217,16 @@ def main() -> int:
     else:
         line = f"SEQUENCE {args.buttons} {args.gap}"
 
-    if args.dry_run or (not args.port and not args.host):
+    if args.dry_run or (not args.port and not args.host and not args.ssh):
         print(line)
         return 0
 
-    bridge = (TcpBridge(args.host, args.tcp_port, args.timeout) if args.host
-              else Bridge(args.port, args.baud, args.timeout))
+    if args.ssh:
+        bridge = SshBridge(args.ssh, args.ssh_key, timeout=max(args.timeout, 15.0))
+    elif args.host:
+        bridge = TcpBridge(args.host, args.tcp_port, args.timeout)
+    else:
+        bridge = Bridge(args.port, args.baud, args.timeout)
     bridge.open()
     try:
         print(bridge.command(line))
