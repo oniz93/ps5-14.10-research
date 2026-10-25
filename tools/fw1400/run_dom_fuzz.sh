@@ -145,7 +145,8 @@ for seed in $(seq "$FIRST" "$LAST"); do
         continue
     fi
 
-    if [ "$finished" -eq 1 ] || [ "$rc" -eq 124 ] || [ "$rc" -eq 0 ]; then
+    # 143/137 = our own group kill when a seed never reached DONE; that is the timeout path.
+    if [ "$finished" -eq 1 ] || [ "$rc" -eq 124 ] || [ "$rc" -eq 0 ] || [ "$rc" -eq 143 ] || [ "$rc" -eq 137 ]; then
         if [ "$finished" -eq 1 ]; then
             completed=$((completed + 1))
         else
