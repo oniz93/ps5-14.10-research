@@ -40,3 +40,6 @@ out/yarr-findings/
 out/frontend-results.jsonl
 out/frontend-run.log
 out/frontend-findings/
+
+# third-party clones kept out of git
+research/slopkit/
