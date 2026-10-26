@@ -67,3 +67,39 @@ Mapped from the public 14.10 browser research and consistent with what is confir
 3. **Code execution** - overwrite a vtable, or `startOfStructureHeap` (JSC Config is unfrozen on PS5), then
    ROP. No PAC and no JIT to fight.
 4. **Then** the kernel rung, which has no public 14.10 bug - that gap is Teo's open problem, not this one.
+
+## Appendix: the public exploit probe, run on our console (V665)
+
+The 14.10 browser research has 68 probe files. The newest (`v665.html`, "save-count OOB stateStack info
+leak") was served to the console through the lab and executed. Beacons, in order:
+
+```
+V665-BOOT, V665-UAF, V665-GROW, V665-GROW-LW, V665-LD, V665-ATTRS,
+V665-SPRAY, V665-XF, V665-CANVAS, V665-NO-OOB, V665-RESTORE-LW, V665-DONE
+```
+
+`V665-NO-OOB` is the result that matters: growing `m_stateStack` past its capacity and reading through the
+stale wrapper did **not** produce an out-of-bounds read on this console. So the arbitrary-R/W stage is still
+designed rather than demonstrated - which matches the source repo's own status table, where arbitrary R/W is
+"DESIGNED" and only the UAF, reclaim, alias, crash oracle and ASLR leak are "CONFIRMED".
+
+Our independent contribution stands on its own: the trigger, the reclaim ordering (reclaim *before* touching
+the stale wrapper, otherwise the process dies), and a measured bidirectional alias (`alias-index:4`,
+`readback:777.25`).
+
+### Where that leaves the chain
+
+| stage | status |
+|---|---|
+| UAF trigger | confirmed here and publicly |
+| same-type reclaim | confirmed here (500 contexts) |
+| alias R/W (two JS objects, one context) | confirmed here |
+| ASLR leak | confirmed publicly (APNG overread), not yet reproduced here |
+| arbitrary R/W | open - public save-count OOB returns NO-OOB on retail |
+| code exec | open |
+| kernel for 14.10 | nothing public at any layer |
+
+The next idea worth trying is a different reclaim target: instead of growing the state stack and hoping for
+an OOB read, reclaim the freed 768-byte `CanvasRenderingContext2D` **itself** with an ArrayBuffer. Gigacage is
+disabled on PS5, so AB backing stores share the heap; controlling the object's bytes would let us set
+`m_stateStack` to a forged `State` array directly rather than relying on a size confusion.
