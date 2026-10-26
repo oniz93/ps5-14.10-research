@@ -1,0 +1,22 @@
+[Unit]
+# Recreate the HID gadget at boot.
+#
+# Why this exists: the gadget lives in configfs, which is not persistent. After any reboot the console
+# sees the Pi as "no keyboard" until someone runs pi_gadget_setup.sh by hand - and if that reboot also
+# takes sshd down, the only fix is walking to the hardware. Binding the gadget at boot removes that
+# whole failure mode.
+Description=PS5 keyboard gadget (configfs HID keyboard)
+DefaultDependencies=no
+After=sys-kernel-config.mount local-fs.target
+Before=network-pre.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/pi_gadget_setup.sh
+# Unbind on stop so the console sees a clean disconnect instead of a wedged interface.
+ExecStop=/bin/sh -c 'echo "" > /sys/kernel/config/usb_gadget/ps5kbd/UDC 2>/dev/null || true'
+
+[Install]
+WantedBy=multi-user.target
