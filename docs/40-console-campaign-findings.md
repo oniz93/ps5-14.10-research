@@ -152,3 +152,41 @@ WebKit bug rather than a harness bug:
    not forward `console.log`.
 
 `/tmp/run_asan_page.sh` wraps 1-3; the http.server access log supplies the results.
+
+## Killed: XPath GC-thread race (bug 309776) - the mechanism does not exist here
+
+Upstream fix `e8db86ea12` (May 2026) locks `XPathResult::m_nodeSet` because the GC thread iterates the node
+vector while the main thread can call `sort()` from `firstNode`/`snapshotItem`, a use-after-free. Sony's
+tree carries the exact FIXME:
+
+```cpp
+// FIXME: This looks like it might race, but I'm not sure.
+for (auto& node : value.toNodeSet())
+    addWebCoreOpaqueRoot(visitor, node.get());
+```
+
+But the fix's own shape gives it away: it replaces that body with
+`wrapped().visitAdditionalChildrenInGCThread(visitor)`. A recursive grep over `Source/` finds
+`visitAdditionalChildrenInGCThread` in **zero files** in this snapshot - the off-thread visitation
+mechanism did not exist in September 2023. Here the node set is only walked on the main thread, the same
+thread that sorts it, so the race cannot happen. The FIXME was a premonition about a later architecture.
+
+This is a recurring pattern worth stating: a fix dated 2024-2026 can describe a bug that this build simply
+cannot have, either because the subsystem is absent (WebGL, WebRTC, Web Audio, WebCodecs) or because the
+concurrency that creates the race was added later. The era gate catches the explicit `REGRESSION(<rev>)`
+case; this class has to be caught by checking that the *mechanism* the fix refers to exists at all.
+
+## Reachable-candidate ledger
+
+| candidate | class | verdict |
+|---|---|---|
+| `@page` into a detached grouping rule | null deref | **confirmed on console**, control-validated (DoS) |
+| bug 278657 ResizableSharedArrayBuffer injection | type confusion | dead: `SharedArrayBuffer` absent (measured) |
+| `CachedString::m_jsString` | UAF | dead: pool indices only from `write(Identifier)` |
+| bug 262616 array index vs `NonIndexPropertiesTag` | type confusion | dead from JS: serializer walks the index range, `structuredClone` never returns |
+| bug 309776 XPath node-set race | UAF | dead: `visitAdditionalChildrenInGCThread` absent from this snapshot |
+| OpenType vertical GSUB range (2196077a54) | OOB read | live and reachable via `@font-face`, but read-only into font data with no path back to JS - a crash, not a primitive |
+
+Of 340 memory-safety patches examined (141 targeted + 191 write/race/uninit), 27 keep a contiguous pre-fix
+block and only a handful touch subsystems this build actually ships. That is the real finding of this
+round: the surface is small and Sony's backports are competent, not that the search was idle.
