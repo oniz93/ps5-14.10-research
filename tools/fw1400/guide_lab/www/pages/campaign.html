@@ -1,0 +1,71 @@
+<!doctype html><meta charset="utf-8"><title>campaign</title>
+<style>body{background:#111;color:#ddd;font:13px/1.5 ui-monospace,monospace;margin:2em}
+.ok{color:#6ee7a0}.bad{color:#f08a8a}.run{color:#f5d76e}</style>
+<body><h1 style="font-size:15px">campaign</h1><p id="s">starting…</p><ol id="log"></ol>
+<script>
+(function () {
+  // Self-resuming campaign runner.
+  //
+  // runner.html cannot resume after a WebProcess crash: the guide URL carries no ?i=, so a reload
+  // restarts at case 0 and the crashing case is re-run forever. This keeps its own cursor in
+  // localStorage, written BEFORE each case runs, so after a crash the next load resumes at the case
+  // that died - and an attempt counter skips a case after two tries, so one crasher cannot pin the
+  // campaign.
+  var KEY = 'campaign.cursor';
+
+  function beacon(kind, id) {
+    var body = kind + (id === undefined ? '' : ':' + id);
+    try { navigator.sendBeacon('/beacon', body); return; } catch (e) {}
+    try { var x = new XMLHttpRequest(); x.open('POST', '/beacon', true);
+          x.setRequestHeader('Content-Type', 'text/plain'); x.send(body); } catch (e) {}
+  }
+  function line(cls, txt) {
+    var li = document.createElement('li');
+    li.className = cls; li.textContent = txt;
+    document.getElementById('log').appendChild(li);
+  }
+  function cursor() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '{"i":0,"a":0}'); }
+    catch (e) { return { i: 0, a: 0 }; }
+  }
+  function setCursor(c) { try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {} }
+
+  fetch('/cases/manifest.json', { cache: 'no-store' }).then(function (r) { return r.json(); })
+  .then(function (cases) {
+    var c = cursor();
+    beacon('BOOT', cases.length + '-from-' + c.i + '-a' + c.a);
+    if (c.a >= 2) { line('bad', c.i + ' skipped after 2 attempts'); c = { i: c.i + 1, a: 0 }; }
+    if (c.i >= cases.length) { c = { i: 0, a: 0 }; line('ok', 'wrapped'); }
+    document.getElementById('s').textContent =
+      cases.length + ' case(s), at ' + c.i + ' (attempt ' + (c.a + 1) + ')';
+
+    var i = c.i;
+    (function next() {
+      if (i >= cases.length) { line('ok', 'DONE'); beacon('FUZZ-RUNNER-DONE', cases.length); return; }
+      var name = cases[i];
+      beacon('start', i);
+      line('run', i + ' ' + name);
+      setCursor({ i: i, a: c.a });            // before running: a crash leaves the cursor on this case
+      var threw = false, why = '';
+      try {
+        var src = new XMLHttpRequest();
+        src.open('GET', '/cases/' + encodeURIComponent(name), false);
+        src.send(null);
+        if (src.status !== 200) { threw = true; why = 'HTTP ' + src.status; }
+        else { (0, eval)(src.responseText); }
+      } catch (e) { threw = true; why = String(e && e.message || e).slice(0, 80); }
+      if (threw) { beacon('threw', i); line('bad', i + ' threw ' + why); }
+      else { beacon('survived', i); line('ok', i + ' survived'); }
+      c = { i: i + 1, a: 0 };
+      setCursor(c);
+      i = c.i;
+      setTimeout(next, 20);
+    })();
+  })
+  .catch(function (e) {
+    document.getElementById('s').textContent = 'manifest error: ' + e;
+    beacon('MANIFEST-ERROR', String(e).slice(0, 80));
+  });
+})();
+</script>
+</html>

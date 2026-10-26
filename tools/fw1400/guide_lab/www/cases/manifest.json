@@ -1,1 +1,6 @@
-[]
+[
+ "c000-control.js",
+ "c001-page-detached.js",
+ "c002-grouping-churn.js",
+ "c003-clone-gc.js"
+]
