@@ -27,7 +27,7 @@ import tempfile
 import time
 from pathlib import Path
 
-STATES = ("UPDATE_PROMPT", "PS_ERROR", "GUIDE", "SYSTEM_UI", "UNKNOWN")
+STATES = ("UPDATE_PROMPT", "NET_ERROR", "PS_ERROR", "GUIDE", "SYSTEM_UI", "UNKNOWN")
 
 # Ordered: the first match wins, so the alarm state is checked before anything else.
 RULES = [
@@ -35,6 +35,12 @@ RULES = [
         r"\b(update|updating)\b.*\b(system software|software|now|console)\b"
         r"|system software update|latest version of the system software|"
         r"\bupdate now\b|\bsoftware update\b", re.I)),
+    # Network/service failures (WV- codes) are not crashes: the console cannot reach PSN because the
+    # lab DNS NXDOMAINs Sony's estate. Distinguished from PS_ERROR so a run is not reported as a
+    # WebProcess failure, and given no automatic recovery - it is dismissed with the controller.
+    ("NET_ERROR", re.compile(
+        r"\bWV-\d{5}-\d\b|can'?t connect to the server|"
+        r"problem connecting to the network|could not connect to the (server|network)", re.I)),
     ("PS_ERROR", re.compile(
         r"cannot be displayed|can't be displayed|error has occurred|an error occurred|"
         r"\bCE-\d{5}-\d\b|\bNP-\d|failed to load|page (could not|can't) be", re.I)),

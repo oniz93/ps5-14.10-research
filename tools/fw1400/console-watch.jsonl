@@ -1,0 +1,5 @@
+{"ts": 1792994703.4481852, "state": "UNKNOWN", "evidence": "", "lines": ["WV-10944-9", "Cant connect to the server. There might have been a problem connecting to the network or to", "our online services", "More Info", "Suggested Actions", "OK"]}
+{"ts": 1792994893.040223, "state": "UNKNOWN", "evidence": "", "lines": ["WV-10944-9", "Cant connect to the server. There might have been a problem connecting to the network or to", "our online services", "More Info", "Suggested Actions", "OK"]}
+{"ts": 1792994905.062836, "state": "NET_ERROR", "evidence": "WV-10944-9", "lines": ["WV-10944-9", "Cant connect to the server. There might have been a problem connecting to the network or to", "our online services", "More Info", "Suggested Actions", "OK"]}
+{"ts": 1792994905.6254778, "state": "NET_ERROR", "evidence": "Cant connect to the server", "lines": ["WV-109144-9", "Cant connect to the server. There might have been a problem connecting to the network or to", "our online services", "More Info", "Suggested Actions", "OK"]}
+{"ts": 1792994906.127866, "state": "UNKNOWN", "evidence": "", "lines": ["\u2022joh"]}
