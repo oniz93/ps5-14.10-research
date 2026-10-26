@@ -10,6 +10,13 @@ happened" without a human watching the screen.
 Usage:
     key_probe.py --ssh root@<pi-ip> --key down
     key_probe.py --ssh root@<pi-ip> --key enter --threshold 42
+
+WARNING - do not trust this as a pass/fail oracle on bright or mostly-white screens. The webcam's
+auto-exposure hunts on a large white area, which moves every pixel with no UI change at all: two
+consecutive frames of an unchanged blank page measured 23.4 dB, i.e. inside the "changed" band. An
+edge-detected variant was tried as an exposure-invariant replacement and does not separate either
+(idle 32 dB, true change 24.7 dB, unchanged white page 26-27 dB). Use it only on a dark, static screen,
+or prefer OCR (exposure-independent) / a human watching.
 """
 
 import argparse
