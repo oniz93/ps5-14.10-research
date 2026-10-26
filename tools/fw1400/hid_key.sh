@@ -43,6 +43,8 @@ code_for() {
 }
 
 open_dev() {
+    # Dry run only prints the encoding; there is nothing to open.
+    [ "${HID_KEY_DRYRUN:-0}" = 1 ] && return 0
     # exec keeps fd 3 open for the whole command, so no report is cancelled mid-flight.
     if ! exec 3>"$DEV" 2>/dev/null; then
         echo "ERR cannot open $DEV"
@@ -51,26 +53,37 @@ open_dev() {
 }
 
 close_dev() {
+    [ "${HID_KEY_DRYRUN:-0}" = 1 ] && return 0
     # Give the host one full polling interval to collect the final release report.
     sleep 0.08
     exec 3>&- 2>/dev/null || true
 }
 
-# Build an 8-byte report: modifiers, reserved, then up to six keycodes.
-send_report() {
-    local out='\x00\x00' i c
-    for i in 1 2 3 4 5 6; do
-        c="$(code_for "${!i}")"
-        if [ -n "$c" ]; then out="$out$c"; else out="$out"'\x00'; fi
-    done
-    if ! printf "$out" >&3 2>/dev/null; then
+# Write one 8-byte report, or print its bytes when HID_KEY_DRYRUN=1.
+emit() {
+    if [ "${HID_KEY_DRYRUN:-0}" = 1 ]; then
+        printf "$1" | od -An -tx1
+        return 0
+    fi
+    if ! printf "$1" >&3 2>/dev/null; then
         echo "ERR write failed"
         return 1
     fi
     return 0
 }
 
-all_up() { printf '\x00\x00\x00\x00\x00\x00\x00\x00' >&3 2>/dev/null || true; }
+# Build an 8-byte report: modifiers, reserved, the keycode, then five empty slots.
+#
+# This was written as a loop over ${!i}, which is INDIRECT expansion - the value of the variable whose
+# name is $i - so for positional parameters it expanded to nothing and every "press" went out as eight
+# zero bytes, i.e. "all keys released". Both the console and a Linux host duly received reports and
+# ignored them, and every layer above reported success. Verified on the wire with hidraw on a Linux
+# host: the capture was six all-zero reports for three presses.
+send_report() {
+    emit "\x00\x00$1\x00\x00\x00\x00\x00"
+}
+
+all_up() { emit '\x00\x00\x00\x00\x00\x00\x00\x00'; }
 
 # Accept both `hid_key.sh PRESS enter 120` and `hid_key.sh "PRESS enter 120"`: the SSH client sends
 # the whole line as one argument unless it is deliberately unquoted, and treating those two forms
