@@ -9,3 +9,7 @@
 {"ts": 1792996431.0910568, "state": "UNKNOWN", "evidence": "", "lines": []}
 {"ts": 1792998861.6306932, "state": "UNKNOWN", "evidence": "", "lines": []}
 {"ts": 1792999130.8237891, "state": "UNKNOWN", "evidence": "", "lines": []}
+{"ts": 1793027724.5036879, "state": "GUIDE", "evidence": "Guide", "lines": ["Guide & Tips, Health & Safety, and Other Information", "Guide and Tips", "User's Guide", "Discover Tips"]}
+{"ts": 1793027749.4088728, "state": "NET_ERROR", "evidence": "Can't connect to the server", "lines": ["WV-109144-9", "Can't connect to the server. There might have been a problem connecting to the network or to", "our online services.", "More Info", "Suggested Actions", "OK"]}
+{"ts": 1793027853.588882, "state": "UNKNOWN", "evidence": "", "lines": ["\u2022 Relead", "B/R3 Zoam \u2022 Options"]}
+{"ts": 1793027868.03136, "state": "GUIDE", "evidence": "Guide", "lines": ["Guide & Tips, Health & Safety, and Other Information", "Guide and Tips", "User's Guide", "Discover Tips"]}
