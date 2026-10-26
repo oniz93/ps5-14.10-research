@@ -3,3 +3,5 @@
 {"ts": 1792994905.062836, "state": "NET_ERROR", "evidence": "WV-10944-9", "lines": ["WV-10944-9", "Cant connect to the server. There might have been a problem connecting to the network or to", "our online services", "More Info", "Suggested Actions", "OK"]}
 {"ts": 1792994905.6254778, "state": "NET_ERROR", "evidence": "Cant connect to the server", "lines": ["WV-109144-9", "Cant connect to the server. There might have been a problem connecting to the network or to", "our online services", "More Info", "Suggested Actions", "OK"]}
 {"ts": 1792994906.127866, "state": "UNKNOWN", "evidence": "", "lines": ["\u2022joh"]}
+{"ts": 1792995061.3587992, "state": "UNKNOWN", "evidence": "", "lines": ["\u2022 Reload", "1/ R3 200m \u2022 Options"]}
+{"ts": 1792995117.7624462, "state": "UNKNOWN", "evidence": "", "lines": ["ERROR: 0V00000006", "SSLEror: 0x00000000", "Coulen't resolve host name", "A Reload", "07 R3 Zoom", "= Options"]}
