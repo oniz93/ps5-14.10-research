@@ -36,35 +36,53 @@ BEACONS = os.path.join(HERE, "guide_lab", "results", "beacons.jsonl")
 INPUT = os.path.join(HERE, "ps5_input.py")
 
 
-def beacon_state(path):
-    """Return (total_beacons, last_start_index, runner_done)."""
-    total = last_start = 0
-    done = False
-    if not os.path.exists(path):
-        return 0, 0, False
-    with open(path, "rb") as f:
-        f.seek(0, os.SEEK_END)
-        size = f.tell()
-        f.seek(max(0, size - 65536))         # the tail is enough; the log grows to tens of MB
-        tail = f.read().decode("utf-8", "replace")
-    for line in tail.splitlines():
-        line = line.strip()
-        if not line.startswith("{"):
-            continue
-        try:
-            rec = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-        total += 1
-        body = rec.get("body") or ""
-        if body.startswith("start:"):
+class BeaconTail:
+    """Incremental reader over the beacon log.
+
+    A fixed tail window is wrong: the log already contains a FUZZ-RUNNER-DONE from an earlier run, so
+    reading "the last 64 KB" makes a fresh supervisor believe the campaign finished before it started.
+    This reads only bytes appended after construction, and keeps a partial trailing line for the next
+    poll, because a write can land mid-line.
+    """
+
+    def __init__(self, path):
+        self.path = path
+        self.total = 0
+        self.last_start = -1
+        self.done = False
+        self._buf = ""
+        self.offset = os.path.getsize(path) if os.path.exists(path) else 0
+
+    def poll(self):
+        if not os.path.exists(self.path):
+            return self.total
+        size = os.path.getsize(self.path)
+        if size < self.offset:               # truncated or rotated: start over
+            self.offset, self._buf = 0, ""
+        if size > self.offset:
+            with open(self.path, "rb") as f:
+                f.seek(self.offset)
+                self._buf += f.read().decode("utf-8", "replace")
+                self.offset = f.tell()
+        *complete, self._buf = self._buf.split("\n")
+        for line in complete:
+            line = line.strip()
+            if not line.startswith("{"):
+                continue
             try:
-                last_start = max(last_start, int(body.split(":", 1)[1]))
-            except ValueError:
-                pass
-        elif body.startswith("FUZZ-RUNNER-DONE"):
-            done = True
-    return total, last_start, done
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            self.total += 1
+            body = rec.get("body") or ""
+            if body.startswith("start:"):
+                try:
+                    self.last_start = max(self.last_start, int(body.split(":", 1)[1]))
+                except ValueError:
+                    pass
+            elif body.startswith("FUZZ-RUNNER-DONE"):
+                self.done = True
+        return self.total
 
 
 def press(ssh, key, keyfile, log):
@@ -109,11 +127,13 @@ def main():
                           "minutes": args.minutes, "dry_run": args.dry_run}) + "\n")
 
     deadline = time.time() + args.minutes * 60
-    last_total, last_progress = beacon_state(BEACONS)[0], time.time()
+    tail = BeaconTail(BEACONS)          # only records written from now on
+    tail.poll()
+    last_total, last_progress = tail.total, time.time()
     seen_start = 0
 
     while time.time() < deadline:
-        total, idx, done = beacon_state(BEACONS)
+        total, idx, done = tail.poll(), tail.last_start, tail.done
         if done:
             log.write(json.dumps({"t": time.strftime("%H:%M:%S"), "event": "runner_done",
                                   "cases_started": idx}) + "\n")

@@ -1,6 +1,12 @@
 [
  "c000-control.js",
+ "c007-page-detached-grouping.js",
+ "c008-xml-parser-detach.js",
+ "c009-svg-feimage-reentrant.js",
+ "c006-capability.js",
  "c001-page-detached.js",
  "c002-grouping-churn.js",
- "c003-clone-gc.js"
+ "c003-clone-gc.js",
+ "c004-serialize-reentrancy.js",
+ "c005-serialize-mutate.js"
 ]

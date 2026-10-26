@@ -45,7 +45,10 @@
       var name = cases[i];
       beacon('start', i);
       line('run', i + ' ' + name);
-      setCursor({ i: i, a: c.a });            // before running: a crash leaves the cursor on this case
+      // Before running, and with the attempt already counted: a crash or a hang leaves the cursor
+      // on this case, and the NEXT load sees a+1 and can skip it after two tries. Storing the
+      // same a every time is what let one hanging case pin the whole campaign.
+      setCursor({ i: i, a: c.a + 1 });
       var threw = false, why = '';
       try {
         var src = new XMLHttpRequest();

@@ -1,0 +1,506 @@
+[
+ {
+  "sha": "cfe38930db",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/js/structuredClone/structured-clone-of-ResizableSharedArrayBuffer.html",
+  "tests": 1,
+  "sec": true,
+  "jsc": true,
+  "title": "Race condition in CloneSerializer::dumpIfTerminal allows for injecting arbitrary deseria"
+ },
+ {
+  "sha": "621e3bf30e",
+  "worst": "PARTIAL",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Data race in Range::visitNodesConcurrently during GC, leading to a use-after-free of Ran"
+ },
+ {
+  "sha": "ab488735a4",
+  "worst": "PARTIAL",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Data race in Range::visitNodesConcurrently during GC, leading to a use-after-free of Ran"
+ },
+ {
+  "sha": "5b3364fd97",
+  "worst": "NOFILE",
+  "test": "LayoutTests/svg/filters/feImage-reentrant-filter-remove-crash.html",
+  "tests": 1,
+  "sec": true,
+  "jsc": false,
+  "title": "Revert 312304@main, which used a stale HashMap iterator in LegacyRenderSVGResourceFilter"
+ },
+ {
+  "sha": "a93904b977",
+  "worst": "DIVERGED",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "=?UTF-8?q?Use-after-free=20in=20SVGGeometryElement::getPo?= =?UTF-8?q?intAtLength=20=E2="
+ },
+ {
+  "sha": "e147963ac4",
+  "worst": "NOFILE",
+  "test": "LayoutTests/fast/webcodecs/audio-data-close-during-gc-crash.html",
+  "tests": 1,
+  "sec": true,
+  "jsc": false,
+  "title": "use-after-free in WebCodecsAudioData::memoryCost() via concurrent GC marker / close() rd"
+ },
+ {
+  "sha": "cb83583e5f",
+  "worst": "DIVERGED",
+  "test": "LayoutTests/fast/dom/trusted-types-iframe-removal-crash.html",
+  "tests": 1,
+  "sec": true,
+  "jsc": false,
+  "title": "Use-after-free of Document in trustedTypeCompliantString https://bugs.webkit.org/show_bu"
+ },
+ {
+  "sha": "d7904663aa",
+  "worst": "NOFILE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "StabilityTracer: Safari crashes in AppKit when Writing Tools requests the selected text "
+ },
+ {
+  "sha": "cc88e18743",
+  "worst": "DIVERGED",
+  "test": "LayoutTests/imported/w3c/web-platform-tests/css/cssom/insertRule-page-detached-grouping-rule-crash.html",
+  "tests": 1,
+  "sec": false,
+  "jsc": false,
+  "title": "Null dereference in CSSParser::parsePageSelector() when inserting an @page rule into a d"
+ },
+ {
+  "sha": "8e3c2c07a9",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Fix bad cases of refcounted objects being stored in std::unique_ptr https://bugs.webkit."
+ },
+ {
+  "sha": "44884327f7",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "ImageBitmapBacking is a redundant class https://bugs.webkit.org/show_bug.cgi?id=267455 r"
+ },
+ {
+  "sha": "74df988dc5",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "beginParsingChildren and finishParsingChildren should only exist on Element https://bugs"
+ },
+ {
+  "sha": "560b9a991f",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Drop dead code in HTMLTreeBuilder::processTemplateEndTag() https://bugs.webkit.org/show_"
+ },
+ {
+  "sha": "442482adf1",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/js/structuredClone/structured-clone-of-CachedString-in-map.html",
+  "tests": 1,
+  "sec": true,
+  "jsc": false,
+  "title": "CachedString::m_jsString is not protected from GC in CloneDeserializer. https://bugs.web"
+ },
+ {
+  "sha": "eb2cefb5ee",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Fold `TreeDepthLimit.h` into `XMLDocumentParser.cpp`"
+ },
+ {
+  "sha": "af0b4e780f",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Get GraphicsLayer.h out of some hot include paths https://bugs.webkit.org/show_bug.cgi?i"
+ },
+ {
+  "sha": "643cd318d6",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Address UncountedCallArgsChecker & UncountedLocalVarsChecker issues in CSSParserImpl.cpp"
+ },
+ {
+  "sha": "94ec0f4523",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Re-land missing exception checks https://bugs.webkit.org/show_bug.cgi?id=291290 rdar://1"
+ },
+ {
+  "sha": "6e19b3bf99",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Merge CSSParser and CSSParserImpl https://bugs.webkit.org/show_bug.cgi?id=291572"
+ },
+ {
+  "sha": "3c7fe87417",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Leverage the `RefPtr<T>(T&)` constructor in more places https://bugs.webkit.org/show_bug"
+ },
+ {
+  "sha": "59959a003b",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Address safer cpp warnings in SerializedScriptValue.cpp https://bugs.webkit.org/show_bug"
+ },
+ {
+  "sha": "4a6e51b91b",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/imported/w3c/web-platform-tests/css/css-nesting/nesting-basic-expected.html",
+  "tests": 2,
+  "sec": false,
+  "jsc": false,
+  "title": "Inline nesting selector when possible https://bugs.webkit.org/show_bug.cgi?id=299168 rda"
+ },
+ {
+  "sha": "b435bcbfaf",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Stop storing raw pointers in containers in SerializedScriptValue.cpp https://bugs.webkit"
+ },
+ {
+  "sha": "479cba7de8",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/fast/parser/xml-parser-detach-crash.html",
+  "tests": 1,
+  "sec": false,
+  "jsc": false,
+  "title": "ASAN_ILL | WebCore::XMLDocumentParser::detach; WebCore::Document::removedLastRef; WebCor"
+ },
+ {
+  "sha": "13585ff380",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Avoid heap-allocating CSSSelector in MutableCSSSelector https://bugs.webkit.org/show_bug"
+ },
+ {
+  "sha": "5de150e5b4",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "MessagePort::DataType does not need to have a SerializedScriptValue option rdar://169441"
+ },
+ {
+  "sha": "3ce7856bc4",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "WebKit is slow at opening very big HTML files https://bugs.webkit.org/show_bug.cgi?id=30"
+ },
+ {
+  "sha": "aff0077f73",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/fast/parser/html-parser-depth-limit-hang.html",
+  "tests": 1,
+  "sec": false,
+  "jsc": false,
+  "title": "Deeply nested <div> causes hang in parser (realistic example) https://bugs.webkit.org/sh"
+ },
+ {
+  "sha": "b271e70e72",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Allow Object.prototype to be serialized by structuredClone https://bugs.webkit.org/show_"
+ },
+ {
+  "sha": "414b33a529",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Short-circuit isParsingTemplateContents() with O(1) containsTemplateElement() check http"
+ },
+ {
+  "sha": "d093ebaada",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/fast/parser/xml-entity-reference-expansion-2.html",
+  "tests": 3,
+  "sec": true,
+  "jsc": false,
+  "title": "XML parser hangs in trying to expand deeply nested entity references https://bugs.webkit"
+ },
+ {
+  "sha": "87ee373497",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/fast/dom/NodeList/childNodes-reverse-iteration.html",
+  "tests": 3,
+  "sec": true,
+  "jsc": false,
+  "title": "innerText getter: fix blank line handling for <p> and headings, and strip trailing block"
+ },
+ {
+  "sha": "c58af30db1",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/editing/selection/doubleclick-beside-cr-span.html",
+  "tests": 1,
+  "sec": false,
+  "jsc": false,
+  "title": "innerText getter: preserve newlines for white-space:pre-line https://bugs.webkit.org/sho"
+ },
+ {
+  "sha": "2b861656bd",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Various build speed improvements https://bugs.webkit.org/show_bug.cgi?id=313934 rdar://1"
+ },
+ {
+  "sha": "4d33765661",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "innerText on tables emits spurious trailing newlines and drops row-exit newlines after e"
+ },
+ {
+  "sha": "ff2f768ad6",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Implement case sensitive modifier (s) in attribute selector https://bugs.webkit.org/show"
+ },
+ {
+  "sha": "30bf5b4225",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Split Style::DocumentScope out of Style::Scope https://bugs.webkit.org/show_bug.cgi?id=3"
+ },
+ {
+  "sha": "fab4ac5572",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/imported/w3c/web-platform-tests/css/selectors/nth-child-large-anplusb-clamp.html",
+  "tests": 1,
+  "sec": true,
+  "jsc": false,
+  "title": ":nth-child() An+B coefficients are converted from double to int without clamping https:/"
+ },
+ {
+  "sha": "84cde5ed5a",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/http/tests/broadcastchannel/postmessage-array.html",
+  "tests": 24,
+  "sec": false,
+  "jsc": true,
+  "title": "`SerializedScriptValue::deserialize` cannot be called more than once (affects BroadcastC"
+ },
+ {
+  "sha": "e0d162e570",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Migrate cloning cell terminal JS values to JSC https://bugs.webkit.org/show_bug.cgi?id=3"
+ },
+ {
+  "sha": "e20361406f",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "containsPlainText() re-scans the document head and misses matches past the first search-"
+ },
+ {
+  "sha": "c0625bcafb",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/js/dom/dom-exception-is-error.html",
+  "tests": 2,
+  "sec": true,
+  "jsc": false,
+  "title": "Error.isError() should return true for DOMException https://bugs.webkit.org/show_bug.cgi"
+ },
+ {
+  "sha": "045a0c6379",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/fast/storage/serialized-script-value.html",
+  "tests": 2,
+  "sec": false,
+  "jsc": false,
+  "title": "DOMException should have a stack property, like other errors https://bugs.webkit.org/sho"
+ },
+ {
+  "sha": "7390911815",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/fast/selectors/selector-filter-hashes.html",
+  "tests": 2,
+  "sec": true,
+  "jsc": false,
+  "title": "Optimize attribute selector [class~=foo] like class selector https://bugs.webkit.org/sho"
+ },
+ {
+  "sha": "d719d23779",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/fast/canvas/hdr/float16-canvas-drawimage-imagebitmap-accelerated-display-p3.html",
+  "tests": 10,
+  "sec": false,
+  "jsc": false,
+  "title": "createImageBitmap-from-hdr https://bugs.webkit.org/show_bug.cgi?id=324399 rdar://1876321"
+ },
+ {
+  "sha": "165f9ed4d0",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Make CString's raw-byte constructors reachable only through CStringWithEncoding on Cocoa"
+ },
+ {
+  "sha": "35090d6160",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/editing/pasteboard/copy-select-excludes-user-agent-shadow-tree.html",
+  "tests": 3,
+  "sec": true,
+  "jsc": false,
+  "title": "Mark HTMLEnhancedSelectMultipleAndListBoxEnabled testable https://bugs.webkit.org/show_b"
+ },
+ {
+  "sha": "21862acf2c",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Preserve QuotaExceededError when structured cloning https://bugs.webkit.org/show_bug.cgi"
+ },
+ {
+  "sha": "86d0164f83",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Generate structured deserialization exposure checks from IDL https://bugs.webkit.org/sho"
+ },
+ {
+  "sha": "83fa59d858",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Fix uncounted call arguments warnings in Source/WebCore after 2026-10-06 rollout - part "
+ },
+ {
+  "sha": "ce011e7c0b",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/imported/w3c/web-platform-tests/webcodecs/videoFrame-alpha-discard.any.html",
+  "tests": 9,
+  "sec": false,
+  "jsc": false,
+  "title": "Drawing a BGRX VideoFrame should disregard the alpha component rdar://189794952 https://"
+ },
+ {
+  "sha": "eb71e0180b",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": true,
+  "jsc": false,
+  "title": "Annotate functions in Source/WebCore/html as NODELETE https://bugs.webkit.org/show_bug.c"
+ },
+ {
+  "sha": "3199d04f22",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Annotate functions in Source/WebCore/bindings as NODELETE https://bugs.webkit.org/show_b"
+ },
+ {
+  "sha": "f5fa7b5d46",
+  "worst": "VULN-SHAPE",
+  "test": "",
+  "tests": 0,
+  "sec": false,
+  "jsc": false,
+  "title": "Annotate functions in Source/WebCore/editing as NODELETE https://bugs.webkit.org/show_bu"
+ },
+ {
+  "sha": "7d12474f8d",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/fast/parser/html-processing-instruction-enabled.html",
+  "tests": 2,
+  "sec": true,
+  "jsc": false,
+  "title": "Parse processing instructions in HTML https://bugs.webkit.org/show_bug.cgi?id=326324"
+ },
+ {
+  "sha": "202ef7bf88",
+  "worst": "VULN-SHAPE",
+  "test": "LayoutTests/imported/w3c/web-platform-tests/html/document-isolation-policy/cross-origin-isolated-permissions-policy.tentative.https.html",
+  "tests": 3,
+  "sec": true,
+  "jsc": false,
+  "title": "Serializing a SharedArrayBuffer only requires a cross-origin isolated process https://bu"
+ }
+]
