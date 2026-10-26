@@ -190,3 +190,41 @@ case; this class has to be caught by checking that the *mechanism* the fix refer
 Of 340 memory-safety patches examined (141 targeted + 191 write/race/uninit), 27 keep a contiguous pre-fix
 block and only a handful touch subsystems this build actually ships. That is the real finding of this
 round: the surface is small and Sony's backports are competent, not that the search was idle.
+
+## CONFIRMED: OOB read in the vertical font parser, reachable from CSS alone
+
+`@font-face` with a crafted font drives `OpenTypeVerticalData` into a heap-buffer-overflow **read**. ASAN,
+on Sony's own tree:
+
+```
+READ of size 2 at 0x6070000ef33a
+  #0 WebCore::OpenType::BigEndianUShort::operator unsigned short()   OpenTypeTypes.h:44
+  #7 WebCore::OpenType::LookupTable::getSubstitutions()              OpenTypeVerticalData.cpp:182
+  #9   GSUBTable::getVerticalGlyphSubstitutions()
+  #10  OpenTypeVerticalData::loadVerticalGlyphSubstitutions()        :493
+  #13  FontCache::verticalData(FontPlatformData const&)
+  #21  CachedFont::createFont                                        (i.e. @font-face)
+  #24  CSSFontFace::font
+```
+
+`fromEnd = end + 1` is `uint16_t`, so a Coverage Format 2 range whose `end` is `0xFFFF` yields `fromEnd == 0`;
+`indexTo + (fromEnd - from)` then underflows to -1 and the guard passes, after which
+`for (; from != fromEnd; ++from, ++indexTo) map->set(from, substitute[indexTo])` walks from `start` to
+`0xFFFF` against a `substitute` array validated for one entry.
+
+Font: `tools/fw1400/build_gsub_font.py` builds a 1008-byte TTF with minimal glyf/cmap/hmtx, **vhea+vmtx**
+(loadMetrics returns early without them, so the vertical path is never entered) and a hand-written GSUB
+carrying the poisoned range. Reproducer `guide_lab/www/cases/c013-font-gsub-oob.js` inlines the font as a
+`data:` URI, so it needs nothing from the lab server.
+
+**On the console it does not crash.** The case beacons `font-loaded:1` then `rendered`, and the process
+survives: the read walks ~128 KB past a 2-byte array, and on retail that memory is mapped, so the loop
+reads garbage instead of faulting. The bug is present and reached (same code, same font) but its effect
+there is a silent out-of-bounds read, not a crash. No path was found from the read values (glyph ids
+inserted into a `HashMap<uint16_t,uint16_t>` used for substitution) back to script, so it is not a leak
+primitive either.
+
+Why it still matters: it proves the **font parser is a live, unhardened surface reachable with zero
+interaction** - an `@font-face` rule alone is enough, before any text is looked at. That is now the most
+promising place to spend the next round, and unlike the DOM/CSS work it can be driven entirely by the local
+ASAN build.

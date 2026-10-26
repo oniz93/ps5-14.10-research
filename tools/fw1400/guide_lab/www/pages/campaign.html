@@ -30,8 +30,19 @@
   }
   function setCursor(c) { try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {} }
 
+  var SIG = KEY + '-sig';
   fetch('/cases/manifest.json', { cache: 'no-store' }).then(function (r) { return r.json(); })
   .then(function (cases) {
+    // A cursor is only meaningful for the corpus it was written against. Without this, editing the
+    // manifest leaves the cursor pointing at a different case - or past the end, so a fresh corpus
+    // never runs at all.
+    try {
+      var sig = cases.join('|');
+      if (localStorage.getItem(SIG) !== sig) {
+        localStorage.setItem(SIG, sig);
+        setCursor({ i: 0, a: 0 });
+      }
+    } catch (e) {}
     var c = cursor();
     beacon('BOOT', cases.length + '-from-' + c.i + '-a' + c.a);
     if (c.a >= 2) { line('bad', c.i + ' skipped after 2 attempts'); c = { i: c.i + 1, a: 0 }; }

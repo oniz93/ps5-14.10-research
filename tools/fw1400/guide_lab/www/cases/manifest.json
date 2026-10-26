@@ -1,13 +1,4 @@
 [
  "c000-control.js",
- "c008-xml-parser-detach.js",
- "c009-svg-feimage-reentrant.js",
- "c006-capability.js",
- "c001-page-detached.js",
- "c002-grouping-churn.js",
- "c003-clone-gc.js",
- "c004-serialize-reentrancy.js",
- "c005-serialize-mutate.js",
- "c010-broadcastchannel-deserialize.js",
- "c011-trusted-types-detach.js"
+ "c013-font-gsub-oob.js"
 ]
