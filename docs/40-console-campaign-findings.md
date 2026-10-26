@@ -120,3 +120,35 @@ two automated gates then cut it to 10:
 
 An era gate also applies: a fix for `REGRESSION(322468@main)` cannot exist in a September-2023 snapshot,
 however familiar the surrounding code looks. `--snapshot-rev` defaults to 268000 and drops later ones.
+
+## Killed: array-index / tag confusion (bug 262616) is not reachable from JavaScript
+
+The deserializer really does confuse an index of `0xFFFFFFFD` with `NonIndexPropertiesTag`, and Sony's
+tree is pre-fix. But the *serializer* walks the array's index range, so producing the malicious stream
+from JS is impractical. Measured in the local ASAN build with the same page reporting through beacons:
+
+| event | result |
+|---|---|
+| `small-index:ok:19ms` | `a[100000] = 'x'; structuredClone(a)` round-trips in 19 ms |
+| `big-alloc:0ms` | `b[4294967293] = 'y'` is instant |
+| `big-index:...` | **never arrives** — `structuredClone(b)` hangs |
+
+Upstream's own reproducer injects a hand-built byte stream for exactly this reason, so the bug needs a
+sender that can supply serialized bytes — a sandbox-escape direction, not an entry point. Dead for a
+WebView entry; recorded so it is not re-chased.
+
+## The local ASAN oracle now works (recipe that matters)
+
+Getting a page-driven answer out of the ASAN build needed four things, and each failure looks like a
+WebKit bug rather than a harness bug:
+
+1. `ASAN_OPTIONS=...:detect_stack_use_after_return=0`. JSC scans the raw stack for GC roots; ASAN's fake
+   stack lives elsewhere, so the scanner walks unmapped memory and SEGVs. Every run aborted inside GC.
+2. `WEBKIT_DISABLE_COMPOSITING_MODE=1` keeps rendering in-process so faults land in the instrumented
+   build rather than a separate GPU process.
+3. Run **inside the wk distrobox**: on the host, `libasan.so.8` is missing and every run exits 127.
+4. Serve the page over HTTP and report through image GETs. A `file://` page has an opaque origin and its
+   `sendBeacon` calls are dropped, which is indistinguishable from "the page never ran"; MiniBrowser does
+   not forward `console.log`.
+
+`/tmp/run_asan_page.sh` wraps 1-3; the http.server access log supplies the results.
