@@ -28,12 +28,18 @@ def parse_patch(path):
     """Return (files, test_added, subject). files maps repo path -> list of deleted line bodies."""
     text = open(path, encoding="utf-8", errors="replace").read()
     if not text.startswith("From "):
-        return {}, False, ""
+        return {}, False, "", False, None
 
     subject = ""
     m = re.search(r"^Subject: \[PATCH\]\s*(.*?)(?:\n\n|\n\*|\Z)", text, re.S | re.M)
     if m:
         subject = " ".join(m.group(1).split())
+    # Era gate: a fix for a REGRESSION(<rev>) can only apply if the regression predates the snapshot the
+    # vendor froze. Sony's tree is the Safari 17.0 GA cut (Sept 2023, ~rev 268000); a regression
+    # introduced by rev 322468 cannot be present no matter how familiar the surrounding code looks.
+    reg = re.search(r"REGRESSION\((\d+)@", subject)
+    regression_rev = int(reg.group(1)) if reg else None
+    is_regression = regression_rev is not None
 
     files, cur = {}, None
     test_added = False
@@ -55,7 +61,28 @@ def parse_patch(path):
         if len(body) < 12:
             continue
         files[cur].append(body)
-    return files, test_added, subject
+    return files, test_added, subject, is_regression, regression_rev
+
+
+# Subsystems the target build does not ship, measured on the console: WebGL/ANGLE, WebGPU, WebRTC,
+# Web Audio, WebCodecs, EME/CDM, WebXR, wasm, IndexedDB, service workers and OffscreenCanvas are all
+# absent, and JSC's optimising tiers are compiled out (ENABLE_JIT=0, confirmed by the cold/warm oracle).
+# A perfectly intact pre-fix block in one of these is uninteresting: there is no way to run it.
+DEAD_SURFACES = (
+    "Source/ThirdParty/ANGLE/", "Source/WebCore/platform/graphics/angle/",
+    "Source/WebCore/Modules/webxr/", "Source/WebCore/Modules/webaudio/",
+    "Source/WebCore/Modules/webrtc/", "Source/WebCore/platform/mediastream/",
+    "Source/WebCore/Modules/webcodecs/", "Source/WebCore/Modules/encryptedmedia/",
+    "Source/WebCore/Modules/indexeddb/", "Source/WebCore/Modules/cache/",
+    "Source/WebCore/workers/service/", "Source/WebCore/html/canvas/WebGL",
+    "Source/JavaScriptCore/dfg/", "Source/JavaScriptCore/ftl/", "Source/JavaScriptCore/b3/",
+    "Source/JavaScriptCore/wasm/", "Source/JavaScriptCore/jit/",
+    "Source/WebCore/Modules/offscreencanvas/",
+)
+
+
+def dead_surface(path):
+    return any(path.startswith(d) for d in DEAD_SURFACES)
 
 
 def normalise(s):
@@ -69,6 +96,9 @@ def main():
     ap.add_argument("--json", help="write full results here")
     ap.add_argument("--min-lines", type=int, default=1,
                     help="how many deleted lines must still be present")
+    ap.add_argument("--snapshot-rev", type=int, default=268000,
+                    help="WebKit revision of the vendor snapshot; newer REGRESSION() ids are excluded")
+    ap.add_argument("--keep-regressions", action="store_true")
     args = ap.parse_args()
 
     paths = []
@@ -77,13 +107,15 @@ def main():
 
     cache, rows = {}, []
     for patch in paths:
-        files, test_added, subject = parse_patch(patch)
+        files, test_added, subject, is_regression, regression_rev = parse_patch(patch)
         sha = os.path.basename(patch).split(".")[0]
         total_removed = total_present = 0
         best_run, best_text = 0, ""
         evidence = []
         for repo_path, deleted in files.items():
             if not repo_path.startswith("Source/"):
+                continue
+            if dead_surface(repo_path):
                 continue
             target = os.path.join(args.tree, repo_path)
             if target not in cache:
@@ -114,11 +146,22 @@ def main():
             "removed": total_removed, "present": total_present,
             "block": best_run, "block_text": best_text,
             "crash_test": bool(re.search(r"crash|uaf|overflow|assert|security", subject, re.I)),
+            "regression": is_regression, "regression_rev": regression_rev,
             "files": sum(1 for p in files if p.startswith("Source/")),
+            "live_files": sum(1 for p in files
+                              if p.startswith("Source/") and not dead_surface(p)),
             "evidence": evidence,
         })
 
     rows.sort(key=lambda r: (r["block"], r["test"]), reverse=True)
+
+    if not args.keep_regressions:
+        # Keep regressions that predate the snapshot (those can be real) and drop later ones outright.
+        rows = [r for r in rows
+                if not (r["regression"] and (r["regression_rev"] or 0) > args.snapshot_rev)]
+
+    # Only patches that touch at least one live file can be exercised at all.
+    rows = [r for r in rows if r.get("live_files", r["files"]) > 0]
 
     kept = [r for r in rows if r["block"] >= args.min_lines]
     print(f"{len(rows)} patches . {len(kept)} keep a contiguous pre-fix block (>= {args.min_lines} lines)\n")

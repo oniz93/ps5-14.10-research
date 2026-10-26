@@ -160,6 +160,14 @@ def main():
         log.write(json.dumps(entry) + "\n")
         print(f"stall -> {state} {evidence} (case {idx})", flush=True)
 
+        if state == "LOW_MEMORY":
+            # Not recoverable by keyboard, and every further capture would be this dialog. Stop rather
+            # than keep pressing: a run that continues here reports nothing but its own artifact.
+            log.write(json.dumps({"t": time.strftime("%H:%M:%S"), "event": "ALARM",
+                                  "reason": "console out of memory; keyboard cannot dismiss"}) + "\n")
+            print("ALARM: console reports low memory - stopping instead of pressing", flush=True)
+            return 3
+
         if state == "UPDATE_PROMPT":
             # Never. This dialog is the one thing input automation must not touch.
             log.write(json.dumps({"t": time.strftime("%H:%M:%S"), "event": "ALARM",

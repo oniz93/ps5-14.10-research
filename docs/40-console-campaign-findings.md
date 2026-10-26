@@ -75,3 +75,48 @@ matching across versions and means nothing.
 - That memory dialog **does not accept keyboard input** (three Enters did nothing), unlike the `WV-`
   network dialogs where Enter works. The supervisor classifies it `UNKNOWN` and keeps pressing; it should
   be its own alarm state.
+
+## Strongest live candidate: array-index / tag confusion in structured clone
+
+Upstream fix `3a900e192f` (Mark Lam, 2023-12-14), bug 262616:
+
+> `NonIndexPropertiesTag` is `0xFFFFFFFD`, which is less than `MAX_ARRAY_INDEX` (`0xFFFFFFFE`), i.e. an
+> index of `0xFFFFFFFD` can be confused for the `NonIndexPropertiesTag`, resulting type confusion.
+
+The serializer terminates an array's indexed-property section with that very value, so the deserializer
+cannot distinguish "this array has an element at 4294967293" from "the indexed section ends here". It
+stops early and parses the remaining bytes as non-index properties. That is a **type confusion inside
+`structuredClone`**, reachable from ordinary JavaScript with no crafted byte stream:
+
+```js
+var a = [];
+a[4294967293] = 'x';        // 0xFFFFFFFD is a legal array index
+structuredClone(a);         // deserializer reads the index as the terminator
+```
+
+Sony's tree is still pre-fix: `TerminatorTag = 0xFFFFFFFF` and `NonIndexPropertiesTag = 0xFFFFFFFD` at
+`SerializedScriptValue.cpp:679/681`, the bare `write(NonIndexPropertiesTag)` at `:2539`, and the
+`index == NonIndexPropertiesTag` test at `:4869`. The upstream fix changes the wire format to always
+emit a `TerminatorTag` first, which is why the whole file had to change rather than one comparison.
+
+Reproducer staged as `guide_lab/www/cases/c012-array-index-tag-confusion.js`. It beacons
+`roundtrip-ok` / `wrong-value` / `threw`, so a clean result is distinguishable from a dead process.
+
+Status: not yet run on the console - it is parked on the low-memory dialog, which the supervisor now
+treats as an alarm instead of pressing keys into it.
+
+## How the candidate list was rebuilt
+
+The sweep's ranking was dominated by refactors. Replacing it with targeted commit search
+(`use-after-free`, `out-of-bounds`, `type confusion`, since the 17.0 cut) gave 141 memory-safety commits;
+two automated gates then cut it to 10:
+
+1. **Presence** - does a contiguous run (>= 3 lines) of the lines the fix deletes still exist in Sony's
+   tree? Isolated single-line matches are noise (a `case VideoPixelFormat::RGBX:` label exists in every
+   version).
+2. **Reachability** - drop patches that only touch subsystems this build does not ship: ANGLE/WebGL,
+   WebGPU, WebRTC, Web Audio, WebCodecs, EME, WebXR, IndexedDB, service workers, OffscreenCanvas, and
+   JSC's optimising tiers (compiled out).
+
+An era gate also applies: a fix for `REGRESSION(322468@main)` cannot exist in a September-2023 snapshot,
+however familiar the surrounding code looks. `--snapshot-rev` defaults to 268000 and drops later ones.

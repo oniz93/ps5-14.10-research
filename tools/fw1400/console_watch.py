@@ -27,7 +27,7 @@ import tempfile
 import time
 from pathlib import Path
 
-STATES = ("UPDATE_PROMPT", "NET_ERROR", "PS_ERROR", "GUIDE", "SYSTEM_UI", "UNKNOWN")
+STATES = ("UPDATE_PROMPT", "LOW_MEMORY", "NET_ERROR", "PS_ERROR", "GUIDE", "SYSTEM_UI", "UNKNOWN")
 
 # Ordered: the first match wins, so the alarm state is checked before anything else.
 RULES = [
@@ -38,6 +38,11 @@ RULES = [
     # Network/service failures (WV- codes) are not crashes: the console cannot reach PSN because the
     # lab DNS NXDOMAINs Sony's estate. Distinguished from PS_ERROR so a run is not reported as a
     # WebProcess failure, and given no automatic recovery - it is dismissed with the controller.
+    # Console memory exhaustion. Distinct from every other dialog because the keyboard cannot dismiss
+    # it: three Enters did nothing, while the WV- network dialogs accept Enter. An input harness that
+    # keeps pressing here spins forever and its screenshots are all this dialog, which silently
+    # invalidates any run it is supervising.
+    ("LOW_MEMORY", re.compile(r"not enough free system memory|free system memory", re.I)),
     ("NET_ERROR", re.compile(
         r"\bWV-\d{5}-\d\b|can'?t connect to the server|"
         r"problem connecting to the network|could not connect to the (server|network)", re.I)),

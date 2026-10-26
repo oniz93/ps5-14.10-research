@@ -20,3 +20,6 @@
 {"ts": 1793031360.1827898, "state": "UNKNOWN", "evidence": "", "lines": ["There is not enough free system memory."]}
 {"ts": 1793031374.366244, "state": "UNKNOWN", "evidence": "", "lines": ["There is not enough free system memory."]}
 {"ts": 1793031407.102622, "state": "UNKNOWN", "evidence": "", "lines": []}
+{"ts": 1793032603.896914, "state": "UNKNOWN", "evidence": "", "lines": []}
+{"ts": 1793032688.3704052, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
+{"ts": 1793032870.673999, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
