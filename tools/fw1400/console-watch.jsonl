@@ -31,3 +31,4 @@
 {"ts": 1793034785.316274, "state": "UNKNOWN", "evidence": "", "lines": []}
 {"ts": 1793041221.8367512, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
 {"ts": 1793041380.866466, "state": "UNKNOWN", "evidence": "", "lines": []}
+{"ts": 1793042139.531368, "state": "UNKNOWN", "evidence": "", "lines": ["\u2022 Reload", "L / R3 Zoom", "\u2022 Options"]}
