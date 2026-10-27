@@ -80,6 +80,19 @@
     document.getElementById('s').textContent = 'manifest error: ' + e;
     beacon('MANIFEST-ERROR', String(e).slice(0, 80));
   });
+
+  // Hot reload. The guide URL carries no query string, so there is no way to navigate from script and a
+  // physical reload per experiment puts a person in the loop for nothing. Poll the manifest and reload
+  // when the corpus changes; the cursor signature logic above then starts the new corpus at case 0.
+  var lastSig = null;
+  setInterval(function () {
+    fetch('/cases/manifest.json', { cache: 'no-store' }).then(function (r) { return r.json(); })
+    .then(function (cs) {
+      var sig = cs.join('|');
+      if (lastSig === null) { lastSig = sig; return; }
+      if (sig !== lastSig) { lastSig = sig; beacon('HOTRELOAD', sig.slice(0, 60)); location.reload(); }
+    }).catch(function () {});
+  }, 3000);
 })();
 </script>
 </html>

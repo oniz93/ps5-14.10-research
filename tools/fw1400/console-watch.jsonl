@@ -36,3 +36,8 @@
 {"ts": 1793047558.057445, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
 {"ts": 1793047580.376765, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
 {"ts": 1793052466.8776472, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
+{"ts": 1793054707.2344089, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory.", "OK"]}
+{"ts": 1793066672.646558, "state": "GUIDE", "evidence": "Guide", "lines": ["Guide & Tips, Health & Safety, and Other Information", "User's Guide", "Discover Tips"]}
+{"ts": 1793066748.956723, "state": "UNKNOWN", "evidence": "", "lines": ["There is not enough free system mem"]}
+{"ts": 1793066777.257898, "state": "UNKNOWN", "evidence": "", "lines": []}
+{"ts": 1793067093.3679712, "state": "UNKNOWN", "evidence": "", "lines": ["There is not enough free system memo"]}
