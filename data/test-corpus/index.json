@@ -1,0 +1,470 @@
+[
+ {
+  "patch": "d3de21e23bc8d8443a47227ed0027e7c92b566db.patch",
+  "subject": "[PATCH] Add bounds checks to platformImportSpki and platformImportPkcs8 rdar://173548767 https://bugs.webkit.org/show_bug.cgi?id=311703",
+  "tests": [
+   "LayoutTests/crypto/subtle/ec-import-pkcs8-empty-key-data.html",
+   "LayoutTests/crypto/subtle/ec-import-pkcs8-invalid-length.html",
+   "LayoutTests/crypto/subtle/ec-import-pkcs8-truncated-key.html",
+   "LayoutTests/crypto/subtle/ec-import-spki-empty-key-data.html",
+   "LayoutTests/crypto/subtle/ec-import-spki-invalid-length.html",
+   "LayoutTests/crypto/subtle/ec-import-spki-truncated-key.html",
+   "LayoutTests/crypto/subtle/rsa-import-pkcs8-empty-key-data.html",
+   "LayoutTests/crypto/subtle/rsa-import-pkcs8-invalid-length.html",
+   "LayoutTests/crypto/subtle/rsa-import-pkcs8-truncated-key.html",
+   "LayoutTests/crypto/subtle/rsa-import-spki-empty-key-data.html",
+   "LayoutTests/crypto/subtle/rsa-import-spki-invalid-length.html",
+   "LayoutTests/crypto/subtle/rsa-import-spki-truncated-key.html"
+  ]
+ },
+ {
+  "patch": "7224709bf0747d1cb8f7d52e65cc7900e91fdb75.patch",
+  "subject": "[PATCH] [threaded-animations] cross-thread UAF in UIProcess via unguarded static TinyLRUCache in AcceleratedEffect polygon path cache https://bugs.webkit.org/show_bug.cgi?id=317919 rdar://180233994",
+  "tests": [
+   "LayoutTests/webanimations/threaded-animations/offset-path-shape-cache-thread-safety-crash.html"
+  ]
+ },
+ {
+  "patch": "f457aa2ebeca6492031580b2288bb19e22b5e921.patch",
+  "subject": "[PATCH] heap-use-after-free in Style::commitRelations via MatchResultCache https://bugs.webkit.org/show_bug.cgi?id=319413 rdar://180282897",
+  "tests": [
+   "LayoutTests/fast/css/match-result-cache-has-style-relation-crash.html"
+  ]
+ },
+ {
+  "patch": "a14d1c0731137bfcf330d8706fadd983b9834b17.patch",
+  "subject": "[PATCH] Safari & Chrome for iOS: Use-after-free in WebKit libwebrtc `RtpTransceiver` codec state reachable via `RTCRtpTransceiver.setCodecPreferences` after garbage-collected `RTCPeerConnection` rdar:",
+  "tests": [
+   "LayoutTests/webrtc/transceiver-setCodecPreferences-closed.html"
+  ]
+ },
+ {
+  "patch": "3e5b31e006359db053de870eaacfede629f49c64.patch",
+  "subject": "[PATCH] use-after-free of AudioParam via cross-thread non-atomic ref/deref in AudioNodeOutput::disconnectAllParams() rdar://177930032",
+  "tests": [
+   "LayoutTests/webaudio/AudioParam/audioparam-cross-thread-ref-deref-crash.html"
+  ]
+ },
+ {
+  "patch": "1d46772984f6a2857ade7cd1e2e93d04ab37780f.patch",
+  "subject": "[PATCH] [WebXR] Use-after-free when ending an XRSession whose owning WebXRSystem has been garbage collected rdar://175674872",
+  "tests": [
+   "LayoutTests/webxr/xr-session-end-after-cross-realm-system-gc.html"
+  ]
+ },
+ {
+  "patch": "5b391e6d3b14d549908dad2c6695999291313f30.patch",
+  "subject": "[PATCH] Out-of-bounds write in PNGImageDecoder::frameComplete() ICC transform",
+  "tests": [
+   "LayoutTests/fast/images/animated-png-icc-transform-crash.html"
+  ]
+ },
+ {
+  "patch": "7b7429195b075c5c4332d5a436cf605516912c23.patch",
+  "subject": "[PATCH] Use-after-free in LocalFrameView::scrollToAnchorFragment via NavigateEvent:finish https://bugs.webkit.org/show_bug.cgi?id=313606",
+  "tests": [
+   "LayoutTests/navigation-api/navigation-api-fragment-intercept-crash.html"
+  ]
+ },
+ {
+  "patch": "5aedb82710ba578f61501106e78f6b25b7f7a558.patch",
+  "subject": "[PATCH] Use-after-free in CSSFontFace::setStatus via CSSFontFace::load https://bugs.webkit.org/show_bug.cgi?id=313577 rdar://175766724",
+  "tests": [
+   "LayoutTests/fonts/font-face-load-crash.html"
+  ]
+ },
+ {
+  "patch": "60c138fa85eaebab3407056462971fccf66f1d7c.patch",
+  "subject": "[PATCH] Downcast crash when grid item requests fullscreen with container-type parent https://bugs.webkit.org/show_bug.cgi?id=303417 rdar://163028025",
+  "tests": [
+   "LayoutTests/fullscreen/fullscreen-grid-item-container-type-crash.html"
+  ]
+ },
+ {
+  "patch": "8384c8455e7b5bc40b42c8cc7e9336b519d6cd80.patch",
+  "subject": "[PATCH] Type Confusion in RTCEncodedStreamProducer.cpp Results in OOB Read https://bugs.webkit.org/show_bug.cgi?id=311131 rdar://173718825",
+  "tests": [
+   "LayoutTests/http/wpt/webrtc/audio-video-transform.js",
+   "LayoutTests/http/wpt/webrtc/audiovideo-script-transform.html"
+  ]
+ },
+ {
+  "patch": "ba3be26a064abdfdcc87698f202ff0be33452663.patch",
+  "subject": "[PATCH] [WebCore]=20use-after-free=20in=20Style::TreeRe solver=20=E2=80=94=20XMLDocumentParser::startElementNs=20missin g=20parentNode=20re-check=20after=20custom-element=20upgrade=20 rdar://177479772",
+  "tests": [
+   "LayoutTests/fast/custom-elements/xml-parser-reparent-during-construction-crash.xhtml"
+  ]
+ },
+ {
+  "patch": "5549b3663c5d3904eab780389cd14c58523d1dfa.patch",
+  "subject": "[PATCH] Use-after-free of ScriptExecutionContext in trustedTypeCompliantString https://bugs.webkit.org/show_bug.cgi?id=317320 rdar://177766868",
+  "tests": [
+   "LayoutTests/fast/html/trusted-types-set-attribute-iframe-removal-crash.html"
+  ]
+ },
+ {
+  "patch": "cf0a14a0f239bd54510623530f01b1ddee0214b4.patch",
+  "subject": "[PATCH] [WebGPU] Per-buffer m_mustTakeSlowIndexValidationPath cleared between command buffers leads to GPU OOB vertex fetch https://bugs.webkit.org/show_bug.cgi?id=314835 rdar://176482961",
+  "tests": [
+   "LayoutTests/fast/webgpu/nocrash/index-buffer-invalidation-multi-command-buffer.html"
+  ]
+ },
+ {
+  "patch": "808e77190fcf15156e06761c31e79230b166c8d0.patch",
+  "subject": "[PATCH] Out-of-bounds read in CtapHidDriver when a CTAPHID_INIT response is too short https://bugs.webkit.org/show_bug.cgi?id=320344 rdar://problem/183363731",
+  "tests": [
+   "LayoutTests/http/wpt/webauthn/ctap-hid-failure.https.html"
+  ]
+ },
+ {
+  "patch": "be08720593705c04826f1e0804581ea8aafb2748.patch",
+  "subject": "[PATCH] [WebCore] Use-after-free in `DataListButtonElement::defaultEventHandler` https://bugs.webkit.org/show_bug.cgi?id=313521 rdar://175672489",
+  "tests": [
+   "LayoutTests/fast/forms/datalist/datalist-button-change-input-type-on-click-crash.html"
+  ]
+ },
+ {
+  "patch": "55d9d9007f54ee61fa38accb59cd88a8d4075847.patch",
+  "subject": "[PATCH] Use-after-free in MediaElementAudioSourceNode::provideInput when iframe is detached https://bugs.webkit.org/show_bug.cgi?id=315989 rdar://175673159",
+  "tests": [
+   "LayoutTests/webaudio/mediaelementsource-clear-detached-frame.html"
+  ]
+ },
+ {
+  "patch": "b6f26e020fae9433af5d751db1149ccec14a837f.patch",
+  "subject": "[PATCH] Avoid out-of-bounds read in isPlayReadySanitizedInitializationData https://bugs.webkit.org/show_bug.cgi?id=",
+  "tests": [
+   "LayoutTests/media/encrypted-media/mock-MediaKeySession-generateRequest-cenc-unterminated-crash.html"
+  ]
+ },
+ {
+  "patch": "ccb3ee3ebe364b5b8df6a7e100ae682496f3c6a7.patch",
+  "subject": "[PATCH] Use-after-free on SecurityOrigin in NavigationScheduler::scheduleLocationChange https://bugs.webkit.org/show_bug.cgi?id=313612 rdar://175673312",
+  "tests": [
+   "LayoutTests/http/tests/workers/service/navigate-client-from-service-worker.html"
+  ]
+ },
+ {
+  "patch": "96ec73a1e57d67618055237272f866849103669c.patch",
+  "subject": "[PATCH] Type confusion in ReadableStream when cancel returns a fake Promise object https://bugs.webkit.org/show_bug.cgi?id=312357 rdar://174652787",
+  "tests": [
+   "LayoutTests/streams/readable-stream-fake-promise-crash.html"
+  ]
+ },
+ {
+  "patch": "87d203651d8a2fd077eebd5d18b7dc1492fa0f6b.patch",
+  "subject": "[PATCH] Type confusion in ReadableStream.cancel() via jsCast<JSPromise*> https://bugs.webkit.org/show_bug.cgi?id=313706 rdar://174938744",
+  "tests": [
+   "LayoutTests/streams/readable-stream-cancel-fake-promise-crash.html"
+  ]
+ },
+ {
+  "patch": "866892a3052f6739cffd35175d93b0d238091b29.patch",
+  "subject": "[PATCH] [CoreIPC][GPUProcess] UserMediaCaptureManagerProxy::startProducingData races prepareAudioDescription() against audioSamplesAvailable() lead to various UAF/write-after-unmap https://bugs.webkit",
+  "tests": [
+   "LayoutTests/ipc/usermedia-capture-start-producing-data-race.html"
+  ]
+ },
+ {
+  "patch": "e75354878ca37205ff0f69e9e8dedefd20d8c479.patch",
+  "subject": "[PATCH] Type confusion via raw Exception cell returned to script from callPromisePairFunction when throwVMError bypasses sentinel check https://bugs.webkit.org/show_bug.cgi?id=314944 rdar://177031898",
+  "tests": [
+   "LayoutTests/navigation-api/navigation-navigate-no-arguments-crash.html"
+  ]
+ },
+ {
+  "patch": "e0558372aafca3e5ed5bcc50d0950b60e22e281a.patch",
+  "subject": "[PATCH] Use-after-free in CanvasRenderingContext2DBase::beginLayer via realizeSavesLoop early exit https://bugs.webkit.org/show_bug.cgi?id=318378 <rdar://175228541>",
+  "tests": [
+   "LayoutTests/fast/canvas/canvas-layer-after-max-save-count.html"
+  ]
+ },
+ {
+  "patch": "d40f4efab0e0cee61e29c8540abff5285bf5275d.patch",
+  "subject": "[PATCH] [WebCore] Use-after-free in ImageLoader::dispatchPendingLoadEvent / dispatchPendingErrorEvent rdar://177909775",
+  "tests": [
+   "LayoutTests/fast/images/image-load-event-in-modal-dialog-crash.html"
+  ]
+ },
+ {
+  "patch": "a8459d453b2b90948bcfd1d8620c8a1ceb266eab.patch",
+  "subject": "[PATCH] Heap use-after-free of XSLStyleSheet::m_stylesheetDoc after libxslt frees imported doc on compile failure <https://bugs.webkit.org/show_bug.cgi?id=312337> <rdar://174646751>",
+  "tests": [
+   "LayoutTests/http/tests/xsl/xslt-import-delayed-subresource-crash.html"
+  ]
+ },
+ {
+  "patch": "cb83583e5f4d955355574006a1bebf4b98a42a5d.patch",
+  "subject": "[PATCH] Use-after-free of Document in trustedTypeCompliantString https://bugs.webkit.org/show_bug.cgi?id=313703 rdar://175673135",
+  "tests": [
+   "LayoutTests/fast/dom/trusted-types-iframe-removal-crash.html"
+  ]
+ },
+ {
+  "patch": "76c4d04808578cda9425ec80246098d32a7be83c.patch",
+  "subject": "[PATCH] Expect INVALID_VALUE for out-of-bounds compressed texture dimensions https://bugs.webkit.org/show_bug.cgi?id=322958 rdar://186229626",
+  "tests": [
+   "LayoutTests/fast/canvas/webgl/webgl-compressed-texture-size-limit.html"
+  ]
+ },
+ {
+  "patch": "e269e1967d8d2dd0d4b1ba8bedd38900a46b6102.patch",
+  "subject": "[PATCH] Out-of-bounds read in BMP RLE24 absolute-mode decoding https://bugs.webkit.org/show_bug.cgi?id=321680",
+  "tests": [
+   "LayoutTests/fast/images/bmp-rle24-absolute-run-crash.html"
+  ]
+ },
+ {
+  "patch": "7a9d14998def6f77f60708cb89c5e68db69982e5.patch",
+  "subject": "[PATCH] [JSC] TypedArray.from() Out-of-Bounds Read via Resizable ArrayBuffer resize/transfer in mapFn callback. https://bugs.webkit.org/show_bug.cgi?id=312513 rdar://174428778",
+  "tests": [
+   "JSTests/stress/typedarray-from-oob.js"
+  ]
+ },
+ {
+  "patch": "44ba2b5c111ec26ba583c657cb32bfc9f7f01084.patch",
+  "subject": "[PATCH] Script-triggerable crash inserting an @namespace rule after an @import rule via CSSOM https://bugs.webkit.org/show_bug.cgi?id=317517",
+  "tests": [
+   "LayoutTests/imported/w3c/web-platform-tests/css/cssom/insertRule-namespace-after-import.html"
+  ]
+ },
+ {
+  "patch": "9197450e126a7cb9906153e40ad0c97e731fec73.patch",
+  "subject": "[PATCH] MallocSpan crash in GPUQueue::copyExternalImageToTexture https://bugs.webkit.org/show_bug.cgi?id=324153 rdar://187345349",
+  "tests": [
+   "LayoutTests/fast/webgpu/copy-external-image-video-frame-odd-width.html",
+   "LayoutTests/fast/webgpu/copy-image-non-bitmap-source.html"
+  ]
+ },
+ {
+  "patch": "b1a42efa6ce00e8d6cabcf8faff005e734a54190.patch",
+  "subject": "[PATCH] Data race in JSStyleSheet::visitAdditionalChildren during GC leading to use-after-free https://bugs.webkit.org/show_bug.cgi?id=312540 rdar://174207086",
+  "tests": [
+   "LayoutTests/fast/dom/StyleSheet/gc-import-rule-stylesheet.html"
+  ]
+ },
+ {
+  "patch": "354fb3b075c42740ec1053c1684179bb0dfddd5d.patch",
+  "subject": "[PATCH] Grid with a subgrid whose item has an aspect-ratio and a percentage height crashes in Grid::gridItemArea() https://bugs.webkit.org/show_bug.cgi?id=327806",
+  "tests": [
+   "LayoutTests/imported/w3c/web-platform-tests/css/css-grid/subgrid/subgrid-item-aspect-ratio-001.html"
+  ]
+ },
+ {
+  "patch": "d4b40e10edf70074195fa76e9ffdc52962a3f04b.patch",
+  "subject": "[PATCH] [WebKit] Cross-thread use-after-free in RemoteSampleBufferDisplayLayer via off-main layerErrorDidChange() from FlushAndRemoveImage @catch rdar://176482856",
+  "tests": [
+   "LayoutTests/ipc/LocalSampleBufferDisplayLayer-flushAndRemoveImage-cross-thread-uaf.html"
+  ]
+ },
+ {
+  "patch": "8f229fb72961093d2f552ecfef65a8f13afd402a.patch",
+  "subject": "[PATCH] [JSC] WebAssembly try/catch result-type confusion omits optimized reference checks https://bugs.webkit.org/show_bug.cgi?id=317450 rdar://179017779",
+  "tests": [
+   "JSTests/wasm/regress/try-catch-result-type.js"
+  ]
+ },
+ {
+  "patch": "efe49205d32cdfd396ca62f1b3b7452acdcfc176.patch",
+  "subject": "[PATCH] Use-after-free=20in=20HistoryController::recurs iveGoToItem=20=E2=80=94=20popstate-reentrant=20setChildItem=20r eallocates=20iterated=20m=5Fchildren=20https://bugs.webkit.org/ show=5Fbug.cgi=3",
+  "tests": [
+   "LayoutTests/fast/history/popstate-add-iframes-during-history-back.html"
+  ]
+ },
+ {
+  "patch": "c5036aadbde48318a52ffe639cb603aaeea8cce7.patch",
+  "subject": "[PATCH] Heap use-after-free in ClipboardItemBindingsDataSource::clearItemTypeLoaders() https://bugs.webkit.org/show_bug.cgi?id=313691 rdar://174651164",
+  "tests": [
+   "LayoutTests/editing/async-clipboard/clipboard-write-item-crash.html"
+  ]
+ },
+ {
+  "patch": "b48b4d4d4034d4a207ba2e0d61570ecc051f30a4.patch",
+  "subject": "[PATCH] [WebCore] Use-after-free in InternalAudioEncoderCocoa on ASBD change because converter->finish() promise is discarded https://bugs.webkit.org/show_bug.cgi?id=314107 rdar://175402146",
+  "tests": [
+   "LayoutTests/http/wpt/webcodecs/audio-encoder-pcm-format-change.html"
+  ]
+ },
+ {
+  "patch": "2b68a6816f173200ec2e6e6c87b034e8431e7d6d.patch",
+  "subject": "[PATCH] [WebXR] Use-after-free of WebXRSystem in callbacks re-posted from ensureImmersiveXRDeviceIsSelected rdar://175674581",
+  "tests": [
+   "LayoutTests/webxr/xr-isSessionSupported-detached-iframe-crash.html"
+  ]
+ },
+ {
+  "patch": "ffe2ea6689b543ec54a86570650be46c723f309d.patch",
+  "subject": "[PATCH] REGRESSION(298821@main): [iOS] RequestPointerLock IPC twice in succession can produce use-after-free of unretained GCMouseMoved block in WKMouseInteraction rdar://175672657",
+  "tests": [
+   "LayoutTests/ipc/pointer-lock-double-lock-uaf.html"
+  ]
+ },
+ {
+  "patch": "6a97574d77c8f44a8ceca22d7a2647b1b0b99c5b.patch",
+  "subject": "[PATCH] Fix Cross-thread use-after-free in RemoteScrollingTree::m_progressBasedTimelineRegistry <https://bugs.webkit.org/show_bug.cgi?id=314585> <rdar://176483524>",
+  "tests": [
+   "LayoutTests/webanimations/threaded-animations/scroll-driven-animation-registry-update-crash.html"
+  ]
+ },
+ {
+  "patch": "0bcd5c84c365da592ed86a60c03e8e1aa011b51a.patch",
+  "subject": "[PATCH] [WebCore] use-after-free in ShareDataReader::didFinishLoading: cancel() called on freed this after completionHandler destruction https://bugs.webkit.org/show_bug.cgi?id=317270 rdar://177909918",
+  "tests": [
+   "LayoutTests/http/tests/webshare/shareddatareader-didfinishloading-crash.html"
+  ]
+ },
+ {
+  "patch": "87fedd82a16530e11847ba929c480693992c8443.patch",
+  "subject": "[PATCH] Use-after-free in FocusController::findAndFocusElementInDocumentOrder https://bugs.webkit.org/show_bug.cgi?id=313702 rdar://175673194",
+  "tests": [
+   "LayoutTests/fast/events/new-focused-document-removal-during-blur-event-handler-crash.html"
+  ]
+ },
+ {
+  "patch": "5d1761dffb0059dae2de405ab872b7bbd2798576.patch",
+  "subject": "[PATCH] [JSC] Extract `CheckInBounds` from `StringAt` and `StringCodePointAt` https://bugs.webkit.org/show_bug.cgi?id=323640",
+  "tests": [
+   "JSTests/stress/string-index-dce-bounds-check.js"
+  ]
+ },
+ {
+  "patch": "89be2da97f720db0fec908746d1cfe3a3c56c91c.patch",
+  "subject": "[PATCH] [JSC] Add OOB mode to `StringCharCodeAt` node in DFG/FTL https://bugs.webkit.org/show_bug.cgi?id=319928",
+  "tests": [
+   "JSTests/microbenchmarks/string-charcodeat-out-of-bounds-lookahead.js",
+   "JSTests/stress/string-charcodeat-cse-array-mode.js",
+   "JSTests/stress/string-charcodeat-out-of-bounds-constant-folding.js",
+   "JSTests/stress/string-charcodeat-out-of-bounds-mode.js",
+   "JSTests/stress/string-charcodeat-out-of-bounds-uses.js"
+  ]
+ },
+ {
+  "patch": "97e8c4b43c17c90c622ce09040fb40df0f2668f6.patch",
+  "subject": "[PATCH] [WebGPU] PipelineLayout::makeInvalid leaves m_bindGroupLayouts engaged, causing GPU OOB <https://bugs.webkit.org/show_bug.cgi?id=312336> <rdar://174670323>",
+  "tests": [
+   "LayoutTests/fast/webgpu/regression/extra-bind-group-beyond-pipeline-layout.html",
+   "LayoutTests/fast/webgpu/regression/pipeline-layout-make-invalid-bind-group-bypass.html"
+  ]
+ },
+ {
+  "patch": "9ba6cb68fcfbb1948bc4b6a1d3f88c4d9073e032.patch",
+  "subject": "[PATCH] Race on RemoteVideoDecoderCallbacks::m_timestampToDuration leads to use-after-free rdar://177096608",
+  "tests": [
+   "LayoutTests/http/wpt/webcodecs/videoDecoder-concurrent-decode-output-no-crash.html"
+  ]
+ },
+ {
+  "patch": "2df698f59386b2ffccd45c7ef28422b69eba8c44.patch",
+  "subject": "[PATCH] Heap-use-after-free of RemoteLayerTreeEventDispatcher's RunLoop::Timer on the scrolling thread <https://bugs.webkit.org/show_bug.cgi?id=315533> <rdar://177889453>",
+  "tests": [
+   "LayoutTests/fast/scrolling/mac/event-dispatcher-timer-close-crash.html"
+  ]
+ },
+ {
+  "patch": "a3c2559f0df096e9e3b66bed4f49fbd6713b52c7.patch",
+  "subject": "[PATCH] [WebKit] Use-after-free in ServiceWorkerDownloadTask via stale FunctionDispatcherQueue after second EstablishSWContextConnection rdar://176481482",
+  "tests": [
+   "LayoutTests/http/tests/workers/service/service-worker-download-task-uaf.https.html"
+  ]
+ },
+ {
+  "patch": "8fd92b1021d310b2580eb3ac7913911eb14dc476.patch",
+  "subject": "[PATCH] [WebCore] TransformStream type confusion when Array.prototype[Symbol.iterator] is overridden https://bugs.webkit.org/show_bug.cgi?id=314528 rdar://176568667",
+  "tests": [
+   "LayoutTests/streams/transform-stream-poisoned-iterator-crash.html"
+  ]
+ },
+ {
+  "patch": "8dd4f788a5958cfebb8d7032576054efa9ed21a3.patch",
+  "subject": "[PATCH] [text-wrap] Fix crash in text-wrap-pretty due to index type confusion https://bugs.webkit.org/show_bug.cgi?id=306377 <rdar://168927397>",
+  "tests": [
+   "LayoutTests/fast/css3-text/css3-text-wrap/text-wrap-pretty-line-break-crash-6.html"
+  ]
+ },
+ {
+  "patch": "0351e7b861f3174aafbb4da98d4cd46012163e39.patch",
+  "subject": "[PATCH] [Site Isolation] Fix fast/dom/DOMURL/url-very-large-password-no-crash.html test failure https://bugs.webkit.org/show_bug.cgi?id=307010 rdar://169663801",
+  "tests": [
+   "LayoutTests/fast/dom/DOMURL/url-very-large-password-no-crash.html",
+   "LayoutTests/fast/dom/DOMURL/url-very-large-username-no-crash.html"
+  ]
+ },
+ {
+  "patch": "c702978087bc0c1a34407bbeeeccc6cf1add3b76.patch",
+  "subject": "[PATCH] [JSC] heap-buffer-overflow on WebKit/Source/JavaScriptCore/runtime/WriteBarrier.h:166:17 https://bugs.webkit.org/show_bug.cgi?id=285393 rdar://142369820",
+  "tests": [
+   "JSTests/stress/array-fast-fill-beyond-length.js"
+  ]
+ },
+ {
+  "patch": "c031542a9d50bb2a0c103818d0a88838b54ff794.patch",
+  "subject": "[PATCH] Heap-buffer-overflow in I420ToNV12 when the length of the given data buffer is higher than allocation size but lower than the product of width and height of the videoframe. https://bugs.webkit",
+  "tests": [
+   "LayoutTests/http/wpt/webcodecs/I420ToNV12-convert-heap-buffer-overflow.html"
+  ]
+ },
+ {
+  "patch": "e410d5cb1d2c66ceda33ef1d450fc804ecf4776f.patch",
+  "subject": "[PATCH] Heap Buffer Overflow in WebRTC VP9 Encoder rdar://177719944",
+  "tests": [
+   "LayoutTests/http/wpt/webcodecs/configure-encoder-big-frame-size.html"
+  ]
+ },
+ {
+  "patch": "176844ce6b7081d18c274f3c391b5c3a81f84f2c.patch",
+  "subject": "[PATCH] Heap-buffer-overflow in WebCore::VideoFrame::createNV12. https://bugs.webkit.org/show_bug.cgi?id=257550. rdar://110003963 (jsc_fuz/wktr: heap-buffer-overflow in WebCore::VideoFrame::createNV12",
+  "tests": [
+   "LayoutTests/http/wpt/webcodecs/createNV12-heap-buffer-overflow.html"
+  ]
+ },
+ {
+  "patch": "56f1fb5d4d01992f182c13e6a77ee71a4eae4a12.patch",
+  "subject": "[PATCH] [WebGPU] missing useResources: call leads to out of bounds read https://bugs.webkit.org/show_bug.cgi?id=284126 rdar://140803271",
+  "tests": [
+   "LayoutTests/fast/webgpu/nocrash/fuzz-284126.html"
+  ]
+ },
+ {
+  "patch": "8b20220f4c45b7051687abb7d332136bd0534d05.patch",
+  "subject": "[PATCH] Crash in RTCEncodedStreamProducer::writeFrame, m_transformBackend nullptr rdar://165687266 https://bugs.webkit.org/show_bug.cgi?id=303383",
+  "tests": [
+   "LayoutTests/http/wpt/webrtc/unset-transform.html",
+   "LayoutTests/http/wpt/webrtc/unset-transform.js"
+  ]
+ },
+ {
+  "patch": "e8a476cd12df5fb1ea1f682f1c2381397c44ccef.patch",
+  "subject": "[PATCH] Stack buffer overflow in WebKit libwebrtc VideoCodecInitializer via remote SDP simulcast layers leads to WebContent memory corruption rdar://175624943",
+  "tests": [
+   "LayoutTests/webrtc/addTrack-simulcast.html"
+  ]
+ },
+ {
+  "patch": "c1787ccc4e9191a754f0ccfd07ad2d2f74a52b78.patch",
+  "subject": "[PATCH] jsc_fuz/wktr: heap-buffer-overflow in  WebCore::WebCodecsVideoFrame::copyTo(...) WebCodecsVideoFrame.cpp:488 https://bugs.webkit.org/show_bug.cgi?id=262955 rdar://115835656",
+  "tests": [
+   "LayoutTests/http/wpt/webcodecs/videoFrame-rect.html"
+  ]
+ },
+ {
+  "patch": "0fa174e18a820faa0c61c796fabe4288683a81d2.patch",
+  "subject": "[PATCH] [WebGPU] RemoteBuffer::copy can result in an out of bounds write https://bugs.webkit.org/show_bug.cgi?id=274678 <radar://128591350>",
+  "tests": [
+   "LayoutTests/fast/webgpu/regression/repro_274678.html"
+  ]
+ },
+ {
+  "patch": "1e8c797c8799581ef47ad5a25f917064b1f40823.patch",
+  "subject": "[PATCH] heap-buffer-overflow: crash under WebCore::ShadowBlur::blurLayerImage(). https://bugs.webkit.org/show_bug.cgi?id=264978 rdar://118004762.",
+  "tests": [
+   "LayoutTests/fast/box-shadow/large-shadowblur-no-crash.html"
+  ]
+ },
+ {
+  "patch": "4847c476a8210ac1f67eec533605e8df4bb26602.patch",
+  "subject": "[PATCH] Anchor positioned element with position-visibility crashes when its default anchor is a <br> https://bugs.webkit.org/show_bug.cgi?id=321364 rdar://184019783",
+  "tests": [
+   "LayoutTests/fast/css/css-anchor-position/position-visibility-line-break-anchor-crash.html"
+  ]
+ }
+]
