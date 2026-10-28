@@ -1,3 +1,5 @@
 [
+ "c028-createimagebitmap-zero-div.js",
+ "c026b-typedarray-from-rab.js",
  "c027-typedarray-map-rab.js"
 ]
