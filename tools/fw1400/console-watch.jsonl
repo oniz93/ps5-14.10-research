@@ -43,3 +43,13 @@
 {"ts": 1793067093.3679712, "state": "UNKNOWN", "evidence": "", "lines": ["There is not enough free system memo"]}
 {"ts": 1793076720.8835928, "state": "GUIDE", "evidence": "Guide", "lines": ["Guide & Tips, Health & Safety, and Other Information", "ide and Tips", "User's Guide", "Discover Tips"]}
 {"ts": 1793220086.7540019, "state": "UNKNOWN", "evidence": "", "lines": []}
+{"ts": 1793285917.188603, "state": "GUIDE", "evidence": "Guide", "lines": ["Safety, and Other Information", "User's Guide", "Discover Tips"]}
+{"ts": 1793285951.345123, "state": "UNKNOWN", "evidence": "", "lines": ["ge can't be confirmed. The PSS doesn't have the CA root certificate provided by the se", "Do you want to display the page?"]}
+{"ts": 1793286505.5001621, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
+{"ts": 1793286534.877793, "state": "GUIDE", "evidence": "Guide", "lines": ["Settings", "Guide & Tips, Health & Safety, and Other Information", "\u2022 Accessibility", "\u2022 Network", "\u2022 Users and Accounts", "\u2022 Famay and Parental Controls", "\u2022 System", "\u2022 Storage", "Soum", "- Sosen and Video e"]}
+{"ts": 1793286619.883625, "state": "GUIDE", "evidence": "Guide", "lines": ["Settings", "Guide & Tips, Health & Safety, and Other Information", "\u2022 Accessibility", "\u2022 Network", "\u2022 Users and Accounts", "\u2022 Famay and Parental Controls", "\u2022 System", "\u2022 Stora", "- Screen and Video"]}
+{"ts": 1793286673.996918, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
+{"ts": 1793286697.13807, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
+{"ts": 1793286783.517012, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
+{"ts": 1793286804.530761, "state": "LOW_MEMORY", "evidence": "not enough free system memory", "lines": ["There is not enough free system memory."]}
+{"ts": 1793286847.791061, "state": "GUIDE", "evidence": "Guide", "lines": ["Settings", "Guide & Tips, Health & Safety, and Other Information", "\u2022 Accessibility", "\u2022 Network", "\u2022 Users and Accounts", "Famay and Parental Controls", "\u2022 System", "\u2022 Storage", "\u2022 Soun", "\u2022 Sasan and Video"]}
