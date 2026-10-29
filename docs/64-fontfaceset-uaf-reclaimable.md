@@ -67,6 +67,41 @@ fake object's fields point where we want, and use `existingWrapper()`/`wrapper()
 backing C++ structure we influence. Whether that yields a read/write primitive depends on what those calls do with
 the fake fields, which the source can answer before another console cycle is spent.
 
+## Reclaim experiments
+
+Spraying 2000 x `ArrayBuffer(192)` inside the getter, three fills (0x00, 0x03, 0xff), and a no-spray control.
+
+**With ASAN quarantine on** (default `run_asan_page.sh`): every mode reports the same
+`heap-use-after-free` at `CSSFontFace.h:104`. Nothing can reclaim, because the quarantine parks freed memory.
+That is a property of the instrument, not of the bug.
+
+**With quarantine off** (`run_nq.sh`): the report changes to `heap-buffer-overflow`, and the stack moves one frame
+earlier — the stale dereference now happens inside `face.get().load()` itself:
+
+```
+READ of size 1 at 0x...4c2
+  #0 WebCore::CSSFontFace::status()   CSSFontFace.h:104
+  #1 WebCore::CSSFontFace::pump()     CSSFontFace.cpp:646
+  #2 WebCore::CSSFontFace::load()     CSSFontFace.cpp:703
+  #3 WebCore::FontFaceSet::load()     FontFaceSet.cpp:169
+0x...4c2 is located 194 bytes after 192-byte region
+allocated by: fastMalloc -> CSSFontFace::operator new -> CSSFontFace::create <- FontFace::FontFace
+```
+
+Two readings, both useful:
+
+1. **The slot is reusable.** With the quarantine gone the region is taken immediately — the wall the canvas UAF
+   hit does not exist here.
+2. **The next occupant is another `CSSFontFace`, not our ArrayBuffer.** The allocation stack for the live region
+   the fault lands next to is `FontFace::FontFace`, i.e. a JS `new FontFace(...)`. Our 192-byte ArrayBuffers do not
+   win the class; font-face allocations do, because removing the style and pumping the load path creates more of
+   them.
+
+So the groom has to be ordered around that: either allocate controlled 192-byte objects *after* the font machinery
+has finished allocating its own, or make the object that lands in the slot a `CSSFontFace` whose fields we can
+influence through the descriptors we pass to `new FontFace(...)`. The fault landing 194 bytes past a live 192-byte
+region (rather than at a fixed offset inside a known object) says the current spray is nowhere near the slot yet.
+
 ## Status
 
 * ASAN: confirmed (above).
