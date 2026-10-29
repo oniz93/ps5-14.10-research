@@ -95,7 +95,7 @@ The board has no display, so MiniBrowser runs under a virtual X server:
 
 ```bash
 Xvfb :99 -screen 0 1920x1080x24 &
-DISPLAY=:99 MiniBrowser --automation-mode file://<user>/wk/pages/style-scope-upstream.html
+DISPLAY=:99 MiniBrowser --automation-mode file:///home/<user>/wk/pages/style-scope-upstream.html
 ```
 
 ## The open question this build exists to answer
