@@ -53,10 +53,18 @@ Provenance and re-fetch instructions for each are recorded in
 
 ## Generated test assets
 
-The fonts in `tools/fw1400/guide_lab/www/fonts/`, the MP4 fragments in
-`www/mp4/` and `www/mp4b/`, and the corpus pages under `www/cases/` are generated or
-hand-written locally (see `tools/fw1400/font_mutate.py`, `mp4_mutate.py`,
-`avc_mutate.py`, `img_corpus.py`). They contain no third-party font, media or code.
+The MP4 fragments in `tools/fw1400/guide_lab/www/mp4/` and `www/mp4b/`, and the corpus
+pages under `www/cases/`, are generated or hand-written locally (see
+`tools/fw1400/mp4_mutate.py`, `avc_mutate.py`, `img_corpus.py`). They contain no third-party
+media or code.
+
+The test fonts in `tools/fw1400/guide_lab/www/fonts/` are mutants and truncations of
+**Noto Sans Lepcha Regular** (Copyright 2017 Google Inc., Noto is a trademark of Google Inc.),
+which ships with macOS, so the base file is redistributed here alongside the mutants. It is
+licensed under the **SIL Open Font License 1.1**, which permits redistribution provided the
+copyright notice and licence travel with the font — both are in
+`www/fonts/OFL.txt`. The mutants are decoding tests, not usable fonts, and are not presented as
+Noto.
 
 ## Trademarks
 
