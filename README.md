@@ -12,7 +12,8 @@ document it — and, long shot, eventually replace stage 2 and boot Linux direct
 with no hypervisor in the path.
 
 **Target console:** retail PS5, FW 14.10 (no public jailbreak available)
-**Current stage:** 0 — software only, zero hardware risk
+**Current stage:** userland (WebKit/WebProcess) research on 14.10 — no kernel read/write, no
+hypervisor bypass, no console modification
 **Started:** 2026-10-19
 
 ## The chain
