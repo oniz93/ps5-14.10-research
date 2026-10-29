@@ -48,6 +48,42 @@ string produced by the stream's own keys. Breaking that requires either
 * controlling *when* the GC runs, so it lands immediately before a non-string allocation. GC timing is the
   collector's, not ours; the large `ArrayBuffer`s are a blunt lever.
 
+## Two more shapes, and the structural answer
+
+| # | shape | result |
+|---|---|---|
+| 7 | buffers nested under one string key, filler as a separate entry | substitute = `fill` (the next entry's key) |
+| 8 | buffers **and** filler inside a single entry's value | substitute = `expected` (that entry's own key) |
+
+Experiment 8 is the informative one: the string that wins is the key of the very entry that carries the repeated
+value. A key is always serialised immediately before its value, so a `JSString` for the key is allocated at exactly
+the moment the freed cell is available, and it always gets there first. Arrays avoid keys entirely — and arrays do
+not reproduce the bug at all (experiment 3), which says the pool path that breaks is the keyed one.
+
+That is the wall, stated precisely: **the cached-string path is entered through keyed containers, and keyed
+containers allocate a string immediately before every value.** The window in which a non-string could take the slot
+does not exist in this stream shape.
+
+## Checked and dismissed: the `CachedStringRef` dangling-pointer theory
+
+Reading `readFile` suggests a second bug: four `CachedStringRef`s are created in sequence, appended to
+`m_constantPool` between each, and used at the end — which would dangle if the vector reallocated. It does not:
+
+```cpp
+CachedString* operator->() { ASSERT(m_base); return &m_base->at(m_index); }
+private:
+    Vector<CachedString>* m_base;   // the vector object, not its buffer
+    size_t m_index;
+```
+
+The ref is index-based and re-dereferences the vector each time, so growth is safe. Dismissed.
+
+## One self-inflicted crash, recorded so it is not mistaken for a finding
+
+A variant with 256 × 16 MB `ArrayBuffer`s aborted inside `Vector::reserveCapacity` via `CRASH_ON_OVERFLOW` —
+4 GB in one serialisation. That is the allocator's crash guard, not a memory-safety bug, and it is reachable only
+by a page that asks to clone 4 GB.
+
 ## Honest position
 
 This is a real, reproducible, JS-only use-after-free of a JSCell on retail 14.10 with the JIT off — the first
