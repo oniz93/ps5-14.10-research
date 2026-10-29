@@ -76,6 +76,19 @@ The campaign page auto-reloads after a hang (`BOOT:1-from-0-aN`), and the manife
 case, so every reload re-ran `_PS.postMessage('')` and re-wedged the console. Clearing the manifest to `[]` stopped
 it. **Never leave a case that can hang in the manifest** — clear it before recovering, or recovery will not hold.
 
+## The real Guide page never calls it
+
+The Mac's resolver points at the lab, so fetching `manuals.playstation.net` normally returns our own campaign
+page. Pinning the real address (`dig @1.1.1.1` -> `23.6.245.19`, then `curl --resolve`) returns Sony's actual
+shell: a 3.8 KB static page titled *User's Guide*, referencing `setTheme.js`, a SiteCatalyst `s_code.js`, Google
+Tag Manager and Microsoft Clarity. Its three inline scripts are analytics bootstraps.
+
+**No `_PS`, no `postMessage`, no `postMessageNative`.** The real content page never talks to the bridge.
+
+That explains the wedge. `_PS` is app-shell plumbing, not part of the page contract: it exists so the native Guide
+UI can exchange messages with its own WebView, and a page that calls it is asking for something it was never
+designed to serve. There is also no protocol reference to imitate — the real page gives us nothing to copy.
+
 ## Why this still matters
 
 The bridge is a dead end for exploitation, but it is the first evidence that the Guide shell exposes native code
