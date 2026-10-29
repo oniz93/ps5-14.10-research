@@ -1,7 +1,7 @@
 {
  "source": {
-  "sysent": "<home>/Documents/ps5-bootchain/research/PS5-14.10-Research/docs/dumps_13.60/sysent_raw.bin",
-  "text": "<home>/Documents/ps5-bootchain/research/PS5-14.10-Research/docs/dumps_13.60/kernel_text.bin"
+  "sysent": "<repo-root>/research/PS5-14.10-Research/docs/dumps_13.60/sysent_raw.bin",
+  "text": "<repo-root>/research/PS5-14.10-Research/docs/dumps_13.60/kernel_text.bin"
  },
  "kernel_base": "0xffffffff8a9c0000",
  "entry_count": 679,

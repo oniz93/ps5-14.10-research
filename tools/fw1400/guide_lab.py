@@ -176,7 +176,11 @@ def _forward(data: bytes, upstream: str, timeout: float = 3.0):
 
 
 def run_dns(lan_ip: str, port: int = 53, verbose: bool = True, catchall: bool = False,
-            upstream: str = "<resolver-ip>", block_sony: bool = True):
+            upstream: "str | None" = None, block_sony: bool = True):
+    if upstream is None:
+        # No hardcoded resolver: default to the gateway of the LAN the console points at,
+        # so this stays portable across networks.
+        upstream = ".".join(lan_ip.split(".")[:3]) + ".1" if lan_ip else "192.168.1.1"
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
@@ -544,8 +548,9 @@ def main():
     ap.add_argument("--allow-sony", action="store_true",
                     help="disable update containment: forward Sony/PlayStation names upstream "
                          "again instead of refusing them (only for debugging the guide)")
-    ap.add_argument("--upstream", default="<resolver-ip>",
-                    help="resolver to forward non-hijacked names to (default: the Pi-hole)")
+    ap.add_argument("--upstream", default=None,
+                    help="resolver to forward non-hijacked names to (default: the gateway of "
+                         "--lan-ip's /24, e.g. 192.168.1.1 for 192.168.1.50)")
     ap.add_argument("--dns-catchall", action="store_true",
                     help="answer every A query with --lan-ip and log every query name; "
                          "use when you do not yet know which host the guide asks for")

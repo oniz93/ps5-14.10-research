@@ -6,7 +6,9 @@ were both findable.
 ## The 13.60 kernel dump exists, one URL away
 
 The repo referenced by the public research (`zigzagboi1/ps5-13.60-kernel-dump`) 404s, but the capture was
-re-published at `terrafirma2021/ps5-13.60-kernel-dump` (captured 2026-10-13).
+re-published at `terrafirma2021/ps5-13.60-kernel-dump` (captured 2026-10-13). It is not redistributed
+here — only its hash is recorded, so the exact bytes can be checked without this repository hosting
+Sony code.
 
 Downloaded and verified:
 
