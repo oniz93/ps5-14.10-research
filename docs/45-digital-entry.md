@@ -22,9 +22,13 @@ Digital PS5 + PC + USB stick is enough.
 ## What is packaged here
 
 `deliverables/lua-entry/`
-  `save-payload/`        all 24 loader files - drop these into the decrypted save, keeping `sce_sys/`
   `probe-01-procdesc-permitted.lua`   first probe: does the sandbox allow the pd* syscalls at all?
-  `README.md`            the full step-by-step
+  `README.md`            the entry class and the procedure
+
+The loader payload itself (24 files, `.iet` injection script, game save) is **not**
+distributed in this repository — it is third-party artefact code with no licence stated.
+Provenance and re-fetch instructions: `research/UPSTREAM.md`, `NOTICE.md` §"Removed
+third-party code".
 
 ## Why probe 01 is deliberately boring
 
