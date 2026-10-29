@@ -37,6 +37,28 @@ The second run rules out the obvious confound: `c029b` had leaked sixteen `Media
 object URLs, and this console has a history of `LOW_MEMORY` from exactly that. Reloading between runs released
 that state, and the modal still appeared.
 
+## It is not the empty string
+
+`c036` asked the obvious follow-up with a well-formed message:
+
+| run | payload | outcome |
+|---|---|---|
+| `c033` | `''` | no `post`, `LOW_MEMORY` modal |
+| `c035` | `''` (fresh page) | no `post`, `LOW_MEMORY` modal |
+| `c036` | `'{"type":"ping"}'` | no `post`, `LOW_MEMORY` modal |
+
+So **any** call into `_PS.postMessage` wedges the console, not just an empty one. That changes the interpretation:
+this is not an input-parsing bug where a zero-length message hits a bad path. It is the bridge refusing to serve
+a page it did not expect, and doing so by blocking rather than by returning an error.
+
+The most likely explanation is that the native handler validates the message origin or a handshake token that the
+real Guide page obtains during its own bootstrap, and an unrecognised caller sends it into a wait that never
+completes. The practical consequence is the same either way: the bridge is not usable from a page we serve, and
+every attempt costs a console wedge to learn that again.
+
+**Conclusion: stop probing it.** Two payloads and three runs are enough to establish that the gate is not in the
+message contents, and each further attempt buys another `LOW_MEMORY` recovery cycle with no new information.
+
 ## Severity, stated honestly
 
 This is a denial of service in Sony's own code, reachable from any page served into the Guide. It is not a memory
@@ -54,12 +76,20 @@ The campaign page auto-reloads after a hang (`BOOT:1-from-0-aN`), and the manife
 case, so every reload re-ran `_PS.postMessage('')` and re-wedged the console. Clearing the manifest to `[]` stopped
 it. **Never leave a case that can hang in the manifest** — clear it before recovering, or recovery will not hold.
 
-## Next, one variable at a time
+## Why this still matters
 
-* `_PS.postMessage('{"type":"ping"}')` — does a well-formed message return cleanly? That separates "empty string
-  is special" from "any call blocks".
-* Then malformed JSON, then a non-string argument passed directly to `_PS.postMessage` (bypassing the shim's
-  `String()` coercion), then depth.
+The bridge is a dead end for exploitation, but it is the first evidence that the Guide shell exposes native code
+to page script at all. Two things follow for future work:
 
-Each run is single-variable, and the manifest is cleared to `[]` immediately after the case fires, so a hang cannot
-loop.
+* The origin/state gate is the interesting object, not the payload. If a page ever *does* satisfy it — for example
+  by being served on the exact host and path the real Guide uses, with whatever token it fetches during bootstrap
+  — the handler behind it parses attacker-controlled strings in native code. That is a better target than the
+  closed media demuxer, because the input is text and the code is Sony's.
+* `postMessageNative` is `writable` and `configurable`, so page script can replace the shim. That is only useful
+  against the page's own JS, not the native side, and is not worth pursuing.
+
+## Cost accounting
+
+Four probe cycles were spent on this surface: two wedges, two recoveries, one auto-reload loop. The wedge costs
+about 90 seconds of console time and needs four `Escape` presses. Any further work here should assume that cost
+per attempt.
