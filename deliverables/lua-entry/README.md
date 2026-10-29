@@ -1,5 +1,11 @@
 # Lua entry on a Digital Edition PS5 (firmware 14.10)
 
+> **Not distributed here.** The loader payload, the `.iet` injection script and the game save
+> are third-party artefact code and are excluded from this repository (see
+> [NOTICE.md](../../NOTICE.md) and [DISCLAIMER.md](../../DISCLAIMER.md) §2). This document
+> records the entry class and what was learned from it; the steps that need the payload are
+> kept for personal reproduction against the upstream project, not as a distribution channel.
+
 No disc needed. The entry is the **free demo** of *Hamidashi Creative* (CUSA27390, Artemis engine with embedded
 Lua 5.1), which is on the **Japanese** PSN store and is one of the 18 supported games in
 `n0llptr/remote_lua_loader`.
@@ -20,12 +26,13 @@ arguing about it.
 6. **Decrypt it without a PS4.** The community service HTOS (Discord) does this with `/decrypt`, setting
    `SCE_SYS` to FALSE. (The documented alternative is a jailbroken PS4 with Apollo Save Tool; you don't need
    that.)
-7. **Drop the payload in:** in the decrypted folder, delete everything **except** `sce_sys/`, then copy every
-   file from `save-payload/` here into that folder. All 24 files are required - `main.lua` pulls in the
-   helpers, and `elfldr.elf` / `ps5-elfldr.elf` are what kernel-side probes reach for.
+7. **Drop the payload in:** in the decrypted folder, delete everything **except** `sce_sys/`, then
+   copy the loader files from the upstream project (see [NOTICE.md](../../NOTICE.md)) into that
+   folder. All of them are required — `main.lua` pulls in the helpers, and the ELF loader is what
+   kernel-side probes reach for. These files are not in this repository.
 8. **Re-encrypt and resign** with HTOS `/encrypt` and `/resign`, using your PSN ID / account name.
 9. **Import the save onto the PS5** and launch the demo. Expect a black screen, then the notification
-   `remote lua loader` / `listening on <ip>:9026`.
+   `remote lua loader` / `listening on <console-ip>:9026`.
 10. **From the Mac**, send a probe:
     `python3 research/remote_lua_loader/payloads/send_lua.py probe-01-procdesc-permitted.lua`
 

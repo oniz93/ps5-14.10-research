@@ -27,6 +27,38 @@ venv/
 # third-party clones: re-fetch, do not vendor
 research/ps5-uart-src/
 
+# third-party material — clone, never commit (see research/UPSTREAM.md)
+research/fw1400-README.md
+research/gzimbric-README.md
+research/loader-offsets.c
+research/mewx-README.md
+research/prosperismo-README.md
+research/ps5-titania-README.md
+research/ps5-uart-*
+research/raeen-slb2.rs
+research/titania-README.md
+research/titania-RESEARCH_POST.md
+research/uart-note-*.txt
+research/remote_lua_loader/
+research/ps5-linux-loader/
+research/ps5-linux-porting/
+research/ps5-jar-loader/
+research/raeen/
+research/kura/
+research/mewx/
+research/PSFree/
+research/apollo-ps4/
+
+# exploit payloads and save artefacts — never published (DISCLAIMER.md §2)
+deliverables/lua-entry/save-payload/
+private/
+
+# credentials and local build artefacts
+*.pem
+*.key
+*.p12
+tools/fw1400/ocr
+
 # third-party research clone (re-clone with: git clone --depth 1 https://github.com/ZigZagBoi1/PS5-14.10-Research)
 research/PS5-14.10-Research/
 out/diffs/.cache/
