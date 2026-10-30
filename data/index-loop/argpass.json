@@ -1,0 +1,391 @@
+{
+ "owner_rows": 310,
+ "loops_not_found": [],
+ "calls_in_owner_bodies": 1368,
+ "args_in_owner_bodies": 992,
+ "argpass_sites": 0,
+ "depth2_sites": 0,
+ "alias_rows": [],
+ "member_in_callee": [],
+ "growth_in_callee": [],
+ "member_arg_in_callee": [],
+ "root_in_callee": {
+  "count": 28,
+  "bodies": 371,
+  "bytes_min": 13,
+  "bytes_median": 67,
+  "samples": [
+   {
+    "callee": "AudioParamTimeline::processSetTargetFollowedByRamp",
+    "file": "Source/WebCore/Modules/webaudio/AudioParamTimeline.cpp",
+    "line": 418,
+    "container": "m_events",
+    "call": "processSetTargetFollowedByRamp",
+    "ctx": " m_events[eventIndex] = ParamEvent::createSetValueEvent(value, Seconds "
+   },
+   {
+    "callee": "AudioParamTimeline::processCancelValues",
+    "file": "Source/WebCore/Modules/webaudio/AudioParamTimeline.cpp",
+    "line": 418,
+    "container": "m_events",
+    "call": "processCancelValues",
+    "ctx": "Frame < cancelFrame + 1) { auto lastEventType = m_events[currentState.eventIndex - 1].type(); if (lastEven"
+   },
+   {
+    "callee": "AudioWorkletNode::input",
+    "file": "Source/WebCore/Modules/webaudio/AudioWorkletNode.cpp",
+    "line": 215,
+    "container": "m_inputs",
+    "call": "input",
+    "ctx": "{ if (i < m_inputs.size()) return m_inputs[i].get(); return nullptr;"
+   },
+   {
+    "callee": "AudioWorkletNode::input",
+    "file": "Source/WebCore/Modules/webaudio/AudioWorkletNode.cpp",
+    "line": 215,
+    "container": "m_inputs",
+    "call": "input",
+    "ctx": "{ if (i < m_inputs.size()) return m_inputs[i].get(); return nullptr;"
+   },
+   {
+    "callee": "AudioWorkletNode::output",
+    "file": "Source/WebCore/Modules/webaudio/AudioWorkletNode.cpp",
+    "line": 217,
+    "container": "m_outputs",
+    "call": "output",
+    "ctx": "{ if (i < m_outputs.size()) return m_outputs[i].get(); return nullpt"
+   },
+   {
+    "callee": "AccessibilityTable::ensureRowAndColumn",
+    "file": "Source/WebCore/accessibility/AccessibilityTable.cpp",
+    "line": 537,
+    "container": "m_cellSlots",
+    "call": "ensureRowAndColumn",
+    "ctx": "{ ensureRow(rowIndex); if (m_cellSlots[rowIndex].size() < columnIndex + 1) m_cellSlots[ro"
+   },
+   {
+    "callee": "KeyframeEffect::timingFunctionForKeyframeAtIndex",
+    "file": "Source/WebCore/animation/KeyframeEffect.cpp",
+    "line": 650,
+    "container": "m_parsedKeyframes",
+    "call": "timingFunctionForKeyframeAtIndex",
+    "ctx": "{ if (!m_parsedKeyframes.isEmpty()) { if (index >= m_parsedKeyframes."
+   },
+   {
+    "callee": "KeyframeEffect::timingFunctionForKeyframeAtIndex",
+    "file": "Source/WebCore/animation/KeyframeEffect.cpp",
+    "line": 2359,
+    "container": "m_blendingKeyframes",
+    "call": "timingFunctionForKeyframeAtIndex",
+    "ctx": "frames[index].timingFunction.get(); } if (index >= m_blendingKeyframes.size()) return nullptr; return timingF"
+   },
+   {
+    "callee": "LRUImageBufferCache::bubbleToFront",
+    "file": "Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp",
+    "line": 5786,
+    "container": "m_buffers",
+    "call": "bubbleToFront",
+    "ctx": "{ for (size_t i = idx; i > 0; --i) m_buffers[i].swap(m_buffers[i-1]); }"
+   },
+   {
+    "callee": "AVIFImageDecoder::decode",
+    "file": "Source/WebCore/platform/image-decoders/avif/AVIFImageDecoder.cpp",
+    "line": 79,
+    "container": "m_frameBufferCache",
+    "call": "decode",
+    "ctx": " ASSERT(m_reader); m_reader->decodeFrame(frameIndex, m_frameBufferCache[frameIndex], *m_data); if (allDataReceived && "
+   },
+   {
+    "callee": "RenderTableSection::cellAt",
+    "file": "Source/WebCore/rendering/RenderTableSection.cpp",
+    "line": 246,
+    "container": "m_grid",
+    "call": "cellAt",
+    "ctx": "{ recalcCellsIfNeeded(); return m_grid[row].row[col]; }"
+   },
+   {
+    "callee": "RenderTableSection::cellAt",
+    "file": "Source/WebCore/rendering/RenderTableSection.cpp",
+    "line": 246,
+    "container": "m_grid",
+    "call": "cellAt",
+    "ctx": "{ ASSERT(!m_needsCellRecalc); return m_grid[row].row[col]; }"
+   }
+  ]
+ },
+ "callee_scan": {
+  "calls": 1321,
+  "resolved": 333,
+  "unresolved": {
+   "max": 37,
+   "builder.append": 18,
+   ".get": 16,
+   "min": 15,
+   "->data": 11,
+   "->mutableData": 8,
+   "inlineItem.isInlineBoxStart": 8,
+   "->process": 7,
+   ".ptr": 7,
+   "inlineItem.isInlineBoxEnd": 7,
+   "LOG": 6,
+   "inlineItem.layoutBox": 6,
+   "destination->channel": 5,
+   "inlineItem.isFloat": 5,
+   ".contains": 5,
+   "->reset": 5,
+   "Length": 5,
+   "ALWAYS_LOG_MEDIASESSIONMANAGER": 4,
+   "memset": 4,
+   "source->channel": 4
+  }
+ },
+ "mentions": {
+  "element-index": 108,
+  "size": 1
+ },
+ "counts": {
+  "container-not-a-member": 16
+ },
+ "control_all_loops": {
+  "calls": 5399,
+  "hits": 16,
+  "rows": [
+   {
+    "file": "Source/WebCore/Modules/websockets/WebSocketHandshake.cpp",
+    "line": 421,
+    "callee": "makeString",
+    "arg_index": 1,
+    "arg": "statusCodeString",
+    "container": "statusCodeString",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/css/parser/CSSPropertyParser.cpp",
+    "line": 666,
+    "callee": "std::size",
+    "arg_index": 0,
+    "arg": "values",
+    "container": "values",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/editing/Editing.cpp",
+    "line": 372,
+    "callee": "rebalancedString.appendSubstring",
+    "arg_index": 0,
+    "arg": "string",
+    "container": "string",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/editing/SimplifyMarkupCommand.cpp",
+    "line": 94,
+    "callee": "pruneSubsequentAncestorsToRemove",
+    "arg_index": 0,
+    "arg": "nodesToRemove",
+    "container": "nodesToRemove",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/layout/formattingContexts/inline/InlineContentBreaker.cpp",
+    "line": 334,
+    "callee": "U16_SET_CP_START",
+    "arg_index": 0,
+    "arg": "text",
+    "container": "text",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/layout/formattingContexts/inline/InlineContentBreaker.cpp",
+    "line": 599,
+    "callee": "tryBreakingTextRun",
+    "arg_index": 0,
+    "arg": "runs",
+    "container": "runs",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/layout/formattingContexts/inline/InlineContentBreaker.cpp",
+    "line": 599,
+    "callee": "findTrailingRunIndex",
+    "arg_index": 0,
+    "arg": "runs",
+    "container": "runs",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/platform/text/QuotedPrintable.cpp",
+    "line": 68,
+    "callee": "lengthOfLineEndingAtIndex",
+    "arg_index": 0,
+    "arg": "input",
+    "container": "input",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/platform/text/QuotedPrintable.cpp",
+    "line": 68,
+    "callee": "lengthOfLineEndingAtIndex",
+    "arg_index": 0,
+    "arg": "input",
+    "container": "input",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/platform/text/win/LocaleWin.cpp",
+    "line": 187,
+    "callee": "countContinuousLetters",
+    "arg_index": 0,
+    "arg": "format",
+    "container": "format",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/platform/text/win/LocaleWin.cpp",
+    "line": 187,
+    "callee": "converted.append",
+    "arg_index": 0,
+    "arg": "format",
+    "container": "format",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/platform/text/win/LocaleWin.cpp",
+    "line": 187,
+    "callee": "converted.append",
+    "arg_index": 0,
+    "arg": "format",
+    "container": "format",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/platform/text/win/LocaleWin.cpp",
+    "line": 187,
+    "callee": "literalBuffer.append",
+    "arg_index": 0,
+    "arg": "format",
+    "container": "format",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/rendering/RenderObject.cpp",
+    "line": 2448,
+    "callee": "adjustLineHeightOfSelectionGeometries",
+    "arg_index": 0,
+    "arg": "geometries",
+    "container": "geometries",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/rendering/RenderText.cpp",
+    "line": 1186,
+    "callee": "StringView",
+    "arg_index": 0,
+    "arg": "string",
+    "container": "string",
+    "owner": null,
+    "how": "handle"
+   },
+   {
+    "file": "Source/WebCore/rendering/svg/SVGTextChunkBuilder.cpp",
+    "line": 73,
+    "callee": "SVGTextChunk",
+    "arg_index": 0,
+    "arg": "lineLayoutBoxes",
+    "container": "lineLayoutBoxes",
+    "owner": null,
+    "how": "handle"
+   }
+  ]
+ },
+ "control_iterate_clients": [
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "WeakHashSet<CSSFontFace::Client>& clients",
+   "matched": false,
+   "how": ""
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFace.cpp",
+   "arg0": "m_clients",
+   "matched": true,
+   "how": "handle"
+  }
+ ],
+ "sites": [],
+ "depth2_detail": []
+}

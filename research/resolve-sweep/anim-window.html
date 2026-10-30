@@ -1,0 +1,77 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>anim-resolve-window</title>
+<body>
+<div id="host"></div>
+<script>
+// docs/74 probe: does the `resolve(*this)` inside WebAnimation::finishNotificationSteps hand control to
+// script synchronously, and what does the frame do afterwards if script cancels/removes inside that window?
+//   k=none|then          install a getter on Object.prototype.then
+//   atk=none|rm|cancel|cancelrm
+//   pre=1                touch a.ready / a.finished first: DOMPromiseProxy only settles the DeferredPromises
+//                        that already exist, so without this the C++ resolve creates no JS value at all
+//   probe=1              Promise.resolve({probe:1}) after arming -- in-page positive control for the getter
+var q = new URLSearchParams(location.search);
+var k = q.get('k') || 'none';
+var atk = q.get('atk') || 'none';
+var pre = q.get('pre') !== '0';
+var probe = q.get('probe') === '1';
+var ARMED = false, hits = 0;
+
+function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(m); }
+
+function tag(o) { try { return Object.prototype.toString.call(o).slice(8, -1); } catch (e) { return 'ERR'; } }
+
+ev('START k=' + k + ' atk=' + atk + ' pre=' + pre + ' probe=' + probe);
+
+var host = document.getElementById('host');
+var el = document.createElement('div');
+el.textContent = 'x';
+host.appendChild(el);
+
+var a = null, fin = 0, err = '';
+try {
+    a = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1000 });
+} catch (e) { err = e.name + ':' + e.message; }
+if (!a) { ev('NOANIM ' + err); } else {
+    ev('ANIM ok st=' + a.playState);
+    a.addEventListener('finish', function () { fin++; ev('FINEV st=' + a.playState + ' hits=' + hits); });
+    try { a.play(); } catch (e) { ev('PLAYERR ' + e.name); }
+    ev('PRE st=' + a.playState + ' ct=' + a.currentTime);
+
+    if (pre) {
+        var pr = a.ready, pf = a.finished;
+        ev('PROMISES ready=' + tag(pr) + ' fin=' + tag(pf));
+    }
+
+    if (k === 'then') {
+        Object.defineProperty(Object.prototype, 'then', {
+            configurable: true,
+            get: function () {
+                if (!ARMED) return undefined;
+                hits++;
+                var st = '';
+                try { st = a.playState; } catch (e) { st = 'ERR'; }
+                ev('THEN hit=' + hits + ' on=' + tag(this) + ' st=' + st + ' kids=' + host.childElementCount);
+                try {
+                    if (atk === 'rm' || atk === 'cancelrm') el.remove();
+                    if (atk === 'cancel' || atk === 'cancelrm') a.cancel();
+                } catch (e) { ev('ATKERR ' + e.name); }
+                return undefined;
+            }
+        });
+        ev('ARMED');
+    }
+
+    ARMED = true;
+    if (probe) { Promise.resolve({ probe: 1 }); ev('PROBE'); }
+    try { a.finish(); } catch (e) { ev('FINERR ' + e.name); }
+    ARMED = false;
+    ev('POST st=' + a.playState + ' hits=' + hits + ' kids=' + host.childElementCount + ' fin=' + fin);
+
+    if (k === 'then') { try { delete Object.prototype.then; ev('DEL ok=' + (typeof Object.prototype.then)); } catch (e) { ev('DELERR ' + e.name); } }
+
+    setTimeout(function () { ev('LATE st=' + a.playState + ' hits=' + hits + ' kids=' + host.childElementCount + ' fin=' + fin); }, 300);
+    setTimeout(function () { ev('END hits=' + hits + ' fin=' + fin + ' st=' + a.playState); }, 1200);
+}
+</script>

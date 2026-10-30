@@ -1,0 +1,7 @@
+start case=1 href=/s.css nlink=1
+loaded load
+pre sheets=2 0:[inline n=1] 1:[/s.css n=1]
+target idx=0 cls=CSSStyleRule cssTextLen=454 rule=& b{color:green}
+INS ret=0 nestedLen=1
+after sheets=2 0:[inline n=1] 1:[/s.css n=1]
+done case=1

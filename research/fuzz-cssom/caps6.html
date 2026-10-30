@@ -1,0 +1,90 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps6 — clone getter enumerability, and whether any popup path exists on this build</title>
+<body>
+<div id="host"><p id="p0">delta</p></div>
+<script>
+// docs/87 probe 2.  caps5 measured: structuredClone exists and clones 40 levels but our getter did
+// not run (defineProperty defaults to enumerable:false, and the serializer walks own ENUMERABLE
+// names only); window.open('','zzpop5') returned null.  Two questions, one beacon each.
+function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); }
+function T(x) { try { return typeof x; } catch (e) { return 'ERR:' + e.name; } }
+var host = document.getElementById('host'), p0 = document.getElementById('p0');
+
+// ---------------------------------------------------------------- (a) clone getter, enumerable
+(function () {
+  var gHit = 0, gKids = -1, gErr = '';
+  var root = { v: 0 }, cur = root;
+  for (var i = 0; i < 40; i++) { var nx = { i: i }; cur.next = nx; cur = nx; }
+  Object.defineProperty(cur, 'late', {
+    enumerable: true, configurable: true,
+    get: function () {
+      gHit++;
+      try {
+        var sp = document.getElementById('sp6');
+        if (sp && sp.parentNode) sp.parentNode.removeChild(sp);
+        document.body.offsetHeight;
+        gKids = host.childNodes.length;
+      } catch (e) { gErr = e.name; }
+      return 'L';
+    }
+  });
+  var sp = document.createElement('span'); sp.id = 'sp6'; host.appendChild(sp);
+  var out = null, cerr = '';
+  try { out = structuredClone(root); } catch (e) { cerr = e.name; }
+  var depth = 0, c = out;
+  while (c && c.next) { depth++; c = c.next; }
+  ev('clone2 get=' + gHit + ' depth=' + depth + ' late=' + (c && c.late === 'L' ? 1 : 0) +
+     ' kids=' + gKids + ' err=' + (cerr || gErr || '-'));
+  // a Proxy runs ownKeys + get inside the same walk (a second way to get script in)
+  var pHit = 0, pErr = '';
+  var px = new Proxy({ a: 1, b: 2 }, {
+    ownKeys: function (t) { pHit++; return Reflect.ownKeys(t); },
+    get: function (t, k) { pHit++; return t[k]; },
+    getOwnPropertyDescriptor: function (t, k) { pHit++; return Reflect.getOwnPropertyDescriptor(t, k); }
+  });
+  var o3 = null;
+  try { o3 = structuredClone(px); } catch (e) { pErr = e.name; }
+  ev('clone2 proxy hits=' + pHit + ' ok=' + (o3 && o3.a === 1 && o3.b === 2 ? 1 : 0) + ' err=' + (pErr || '-'));
+  // a getter that returns a DOM node must throw DataCloneError, not crash (predicted, measured)
+  var bad = { get n() { return document.body; } };
+  var bErr = '';
+  try { structuredClone(bad); } catch (e) { bErr = e.name; }
+  ev('clone2 node err=' + (bErr || '-'));
+})();
+
+// ---------------------------------------------------------------- (b) popup reachability
+(function () {
+  var tries = [
+    ["open-empty", function () { return window.open(); }],
+    ["open-blank", function () { return window.open('about:blank'); }],
+    ["open-named", function () { return window.open('', 'zzp6a'); }],
+    ["open-feat", function () { return window.open('about:blank', 'zzp6b', 'width=300,height=200'); }],
+    ["open-self", function () { return window.open('about:blank', '_self'); }]
+  ];
+  var got = [];
+  for (var i = 0; i < tries.length; i++) {
+    var w = null, e = '-';
+    try { w = tries[i][1](); } catch (x) { e = x.name; }
+    got.push(tries[i][0] + '=' + (w ? 1 : 0) + (e !== '-' ? '/' + e : ''));
+    // a window we did get is closed at once, so the next attempt is a fresh one
+    try { if (w && w !== window) w.close(); } catch (x) {}
+  }
+  ev('pop ' + got.join(' '));
+  // an anchor click with target=_blank: the other route to a popup
+  var a = document.createElement('a');
+  a.href = 'about:blank'; a.target = '_blank'; a.textContent = 'x';
+  document.body.appendChild(a);
+  var aerr = '-';
+  try { a.click(); } catch (e) { aerr = e.name; }
+  ev('pop anchor err=' + aerr);
+  ev('pop modal=' + T(window.showModalDialog) + ' createHTML=' + T(document.implementation.createHTMLDocument) +
+     ' ua=' + (navigator.userActivation ? (navigator.userActivation.isActive ? 1 : 0) : 'n/a'));
+  setTimeout(function () {
+    // did the anchor produce a window that stayed?  count what the page can see: nothing observable,
+    // so this is only a "did we crash / did a document load" witness.
+    ev('pop after ms=1');
+    ev('done caps6');
+  }, 600);
+})();
+</script>

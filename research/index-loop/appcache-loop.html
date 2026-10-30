@@ -1,0 +1,30 @@
+<!doctype html>
+<html manifest="ac.appcache">
+<head><meta charset="utf-8"><title>appcache index-loop probe</title></head>
+<body>
+<script>
+// docs/81 probe: is ApplicationCacheHost::stopDeferringEvents() reachable with a real dispatch, and can a
+// handler re-enter the host while its index loop is running?  Beacons only; no allocation in the loop.
+var Q = new URLSearchParams(location.search);
+var reentry = Q.get('reentry') === '1';
+var n = 0;
+function B(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(m) + '&r=' + Math.random(); }
+B('START reentry=' + reentry + ' ua=' + navigator.userAgent.length);
+window.addEventListener('load', function () { B('LOAD'); }, false);
+var ac = window.applicationCache;
+B('AC typeof=' + typeof ac);
+if (ac) {
+  var names = ['checking', 'noupdate', 'downloading', 'progress', 'updateready', 'cached', 'obsolete', 'error'];
+  names.forEach(function (k) {
+    ac.addEventListener(k, function () {
+      n++;
+      B('EV ' + k + ' i=' + n);
+      if (reentry && k === 'checking') { try { ac.update(); B('UPD'); } catch (e) { B('UPERR ' + e.name); } }
+      if (reentry && k === 'downloading') { try { ac.swapCache(); B('SWAP'); } catch (e) { B('SWPERR ' + e.name); } }
+    }, false);
+  });
+}
+setTimeout(function () { B('DONE n=' + n); }, 4000);
+</script>
+</body>
+</html>

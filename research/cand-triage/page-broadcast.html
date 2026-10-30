@@ -1,0 +1,54 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>BroadcastChannel: one SerializedScriptValue, several recipients</title>
+<!--
+  docs/67 row 38 (84cde5ed5a): WebBroadcastChannelRegistry::postMessageLocally hands the *same*
+  SerializedScriptValue to every recipient (`message.copyRef()` per channel,
+  WebKit/WebProcess/WebCoreSupport/WebBroadcastChannelRegistry.cpp:94-116), while
+  SerializedScriptValue::deserialize consumes the message: it moves m_backingStores
+  (SerializedScriptValue.cpp:5566) and the ArrayBufferContents are taken by the first pass.
+
+  Shape: N channels with the same name in one document; post from channel 0; every other channel
+  receives a copy. With N=3 there are two recipients, so one of them is the second deserialize.
+  n=2 is the control (one recipient = always the first deserialize).
+
+  Each recipient reports the byteLength of the received ArrayBuffer, the first byte of a typed-array
+  view over it, and the string member. Scored from the beacon log only.
+-->
+<body>
+<script>
+const Q = new URLSearchParams(location.search);
+const N = +(Q.get('n') || 3);
+const XFER = Q.get('xfer') === '1';
+const ev = m => { new Image().src = '/ev?m=' + encodeURIComponent(m); };
+ev('start n=' + N + ' xfer=' + (XFER ? 1 : 0));
+
+const chans = [];
+for (let i = 0; i < N; i++) {
+    const c = new BroadcastChannel('zzprobe');
+    c.onmessage = e => {
+        const d = e.data;
+        let desc;
+        try {
+            desc = 'ab.len=' + d.ab.byteLength + ' ta.len=' + d.ta.length +
+                   ' ta0=' + d.ta[0] + ' s=' + d.s;
+        } catch (err) {
+            desc = 'ERR ' + err.name + ' ' + err.message;
+        }
+        ev('BC' + i + ' ' + desc);
+    };
+    chans.push(c);
+}
+ev('channels=' + chans.length);
+
+const buf = new ArrayBuffer(64);
+const u8 = new Uint8Array(buf);
+for (let i = 0; i < 64; i++)
+    u8[i] = i + 1;
+
+chans[0].postMessage({ ab: buf, ta: new Uint8Array(buf, 0, 8), s: 'hello' },
+                     XFER ? [buf] : []);
+ev('posted xfer=' + (XFER ? 1 : 0) + ' detached=' + buf.byteLength);
+
+setTimeout(() => { ev('done'); }, 900);
+</script>

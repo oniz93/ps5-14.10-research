@@ -1,0 +1,5 @@
+FILES 10500
+MEMBER_DECLS 47 distinct names, 49 declarations
+KINDS members: Counter({'other': 5, 'ref': 5, 'node': 3, 'unknown': 2, 'primitive': 1})
+KINDS hash   : Counter({'node': 11, 'ref': 7, 'other': 4, 'unknown': 3, 'gc': 1})
+python3 tools/vector-member-sweep.py > data/vector-member/inventory.json  125.31s user 7.25s system 97% cpu 2:15.51 total

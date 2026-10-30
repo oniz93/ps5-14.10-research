@@ -1,0 +1,11 @@
+===== A3  page=thenable.html  q=k=obj&td=0
+access: none
+SUMMARY: none
+EXIT=124
+-- beacons:
+   START k=obj td=0 md5ish=1
+   THENOBJ hit=1 len=1
+   LOADOK n=1
+   THENOBJ hit=2 len=undefined
+   READY
+   END hits=2 status=loaded size=2

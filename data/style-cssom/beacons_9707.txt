@@ -1,0 +1,9 @@
+start case=7 href=/s.css nlink=0
+loaded 
+pre sheets=2 0:[inline n=1] 1:[inline n=1]
+pickInline n=0 hits=2
+target idx=0 cls=CSSStyleRule cssTextLen=17 rule=& b{color:green}
+target cssText=[a { color: red; }]
+INS ret=0 nestedLen=1
+after sheets=2 0:[inline n=1] 1:[inline n=1]
+done case=7

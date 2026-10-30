@@ -1,0 +1,12 @@
+{
+ "files_scanned": 10035,
+ "cpp_rows": 301,
+ "header_rows": 63,
+ "settlement_shaped_calls": 364,
+ "cpp_value_resolve_rows": 92,
+ "cpp_literal_primitive_resolve_rows": 17,
+ "cpp_rows_with_post_call_statement": 41,
+ "genuine_post_resolve_uses": 11,
+ "reachable_free": 0,
+ "loops_over_member_container": 3
+}

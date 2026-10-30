@@ -77,3 +77,9 @@ out/frontend-findings/
 research/slopkit/
 research/pasta-1410/
 research/publapse/
+research/k1410/
+research/stark/
+research/ftrev/
+
+# Upstream commit patches downloaded for the docs/67 triage (re-fetchable with the curl in that doc)
+data/cand-patches/

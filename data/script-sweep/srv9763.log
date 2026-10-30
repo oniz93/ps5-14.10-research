@@ -1,0 +1,15 @@
+127.0.0.1 - - [29/Oct/2026 20:29:23] "GET /xml-ce.svg?reg=1&atk=rm HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 20:29:23] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:29:23] "GET /ev?m=START%20reg%3Dtrue%20atk%3Drm%20root%3Dsvg HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:29:23] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:29:23] "GET /ev?m=DEF%20ok HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:29:24] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:29:24] "GET /ev?m=CTOR%20atk%3Drm HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:29:24] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:29:24] "GET /ev?m=RM%20found%3Dtrue%20gone%3Dtrue HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:29:24] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:29:24] "GET /ev?m=CTOR%20done HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:29:24] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:29:24] "GET /ev?m=TAIL%20g%3Dfalse%20xa%3D0%20xaparent%3D- HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:29:24] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:29:24] "GET /favicon.ico HTTP/1.1" 404 -

@@ -1,0 +1,8 @@
+srv=200
+===== W1  q=drop=0&wipe=1
+access: none
+SUMMARY: none
+-- beacons:
+   START drop=0 wipe=1
+   NOCTX
+   LATE

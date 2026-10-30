@@ -1,0 +1,99 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps7 — the IDB hole getter on a custom prototype, and a window that frees a face inside structuredClone</title>
+<body>
+<div id="host"><p id="p0">delta</p></div>
+<style id="wchurn">q{color:#222}</style>
+<script>
+// docs/87 probe 3.  Two mechanisms the three ops need, measured before any op is written:
+//   (a) an array HOLE read by createIDBKeyFromValue can be answered by a getter on a CUSTOM
+//       prototype (so the instrument does not have to poison Array.prototype for the whole page);
+//   (b) a window inside structuredClone can do the docs/65 arming (churn an unrelated sheet,
+//       deleteRule, force layout) and the clone still completes.
+function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); }
+var host = document.getElementById('host'), p0 = document.getElementById('p0');
+
+// ---------------------------------------------------------------- (a) IDB hole, custom prototype
+(function () {
+  var hits = 0, inCall = 0, kerr = '', gotLower = '-', byRecv = 0, other = 0;
+  var proto = {};
+  Object.defineProperty(proto, '1', {
+    configurable: true,
+    get: function () {
+      hits++;
+      if (this === arr) byRecv++;
+      // the getter sees the array itself (this === arr) only if the engine passes the receiver
+      other += (this === arr) ? 0 : 1;
+      return [4, 5];
+    }
+  });
+  var arr = [1, , 3];
+  Object.setPrototypeOf(arr, proto);
+  inCall = 1;
+  var r = null;
+  try { r = IDBKeyRange.only(arr); } catch (e) { kerr = e.name; }
+  inCall = 0;
+  try { if (r && r.lower) gotLower = String(r.lower); } catch (e) { gotLower = 'ERR:' + e.name; }
+  ev('idb7 hits=' + hits + ' recv=' + byRecv + ' other=' + other + ' in=' + inCall +
+     ' ok=' + (r ? 1 : 0) + ' lower=' + gotLower + ' err=' + (kerr || '-'));
+  // control: the same array with the getter removed must produce no hit
+  Object.defineProperty(proto, '1', { value: 7, configurable: true });
+  var h2 = hits, r2 = null;
+  try { r2 = IDBKeyRange.only(arr); } catch (e) {}
+  ev('idb7 control hits=' + (hits - h2) + ' ok=' + (r2 ? 1 : 0));
+  // does the getter leak into ordinary array reads outside the call?  (the page's own churn)
+  var plain = [1, , 3], j = 0;
+  for (var i = 0; i < 3; i++) j += (plain[i] === undefined ? 1 : 0);
+  ev('idb7 plain=' + j);
+})();
+
+// ---------------------------------------------------------------- (b) clone + docs/65 arming
+(function () {
+  var inWindow = 0, gHit = 0, gSt = '?', gErr = '', ok = 0, depth = 0;
+  // a document face with a resolvable local source: the same shape Fdoc stages
+  var st0 = document.createElement('style'); st0.id = 'cf';
+  st0.textContent = '@font-face{font-family:zzcf;src:local("DejaVu Sans")}';
+  document.head.appendChild(st0);
+  document.body.offsetHeight;
+  var face = null;
+  document.fonts.forEach(function (x) { if (String(x.family).indexOf('zzcf') >= 0) face = x; });
+  if (face) { try { face.loaded; } catch (e) {} }
+  var root = { v: 0 }, cur = root;
+  for (var i = 0; i < 40; i++) { var nx = { i: i }; cur.next = nx; cur = nx; }
+  Object.defineProperty(cur, 'late', {
+    enumerable: true, configurable: true,
+    get: function () {
+      gHit++;
+      try {
+        inWindow = 1;
+        var w = document.getElementById('wchurn');
+        if (w && w.parentNode) w.parentNode.removeChild(w);
+        var nw = document.createElement('style'); nw.id = 'wchurn'; nw.textContent = 'q{color:#333}';
+        document.head.appendChild(nw);
+        var s = document.getElementById('s0');
+        if (s && s.sheet && s.sheet.cssRules.length) s.sheet.deleteRule(0);
+        document.body.offsetHeight;                // buildCompleted: the free, inside the serializer
+        inWindow = 0;
+      } catch (e) { gErr = e.name; }
+      return 'L';
+    }
+  });
+  var out = null, cerr = '';
+  try { out = structuredClone(root); } catch (e) { cerr = e.name; }
+  var c = out; while (c && c.next) { depth++; c = c.next; }
+  ok = (depth === 40 && c && c.late === 'L') ? 1 : 0;
+  ev('clone7 hit=' + gHit + ' depth=' + depth + ' ok=' + ok + ' err=' + (cerr || gErr || '-') +
+     ' face=' + (face ? 1 : 0) + ' st=' + (face ? face.status : '-'));
+  if (face) { try { B2(face); } catch (e) {} }
+  function B2(f) {
+    var hits = 0;
+    Object.defineProperty(FontFace.prototype, 'then', { configurable: true,
+      get: function () { hits++; try { document.body.offsetHeight; } catch (e) {} return undefined; },
+      set: function (v) {} });
+    try { f.load(); } catch (e) {}
+    ev('clone7 load hits=' + hits + ' st=' + f.status);
+    try { delete FontFace.prototype.then; } catch (e) {}
+  }
+  ev('done caps7');
+})();
+</script>

@@ -1,0 +1,8 @@
+files 10500 owner_rows 310
+unresolved before {'unresolved_all': 828, 'unresolved_owner': 45} after {'unresolved_all': 791, 'unresolved_owner': 8, 'resolved_owner': 37}
+counts {'recv-unresolved': 380, 'rows-with-ambiguous-name': 16}
+new-window rows 0
+
+real	2m6.534s
+user	2m0.538s
+sys	0m1.801s

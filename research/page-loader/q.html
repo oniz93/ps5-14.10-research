@@ -1,0 +1,12 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>child</title></head><body>
+<script>
+(function () {
+  function ev(m) { (new Image()).src = 'http://127.0.0.1:' + location.port + '/ev?m=' + encodeURIComponent(m) + '&r=' + Math.random(); }
+  ev('Q load hash=' + location.hash);
+  setTimeout(function () { ev('Q nav'); location.hash = 'h1'; }, 150);
+  setTimeout(function () { ev('Q alive2 hash=' + location.hash); }, 900);
+  window.onerror = function (e) { ev('Q err ' + e); };
+})();
+</script>
+</body></html>

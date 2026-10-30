@@ -1,0 +1,11 @@
+===== B1  page=thenable2.html  q=k=arr&td=0
+access: none
+SUMMARY: none
+EXIT=124
+-- beacons:
+   START k=arr td=0 md5ish=1
+   THENARR hit=1 len=1
+   AFTERLOAD st=loaded size=2
+   LOADOK n=1
+   READY
+   END hits=1 status=loaded size=2

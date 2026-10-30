@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>loader tail probe</title></head>
+<body>
+<div id="d">ctrl</div>
+<iframe id="f"></iframe>
+<script>
+(function () {
+  var P = new URLSearchParams(location.search);
+  var k = P.get('k') || 'rm';
+  function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(m) + '&r=' + Math.random(); }
+  ev('P start k=' + k + ' host=' + location.host);
+  var f = document.getElementById('f');
+  var n = 0;
+  f.addEventListener('load', function () {
+    n++;
+    ev('LOAD n=' + n);
+    if (n === 2) {
+      if (k === 'rm') { f.remove(); ev('ACT removed-iframe'); }
+      else if (k === 'div') { document.getElementById('d').remove(); ev('ACT removed-div'); }
+      else { ev('ACT none'); }
+    }
+  });
+  f.src = 'http://localhost:' + location.port + '/q.html';
+  setTimeout(function () { ev('P alive n=' + n); }, 600);
+  setTimeout(function () { ev('P done n=' + n); }, 1500);
+  setTimeout(function () { ev('P done2 n=' + n); }, 2600);
+  window.onerror = function (e) { ev('P err ' + e); };
+})();
+</script>
+</body></html>

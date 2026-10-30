@@ -1,0 +1,18 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>evloop-selfdestroy</title>
+<!-- docs/75 probe: dom/EventLoop.cpp:124-126 continues on the EventLoop (microtaskQueue()) after
+     task->execute() has run arbitrary script. The loop is a per-agent-cluster singleton kept alive only by its
+     documents' RefPtr (Document.h:2180; WindowEventLoop.cpp:72-78), so a child task that removes its own
+     frameElement destroys the document the loop belongs to, in the middle of run().
+       rm=0  child reads frameElement but does not remove it (control)
+       rm=1  child removes it                                   (the window) -->
+<iframe id="f" width="200" height="60"></iframe>
+<script>
+function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(m); }
+var rm = new URLSearchParams(location.search).get('rm') || '1';
+document.getElementById('f').src = 'child.html?rm=' + rm;
+ev('PARENT start rm=' + rm);
+setTimeout(function () { ev('PARENT alive fe=' + (document.getElementById('f') ? 'yes' : 'no')); }, 500);
+setTimeout(function () { ev('PARENT late'); }, 1500);
+</script>

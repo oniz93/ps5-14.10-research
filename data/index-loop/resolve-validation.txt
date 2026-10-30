@@ -1,0 +1,4 @@
+bare multi-hop callers tested: 60  ok=59  miss=1
+  MISS ('DOMCacheStorage', 'startSequentialMatch', 'doSequentialMatch', [])
+receiver multi-hop callers tested: 0  ok=0  miss=0
+python3 tools/index-loop-resolve-validate.py  125.42s user 2.00s system 96% cpu 2:12.14 total

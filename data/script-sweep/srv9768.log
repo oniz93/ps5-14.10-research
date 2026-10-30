@@ -1,0 +1,21 @@
+127.0.0.1 - - [29/Oct/2026 20:38:54] "GET /xml-ce.svg?reg=1&atk=wref HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 20:38:54] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:38:54] "GET /ev?m=START%20reg%3Dtrue%20atk%3Dwref%20root%3Dsvg HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:38:54] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:38:54] "GET /ev?m=DEF%20ok HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:38:54] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:38:54] "GET /ev?m=CTOR%20atk%3Dwref HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:38:54] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:38:54] "GET /ev?m=WREF%20armed HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:38:54] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:38:54] "GET /ev?m=WREF%20alloc%20done HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:38:54] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:38:54] "GET /ev?m=CTOR%20done HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:38:54] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:38:54] "GET /ev?m=TAIL%20g%3Dtrue%20xa%3D1%20xaparent%3Dg HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:38:54] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:38:54] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:38:55] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:38:55] "GET /ev?m=LATE%20root%3Dyes%20g%3D1%20xa%3D1%20text%3D1 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:38:55] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:38:55] "GET /ev?m=WREF%20later%20alive%3Dno HTTP/1.1" 404 -

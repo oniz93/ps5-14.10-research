@@ -1,0 +1,47 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>track-clients</title>
+<body>
+<script>
+// docs/80 §6 arm: a <track>-created TextTrack has TWO clients (HTMLTrackElement + HTMLMediaElement), so one
+// setMode() drives two iterations of WeakHashSet::forEach — the second `m_set.contains()` therefore runs after
+// the first client callback. Witnesses: a `change` event on video.textTracks (HTMLMediaElement client's
+// scheduleChangeEvent) and an `error`/`load` event on the <track> element (HTMLTrackElement client's
+// scheduleLoad). Control: a JS-created TextTrack has only the media element as a client.
+var ev = function (m) { new Image().src = '/ev?m=' + encodeURIComponent(m); };
+window.addEventListener('error', function (e) { ev('ERR ' + e.message); });
+
+function armA() {
+    var v = document.createElement('video');
+    v.setAttribute('preload', 'metadata');
+    var t = document.createElement('track');
+    t.setAttribute('kind', 'captions');
+    t.setAttribute('src', '/nope.vtt');
+    v.appendChild(t);
+    document.body.appendChild(v);
+    var change = 0, terr = 0;
+    v.textTracks.addEventListener('change', function () { change++; ev('A change=' + change); });
+    t.addEventListener('error', function () { terr++; ev('A terr=' + terr + ' rs=' + t.readyState); });
+    t.addEventListener('load', function () { ev('A tload'); });
+    var tt = t.track;
+    ev('A kids=' + v.children.length + ' track=' + (tt ? tt.kind : 'null') + ' mode=' + (tt ? tt.mode : '-'));
+    tt.mode = 'showing';                       // TextTrack::setMode -> m_clients.forEach (two clients)
+    ev('A setmode mode=' + tt.mode + ' label=' + tt.label);
+    setTimeout(armB, 400);
+}
+
+function armB() {
+    var v = document.createElement('video');
+    v.setAttribute('preload', 'metadata');
+    document.body.appendChild(v);
+    var c = 0;
+    v.textTracks.addEventListener('change', function () { c++; ev('B change=' + c); });
+    var tt = v.addTextTrack('captions', 'zz2', 'en');   // one client: the media element
+    var has = tt ? 'yes' : 'no';
+    tt.mode = 'showing';
+    ev('B setmode=' + tt.mode + ' has=' + has + ' n=' + v.textTracks.length);
+    setTimeout(function () { ev('DONE'); }, 500);
+}
+
+setTimeout(armA, 100);
+</script>

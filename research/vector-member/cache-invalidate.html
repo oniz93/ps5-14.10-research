@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!-- docs/79 arm: CollectionIndexCache::m_cachedList is the first member vector in the sweep whose pointee is not
+     separately rooted (raw Vector<Node*>), so its invalidation rule is measured here, not assumed.
+     The index cache is only built (m_listValid) by a read that leaves the `m_current` fast path: c[N-1], c.length.
+     After a structural change the cache must be dropped; if it is not, c[0] answers the *detached* node and the raw
+     pointer it hands back is a dangling one once that node is freed. `mut=0` is the control arm.
+     mode=list is `childNodes`, i.e. ChildNodeList, whose `willValidateIndexCache()` override is empty
+     (dom/ChildNodeList.h:78) — it never registers at the document, so its cache rides only the per-node path. -->
+<html><head><meta charset="utf-8"><title>cache</title></head>
+<body>
+<div id="root"></div>
+<script>
+function ev(m) { new Image().src = '/ev?m=' + encodeURIComponent(m); }
+function desc(n) {
+    if (!n) return 'null';
+    if (n.nodeType === 1) return n.id || n.tagName;
+    if (n.nodeType === 3) return '#t:' + n.nodeValue;
+    return '#' + n.nodeType;
+}
+var Q = new URLSearchParams(location.search);
+var MUT = Q.get('mut') || '1';
+var MODE = Q.get('mode') || 'children';
+var GC = Q.get('gc') || '0';
+var N = parseInt(Q.get('n') || '8', 10);
+
+var root = document.getElementById('root');
+for (var i = 0; i < N; i++) {
+    var d = document.createElement('div');
+    d.id = 'd' + i;
+    d.textContent = 'x' + i;
+    root.appendChild(d);
+}
+for (var i = 0; i < N; i++) root.appendChild(document.createTextNode('t' + i));
+
+var witness = null;
+function collection() {
+    if (MODE === 'children') return root.children;
+    if (MODE === 'tag') return document.getElementsByTagName('div');
+    if (MODE === 'list') return root.childNodes;
+    if (MODE === 'detached') {           // same cache, a root that is not in the document
+        var box = document.createElement('section');
+        for (var i = 0; i < N; i++) { var e = document.createElement('div'); e.id = 'x' + i; box.appendChild(e); }
+        witness = box;
+        return box.children;
+    }
+    return root.children;
+}
+
+var c = collection();
+var first = desc(c[0]);                   // m_current fast path, no cache
+var last = desc(c[c.length - 1]);         // traverseForwardTo -> willValidateIndexCache -> m_cachedList built
+var len0 = c.length;                      // nodeCount -> computeNodeCountUpdatingListCache
+ev('A build mode=' + MODE + ' first=' + first + ' last=' + last + ' len=' + len0 + ' n=' + N);
+
+var removed = null;
+if (MUT === '1') {
+    var host = (MODE === 'detached') ? witness : root;
+    removed = host.firstChild;
+    host.removeChild(removed);
+    ev('B removed=' + desc(removed));
+}
+
+if (GC === '1') {                          // allocation pressure: no window.gc on this build (docs/77)
+    var junk = [];
+    for (var i = 0; i < 200000; i++) junk.push({ a: i, b: 'x' + i });
+    junk = null;
+}
+
+function readIdx() {
+    try { return desc(c[0]); } catch (e) { return 'throw:' + e.name; }
+}
+function readLen() {
+    try { return String(c.length); } catch (e) { return 'throw:' + e.name; }
+}
+ev('C after first=' + readIdx() + ' len=' + readLen() + ' mut=' + MUT + ' mode=' + MODE + ' gc=' + GC);
+ev('D again=' + readIdx() + ' removedParented=' + (removed ? (removed.parentNode ? 'yes' : 'no') : 'na'));
+
+if (removed) {
+    var host2 = (MODE === 'detached') ? witness : root;
+    host2.insertBefore(removed, host2.firstChild);
+    ev('E reattached first=' + readIdx() + ' len=' + readLen());
+}
+ev('F done');
+</script>
+</body></html>

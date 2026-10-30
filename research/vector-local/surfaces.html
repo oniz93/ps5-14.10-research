@@ -1,0 +1,35 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>docs/78 — the gated surface: window.indexedDB on this build</title>
+<body>
+<script>
+// docs/78. The only page-reachable local `Vector<X*, N>` with a GC element outside the serializer is
+// IDBBindingUtilities.cpp:257 (`Vector<JSArray*> stack`, default capacity 0 — always heap) inside
+// createIDBKeyFromValue, where `array->getIndex()` falls back to `get()` on a miss (JSObject.h:409-414) and can
+// therefore run a prototype getter with the ancestor chain on the heap vector.
+//
+// Its gate: IDBFactory.idl:27 `EnabledBySetting=IndexedDBAPIEnabled`, and
+// UnifiedWebPreferences.yaml:3139 IndexedDBAPIExposeIndexedDBToWindowOrWorkerEnabled is `false` on
+// `PLATFORM(PLAYSTATION)` for WebKitLegacy, WebKit and WebCore ("we need to hide window.indexedDB but expose the
+// IndexedDB types"). This page measures it instead of quoting it.
+//
+// Controls: MutationObserver (one of the ref rows really read in docs/78), structuredClone (the row that is
+// live and closed), and Element.attachShadow (proves DOM scripting works at all in this run).
+(function () {
+  function B(m) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); } catch (e) {} }
+  function T(n) { try { return typeof eval(n); } catch (e) { return 'THREW:' + e.name; } }
+  B('idb ' + T('indexedDB'));
+  B('idbfactory ' + T('IDBFactory'));
+  B('idbobjectstore ' + T('IDBObjectStore'));
+  B('idbkeyrange ' + T('IDBKeyRange'));
+  B('idbrequest ' + T('IDBRequest'));
+  B('ctl-mutationobserver ' + T('MutationObserver'));
+  B('ctl-structuredclone ' + T('structuredClone'));
+  B('ctl-map ' + T('Map'));
+  B('ctl-weakref ' + T('WeakRef'));
+  B('ctl-attachshadow ' + (document.body.attachShadow ? 'function' : 'undefined'));
+  // positive control that a typed name really is visible when it is not gated:
+  B('ctl-element ' + T('Element') + ' ctl-cssfontface ' + T('FontFace'));
+  B('done');
+})();
+</script>

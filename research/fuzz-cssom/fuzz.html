@@ -1,0 +1,369 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>fuzz-cssom — a seeded in-page fuzzer over the four surfaces the audits kept finding</title>
+<link rel="stylesheet" href="fuzz.css">
+<style id="s0">
+.c0 { color: #111 }
+</style>
+<body>
+<div id="root"><p id="p0">delta</p><span id="sp">gamma</span></div>
+<script>
+// docs/84. Twenty static passes (docs/69-docs/83) closed every script-window *shape* this tree has; the one
+// live bug (docs/65) is closed as not-a-primitive. What has never been pointed at the drop is the sanitizer
+// under a seeded in-page fuzzer. The alphabet is not invented here — it is the four surfaces those passes kept
+// touching:
+//
+//   F*  @font-face lifecycle      docs/65: new FontFace, document.fonts.load/check/ready, FontFace.status,
+//                                 delete a face, and remove the owning <style> (the free is the last
+//                                 statement of CSSFontSelector::buildCompleted, reached from
+//                                 Element::offsetHeight during a style recalc).
+//   R*  CSSOM rule mutation       docs/72: insertRule/deleteRule on an inline <style> sheet and on a <link>
+//                                 sheet, @media grouping rules, @page, and nesting `&`.
+//   C*  custom-element reactions  docs/80: define/upgrade, enqueue during invokeAll, attributeChanged.
+//   G*  Range/Selection churn     docs/68: boundary reassignment across nodes that are removed.
+//   L*/M*  the engine's own "run the recalc now" button (offsetHeight) and a GC churn.
+//
+// Determinism, and why a crash is reproducible: every iteration draws exactly four xorshift32 words, whatever
+// the op is — one for the op choice, three for its arguments. So the op id and its arguments at index i are a
+// pure function of (seed, i) and do not depend on which ops were executed. The beacon stream therefore only
+// needs the count, and a minimiser can replay: bisect `n=` to the first failing index, then narrow with
+// `only=<ids>` (skipped ops still consume their four draws, so the retained ops keep their exact arguments).
+//
+// Oracles:
+//   beacon  `new Image().src='/ev?m=<seq>&op=<id>'` every `every=` operations (default 200) and a final
+//           `m=done&op=<last>`, so the last executed operation survives a process death. `m=census` lines at
+//           the end give, per op id, how many times it ran and how many times it threw — a fuzz run whose ops
+//           all throw is not a measurement, and this is how that is told apart from a clean run.
+//   then=1  installs an `Object.prototype.then` accessor, the reentrancy window docs/69 measured inside
+//           `resolve(<DOM object>)`: the getter runs *synchronously* inside the resolution, before the next
+//           C++ statement, and here it mutates the sheet or removes the face's owning <style>. Off by
+//           default so the sweep stays one variable away from the plain instrument.
+(function () {
+  'use strict';
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+  function B(m, x) {
+    try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {}
+  }
+
+  var SEED  = (parseInt(K('seed', '1'), 10) >>> 0) || 1;
+  var N     = Math.max(0, parseInt(K('n', '2000'), 10));
+  var EVERY = Math.max(1, parseInt(K('every', '200'), 10));
+  var BATCH = Math.max(1, parseInt(K('batch', '50'), 10));
+  var ONLY  = K('only', '') ? K('only', '').split(',') : null;
+  var SKIP  = K('skip', '') ? K('skip', '').split(',') : null;
+  var THEN  = K('then', '0') === '1';
+  var DELF  = K('del', '0') === '1';   // then=1 only: make the m==0 slot delete a live face
+  var MAXF  = Math.max(1, parseInt(K('maxfaces', '8'), 10));
+  var MAXR  = Math.max(1, parseInt(K('maxrules', '24'), 10));
+  var MAXE  = Math.max(0, parseInt(K('maxels', '40'), 10));
+  var TICK  = Math.max(0, parseInt(K('tick', '5000'), 10));
+
+  // xorshift32. Seed 0 is remapped (the fixed point of the generator).
+  var st = SEED;
+  function rnd() { st ^= st << 13; st >>>= 0; st ^= st >>> 17; st ^= st << 5; st >>>= 0; return st; }
+
+  var root = document.getElementById('root');
+  var p0 = document.getElementById('p0');
+  var s0 = document.getElementById('s0');
+  var live = [], probe = [], els = [], defs = [], junk = [];
+  var counter = 0, STAT = '', depth = 0, thenHits = 0, seq = 0, lastOp = 'none';
+  var T0 = Date.now();
+  var CNT = {}, ERRC = {}, ERRLAST = {};
+
+  function noop() {}
+  function inlineSheet() { return s0 && s0.sheet ? s0.sheet : null; }
+  function linkSheet() {
+    var L = document.styleSheets;
+    for (var i = 0; i < L.length; i++) {
+      var s = L[i];
+      try { if (s.href && s.href.indexOf('fuzz.css') >= 0) return s; } catch (e) {}
+    }
+    return null;
+  }
+  function fam(a) { return 'zzF' + (a % 16); }
+  function pick(l, a) { return l.length ? l[a % l.length] : null; }
+  function trimFaces() {
+    while (live.length > MAXF) { var f = live.shift(); try { document.fonts.delete(f); } catch (e) {} }
+  }
+  function trimRules(s) {
+    try { while (s && s.cssRules && s.cssRules.length > MAXR) s.deleteRule(s.cssRules.length - 1); } catch (e) {}
+  }
+  function trimEls() {
+    while (els.length > MAXE) { var el = els.shift(); if (el && el.parentNode) el.parentNode.removeChild(el); }
+  }
+
+  // ---------------------------------------------------------------- the alphabet
+  var OPS = [
+    // --- font lifecycle (docs/65)
+    ['Fnew-local', 6, function (a, b) {
+      var f = new FontFace(fam(a), 'local("NoSuchFontName' + (b % 7) + '")');
+      document.fonts.add(f);
+      f.load().then(noop, noop);
+      live.push(f); trimFaces();
+    }],
+    ['Fnew-url', 3, function (a, b) {
+      var f = new FontFace(fam(a), 'url(/nope' + (b % 5) + '.woff2)');
+      document.fonts.add(f);
+      f.load().then(noop, noop);
+      live.push(f); trimFaces();
+    }],
+    ['Fcheck', 3, function (a) {
+      var f = pick(live, a);
+      STAT = document.fonts.check('1em "' + (f ? f.family : fam(a)) + '"');
+    }],
+    ['Fload', 3, function (a) {
+      var f = pick(live, a);
+      document.fonts.load('1em "' + (f ? f.family : fam(a)) + '"', 'A').then(noop, noop);
+    }],
+    ['Fstatus', 3, function (a) {
+      var f = pick(live, a);
+      if (f) STAT = f.status;
+    }],
+    ['Fdel', 2, function (a) {
+      if (!live.length) return;
+      document.fonts.delete(live.splice(a % live.length, 1)[0]);
+    }],
+    ['Fstyle', 5, function (a) {
+      var n = 'zzS' + (a % 8);
+      var el = document.createElement('style');
+      el.textContent = '@font-face{font-family:' + n + ';src:local("NoSuchFontName")}.' + n + '{font-family:' + n + '}';
+      document.head.appendChild(el);
+      probe.push(el);
+      root.className = n;
+      // remove the owning <style> of an older face — docs/65 Attempt 8/9's "two rebuilds" surface
+      while (probe.length > 4) { var o = probe.shift(); if (o.parentNode) o.parentNode.removeChild(o); }
+    }],
+    ['Fready', 1, function () { document.fonts.ready.then(noop, noop); }],
+
+    // --- CSSOM rule mutation (docs/72)
+    ['Rfont', 6, function (a) {
+      var s = inlineSheet(); if (!s) return;
+      s.insertRule('@font-face{font-family:zzR' + (a % 16) + ';src:local("NoSuchFontName")}', 0);
+      trimRules(s);
+    }],
+    ['Rplain', 4, function (a, b) {
+      var s = inlineSheet(); if (!s) return;
+      var L = s.cssRules.length;
+      s.insertRule('.c' + (a % 12) + '{color:rgb(' + (b % 256) + ',0,0)}', b % (L + 1));
+      trimRules(s);
+    }],
+    ['Rdel', 4, function (a, b, c) {
+      var s = inlineSheet(); if (!s) return;
+      var L = s.cssRules.length; if (!L) return;
+      s.deleteRule(c % L);
+    }],
+    ['Rmedia', 3, function (a, b) {
+      var s = inlineSheet(); if (!s) return;
+      s.insertRule('@media all{.m' + (a % 8) + '{color:blue}}', 0);
+      var r = s.cssRules[0];
+      if (r && r.insertRule && r.cssRules && r.cssRules.length === 0) r.insertRule('.mi' + (b % 4) + '{margin:0}', 0);
+      trimRules(s);
+    }],
+    // docs/67's deterministic crash: a @page rule inserted into a grouping rule whose parentStyleSheet was
+    // cleared by deleteRule(0). Kept in the alphabet as the instrument's own sensitivity control.
+    ['Rpage', 1, function (a) {
+      var el = document.createElement('style');
+      el.textContent = '@media all{}';
+      document.head.appendChild(el);
+      var s = el.sheet; if (!s) return;
+      var g = s.cssRules[0];
+      if (!g || !g.insertRule) { el.parentNode.removeChild(el); return; }
+      s.deleteRule(0);
+      g.insertRule('@page foo' + (a % 4) + ' {}', 0);
+      el.parentNode.removeChild(el);
+    }],
+    ['Rnest-inline', 2, function (a, b) {
+      var s = inlineSheet(); if (!s) return;
+      var L = s.cssRules.length; if (!L) return;
+      var r = s.cssRules[b % L];
+      if (r && r.insertRule) r.insertRule('& b{color:green}', 0);
+    }],
+    // docs/72's deterministic crash: nesting insertRule into a *copied* (<link>) sheet's CSSStyleRule.
+    ['Rnest-link', 1, function (a, b) {
+      var s = linkSheet(); if (!s) return;
+      var L = s.cssRules.length; if (!L) return;
+      var r = s.cssRules[b % L];
+      if (r && r.insertRule) r.insertRule('& b{color:red}', 0);
+    }],
+    ['Rlinkplain', 2, function (a, b) {
+      var s = linkSheet(); if (!s) return;
+      var L = s.cssRules.length;
+      s.insertRule('.lz' + (a % 10) + '{margin-top:' + (b % 9) + 'px}', b % (L + 1));
+      trimRules(s);
+    }],
+    ['Rlinkdel', 2, function (a, b, c) {
+      var s = linkSheet(); if (!s) return;
+      var L = s.cssRules.length; if (!L) return;
+      s.deleteRule(c % L);
+    }],
+    ['Rdetach', 2, function (a) {
+      if (!s0) return;
+      var p = s0.parentNode;
+      if (p) p.removeChild(s0);
+      var s = s0.sheet;
+      if (s) { try { s.insertRule('.d' + (a % 5) + '{color:#000}', 0); } catch (e) {} trimRules(s); }
+      if (p) p.appendChild(s0);
+    }],
+
+    // --- custom-element reactions (docs/80)
+    ['Cdef', 2, function () {
+      if (defs.length > 200) return;
+      var n = 'x-fz' + (counter++);
+      customElements.define(n, class extends HTMLElement {
+        constructor() { super(); this.t = 1; }
+        connectedCallback() { this.setAttribute('c', '1'); }
+        attributeChangedCallback(k, o, v) { this.t = 2; }
+        static get observedAttributes() { return ['a', 'c']; }
+      });
+      defs.push(n);
+    }],
+    ['Cup', 3, function (a) {
+      if (!defs.length) return;
+      var el = document.createElement(defs[a % defs.length]);
+      root.appendChild(el);
+      els.push(el); trimEls();
+    }],
+    ['Cupgrade', 2, function (a) {
+      customElements.upgrade(root);
+      if (defs.length) customElements.whenDefined(defs[a % defs.length]).then(noop, noop);
+    }],
+    ['Cattr', 2, function (a, b) {
+      var el = pick(els, a);
+      if (el) el.setAttribute('a', String(b % 9));
+    }],
+
+    // --- Range / Selection boundary churn (docs/68)
+    ['Grange', 3, function (a) {
+      var r = document.createRange();
+      r.selectNodeContents(p0);
+      r.deleteContents();
+      p0.textContent = 'd' + (a % 9);
+    }],
+    ['Gsel', 2, function () {
+      var s = getSelection(); if (!s) return;
+      var r = document.createRange();
+      r.selectNodeContents(p0);
+      s.addRange(r);
+      s.removeAllRanges();
+    }],
+    ['Gchurn', 2, function () {
+      var r = document.createRange();
+      for (var i = 0; i < 32; i++) {
+        var t = document.createTextNode('t' + i);
+        root.appendChild(t);
+        r.setStart(t, 0); r.setEnd(t, 1);
+        root.removeChild(t);
+        r.setStart(p0, 0); r.setEnd(p0, p0.childNodes.length);
+      }
+    }],
+    ['Gsurround', 1, function () {
+      var r = document.createRange();
+      r.selectNodeContents(p0);
+      try { r.surroundContents(document.createElement('b')); } catch (e) {}
+      r.compareBoundaryPoints(Range.START_TO_END, r);
+    }],
+
+    // --- the recalc trigger and a GC churn
+    ['Llayout', 6, function () { STAT = document.body.offsetHeight; root.getBoundingClientRect(); }],
+    ['Ltext', 2, function (a) {
+      var t = p0.firstChild;
+      if (t && t.nodeType === 3) t.data = 'd' + (a % 9);
+      STAT = document.body.offsetHeight;
+    }],
+    ['Mchurn', 2, function () {
+      for (var i = 0; i < 512; i++) junk.push({ x: i, s: 's' + i });
+      if (junk.length > 8192) junk.length = 0;
+    }]
+  ];
+
+  var TOT = 0, CUM = [];
+  for (var oi = 0; oi < OPS.length; oi++) { TOT += OPS[oi][1]; CUM.push(TOT); }
+  function pickOp(r) {
+    var x = r % TOT;
+    for (var i = 0; i < CUM.length; i++) if (x < CUM[i]) return OPS[i];
+    return OPS[OPS.length - 1];
+  }
+
+  // ---------------------------------------------------------------- then=1 arm
+  if (THEN) {
+    try {
+      Object.defineProperty(Object.prototype, 'then', {
+        configurable: true,
+        get: function () {
+          if (depth > 0) return undefined;          // reentrancy guard, depth 1
+          thenHits++;
+          if (thenHits <= 8) B('then', 'k=' + (this && this.constructor ? this.constructor.name : '?'));
+          depth++;
+          try {
+            var m = thenHits % 4;
+            if (m === 1) document.body.offsetHeight;                        // free path: layout inside the window
+            else if (m === 2) { var sh = inlineSheet(); if (sh && sh.cssRules.length) sh.deleteRule(0); }
+            else if (m === 3) {
+              var ps = probe.pop();
+              if (ps && ps.parentNode) ps.parentNode.removeChild(ps);       // remove the owning <style>
+              document.body.offsetHeight;
+            }
+            else if (DELF) {
+              var lf = pick(live, thenHits);        // the CVE's arming action: shrink the set inside the callback
+              if (lf) { live.splice(live.indexOf(lf), 1); document.fonts.delete(lf); }
+            }
+          } catch (e) {}
+          depth--;
+          return function () {};                    // thenable: the engine calls it, it does nothing
+        },
+        set: function (v) {}
+      });
+    } catch (e) { B('thenfail', 'e=' + (e && e.name)); }
+  }
+
+  B('boot', 'seed=' + SEED + '&n=' + N + '&then=' + (THEN ? 1 : 0) +
+    '&only=' + (ONLY ? ONLY.join('.') : 'all') + '&skip=' + (SKIP ? SKIP.join('.') : 'none') +
+    '&batch=' + BATCH + '&every=' + EVERY + '&del=' + (DELF ? 1 : 0));
+
+  function census() {
+    for (var i = 0; i < OPS.length; i++) {
+      var id = OPS[i][0];
+      B('census', 'op=' + id + '&n=' + (CNT[id] || 0) + '&e=' + (ERRC[id] || 0) +
+        (ERRLAST[id] ? '&x=' + encodeURIComponent(ERRLAST[id]) : ''));
+    }
+  }
+
+  function runBatch() {
+    var end = Math.min(N, seq + BATCH);
+    for (; seq < end; seq++) {
+      var d0 = rnd(), d1 = rnd(), d2 = rnd(), d3 = rnd();   // exactly four, always
+      var op = pickOp(d0);
+      var id = op[0];
+      var run = true;
+      if (ONLY && ONLY.indexOf(id) < 0) run = false;
+      if (SKIP && SKIP.indexOf(id) >= 0) run = false;
+      if (run) {
+        lastOp = id;
+        CNT[id] = (CNT[id] || 0) + 1;
+        try { op[2](d1, d2, d3); }
+        catch (e) { ERRC[id] = (ERRC[id] || 0) + 1; ERRLAST[id] = (e && e.name) + ''; }
+      }
+      // iteration boundary beacon, emitted whether or not the op ran: `m` is therefore an op counter,
+      // and the last one before a crash is a lower bound on the failing index.
+      if ((seq + 1) % EVERY === 0) B(seq + 1, 'op=' + id);
+    }
+    if (seq < N) setTimeout(runBatch, 0);
+    else {
+      // end state, so a null result carries what the alphabet had actually built by then
+      var fc = -1, cr = -1, lk = -1;
+      try { fc = document.fonts.size; } catch (e) {}
+      try { var is = inlineSheet(); cr = is ? is.cssRules.length : -1; } catch (e) {}
+      try { var ls = linkSheet(); lk = ls ? ls.cssRules.length : -1; } catch (e) {}
+      B('done', 'op=' + lastOp + '&tot=' + N + '&then=' + thenHits + '&ms=' + (Date.now() - T0) +
+        '&fc=' + fc + '&cr=' + cr + '&lk=' + lk + '&sc=' + document.head.querySelectorAll('style').length +
+        '&eh=' + document.body.offsetHeight);
+      census();
+    }
+  }
+
+  if (TICK) setInterval(function () { B('tick', 'seq=' + seq); }, TICK);
+  setTimeout(runBatch, 0);
+})();
+</script>
+</body>

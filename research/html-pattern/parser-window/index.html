@@ -1,0 +1,90 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>parser script windows</title>
+<!-- GOAL action 2026-10-29: html/parser audit with the extended sink list (docs/71).
+
+     Sinks under test, all in the parser's own frame:
+       HTMLScriptRunner::runScript()                            :246  performMicrotaskCheckpoint()
+       HTMLScriptRunner::executePendingScriptAndDispatchEvent()  :111  performMicrotaskCheckpoint()
+       HTMLDocumentParser::runScriptsForPausedTreeBuilder()      :229  performMicrotaskCheckpoint()
+       HTMLScriptRunner::execute() -> runScript -> executeParsingBlockingScripts
+     and the object the action named as the free candidate: `PendingScript`.
+
+     Probes are page-side only: the verdict is read from the /ev beacon log, no sanitizer
+     needed.  `p=` selects probes (comma list, default ALL) so one probe can be disabled
+     without touching the others.  The external tags are LITERAL in the markup on purpose:
+     only a parser-inserted <script src> goes through HTMLScriptRunner (JS-created ones go
+     through ScriptRunner's timer, a different owner).
+
+       P1  baseline: an inline parser-blocking script runs.
+       P2  the load-callback frame: `document.write()` from inside an external script, i.e.
+           from inside HTMLDocumentParser::notifyFinished -> executeScriptsWaitingForLoad ->
+           executeParsingBlockingScripts -> executePendingScriptAndDispatchEvent.  The nested
+           beacon must land between "P2 enter" and "P2 wrote" if the parse re-enters.
+       P3  `document.open()` from inside an executing script: Document::open bails at the
+           `parser->isExecutingScript()` test (Document.cpp:3070-3071) without throwing.
+       P5  once-per-element preparation: a parser-inserted `<script src>` is removed and
+           re-appended (must NOT run again -- ScriptElement.cpp:186 `if (m_alreadyStarted)
+           return false`), then a *fresh* element with the same src is appended (must run:
+           control that the URL/cache cannot be what suppressed the re-insert).
+       P6  the currently executing element is removed, then the script writes: the element
+           being processed is held by `Ref<ScriptElement>` at HTMLScriptRunner.cpp:134.
+       P7  a deferred script's element is removed while its PendingScript is queued: the
+           queue (HTMLScriptRunner::m_scriptsToExecuteAfterParsing) owns the PendingScript,
+           not the DOM, so the script should still run at end of parsing.
+       P8  write-recursion depth chain: each write inserts an external script that writes
+           again; cMaxWriteRecursionDepth is 21 (Document.cpp:385), so the chain must stop
+           there.  This measures the width of the parser's script-triggered re-entry. -->
+<script>window.__n = 0;
+window.B = function (m) { window.__n++; new Image().src = '/ev?m=' + encodeURIComponent(window.__n + ' ' + m); };
+window.SEL = new URLSearchParams(location.search).get('p') || 'ALL';
+window.ON = function (n) { var s = window.SEL; return s === 'ALL' || (',' + s + ',').indexOf(',' + n + ',') >= 0; };
+// P8's chain body: an INLINE script written by document.write executes synchronously inside
+// Document::write -> HTMLDocumentParser::insert -> pumpTokenizer, so each link accumulates one
+// level of m_writeRecursionDepth.  (An external write does not: the parser pauses for the load
+// and the script runs in a later task, which the W1 run measured -- depth never accumulated.)
+window.W = function () {
+  window.__w = (window.__w || 0) + 1;
+  B('P8 depth=' + window.__w);
+  if (window.__w < 26) document.write('<script>W()<\/script>');
+  B('P8 ret=' + window.__w);
+};
+B('START sel=' + window.SEL);</script>
+
+<script>B('P1 inline');</script>
+
+<script src="/p2.js"></script>
+
+<script>if (ON('P3')) { B('P3 enter'); try { document.open(); B('P3 open ok'); } catch (e) { B('P3 open threw ' + e.name); } B('P3 exit'); }</script>
+
+<script src="/s1.js" id="s1elm"></script>
+<script>if (ON('P5')) {
+  try {
+    var e = document.getElementById('s1elm');
+    B('P5 found=' + (e ? 1 : 0));
+    e.remove(); document.documentElement.appendChild(e); B('P5 reinserted');
+    var f = document.createElement('script'); f.src = '/s1.js'; document.documentElement.appendChild(f); B('P5 fresh appended');
+  } catch (e2) { B('P5 threw ' + e2.name); }
+}</script>
+
+<script>if (ON('P6')) {
+  B('P6 enter');
+  try {
+    var cs = document.currentScript;
+    if (cs) { cs.remove(); B('P6 removed'); } else B('P6 no currentScript');
+    document.write('<b id=p6w>w</b>'); B('P6 wrote');
+  } catch (e) { B('P6 threw ' + e.name); }
+  B('P6 exit');
+}</script>
+
+<script defer id="d1" src="/s1.js"></script>
+<script>if (ON('P7')) {
+  B('P7 enter');
+  try { var d = document.getElementById('d1'); B('P7 found=' + (d ? 1 : 0)); d.remove(); B('P7 removed'); }
+  catch (e) { B('P7 threw ' + e.name); }
+  B('P7 exit');
+}</script>
+
+<script src="/p8.js"></script>
+
+<script>B('TAIL');</script>

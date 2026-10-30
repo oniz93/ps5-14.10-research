@@ -1,0 +1,13 @@
+127.0.0.1 - - [29/Oct/2026 21:29:09] "GET /class-wall.html?flood=none&n=0&nbuf=0 HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 21:29:09] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 21:29:09] "GET /ev?m=boot%20flood%3Dnone%20n%3D0%20order%3Dpost%20buf%3D16%20nbuf%3D0%20freek%3Dtrue HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 21:29:09] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 21:29:09] "GET /ev?m=pre HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 21:29:09] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 21:29:09] "GET /ev?m=SUM%20len%3D0%20t0%3Dundefined%20tN%3Dundefined HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 21:29:09] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 21:29:09] "GET /ev?m=RESULT%20typeof%3Dstring%20same%3Dtrue%20idSame%3Dfalse%20L%3D15%20C%3D69%20v%3DExpected%20res HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 21:29:09] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 21:29:09] "GET /ev?m=DONE HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 21:29:09] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 21:29:09] "GET /favicon.ico HTTP/1.1" 404 -

@@ -1,0 +1,109 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>CloneSerializer map/set iteration stacks — three cap-4 raw-cell vectors across a getter</title>
+<body>
+<script>
+// docs/78. CloneSerializer::serialize holds four raw-cell vectors. docs/77 measured the first one
+// (`Vector<JSObject*, 32> inputObjectStack`) and closed it with `m_objectPool`. The other three cross their
+// *inline capacity* (4) much earlier than 32, so they are the cheapest place in the whole tree to get a
+// heap-resident raw cell:
+//
+//   Vector<JSMapIterator*, 4> mapIteratorStack    ;2647 push, :2653 last()
+//   Vector<JSSetIterator*, 4> setIteratorStack    ;2693 push, :2699 last()
+//   Vector<JSValue, 4>        mapIteratorValueStack ;2669 push, :2674 last()
+//
+// Each push is preceded by one line of keep-alive (:2646, :2668, :2692
+// `m_keepAliveBuffer.appendWithCrashOnOverflow(...)`), so the prediction is inert. A nested Map/Set clone
+// exercises them: the serializer walks entries through the iterators (no page script there) and each map's
+// 'g' entry is an object with an own getter, so `getProperty` runs page script while d ancestors sit on all
+// three vectors. With n >= 5 the vectors are past their inline capacity, i.e. the pointers are in the heap
+// where the conservative stack scan cannot see them.
+//
+// Oracles (same method as docs/77):
+//   gcprobe  a decoy held only by a WeakRef created in the *previous* job. `collected` proves a GC ran
+//            inside the serialization window; without it "no corruption" cannot be told from "no GC".
+//   verify   the clone is walked back and each level checked (`instanceof Map`, size 2, get('g').p === d).
+//            `bad` counts levels the serializer read wrong.
+//
+// One knob per arm: kind=map|set (which iterator stack), churn=0 (no allocation in the getters),
+// from (first level whose getter churns), n (depth; <= 4 keeps every vector inline).
+(function () {
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+  function B(m) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); } catch (e) {} }
+
+  var N = parseInt(K('n', '8'), 10);
+  var KIND = K('kind', 'map');
+  var CHURN = parseInt(K('churn', '1'), 10);
+  var FROM = parseInt(K('from', '0'), 10);
+  var MB = parseInt(K('mb', '8'), 10);
+  var OBJS = parseInt(K('objs', '400000'), 10);
+  var KEEP = [];
+
+  // job 1: the decoy. A WeakRef target is kept alive to the end of the job that created it, so it must be
+  // made here and deref'd in job 2 (docs/77 recorded the same-job version as void).
+  var DECOYS = [];
+  for (var dc = 0; dc < 4; dc++) DECOYS.push((function () { var d = { decoy: dc }; return new WeakRef(d); })());
+  B('boot n=' + N + ' kind=' + KIND + ' churn=' + CHURN + ' from=' + FROM + ' mb=' + MB + ' objs=' + OBJS);
+
+  setTimeout(function () {
+    if (typeof structuredClone !== 'function') { B('no-structuredClone'); return; }
+    B('sc ok');
+
+    function churn(depth) {
+      if (CHURN) {
+        for (var i = 0; i < 4; i++) KEEP.push(new ArrayBuffer(MB * 1024 * 1024));
+        for (var j = 0; j < OBJS; j++) KEEP.push({ a: j });
+      }
+      B('gcprobe ' + depth + ' ' + (DECOYS[0].deref() ? 'alive' : 'collected'));
+      if (CHURN) B('churn ' + depth + ' ' + KEEP.length);
+    }
+
+    function g(depth) {
+      var o = {};
+      Object.defineProperty(o, 'p', {
+        enumerable: true, configurable: true,
+        get: function () { if (depth >= FROM) churn(depth); return depth; }
+      });
+      return o;
+    }
+
+    function build(depth) {
+      var next = (depth + 1 < N) ? build(depth + 1) : { leaf: 1 };
+      if (KIND === 'set') {
+        var s = new Set();
+        s.add(g(depth));   // walked first, with `depth` ancestor iterators already stacked
+        s.add(next);
+        return s;
+      }
+      var m = new Map();
+      m.set('g', g(depth));  // walked first, with `depth` ancestor iterators already stacked
+      m.set('k', next);
+      return m;
+    }
+
+    var root = build(0);
+    B('built');
+    var out = null;
+    try { out = structuredClone(root); } catch (e) { B('THREW ' + e.name + ':' + e.message); return; }
+    B('done');
+
+    var o = out, k = 0, bad = 0, firstBad = -1, got = '';
+    while (o && typeof o === 'object' && k < N) {
+      var isMap = (KIND !== 'set') && (o instanceof Map);
+      var isSet = (KIND === 'set') && (o instanceof Set);
+      var gv = null, nv = null;
+      if (isMap && o.size === 2) { gv = o.get('g'); nv = o.get('k'); }
+      if (isSet && o.size === 2) { var it = o.values(); gv = it.next().value; nv = it.next().value; }
+      var okg = gv && typeof gv === 'object' && gv.p === k;
+      if (!(isMap || isSet) || !okg) {
+        if (!bad) { firstBad = k; got = (isMap ? 'map' : isSet ? 'set' : String(o)) + ' p=' + (gv && gv.p); }
+        bad++;
+      }
+      o = nv; k++;
+    }
+    if (k !== N) { if (!bad) { firstBad = k; got = 'short'; } bad++; }
+    B('verify kind=' + KIND + ' depth=' + k + ' bad=' + bad + ' first=' + firstBad + ' got=' + got);
+  }, 0);
+})();
+</script>

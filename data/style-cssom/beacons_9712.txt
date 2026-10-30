@@ -1,0 +1,11 @@
+start case=11 href=/s.css nlink=2
+loaded load,load
+pre sheets=3 0:[inline n=1] 1:[/s.css n=1] 2:[/s.css n=1]
+pick n=0 hits=2 href=/s.css
+pick n=1 hits=2 href=/s.css
+T11 pre A=[color: red;] B=[color: red;]
+T11 set ok
+T11 post A=[color: red;]
+T11 post B=[color: red; margin-top: 13px;]
+after sheets=3 0:[inline n=1] 1:[/s.css n=1] 2:[/s.css n=1]
+done case=11

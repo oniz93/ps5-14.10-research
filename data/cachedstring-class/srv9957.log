@@ -1,0 +1,5 @@
+127.0.0.1 - - [29/Oct/2026 21:39:34] "GET /class-wall.html?flood=none&n=0&pre=lit HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 21:39:34] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 21:39:34] "GET /ev?m=boot%20flood%3Dnone%20n%3D0%20order%3Dpost%20buf%3D16%20nbuf%3D4%20freek%3Dtrue%20pre%3Dlit HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 21:39:34] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 21:39:34] "GET /ev?m=pre HTTP/1.1" 404 -

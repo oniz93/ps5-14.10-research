@@ -1,0 +1,8 @@
+/* fuzz.css — the <link> sheet the fuzzer mutates. docs/72: a <link> sheet is copy-on-mutate
+   (`isInMemoryCache()`), so its StyleSheetContents is copied and every wrapper reattached; an inline
+   <style> sheet is not copied. Two sheets, one alphabet, so `Rnest-inline` / `Rnest-link` and
+   `Rlinkplain` / `Rplain` differ only in which sheet they hit. */
+.c0 { color: #111 }
+.l0 { color: #123 }
+.l1 { margin: 1px }
+.l2 { padding: 2px }

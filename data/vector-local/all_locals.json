@@ -1,0 +1,1642 @@
+[
+ {
+  "file": "Source/WebCore/Modules/indexeddb/IDBRequest.cpp",
+  "line": 313,
+  "func": "IDBRequest::dispatchEvent",
+  "elem": "EventTarget*",
+  "cap": "0",
+  "name": "targets",
+  "kind": "node",
+  "chain": "EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/Modules/indexeddb/server/MemoryObjectStore.cpp",
+  "line": 307,
+  "func": "MemoryObjectStore::updateIndexesForPutRecord",
+  "elem": "std::pair<MemoryIndex*, IndexKey>",
+  "cap": "0",
+  "name": "changedIndexRecords",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/PAL/pal/text/TextEncodingRegistry.cpp",
+  "line": 147,
+  "func": "WTF_REQUIRES_LOCK",
+  "elem": "const char*",
+  "cap": "0",
+  "name": "names",
+  "kind": "primitive",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/accessibility/AXObjectCache.cpp",
+  "line": 319,
+  "func": "AXObjectCache::modalElementHasAccessibleContent",
+  "elem": "Node*",
+  "cap": "0",
+  "name": "nodeStack",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/accessibility/AccessibilityNodeObject.cpp",
+  "line": 228,
+  "func": "labelsForNode",
+  "elem": "HTMLLabelElement*",
+  "cap": "0",
+  "name": "labels",
+  "kind": "node",
+  "chain": "HTMLLabelElement > HTMLElement > StyledElement > Element > ContainerNode > Node"
+ },
+ {
+  "file": "Source/WebCore/accessibility/AccessibilityObject.cpp",
+  "line": 3596,
+  "func": "AccessibilityObject::isOnScreen",
+  "elem": "const AccessibilityObject*",
+  "cap": "0",
+  "name": "objects",
+  "kind": "ref",
+  "chain": "AccessibilityObject > AXCoreObject"
+ },
+ {
+  "file": "Source/WebCore/accessibility/AccessibilityObject.cpp",
+  "line": 3695,
+  "func": "AccessibilityObject::scrollToGlobalPoint",
+  "elem": "const AccessibilityObject*",
+  "cap": "0",
+  "name": "objects",
+  "kind": "ref",
+  "chain": "AccessibilityObject > AXCoreObject"
+ },
+ {
+  "file": "Source/WebCore/accessibility/AccessibilityObject.cpp",
+  "line": 4018,
+  "func": "AccessibilityObject::elementsFromAttribute",
+  "elem": "Element*",
+  "cap": "0",
+  "name": "elements",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/accessibility/AccessibilityObject.cpp",
+  "line": 4041,
+  "func": "AccessibilityObject::elementsFromAttribute",
+  "elem": "Element*",
+  "cap": "0",
+  "name": "elements",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/accessibility/AccessibilitySVGElement.cpp",
+  "line": 96,
+  "func": "AccessibilitySVGElement::childElementWithMatchingLanguage",
+  "elem": "Element*",
+  "cap": "0",
+  "name": "elements",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/accessibility/AccessibilityTree.cpp",
+  "line": 86,
+  "func": "AccessibilityTree::isTreeValid",
+  "elem": "Node*",
+  "cap": "0",
+  "name": "queue",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/accessibility/atspi/AccessibilityObjectAtspi.cpp",
+  "line": 484,
+  "func": "AccessibilityObjectAtspi::registerObject",
+  "elem": "std::pair<GDBusInterfaceInfo*, GDBusInterfaceVTable*>",
+  "cap": "0",
+  "name": "interfaces",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/accessibility/atspi/AccessibilityRootAtspi.cpp",
+  "line": 157,
+  "func": "AccessibilityRootAtspi::registerObject",
+  "elem": "std::pair<GDBusInterfaceInfo*, GDBusInterfaceVTable*>",
+  "cap": "0",
+  "name": "interfaces",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/animation/CSSPropertyAnimation.cpp",
+  "line": 1667,
+  "func": "blendMismatchedShadowLists",
+  "elem": "const ShadowData*",
+  "cap": "4",
+  "name": "fromShadows",
+  "kind": "other",
+  "chain": "ShadowData"
+ },
+ {
+  "file": "Source/WebCore/animation/CSSPropertyAnimation.cpp",
+  "line": 1673,
+  "func": "blendMismatchedShadowLists",
+  "elem": "const ShadowData*",
+  "cap": "4",
+  "name": "toShadows",
+  "kind": "other",
+  "chain": "ShadowData"
+ },
+ {
+  "file": "Source/WebCore/animation/CSSPropertyAnimation.cpp",
+  "line": 2378,
+  "func": "blend",
+  "elem": "FillLayer*",
+  "cap": "0",
+  "name": "previousDstLayers",
+  "kind": "ref",
+  "chain": "FillLayer"
+ },
+ {
+  "file": "Source/WebCore/animation/CSSPropertyAnimation.cpp",
+  "line": 3833,
+  "func": "CSSPropertyAnimationWrapperMap::CSSPropertyAnimationWrapperMap",
+  "elem": "AnimationPropertyWrapperBase*",
+  "cap": "0",
+  "name": "longhandWrappers",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/animation/KeyframeEffect.cpp",
+  "line": 1505,
+  "func": "KeyframeEffect::setAnimatedPropertiesInStyle",
+  "elem": "const KeyframeValue*",
+  "cap": "0",
+  "name": "propertySpecificKeyframes",
+  "kind": "other",
+  "chain": "KeyframeValue"
+ },
+ {
+  "file": "Source/WebCore/animation/KeyframeEffect.cpp",
+  "line": 1541,
+  "func": "KeyframeEffect::setAnimatedPropertiesInStyle",
+  "elem": "const KeyframeValue*",
+  "cap": "0",
+  "name": "intervalEndpoints",
+  "kind": "other",
+  "chain": "KeyframeValue"
+ },
+ {
+  "file": "Source/WebCore/bindings/js/IDBBindingUtilities.cpp",
+  "line": 257,
+  "func": "createIDBKeyFromValue",
+  "elem": "JSArray*",
+  "cap": "0",
+  "name": "stack",
+  "kind": "gc",
+  "chain": "JSArray > JSNonFinalObject > JSObject > JSCell > HeapCell"
+ },
+ {
+  "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+  "line": 2499,
+  "func": "CloneSerializer::serialize",
+  "elem": "JSObject*",
+  "cap": "32",
+  "name": "inputObjectStack",
+  "kind": "gc",
+  "chain": "JSObject > JSCell > HeapCell"
+ },
+ {
+  "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+  "line": 2500,
+  "func": "CloneSerializer::serialize",
+  "elem": "JSMapIterator*",
+  "cap": "4",
+  "name": "mapIteratorStack",
+  "kind": "gc",
+  "chain": "JSMapIterator > JSInternalFieldObjectImpl > JSNonFinalObject > JSObject > JSCell > HeapCell"
+ },
+ {
+  "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+  "line": 2501,
+  "func": "CloneSerializer::serialize",
+  "elem": "JSSetIterator*",
+  "cap": "4",
+  "name": "setIteratorStack",
+  "kind": "gc",
+  "chain": "JSSetIterator > JSInternalFieldObjectImpl > JSNonFinalObject > JSObject > JSCell > HeapCell"
+ },
+ {
+  "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+  "line": 2502,
+  "func": "CloneSerializer::serialize",
+  "elem": "JSValue",
+  "cap": "4",
+  "name": "mapIteratorValueStack",
+  "kind": "other",
+  "chain": "JSValue"
+ },
+ {
+  "file": "Source/WebCore/contentextensions/CombinedURLFilters.cpp",
+  "line": 319,
+  "func": "clearReverseSuffixTree",
+  "elem": "ReverseSuffixTreeVertex*",
+  "cap": "128",
+  "name": "stack",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/contentextensions/CombinedURLFilters.cpp",
+  "line": 410,
+  "func": "CombinedURLFilters::processNFAs",
+  "elem": "PrefixTreeVertex*",
+  "cap": "128",
+  "name": "stack",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/css/SelectorFilter.cpp",
+  "line": 84,
+  "func": "SelectorFilter::initializeParentStack",
+  "elem": "Element*",
+  "cap": "20",
+  "name": "ancestors",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/css/StyleRule.cpp",
+  "line": 282,
+  "func": "StyleRule::splitIntoMultipleRulesWithMaximumSelectorComponentCount",
+  "elem": "const CSSSelector*",
+  "cap": "0",
+  "name": "componentsSinceLastSplit",
+  "kind": "other",
+  "chain": "CSSSelector"
+ },
+ {
+  "file": "Source/WebCore/css/StyleRule.cpp",
+  "line": 285,
+  "func": "StyleRule::splitIntoMultipleRulesWithMaximumSelectorComponentCount",
+  "elem": "const CSSSelector*",
+  "cap": "8",
+  "name": "componentsInThisSelector",
+  "kind": "other",
+  "chain": "CSSSelector"
+ },
+ {
+  "file": "Source/WebCore/css/calc/CSSCalcOperationNode.cpp",
+  "line": 684,
+  "func": "CSSCalcOperationNode::combineChildren",
+  "elem": "CSSCalcExpressionNode*",
+  "cap": "0",
+  "name": "remainingChildren",
+  "kind": "ref",
+  "chain": "CSSCalcExpressionNode"
+ },
+ {
+  "file": "Source/WebCore/cssjit/SelectorCompiler.cpp",
+  "line": 4234,
+  "func": "SelectorCodeGenerator::generateElementIsNthChildOf",
+  "elem": "const NthChildOfSelectorInfo*",
+  "cap": "0",
+  "name": "validSubsetFilters",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/cssjit/SelectorCompiler.cpp",
+  "line": 4332,
+  "func": "SelectorCodeGenerator::generateElementIsNthLastChildOf",
+  "elem": "const NthChildOfSelectorInfo*",
+  "cap": "0",
+  "name": "validSubsetFilters",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/display/css/DisplayBoxDecorationPainter.cpp",
+  "line": 1439,
+  "func": "BoxDecorationPainter::paintBackgroundImages",
+  "elem": "const FillLayer*",
+  "cap": "8",
+  "name": "layers",
+  "kind": "ref",
+  "chain": "FillLayer"
+ },
+ {
+  "file": "Source/WebCore/dom/DocumentMarkerController.cpp",
+  "line": 456,
+  "func": "DocumentMarkerController::markersFor",
+  "elem": "RenderedDocumentMarker*",
+  "cap": "0",
+  "name": "result",
+  "kind": "other",
+  "chain": "RenderedDocumentMarker > DocumentMarker"
+ },
+ {
+  "file": "Source/WebCore/dom/DocumentMarkerController.cpp",
+  "line": 510,
+  "func": "DocumentMarkerController::markersInRange",
+  "elem": "RenderedDocumentMarker*",
+  "cap": "0",
+  "name": "markers",
+  "kind": "other",
+  "chain": "RenderedDocumentMarker > DocumentMarker"
+ },
+ {
+  "file": "Source/WebCore/dom/EventPath.cpp",
+  "line": 320,
+  "func": "m_retargetedRelatedNode",
+  "elem": "TreeScope*",
+  "cap": "8",
+  "name": "targetTreeScopeAncestors",
+  "kind": "other",
+  "chain": "TreeScope"
+ },
+ {
+  "file": "Source/WebCore/dom/FragmentDirectiveParser.cpp",
+  "line": 64,
+  "func": "FragmentDirectiveParser::parseFragmentDirective",
+  "elem": "String",
+  "cap": "0",
+  "name": "tokens",
+  "kind": "primitive",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/dom/MutationObserver.cpp",
+  "line": 195,
+  "func": "MutationObserver::deliver",
+  "elem": "MutationObserverRegistration*",
+  "cap": "1",
+  "name": "transientRegistrations",
+  "kind": "ref",
+  "chain": "MutationObserverRegistration"
+ },
+ {
+  "file": "Source/WebCore/dom/Node.cpp",
+  "line": 1217,
+  "func": "Node::isClosedShadowHidden",
+  "elem": "TreeScope*",
+  "cap": "8",
+  "name": "ancestorScopesOfThisNode",
+  "kind": "other",
+  "chain": "TreeScope"
+ },
+ {
+  "file": "Source/WebCore/dom/Node.cpp",
+  "line": 1762,
+  "func": "Node::compareDocumentPosition",
+  "elem": "Node*",
+  "cap": "16",
+  "name": "chain1",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/dom/Node.cpp",
+  "line": 1763,
+  "func": "Node::compareDocumentPosition",
+  "elem": "Node*",
+  "cap": "16",
+  "name": "chain2",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/dom/Node.cpp",
+  "line": 1918,
+  "func": "Node::showNodePathForThis",
+  "elem": "const Node*",
+  "cap": "16",
+  "name": "chain",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/dom/ShadowRoot.cpp",
+  "line": 398,
+  "func": "assignedShadowRootsIfSlotted",
+  "elem": "ShadowRoot*",
+  "cap": "0",
+  "name": "result",
+  "kind": "node",
+  "chain": "ShadowRoot > DocumentFragment > TreeScope > ContainerNode > Node > EventTarget"
+ },
+ {
+  "file": "Source/WebCore/dom/TreeScope.cpp",
+  "line": 198,
+  "func": "TreeScope::retargetToScope",
+  "elem": "TreeScope*",
+  "cap": "8",
+  "name": "nodeTreeScopes",
+  "kind": "other",
+  "chain": "TreeScope"
+ },
+ {
+  "file": "Source/WebCore/dom/TreeScope.cpp",
+  "line": 203,
+  "func": "TreeScope::retargetToScope",
+  "elem": "const TreeScope*",
+  "cap": "8",
+  "name": "ancestorScopes",
+  "kind": "other",
+  "chain": "TreeScope"
+ },
+ {
+  "file": "Source/WebCore/dom/TreeScope.cpp",
+  "line": 531,
+  "func": "commonTreeScope",
+  "elem": "TreeScope*",
+  "cap": "5",
+  "name": "treeScopesA",
+  "kind": "other",
+  "chain": "TreeScope"
+ },
+ {
+  "file": "Source/WebCore/dom/TreeScope.cpp",
+  "line": 534,
+  "func": "commonTreeScope",
+  "elem": "TreeScope*",
+  "cap": "5",
+  "name": "treeScopesB",
+  "kind": "other",
+  "chain": "TreeScope"
+ },
+ {
+  "file": "Source/WebCore/editing/AlternativeTextController.cpp",
+  "line": 470,
+  "func": "AlternativeTextController::recordSpellcheckerResponseForModifiedCorrection",
+  "elem": "RenderedDocumentMarker*",
+  "cap": "0",
+  "name": "correctedOnceMarkers",
+  "kind": "other",
+  "chain": "RenderedDocumentMarker > DocumentMarker"
+ },
+ {
+  "file": "Source/WebCore/editing/Editor.cpp",
+  "line": 4066,
+  "func": "Editor::selectionStartHasMarkerFor",
+  "elem": "RenderedDocumentMarker*",
+  "cap": "0",
+  "name": "markers",
+  "kind": "other",
+  "chain": "RenderedDocumentMarker > DocumentMarker"
+ },
+ {
+  "file": "Source/WebCore/editing/TextIterator.cpp",
+  "line": 238,
+  "func": "setUpFullyClippedStack",
+  "elem": "Node*",
+  "cap": "100",
+  "name": "ancestry",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/editing/markup.cpp",
+  "line": 780,
+  "func": "StyledMarkupAccumulator::traverseNodesForSerialization",
+  "elem": "Node*",
+  "cap": "8",
+  "name": "exitedAncestors",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/html/HTMLMediaElement.cpp",
+  "line": 1867,
+  "func": "HTMLMediaElement::updateActiveTextTrackCues",
+  "elem": "std::pair<MediaTime, TextTrackCue*>",
+  "cap": "0",
+  "name": "eventTasks",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/html/HTMLMediaElement.cpp",
+  "line": 1870,
+  "func": "HTMLMediaElement::updateActiveTextTrackCues",
+  "elem": "TextTrack*",
+  "cap": "0",
+  "name": "affectedTracks",
+  "kind": "node",
+  "chain": "TextTrack > TrackBase > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/html/HTMLVideoElement.cpp",
+  "line": 688,
+  "func": "ancestorRenderLayers",
+  "elem": "const RenderLayer*",
+  "cap": "0",
+  "name": "ret",
+  "kind": "ref",
+  "chain": "RenderLayer"
+ },
+ {
+  "file": "Source/WebCore/html/URLRegistry.cpp",
+  "line": 44,
+  "func": "URLRegistry::forEach",
+  "elem": "URLRegistry*",
+  "cap": "0",
+  "name": "registries",
+  "kind": "other",
+  "chain": "URLRegistry"
+ },
+ {
+  "file": "Source/WebCore/html/parser/HTMLFormattingElementList.cpp",
+  "line": 153,
+  "func": "HTMLFormattingElementList::tryToEnsureNoahsArkConditionQuickly",
+  "elem": "const HTMLStackItem*",
+  "cap": "10",
+  "name": "candidates",
+  "kind": "other",
+  "chain": "HTMLStackItem"
+ },
+ {
+  "file": "Source/WebCore/html/parser/HTMLFormattingElementList.cpp",
+  "line": 186,
+  "func": "HTMLFormattingElementList::ensureNoahsArkCondition",
+  "elem": "const HTMLStackItem*",
+  "cap": "0",
+  "name": "remainingCandidates",
+  "kind": "other",
+  "chain": "HTMLStackItem"
+ },
+ {
+  "file": "Source/WebCore/inspector/DOMPatchSupport.cpp",
+  "line": 491,
+  "func": "DOMPatchSupport::markNodeAsUsed",
+  "elem": "Digest*",
+  "cap": "0",
+  "name": "queue",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/inspector/InspectorOverlay.cpp",
+  "line": 2008,
+  "func": "InspectorOverlay::buildFlexOverlay",
+  "elem": "RenderBox*",
+  "cap": "0",
+  "name": "renderChildrenInFlexOrder",
+  "kind": "node",
+  "chain": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/inspector/InspectorOverlay.cpp",
+  "line": 2009,
+  "func": "InspectorOverlay::buildFlexOverlay",
+  "elem": "RenderObject*",
+  "cap": "0",
+  "name": "renderChildrenInDOMOrder",
+  "kind": "other",
+  "chain": "RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/inspector/InspectorStyleSheet.cpp",
+  "line": 1371,
+  "func": "InspectorStyleSheet::selectorsForCSSStyleRule",
+  "elem": "const CSSSelector*",
+  "cap": "0",
+  "name": "selectors",
+  "kind": "other",
+  "chain": "CSSSelector"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorCSSAgent.cpp",
+  "line": 329,
+  "func": "InspectorCSSAgent::documentDetached",
+  "elem": "CSSStyleSheet*",
+  "cap": "0",
+  "name": "emptyList",
+  "kind": "node",
+  "chain": "CSSStyleSheet > StyleSheet"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorCSSAgent.cpp",
+  "line": 344,
+  "func": "InspectorCSSAgent::activeStyleSheetsUpdated",
+  "elem": "CSSStyleSheet*",
+  "cap": "0",
+  "name": "cssStyleSheets",
+  "kind": "node",
+  "chain": "CSSStyleSheet > StyleSheet"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorCSSAgent.cpp",
+  "line": 355,
+  "func": "InspectorCSSAgent::setActiveStyleSheetsForDocument",
+  "elem": "CSSStyleSheet*",
+  "cap": "0",
+  "name": "addedStyleSheets",
+  "kind": "node",
+  "chain": "CSSStyleSheet > StyleSheet"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorCSSAgent.cpp",
+  "line": 588,
+  "func": "InspectorCSSAgent::getAllStyleSheets",
+  "elem": "InspectorStyleSheet*",
+  "cap": "0",
+  "name": "inspectorStyleSheets",
+  "kind": "ref",
+  "chain": "InspectorStyleSheet"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorCSSAgent.cpp",
+  "line": 600,
+  "func": "InspectorCSSAgent::collectAllStyleSheets",
+  "elem": "CSSStyleSheet*",
+  "cap": "0",
+  "name": "cssStyleSheets",
+  "kind": "node",
+  "chain": "CSSStyleSheet > StyleSheet"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorCanvasAgent.cpp",
+  "line": 373,
+  "func": "InspectorCanvasAgent::frameNavigated",
+  "elem": "InspectorCanvas*",
+  "cap": "0",
+  "name": "inspectorCanvases",
+  "kind": "ref",
+  "chain": "InspectorCanvas"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorCanvasAgent.cpp",
+  "line": 735,
+  "func": "InspectorCanvasAgent::unbindCanvas",
+  "elem": "InspectorShaderProgram*",
+  "cap": "0",
+  "name": "programsToRemove",
+  "kind": "ref",
+  "chain": "InspectorShaderProgram"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorDOMAgent.cpp",
+  "line": 214,
+  "func": "RevalidateStyleAttributeTask::timerFired",
+  "elem": "Element*",
+  "cap": "0",
+  "name": "elements",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorDOMAgent.cpp",
+  "line": 348,
+  "func": "InspectorDOMAgent::documents",
+  "elem": "Document*",
+  "cap": "0",
+  "name": "result",
+  "kind": "node",
+  "chain": "Document > ContainerNode > TreeScope > ScriptExecutionContext > FontSelectorClient > FrameDestructionObserver"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorDOMAgent.cpp",
+  "line": 725,
+  "func": "InspectorDOMAgent::pushNodePathToFrontend",
+  "elem": "Node*",
+  "cap": "0",
+  "name": "path",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorNetworkAgent.cpp",
+  "line": 1514,
+  "func": "InspectorNetworkAgent::searchOtherRequests",
+  "elem": "NetworkResourcesData::ResourceData*",
+  "cap": "0",
+  "name": "resources",
+  "kind": "other",
+  "chain": "ResourceData"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/InspectorPageAgent.cpp",
+  "line": 128,
+  "func": "InspectorPageAgent::cachedResourcesForFrame",
+  "elem": "CachedResource*",
+  "cap": "0",
+  "name": "result",
+  "kind": "ref",
+  "chain": "CachedResource"
+ },
+ {
+  "file": "Source/WebCore/inspector/agents/page/PageNetworkAgent.cpp",
+  "line": 78,
+  "func": "PageNetworkAgent::activeWebSockets",
+  "elem": "WebSocket*",
+  "cap": "0",
+  "name": "webSockets",
+  "kind": "node",
+  "chain": "WebSocket > EventTarget > WebSocketChannelClient > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/layout/Verification.cpp",
+  "line": 125,
+  "func": "outputMismatchingComplexLineInformationIfNeeded",
+  "elem": "WebCore::LegacyInlineBox*",
+  "cap": "0",
+  "name": "inlineBoxes",
+  "kind": "other",
+  "chain": "LegacyInlineBox"
+ },
+ {
+  "file": "Source/WebCore/layout/formattingContexts/block/BlockFormattingContext.cpp",
+  "line": 71,
+  "func": "BlockFormattingContext::layoutInFlowContent",
+  "elem": "const ElementBox*",
+  "cap": "0",
+  "name": "layoutQueue",
+  "kind": "other",
+  "chain": "ElementBox > Box"
+ },
+ {
+  "file": "Source/WebCore/layout/formattingContexts/block/BlockFormattingContext.cpp",
+  "line": 434,
+  "func": "BlockFormattingContext::computedIntrinsicWidthConstraints",
+  "elem": "const ElementBox*",
+  "cap": "0",
+  "name": "queue",
+  "kind": "other",
+  "chain": "ElementBox > Box"
+ },
+ {
+  "file": "Source/WebCore/layout/formattingContexts/inline/InlineLineBoxVerticalAligner.cpp",
+  "line": 159,
+  "func": "LineBoxVerticalAligner::computeLineBoxLogicalHeight",
+  "elem": "InlineLevelBox*",
+  "cap": "0",
+  "name": "lineBoxRelativeInlineLevelBoxes",
+  "kind": "other",
+  "chain": "InlineLevelBox"
+ },
+ {
+  "file": "Source/WebCore/layout/formattingContexts/inline/InlineLineBuilder.cpp",
+  "line": 410,
+  "func": "LineBuilder::initialize",
+  "elem": "const Box*",
+  "cap": "0",
+  "name": "spanningLayoutBoxList",
+  "kind": "other",
+  "chain": "Box"
+ },
+ {
+  "file": "Source/WebCore/layout/integration/LayoutIntegrationCoverage.cpp",
+  "line": 187,
+  "func": "collectRenderBlockFlowsForCurrentPage",
+  "elem": "const RenderBlockFlow*",
+  "cap": "0",
+  "name": "renderFlows",
+  "kind": "node",
+  "chain": "RenderBlockFlow > RenderBlock > RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement"
+ },
+ {
+  "file": "Source/WebCore/loader/archive/cf/LegacyWebArchive.cpp",
+  "line": 428,
+  "func": "LegacyWebArchive::create",
+  "elem": "Node*",
+  "cap": "0",
+  "name": "nodeList",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/loader/archive/cf/LegacyWebArchive.cpp",
+  "line": 467,
+  "func": "LegacyWebArchive::create",
+  "elem": "Node*",
+  "cap": "0",
+  "name": "nodeList",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/loader/archive/cf/LegacyWebArchive.cpp",
+  "line": 601,
+  "func": "LegacyWebArchive::createFromSelection",
+  "elem": "Node*",
+  "cap": "0",
+  "name": "nodeList",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/loader/cache/CachedResourceLoader.cpp",
+  "line": 1765,
+  "func": "CachedResourceLoader::visibleResourcesToPrioritize",
+  "elem": "CachedResource*",
+  "cap": "0",
+  "name": "toPrioritize",
+  "kind": "ref",
+  "chain": "CachedResource"
+ },
+ {
+  "file": "Source/WebCore/page/Chrome.cpp",
+  "line": 657,
+  "func": "Chrome::notifyPopupOpeningObservers",
+  "elem": "PopupOpeningObserver*",
+  "cap": "0",
+  "name": "observers",
+  "kind": "other",
+  "chain": "PopupOpeningObserver"
+ },
+ {
+  "file": "Source/WebCore/page/Page.cpp",
+  "line": 2084,
+  "func": "Page::prioritizeVisibleResources",
+  "elem": "CachedResource*",
+  "cap": "0",
+  "name": "toPrioritize",
+  "kind": "ref",
+  "chain": "CachedResource"
+ },
+ {
+  "file": "Source/WebCore/page/PageSerializer.cpp",
+  "line": 201,
+  "func": "PageSerializer::serializeFrame",
+  "elem": "Node*",
+  "cap": "0",
+  "name": "serializedNodes",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/page/scrolling/mac/ScrollingTreeFrameScrollingNodeMac.mm",
+  "line": 252,
+  "func": "ScrollingTreeFrameScrollingNodeMac::exposedUnfilledArea",
+  "elem": "CALayer*",
+  "cap": "0",
+  "name": "layerQueue",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/encryptedmedia/CDMProxy.cpp",
+  "line": 81,
+  "func": "CDMProxyFactory::platformRegisterFactories",
+  "elem": "CDMProxyFactory*",
+  "cap": "0",
+  "name": "factories",
+  "kind": "other",
+  "chain": "CDMProxyFactory"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/PathUtilities.cpp",
+  "line": 124,
+  "func": "addIntersectionPoints",
+  "elem": "FloatPointGraph::Node*",
+  "cap": "0",
+  "name": "intersectionPoints",
+  "kind": "node",
+  "chain": "Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/angle/GraphicsContextGLANGLE.cpp",
+  "line": 2329,
+  "func": "GraphicsContextGLANGLE::transformFeedbackVaryings",
+  "elem": "const char*",
+  "cap": "0",
+  "name": "pointersToVaryings",
+  "kind": "primitive",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/angle/GraphicsContextGLANGLE.cpp",
+  "line": 2822,
+  "func": "GraphicsContextGLANGLE::getUniformIndices",
+  "elem": "const char*",
+  "cap": "0",
+  "name": "cstr",
+  "kind": "primitive",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/angle/GraphicsContextGLANGLE.cpp",
+  "line": 2887,
+  "func": "GraphicsContextGLANGLE::multiDrawElementsANGLE",
+  "elem": "void*",
+  "cap": "0",
+  "name": "offsetsPointers",
+  "kind": "primitive",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/angle/GraphicsContextGLANGLE.cpp",
+  "line": 2902,
+  "func": "GraphicsContextGLANGLE::multiDrawElementsInstancedANGLE",
+  "elem": "void*",
+  "cap": "0",
+  "name": "offsetsPointers",
+  "kind": "primitive",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/angle/GraphicsContextGLANGLE.cpp",
+  "line": 3143,
+  "func": "GraphicsContextGLANGLE::multiDrawElementsInstancedBaseVertexBaseInstanceANGLE",
+  "elem": "void*",
+  "cap": "0",
+  "name": "offsetsPointers",
+  "kind": "primitive",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/avfoundation/InbandTextTrackPrivateAVF.cpp",
+  "line": 120,
+  "func": "InbandTextTrackPrivateAVF::processCueAttributes",
+  "elem": "const void*",
+  "cap": "0",
+  "name": "keys",
+  "kind": "primitive",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/avfoundation/InbandTextTrackPrivateAVF.cpp",
+  "line": 121,
+  "func": "InbandTextTrackPrivateAVF::processCueAttributes",
+  "elem": "const void*",
+  "cap": "0",
+  "name": "values",
+  "kind": "primitive",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/ca/GraphicsLayerCA.cpp",
+  "line": 3216,
+  "func": "GraphicsLayerCA::updateAnimations",
+  "elem": "LayerPropertyAnimation*",
+  "cap": "0",
+  "name": "translateAnimations",
+  "kind": "other",
+  "chain": "LayerPropertyAnimation"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/ca/GraphicsLayerCA.cpp",
+  "line": 3217,
+  "func": "GraphicsLayerCA::updateAnimations",
+  "elem": "LayerPropertyAnimation*",
+  "cap": "0",
+  "name": "scaleAnimations",
+  "kind": "other",
+  "chain": "LayerPropertyAnimation"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/ca/GraphicsLayerCA.cpp",
+  "line": 3218,
+  "func": "GraphicsLayerCA::updateAnimations",
+  "elem": "LayerPropertyAnimation*",
+  "cap": "0",
+  "name": "rotateAnimations",
+  "kind": "other",
+  "chain": "LayerPropertyAnimation"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/ca/GraphicsLayerCA.cpp",
+  "line": 3219,
+  "func": "GraphicsLayerCA::updateAnimations",
+  "elem": "LayerPropertyAnimation*",
+  "cap": "0",
+  "name": "transformAnimations",
+  "kind": "other",
+  "chain": "LayerPropertyAnimation"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/gstreamer/eme/CDMFactoryGStreamer.cpp",
+  "line": 53,
+  "func": "CDMProxyFactory::platformRegisterFactories",
+  "elem": "CDMProxyFactory*",
+  "cap": "0",
+  "name": "factories",
+  "kind": "other",
+  "chain": "CDMProxyFactory"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/GraphicsLayerTextureMapper.cpp",
+  "line": 430,
+  "func": "GraphicsLayerTextureMapper::commitLayerChanges",
+  "elem": "TextureMapperLayer*",
+  "cap": "0",
+  "name": "rawChildren",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/coordinated/CoordinatedBackingStore.cpp",
+  "line": 108,
+  "func": "CoordinatedBackingStore::paintToTextureMapper",
+  "elem": "TextureMapperTile*",
+  "cap": "0",
+  "name": "tilesToPaint",
+  "kind": "other",
+  "chain": "TextureMapperTile"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/coordinated/CoordinatedBackingStore.cpp",
+  "line": 109,
+  "func": "CoordinatedBackingStore::paintToTextureMapper",
+  "elem": "TextureMapperTile*",
+  "cap": "0",
+  "name": "previousTilesToPaint",
+  "kind": "other",
+  "chain": "TextureMapperTile"
+ },
+ {
+  "file": "Source/WebCore/platform/gstreamer/VideoEncoderPrivateGStreamer.cpp",
+  "line": 424,
+  "func": "videoEncoderFindForFormat",
+  "elem": "std::pair<EncoderId, const EncoderDefinition*>",
+  "cap": "0",
+  "name": "candidates",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/mac/HIDDevice.cpp",
+  "line": 76,
+  "func": "HIDDevice::uniqueInputElementsInDeviceTreeOrder",
+  "elem": "IOHIDElementRef",
+  "cap": "0",
+  "name": "elementQueue",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/text/BidiContext.cpp",
+  "line": 110,
+  "func": "BidiContext::copyStackRemovingUnicodeEmbeddingContexts",
+  "elem": "BidiContext*",
+  "cap": "64",
+  "name": "contexts",
+  "kind": "ref",
+  "chain": "BidiContext"
+ },
+ {
+  "file": "Source/WebCore/platform/xr/openxr/OpenXRSwapchain.cpp",
+  "line": 51,
+  "func": "OpenXRSwapchain::create",
+  "elem": "XrSwapchainImageBaseHeader*",
+  "cap": "0",
+  "name": "imageHeaders",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/platform/xr/openxr/PlatformXROpenXR.cpp",
+  "line": 266,
+  "func": "OpenXRDevice::submitFrame",
+  "elem": "const XrCompositionLayerBaseHeader*",
+  "cap": "0",
+  "name": "frameEndLayers",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/rendering/BackgroundPainter.cpp",
+  "line": 117,
+  "func": "BackgroundPainter::paintFillLayers",
+  "elem": "const FillLayer*",
+  "cap": "8",
+  "name": "layers",
+  "kind": "ref",
+  "chain": "FillLayer"
+ },
+ {
+  "file": "Source/WebCore/rendering/GridTrackSizingAlgorithm.cpp",
+  "line": 460,
+  "func": "GridTrackSizingAlgorithm::increaseSizesToAccommodateSpanningItems",
+  "elem": "GridTrack*",
+  "cap": "0",
+  "name": "growBeyondGrowthLimitsTracks",
+  "kind": "other",
+  "chain": "GridTrack"
+ },
+ {
+  "file": "Source/WebCore/rendering/GridTrackSizingAlgorithm.cpp",
+  "line": 461,
+  "func": "GridTrackSizingAlgorithm::increaseSizesToAccommodateSpanningItems",
+  "elem": "GridTrack*",
+  "cap": "0",
+  "name": "filteredTracks",
+  "kind": "other",
+  "chain": "GridTrack"
+ },
+ {
+  "file": "Source/WebCore/rendering/GridTrackSizingAlgorithm.cpp",
+  "line": 1227,
+  "func": "DefiniteSizeStrategy::maximizeTracks",
+  "elem": "GridTrack*",
+  "cap": "0",
+  "name": "tracksForDistribution",
+  "kind": "other",
+  "chain": "GridTrack"
+ },
+ {
+  "file": "Source/WebCore/rendering/InlineBoxPainter.cpp",
+  "line": 297,
+  "func": "InlineBoxPainter::paintFillLayers",
+  "elem": "const FillLayer*",
+  "cap": "8",
+  "name": "layers",
+  "kind": "ref",
+  "chain": "FillLayer"
+ },
+ {
+  "file": "Source/WebCore/rendering/LegacyInlineFlowBox.cpp",
+  "line": 582,
+  "func": "LegacyInlineFlowBox::computeLogicalBoxHeights",
+  "elem": "LegacyInlineBox*",
+  "cap": "0",
+  "name": "maxAscentInlineBoxList",
+  "kind": "other",
+  "chain": "LegacyInlineBox"
+ },
+ {
+  "file": "Source/WebCore/rendering/LegacyLineLayout.cpp",
+  "line": 860,
+  "func": "LegacyLineLayout::computeInlineDirectionPositionsForSegment",
+  "elem": "LegacyInlineBox*",
+  "cap": "0",
+  "name": "queue",
+  "kind": "other",
+  "chain": "LegacyInlineBox"
+ },
+ {
+  "file": "Source/WebCore/rendering/LegacyLineLayout.cpp",
+  "line": 1750,
+  "func": "LegacyLineLayout::layoutLineBoxes",
+  "elem": "RenderBox*",
+  "cap": "0",
+  "name": "replacedChildren",
+  "kind": "node",
+  "chain": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/rendering/MarkedText.cpp",
+  "line": 192,
+  "func": "MarkedText::collectForDocumentMarkers",
+  "elem": "RenderedDocumentMarker*",
+  "cap": "0",
+  "name": "markers",
+  "kind": "other",
+  "chain": "RenderedDocumentMarker > DocumentMarker"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderBlock.cpp",
+  "line": 1819,
+  "func": "RenderBlock::removePositionedObjects",
+  "elem": "RenderBox*",
+  "cap": "16",
+  "name": "renderersToRemove",
+  "kind": "node",
+  "chain": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderBlockFlow.cpp",
+  "line": 938,
+  "func": "RenderBlockFlow::simplifiedNormalFlowLayout",
+  "elem": "LegacyRootInlineBox*",
+  "cap": "0",
+  "name": "lineBoxes",
+  "kind": "ref",
+  "chain": "LegacyRootInlineBox > LegacyInlineFlowBox > LegacyInlineBox"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderCounter.cpp",
+  "line": 263,
+  "func": "findPlaceForCounter",
+  "elem": "RenderElement*",
+  "cap": "0",
+  "name": "previousRenderers",
+  "kind": "node",
+  "chain": "RenderElement > RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderFlexibleBox.cpp",
+  "line": 383,
+  "func": "RenderFlexibleBox::hitTestChildren",
+  "elem": "RenderBox*",
+  "cap": "0",
+  "name": "reversedOrderIteratorForHitTesting",
+  "kind": "node",
+  "chain": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderFlexibleBox.cpp",
+  "line": 1726,
+  "func": "RenderFlexibleBox::freezeInflexibleItems",
+  "elem": "FlexItem*",
+  "cap": "0",
+  "name": "newInflexibleItems",
+  "kind": "other",
+  "chain": "FlexItem"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderFlexibleBox.cpp",
+  "line": 1746,
+  "func": "RenderFlexibleBox::resolveFlexibleLengths",
+  "elem": "FlexItem*",
+  "cap": "0",
+  "name": "minViolations",
+  "kind": "other",
+  "chain": "FlexItem"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderFlexibleBox.cpp",
+  "line": 1747,
+  "func": "RenderFlexibleBox::resolveFlexibleLengths",
+  "elem": "FlexItem*",
+  "cap": "0",
+  "name": "maxViolations",
+  "kind": "other",
+  "chain": "FlexItem"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderGrid.cpp",
+  "line": 236,
+  "func": "RenderGrid::computeAspectRatioDependentAndBaselineItems",
+  "elem": "RenderBox*",
+  "cap": "0",
+  "name": "dependentGridItems",
+  "kind": "node",
+  "chain": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderGrid.cpp",
+  "line": 948,
+  "func": "RenderGrid::placeItemsOnGrid",
+  "elem": "RenderBox*",
+  "cap": "0",
+  "name": "autoMajorAxisAutoGridItems",
+  "kind": "node",
+  "chain": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderGrid.cpp",
+  "line": 949,
+  "func": "RenderGrid::placeItemsOnGrid",
+  "elem": "RenderBox*",
+  "cap": "0",
+  "name": "specifiedMajorAxisAutoGridItems",
+  "kind": "node",
+  "chain": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderLayer.cpp",
+  "line": 2866,
+  "func": "performOverlapTests",
+  "elem": "OverlapTestRequestClient*",
+  "cap": "0",
+  "name": "overlappedRequestClients",
+  "kind": "other",
+  "chain": "OverlapTestRequestClient"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderLayer.cpp",
+  "line": 3953,
+  "func": "RenderLayer::topLayerRenderLayers",
+  "elem": "RenderLayer*",
+  "cap": "0",
+  "name": "layers",
+  "kind": "ref",
+  "chain": "RenderLayer"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderLayerBacking.cpp",
+  "line": 1736,
+  "func": "RenderLayerBacking::updateInternalHierarchy",
+  "elem": "GraphicsLayer*",
+  "cap": "?",
+  "name": "orderedLayers",
+  "kind": "ref",
+  "chain": "GraphicsLayer"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderLayerCompositor.cpp",
+  "line": 1409,
+  "func": "RenderLayerCompositor::updateBackingAndHierarchy",
+  "elem": "RenderLayer*",
+  "cap": "0",
+  "name": "layersClippedByScrollers",
+  "kind": "ref",
+  "chain": "RenderLayer"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderLayerCompositor.cpp",
+  "line": 1410,
+  "func": "RenderLayerCompositor::updateBackingAndHierarchy",
+  "elem": "RenderLayer*",
+  "cap": "0",
+  "name": "compositedOverflowScrollLayers",
+  "kind": "ref",
+  "chain": "RenderLayer"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderLineBoxList.cpp",
+  "line": 225,
+  "func": "RenderLineBoxList::paint",
+  "elem": "RenderInline*",
+  "cap": "0",
+  "name": "outlineObjects",
+  "kind": "node",
+  "chain": "RenderInline > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderView.cpp",
+  "line": 924,
+  "func": "RenderView::resumePausedImageAnimationsIfNeeded",
+  "elem": "std::pair<RenderElement*, CachedImage*>",
+  "cap": "10",
+  "name": "toRemove",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderView.cpp",
+  "line": 935,
+  "func": "RenderView::resumePausedImageAnimationsIfNeeded",
+  "elem": "SVGSVGElement*",
+  "cap": "0",
+  "name": "svgSvgElementsToRemove",
+  "kind": "node",
+  "chain": "SVGSVGElement > SVGGraphicsElement > SVGFitToViewBox > SVGZoomAndPan > SVGElement > SVGTransformable"
+ },
+ {
+  "file": "Source/WebCore/rendering/mathml/RenderMathMLUnderOver.cpp",
+  "line": 95,
+  "func": "RenderMathMLUnderOver::stretchHorizontalOperatorsAndLayoutChildren",
+  "elem": "RenderBox*",
+  "cap": "3",
+  "name": "embellishedOperators",
+  "kind": "node",
+  "chain": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+ },
+ {
+  "file": "Source/WebCore/rendering/mathml/RenderMathMLUnderOver.cpp",
+  "line": 96,
+  "func": "RenderMathMLUnderOver::stretchHorizontalOperatorsAndLayoutChildren",
+  "elem": "RenderMathMLOperator*",
+  "cap": "3",
+  "name": "stretchyOperators",
+  "kind": "node",
+  "chain": "RenderMathMLOperator > RenderMathMLToken > RenderMathMLBlock > RenderBlock > RenderBox > RenderBoxModelObject"
+ },
+ {
+  "file": "Source/WebCore/rendering/style/FillLayer.cpp",
+  "line": 315,
+  "func": "FillLayer::computeClipMax",
+  "elem": "const FillLayer*",
+  "cap": "4",
+  "name": "layers",
+  "kind": "ref",
+  "chain": "FillLayer"
+ },
+ {
+  "file": "Source/WebCore/rendering/svg/RenderSVGText.cpp",
+  "line": 155,
+  "func": "RenderSVGText::subtreeChildWasAdded",
+  "elem": "SVGTextLayoutAttributes*",
+  "cap": "0",
+  "name": "newLayoutAttributes",
+  "kind": "other",
+  "chain": "SVGTextLayoutAttributes"
+ },
+ {
+  "file": "Source/WebCore/rendering/svg/RenderSVGText.cpp",
+  "line": 196,
+  "func": "checkLayoutAttributesConsistency",
+  "elem": "SVGTextLayoutAttributes*",
+  "cap": "0",
+  "name": "newLayoutAttributes",
+  "kind": "other",
+  "chain": "SVGTextLayoutAttributes"
+ },
+ {
+  "file": "Source/WebCore/rendering/updating/RenderTreeBuilderMultiColumn.cpp",
+  "line": 187,
+  "func": "RenderTreeBuilder::MultiColumn::restoreColumnSpannersForContainer",
+  "elem": "RenderMultiColumnSpannerPlaceholder*",
+  "cap": "0",
+  "name": "placeholdersToRestore",
+  "kind": "node",
+  "chain": "RenderMultiColumnSpannerPlaceholder > RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject"
+ },
+ {
+  "file": "Source/WebCore/rendering/updating/RenderTreeBuilderMultiColumn.cpp",
+  "line": 216,
+  "func": "RenderTreeBuilder::MultiColumn::destroyFragmentedFlow",
+  "elem": "RenderMultiColumnSpannerPlaceholder*",
+  "cap": "0",
+  "name": "placeholdersToDelete",
+  "kind": "node",
+  "chain": "RenderMultiColumnSpannerPlaceholder > RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject"
+ },
+ {
+  "file": "Source/WebCore/rendering/updating/RenderTreeBuilderMultiColumn.cpp",
+  "line": 219,
+  "func": "RenderTreeBuilder::MultiColumn::destroyFragmentedFlow",
+  "elem": "std::pair<RenderElement*, RenderPtr<RenderObject>>",
+  "cap": "0",
+  "name": "parentAndSpannerList",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/rendering/updating/RenderTreeBuilderSVG.cpp",
+  "line": 110,
+  "func": "RenderTreeBuilder::SVG::detach",
+  "elem": "SVGTextLayoutAttributes*",
+  "cap": "2",
+  "name": "affectedAttributes",
+  "kind": "other",
+  "chain": "SVGTextLayoutAttributes"
+ },
+ {
+  "file": "Source/WebCore/rendering/updating/RenderTreeBuilderSVG.cpp",
+  "line": 125,
+  "func": "RenderTreeBuilder::SVG::detach",
+  "elem": "SVGTextLayoutAttributes*",
+  "cap": "2",
+  "name": "affectedAttributes",
+  "kind": "other",
+  "chain": "SVGTextLayoutAttributes"
+ },
+ {
+  "file": "Source/WebCore/rendering/updating/RenderTreePosition.cpp",
+  "line": 71,
+  "func": "RenderTreePosition::nextSiblingRenderer",
+  "elem": "Element*",
+  "cap": "30",
+  "name": "elementStack",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/rendering/updating/RenderTreeUpdater.cpp",
+  "line": 588,
+  "func": "RenderTreeUpdater::tearDownRenderers",
+  "elem": "Element*",
+  "cap": "30",
+  "name": "teardownStack",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/style/ElementRuleCollector.cpp",
+  "line": 211,
+  "func": "ElementRuleCollector::collectMatchingRules",
+  "elem": "const RuleSet::RuleDataVector*",
+  "cap": "4",
+  "name": "ruleVectors",
+  "kind": "unknown",
+  "chain": ""
+ },
+ {
+  "file": "Source/WebCore/style/PageRuleCollector.cpp",
+  "line": 81,
+  "func": "PageRuleCollector::matchPageRules",
+  "elem": "StyleRulePage*",
+  "cap": "0",
+  "name": "matchedPageRules",
+  "kind": "ref",
+  "chain": "StyleRulePage > StyleRuleBase"
+ },
+ {
+  "file": "Source/WebCore/style/RuleSet.h",
+  "line": 241,
+  "func": "RuleSet::containerQueriesFor",
+  "elem": "const CQ::ContainerQuery*",
+  "cap": "0",
+  "name": "queries",
+  "kind": "other",
+  "chain": "ContainerQuery"
+ },
+ {
+  "file": "Source/WebCore/style/StyleInvalidator.cpp",
+  "line": 192,
+  "func": "Invalidator::invalidateStyleForDescendants",
+  "elem": "Element*",
+  "cap": "20",
+  "name": "parentStack",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/style/StyleInvalidator.cpp",
+  "line": 318,
+  "func": "Invalidator::invalidateStyleWithMatchElement",
+  "elem": "Element*",
+  "cap": "16",
+  "name": "ancestors",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/style/StyleInvalidator.cpp",
+  "line": 341,
+  "func": "Invalidator::invalidateStyleWithMatchElement",
+  "elem": "Element*",
+  "cap": "16",
+  "name": "elementAndAncestors",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/style/StyleScope.cpp",
+  "line": 483,
+  "func": "Scope::analyzeStyleSheetChange",
+  "elem": "StyleSheetContents*",
+  "cap": "0",
+  "name": "addedSheets",
+  "kind": "ref",
+  "chain": "StyleSheetContents"
+ },
+ {
+  "file": "Source/WebCore/style/StyleScope.cpp",
+  "line": 901,
+  "func": "Scope::updateQueryContainerState",
+  "elem": "Element*",
+  "cap": "0",
+  "name": "containersToInvalidate",
+  "kind": "node",
+  "chain": "Element > ContainerNode > Node > EventTarget > ScriptWrappable"
+ },
+ {
+  "file": "Source/WebCore/testing/Internals.cpp",
+  "line": 1892,
+  "func": "Internals::markerAt",
+  "elem": "RenderedDocumentMarker*",
+  "cap": "0",
+  "name": "markers",
+  "kind": "other",
+  "chain": "RenderedDocumentMarker > DocumentMarker"
+ },
+ {
+  "file": "Source/WebCore/workers/service/server/SWServer.cpp",
+  "line": 89,
+  "func": "SWServer::~SWServer",
+  "elem": "SWServerWorker*",
+  "cap": "0",
+  "name": "runningWorkers",
+  "kind": "ref",
+  "chain": "SWServerWorker"
+ },
+ {
+  "file": "Source/WebCore/workers/service/server/SWServer.cpp",
+  "line": 269,
+  "func": "SWServer::getRegistrations",
+  "elem": "SWServerRegistration*",
+  "cap": "0",
+  "name": "matchingRegistrations",
+  "kind": "ref",
+  "chain": "SWServerRegistration"
+ },
+ {
+  "file": "Source/WebCore/workers/service/server/SWServer.cpp",
+  "line": 344,
+  "func": "SWServer::clearInternal",
+  "elem": "SWServerRegistration*",
+  "cap": "0",
+  "name": "registrationsToRemove",
+  "kind": "ref",
+  "chain": "SWServerRegistration"
+ },
+ {
+  "file": "Source/WebCore/workers/service/server/SWServer.cpp",
+  "line": 1007,
+  "func": "SWServer::markAllWorkersForRegistrableDomainAsTerminated",
+  "elem": "SWServerWorker*",
+  "cap": "0",
+  "name": "terminatedWorkers",
+  "kind": "ref",
+  "chain": "SWServerWorker"
+ },
+ {
+  "file": "Source/WebCore/workers/service/server/SWServer.cpp",
+  "line": 1226,
+  "func": "SWServer::unregisterServiceWorkerClient",
+  "elem": "SWServerWorker*",
+  "cap": "0",
+  "name": "workersToTerminate",
+  "kind": "ref",
+  "chain": "SWServerWorker"
+ },
+ {
+  "file": "Source/WebCore/xml/XPathNodeSet.cpp",
+  "line": 157,
+  "func": "NodeSet::sort",
+  "elem": "Vector<Node*>",
+  "cap": "0",
+  "name": "parentMatrix",
+  "kind": "unknown",
+  "chain": ""
+ }
+]

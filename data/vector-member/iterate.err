@@ -1,0 +1,3 @@
+MEMBER_CONTAINERS 1246 names / 1599 decls
+EKINDS: Counter({'value': 240, 'refptr': 78, 'ref': 75, 'raw': 45, 'unique': 43, 'weak': 31})
+CBISH_ROWS 38

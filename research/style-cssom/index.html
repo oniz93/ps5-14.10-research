@@ -1,0 +1,183 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>cssom rule-mutation frames</title>
+<style>body{font:14px monospace}</style>
+<script>
+// GOAL action (2026-10-29): the rule-mutation frames that hold a raw StyleRule* / a reference to a
+// rule outside the Ref<StyleRuleBase> vector, across CSSStyleSheet::RuleMutationScope.
+//
+//   case=1  one <link /s.css>            + CSSStyleRule.insertRule        (control: one client)
+//   case=2  two <link /s.css>            + CSSStyleRule.insertRule        (treatment: shared contents)
+//   case=3  two <link> + iframe link     + CSSStyleRule.insertRule        (cross-document sharing)
+//   case=4  two <link /s.css>            + CSSStyleSheet.insertRule       (does the clone happen? witness)
+//   case=5  one <link /m.css>            + CSSMediaRule.insertRule        (control for the grouping frame)
+//   case=6  two <link /m.css>            + CSSMediaRule.insertRule        (grouping frame, shared contents)
+//
+// Every report is a beacon: new Image().src = '/ev?m=...'. A crash leaves the last beacon as the witness.
+const Q = new URLSearchParams(location.search);
+const CASE = +(Q.get('case') || 1);
+const GROUP = (CASE === 5 || CASE === 6 || CASE === 8 || CASE === 9);
+const HREF = GROUP ? '/m.css' : '/s.css';
+// case=7 is the inline control: a <style> element with the same rule, no memory cache, one client.
+const NLINK = (CASE === 7 || CASE === 9) ? 0 : ((CASE === 1 || CASE === 5 || CASE === 8 || CASE === 12) ? 1 : 2);
+// rule=: text handed to CSSStyleRule.insertRule (nested context). The default failed to parse in the
+// first run, so this is a knob: nested style rules are parsed with IsNestedContext::Yes.
+const NRULE = Q.get('rule') || 'b{color:green}';
+
+function ev(m) { new Image().src = '/ev?m=' + encodeURIComponent(m); }
+
+function sheetTag(sh) {
+    let n;
+    try { n = sh.cssRules.length; } catch (e) { n = 'x:' + e.name; }
+    let href = 'inline';
+    try { if (sh.href) href = String(sh.href).replace(location.origin, ''); } catch (e) {}
+    return '[' + href + ' n=' + n + ']';
+}
+
+function sheetsInfo(tag) {
+    let s = '';
+    for (let i = 0; i < document.styleSheets.length; i++)
+        s += ' ' + i + ':' + sheetTag(document.styleSheets[i]);
+    ev(tag + ' sheets=' + document.styleSheets.length + s);
+}
+
+function addLink() {
+    return new Promise(resolve => {
+        const l = document.createElement('link');
+        l.rel = 'stylesheet';
+        l.href = HREF;
+        l.onload = () => resolve('load');
+        l.onerror = () => resolve('error');
+        document.head.appendChild(l);
+    });
+}
+
+function pickSheet(n) {
+    // select by href, not by index: the page's own <style> is also a document.styleSheets entry, so an
+    // index-based pick can land on the inline sheet and change two variables at once (this happened in
+    // the first control run: case=1 inserted into the inline sheet, not /s.css).
+    const hits = [];
+    for (let i = 0; i < document.styleSheets.length; i++) {
+        const sh = document.styleSheets[i];
+        let href = '';
+        try { href = sh.href ? String(sh.href) : ''; } catch (e) {}
+        if (href.indexOf(HREF) >= 0) hits.push(sh);
+    }
+    ev('pick n=' + n + ' hits=' + hits.length + ' href=' + HREF);
+    return hits[n];
+}
+
+function pickSheetCount() {
+    let n = 0;
+    for (let i = 0; i < document.styleSheets.length; i++) {
+        let href = '';
+        try { href = document.styleSheets[i].href ? String(document.styleSheets[i].href) : ''; } catch (e) {}
+        if (href.indexOf(HREF) >= 0) n++;
+    }
+    return n;
+}
+
+function pickInline(n) {
+    const hits = [];
+    for (let i = 0; i < document.styleSheets.length; i++) {
+        const sh = document.styleSheets[i];
+        let href = null;
+        try { href = sh.href; } catch (e) {}
+        if (!href) hits.push(sh);
+    }
+    ev('pickInline n=' + n + ' hits=' + hits.length);
+    // skip the page's own <style> (index 0 of the inline hits) when a second one was added
+    return hits[hits.length - 1 - n];
+}
+
+function insRuleAt(sh, index) {
+    if (!sh) { ev('target MISSING'); return; }
+    const r = sh.cssRules[index];
+    let cls = '?';
+    try { cls = r.constructor.name; } catch (e) {}
+    let txt = -1;
+    try { txt = r.cssText.length; } catch (e) {}
+    ev('target idx=' + index + ' cls=' + cls + ' cssTextLen=' + txt + ' rule=' + NRULE);
+    if (Q.get('dbg') === '1') {
+        try { ev('target cssText=[' + r.cssText.slice(0, 80) + ']'); } catch (e) { ev('target cssText threw=' + e.name); }
+    }
+    let out;
+    try { out = 'ret=' + r.insertRule(NRULE, 0); }
+    catch (e) { out = 'threw=' + e.name + ':' + e.message; }
+    let n = -1;
+    try { n = r.cssRules.length; } catch (e) { n = 'x'; }
+    ev('INS ' + out + ' nestedLen=' + n);
+}
+
+async function run() {
+    ev('start case=' + CASE + ' href=' + HREF + ' nlink=' + NLINK);
+    if (CASE === 7 || CASE === 9) {
+        const st = document.createElement('style');
+        st.textContent = (CASE === 9) ? '@media all { a { color: red } }' : 'a { color: red }';
+        document.head.appendChild(st);
+    }
+    const waits = [];
+    for (let i = 0; i < NLINK; i++)
+        waits.push(addLink());
+    if (CASE === 3) {
+        waits.push(new Promise(resolve => {
+            const f = document.createElement('iframe');
+            f.src = '/ifr.html?h=' + encodeURIComponent(HREF);
+            f.onload = () => resolve('iframe');
+            f.onerror = () => resolve('iframe-error');
+            document.body.appendChild(f);
+        }));
+    }
+    const got = await Promise.all(waits);
+    ev('loaded ' + got.join(','));
+    // let the style scopes settle (a <link> that shares the memory-cached parsed sheet resolves its
+    // client list only after the resource loader has finished both requests)
+    await new Promise(r => setTimeout(r, 250));
+    sheetsInfo('pre');
+    try {
+        if (CASE === 1 || CASE === 5) insRuleAt(pickSheet(0), 0);
+        else if (CASE === 7) insRuleAt(pickInline(0), 0);
+        else if (CASE === 2 || CASE === 6) insRuleAt(pickSheet(1), 0);
+        else if (CASE === 3) insRuleAt(pickSheet(pickSheetCount() - 1), 0);
+        else if (CASE === 8) { insRuleAt(pickSheet(0).cssRules[0], 0); }
+        else if (CASE === 9) { insRuleAt(pickInline(0).cssRules[0], 0); }
+        else if (CASE === 12) {
+            const a = pickSheet(0);
+            const r1 = a.cssRules[0];
+            ev('T12 pre [' + r1.style.cssText.slice(0, 48) + ']');
+            let out = 'ok';
+            try { r1.styleMap.set('margin-top', '13px'); } catch (e) { out = 'threw=' + e.name + ':' + e.message; }
+            ev('T12 set ' + out + ' readback=[' + String(r1.style.marginTop) + ']');
+            ev('T12 post [' + r1.style.cssText.slice(0, 48) + '] samesheet rule0=[' + String(a.cssRules[0].style.marginTop) + ']');
+        }
+        else if (CASE === 11) {
+            const a = pickSheet(0), b = pickSheet(1);
+            const r1 = a.cssRules[0], r2 = b.cssRules[0];
+            ev('T11 pre A=[' + r1.style.cssText.slice(0, 48) + '] B=[' + r2.style.cssText.slice(0, 48) + ']');
+            let out = 'ok';
+            try { r1.styleMap.set('margin-top', '13px'); } catch (e) { out = 'threw=' + e.name + ':' + e.message; }
+            ev('T11 set ' + out);
+            ev('T11 post A=[' + r1.style.cssText.slice(0, 48) + ']');
+            ev('T11 post B=[' + r2.style.cssText.slice(0, 48) + ']');
+        }
+        else if (CASE === 4) {
+            const sh = pickSheet(1);
+            let out;
+            try { out = 'ret=' + sh.insertRule('b{color:green}', sh.cssRules.length); }
+            catch (e) { out = 'threw=' + e.name + ':' + e.message; }
+            ev('SHEETINS ' + out);
+            // clone witness: if the contents was copied, sheet 0 keeps the old rule list
+            sheetsInfo('post');
+        }
+    } catch (e) {
+        ev('OUTER threw=' + e.name + ':' + e.message);
+    }
+    sheetsInfo('after');
+    ev('done case=' + CASE);
+}
+
+window.addEventListener('load', () => setTimeout(run, 50));
+</script>
+<body>
+<div id="host">cssom rule-mutation frames</div>
+</body>

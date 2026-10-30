@@ -1,0 +1,7 @@
+start case=4 href=/s.css nlink=2
+loaded load,load
+pre sheets=3 0:[inline n=1] 1:[/s.css n=1] 2:[/s.css n=1]
+SHEETINS ret=1
+post sheets=3 0:[inline n=1] 1:[/s.css n=2] 2:[/s.css n=1]
+after sheets=3 0:[inline n=1] 1:[/s.css n=2] 2:[/s.css n=1]
+done case=4

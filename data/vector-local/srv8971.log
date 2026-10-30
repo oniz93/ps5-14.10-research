@@ -1,0 +1,21 @@
+127.0.0.1 - - [29/Oct/2026 22:45:06] "GET /vecmap.html?n=8&kind=map&churn=1&from=6 HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 22:45:06] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 22:45:06] "GET /ev?m=boot%20n%3D8%20kind%3Dmap%20churn%3D1%20from%3D6%20mb%3D8%20objs%3D400000 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 22:45:06] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 22:45:06] "GET /ev?m=sc%20ok HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 22:45:06] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 22:45:06] "GET /ev?m=built HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 22:45:07] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 22:45:07] "GET /ev?m=gcprobe%206%20collected HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 22:45:07] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 22:45:07] "GET /ev?m=churn%206%20400004 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 22:45:07] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 22:45:07] "GET /ev?m=gcprobe%207%20collected HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 22:45:07] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 22:45:07] "GET /ev?m=churn%207%20800008 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 22:45:07] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 22:45:07] "GET /ev?m=done HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 22:45:07] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 22:45:07] "GET /ev?m=verify%20kind%3Dmap%20depth%3D8%20bad%3D0%20first%3D-1%20got%3D HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 22:45:07] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 22:45:07] "GET /favicon.ico HTTP/1.1" 404 -

@@ -1,0 +1,68 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>webgl restore window</title>
+<!-- docs/70 row 27: the only html/ site where a member call on `this` follows a synchronous dispatch
+     of a cancelable event, with no local Ref.  maybeRestoreContext() (WebGLRenderingContextBase.cpp:5723)
+     dispatches `webglcontextrestored` and then calls notifyCanvasContentChanged() (:5762).  The context is
+     a unique_ptr member of the canvas, so if the canvas dies inside that listener the context dies with it
+     while its own SuspendableTimer::maybeRestoreContext frame is still on the stack.
+
+     The entry is a timer, not a JS frame: forceRestoreContext() only does m_restoreTimer.startOneShot(0_s)
+     (:5073-5075), and the context-lost task re-arms it the same way (:5719).  So the canvas is held only by
+     the DOM tree at that moment — unless script still has a wrapper for it (JSDOMWrapper::m_wrapped is a Ref).
+
+     Knobs: drop=1 nulls the JS references and churns the heap to let the wrapper be collected;
+     wipe=1 empties #wrap from inside the `webglcontextrestored` capture listener.  One variable per run. -->
+<div id=wrap><canvas id=c width=32 height=32></canvas></div>
+<script>
+const Q = new URLSearchParams(location.search);
+const DROP = Q.get('drop') === '1';
+const WIPE = Q.get('wipe') === '1';
+function ev(msg) { new Image().src = '/ev?m=' + encodeURIComponent(msg); }
+
+ev('START drop=' + (DROP ? 1 : 0) + ' wipe=' + (WIPE ? 1 : 0));
+
+document.addEventListener('webglcontextlost', function (e) {
+  ev('LOST cancelable=' + e.cancelable);
+  e.preventDefault();            // arms restoreRequested, which is what re-arms the timer
+  ev('LOST prevented');
+}, true);
+
+document.addEventListener('webglcontextrestored', function (e) {
+  ev('REST');
+  if (WIPE)
+    document.getElementById('wrap').innerHTML = '';
+  ev('REST2 kids=' + document.getElementById('wrap').childElementCount);
+}, true);
+
+let c = document.getElementById('c');
+let gl = null;
+try {
+  gl = c.getContext('webgl');
+} catch (err) {
+  ev('GETCTX err=' + err.name);
+}
+
+if (!gl) {
+  ev('NOCTX');
+} else {
+  ev('CTX ok');
+  const ext = gl.getExtension('WEBGL_lose_context');
+  if (!ext) {
+    ev('NOEXT');
+  } else {
+    if (DROP) {
+      c = null;
+      gl = null;
+      let junk = [];
+      for (let i = 0; i < 300000; i++)
+        junk.push({ i: i });
+      junk = null;
+      ev('DROPPED');
+    }
+    ext.loseContext();
+    ev('LOSE called');
+  }
+}
+setTimeout(function () { ev('LATE'); }, 1500);
+</script>

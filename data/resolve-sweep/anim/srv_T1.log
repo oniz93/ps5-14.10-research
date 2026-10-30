@@ -1,0 +1,21 @@
+127.0.0.1 - - [29/Oct/2026 20:10:20] "GET /anim-window.html?k=then&atk=cancelrm&pre=1 HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 20:10:20] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:10:20] "GET /ev?m=START%20k%3Dthen%20atk%3Dcancelrm%20pre%3Dtrue%20probe%3Dfalse HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:10:20] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:10:20] "GET /ev?m=ANIM%20ok%20st%3Drunning HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:10:20] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:10:20] "GET /ev?m=PRE%20st%3Drunning%20ct%3D0 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:10:20] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:10:20] "GET /ev?m=PROMISES%20ready%3DPromise%20fin%3DPromise HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:10:20] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:10:20] "GET /ev?m=ARMED HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:10:20] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:10:20] "GET /ev?m=THEN%20hit%3D1%20on%3DAnimation%20st%3Dfinished%20kids%3D1 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:10:20] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:10:20] "GET /ev?m=POST%20st%3Didle%20hits%3D1%20kids%3D0%20fin%3D0 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:10:20] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:10:20] "GET /ev?m=DEL%20ok%3Dundefined HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:10:20] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:10:20] "GET /ev?m=LATE%20st%3Didle%20hits%3D1%20kids%3D0%20fin%3D0 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:10:21] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:10:21] "GET /ev?m=END%20hits%3D1%20fin%3D0%20st%3Didle HTTP/1.1" 404 -

@@ -1,0 +1,12 @@
+srv=200
+===== V1  q=k=val&wipe=1
+access: none
+SUMMARY: none
+-- beacons:
+   START k=val wipe=1
+   REG invalid
+   HIT type=invalid cancelable=true conn=1
+   HIT2 kids=0
+   CALL ok
+   POST kids=0 inp=0 pop=0
+   END

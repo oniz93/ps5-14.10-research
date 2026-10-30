@@ -1,0 +1,21 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>docs/77 — are the gated raw-cell sites even present in this build?</title>
+<body>
+<script>
+// docs/77. The only heap-stored raw JSValue/JSCell* fields in WebCore that a page could reach are the ones whose
+// owner exists only behind a build flag. This page measures which of those owners exist in the shipped runtime.
+// `structuredClone` is the positive control: the same probe machinery sees a real global.
+(function () {
+  function B(m) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); } catch (e) {} }
+  function t(expr) { try { return eval(expr); } catch (e) { return 'THREW:' + e.name; } }
+  B('sc ' + t('typeof structuredClone'));                 // positive control
+  B('shadowrealm ' + t('typeof ShadowRealm') + ' in=' + t('("ShadowRealm" in globalThis)'));
+  B('paintworklet ' + t('typeof (typeof CSS !== "undefined" && CSS.paintWorklet)'));
+  B('css ' + t('typeof CSS'));
+  B('xr ' + t('typeof navigator.xr'));
+  B('internals ' + t('typeof window.internals'));
+  B('xrtest ' + t('typeof (window.internals && window.internals.xrTest)'));
+  B('done');
+})();
+</script>

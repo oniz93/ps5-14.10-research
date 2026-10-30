@@ -1,0 +1,98 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps — what the three new surfaces can actually reach on this build</title>
+<body>
+<div id="host"></div>
+<script>
+// docs/86 probe, before any op is written: does this build have the three surfaces GOAL.md item 1 names?
+//   a second document  -> iframe srcdoc, and a FontFace resolving inside it
+//   Animation          -> el.animate(), and a `then` getter on Animation.prototype firing inside finish()
+//   a worker           -> new Worker from a blob URL, and terminate() from the page
+// Every answer is one beacon line, so the log is the record.
+function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(m); }
+function T(x) { try { return typeof x; } catch (e) { return 'ERR:' + e.name; } }
+function tag(o) { try { return Object.prototype.toString.call(o).slice(8, -1); } catch (e) { return 'ERR'; } }
+
+ev('caps js=1');
+ev('caps Worker=' + T(window.Worker) + ' Blob=' + T(window.Blob) + ' URL=' + T(window.URL) +
+   ' createObjectURL=' + T(window.URL && URL.createObjectURL) +
+   ' structuredClone=' + T(window.structuredClone) + ' MessageChannel=' + T(window.MessageChannel));
+ev('caps Animation=' + T(window.Animation) + ' KeyframeEffect=' + T(window.KeyframeEffect) +
+   ' CSSTransition=' + T(window.CSSTransition) + ' getAnimations=' + T(document.getAnimations) +
+   ' srcdoc=' + ('srcdoc' in document.createElement('iframe')));
+
+// ---- Animation: does a then getter on Animation.prototype fire inside finish()?
+var host = document.getElementById('host');
+var el = document.createElement('div'); el.textContent = 'x'; host.appendChild(el);
+var a = null, hits = 0, inFinish = 0;
+try { a = el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1000 }); } catch (e) { ev('anim err=' + e.name); }
+if (a) {
+  ev('anim ok ctor=' + (a.constructor && a.constructor.name) + ' protoHit=' + (Object.getPrototypeOf(a) === Animation.prototype));
+  try { a.play(); } catch (e) { ev('anim playerr=' + e.name); }
+  var pr = a.ready, pf = a.finished;               // materialise before the resolve
+  ev('anim proms ready=' + tag(pr) + ' fin=' + tag(pf) + ' ps=' + a.playState);
+  Object.defineProperty(Animation.prototype, 'then', {
+    configurable: true,
+    get: function () {
+      hits++;
+      ev('anim then hit=' + hits + ' on=' + tag(this) + ' inFinish=' + inFinish + ' ps=' + (function () { try { return this.playState; } catch (e) { return 'ERR'; } }).call(this));
+      return undefined;
+    },
+    set: function (v) {}
+  });
+  inFinish = 1;
+  try { a.finish(); } catch (e) { ev('anim finerr=' + e.name); }
+  inFinish = 0;
+  ev('anim post hits=' + hits + ' ps=' + a.playState);
+  try { delete Animation.prototype.then; } catch (e) {}
+}
+
+// ---- a second document: srcdoc iframe, and a FontFace inside it resolving
+var fr = document.createElement('iframe');
+fr.srcdoc = '<!doctype html><style>@font-face{font-family:tf;src:local("DejaVu Sans")}</style><body><p>i</p></body>';
+var inner = { ok: 0, fam: '', st: '', then: 0 };
+document.body.appendChild(fr);
+setTimeout(function () {
+  var d = null;
+  try { d = fr.contentDocument; } catch (e) { ev('frame err=' + e.name); }
+  ev('frame doc=' + (d ? 'yes' : 'no') + ' fonts=' + (d && d.fonts ? d.fonts.size : 'n/a') +
+     ' sameOrigin=' + (function () { try { return !!fr.contentWindow.document; } catch (e) { return 'no:' + e.name; } })());
+  if (d && d.fonts) {
+    try {
+      var f = null;
+      d.fonts.forEach(function (x) { if (String(x.family).indexOf('tf') >= 0) f = x; });
+      ev('frame found=' + (f ? 1 : 0) + ' fc=' + d.fonts.size);
+      if (f) {
+        var W = fr.contentWindow;
+        Object.defineProperty(W.FontFace.prototype, 'then', {
+          configurable: true,
+          get: function () { inner.then++; ev('frame then hit=' + inner.then + ' on=' + tag(this)); return undefined; },
+          set: function (v) {}
+        });
+        try { f.loaded; } catch (e) {}
+        try { f.load(); } catch (e) { ev('frame loaderr=' + e.name); }
+        ev('frame post st=' + f.status + ' then=' + inner.then);
+      }
+    } catch (e) { ev('frame fp err=' + e.name); }
+  }
+  // removing the frame from inside its own document's window is what the op will do
+  try { fr.parentNode.removeChild(fr); ev('frame removed=1'); } catch (e) { ev('frame rm err=' + e.name); }
+
+  // ---- worker: blob worker, one echo, then terminate from the page
+  var wsrc = 'onmessage=function(e){ var a=[]; for(var i=0;i<64;i++)a.push(i); postMessage({echo:e.data.n, n:a.length}); };';
+  var w = null, echoed = 0;
+  try { w = new Worker(URL.createObjectURL(new Blob([wsrc], { type: 'text/javascript' }))); } catch (e) { ev('worker err=' + e.name); }
+  if (w) {
+    w.onmessage = function (e) { echoed++; ev('worker echo n=' + (e.data && e.data.n) + ' len=' + (e.data && e.data.n && e.data.n2)); ev('worker echoed=' + echoed); };
+    w.onerror = function (e) { ev('worker onerror ' + (e.message || '')); };
+    w.postMessage({ n: 7 });
+    ev('worker posted=' + 1);
+    setTimeout(function () {
+      try { w.terminate(); ev('worker terminated=1 echoed=' + echoed); } catch (e) { ev('worker term err=' + e.name); }
+      ev('done caps');
+    }, 700);
+  } else {
+    ev('done caps');
+  }
+}, 700);
+</script>

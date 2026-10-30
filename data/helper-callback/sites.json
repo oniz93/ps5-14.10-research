@@ -1,0 +1,3017 @@
+{
+ "helpers": {
+  "::removeLastMatching": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Vector.h",
+    "line": 1628,
+    "sig": "template<typename T, size_t inlineCapacity, typename OverflowHandler, size_t minCapacity, typename Malloc> template<typename MatchFunction> inline bool Vector<T, inlineCapacity, OverflowHandler, minCa",
+    "params": [
+     "matches",
+     "startIndex"
+    ],
+    "iter_idx": 1,
+    "cont_type": "size_t startIndex",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 0,
+    "cb_param": "matches",
+    "snapshot": false,
+    "loop_head": "size_t i = std::min(startIndex + 1, size()); i > 0; --i",
+    "body_excerpt": "{ if (matches(at(i - 1))) { remove(i - 1); return true; } }"
+   }
+  ],
+  "AdapterImpl::requestDevice": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/WebGPU/Implementation/WebGPUAdapterImpl.cpp",
+    "line": 205,
+    "sig": "void AdapterImpl::requestDevice(const DeviceDescriptor& descriptor, CompletionHandler<void(RefPtr<Device>&&)>&& callback)",
+    "params": [
+     "descriptor",
+     "callback"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const DeviceDescriptor& descriptor",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "callback",
+    "snapshot": false,
+    "loop_head": "const auto& pair : descriptor.requiredLimits",
+    "body_excerpt": "{ #define SET_MAX_VALUE(LIMIT) \\ else if (pair.key == #LIMIT _s) { \\ if (pair.value > supportedLimits.LIMIT() || !setMaxIntegerValue(limits.LIMIT, pair.value)) { \\ callback(nullptr); \\ return; \\ } \\ }"
+   }
+  ],
+  "CoordinatedBackingStore::paintTilesToTextureMapper": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/texmap/coordinated/CoordinatedBackingStore.cpp",
+    "line": 92,
+    "sig": "void CoordinatedBackingStore::paintTilesToTextureMapper(Vector<TextureMapperTile*>& tiles, TextureMapper& textureMapper, const TransformationMatrix& transform, float opacity, const FloatRect& rect)",
+    "params": [
+     "tiles",
+     "textureMapper",
+     "transform",
+     "opacity",
+     "rect"
+    ],
+    "iter_idx": 0,
+    "cont_type": "Vector<TextureMapperTile*>& tiles",
+    "cont_member": null,
+    "elem": "TextureMapperTile*",
+    "cb_idx": 4,
+    "cb_param": "rect",
+    "snapshot": false,
+    "loop_head": "auto& tile : tiles",
+    "body_excerpt": "tile->paint(textureMapper, transform, opacity, calculateExposedTileEdges(rect, tile->rect()));"
+   }
+  ],
+  "DocumentMarkerController::forEach": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/dom/DocumentMarkerController.cpp",
+    "line": 470,
+    "sig": "void DocumentMarkerController::forEach(const SimpleRange& range, OptionSet<DocumentMarker::MarkerType> types, Function<bool(Node&, RenderedDocumentMarker&)> function)",
+    "params": [
+     "range",
+     "types",
+     "function"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const SimpleRange& range",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 2,
+    "cb_param": "function",
+    "snapshot": false,
+    "loop_head": "auto& node : intersectingNodes(range)",
+    "body_excerpt": "{ if (auto list = m_markers.get(&node)) { auto offsetRange = characterDataOffsetRange(range, node); for (auto& marker : *list) { if (marker.startOffset() >= offsetRange.end) break; if (marker.endOffse"
+   }
+  ],
+  "FloatingContext::mapTopLeftToFloatingStateRoot": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/layout/floats/FloatingContext.cpp",
+    "line": 570,
+    "sig": "LayoutPoint FloatingContext::mapTopLeftToFloatingStateRoot(const Box& floatBox, LayoutPoint borderBoxTopLeft) const",
+    "params": [
+     "floatBox",
+     "borderBoxTopLeft"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const Box& floatBox",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "borderBoxTopLeft",
+    "snapshot": false,
+    "loop_head": "auto& containingBlock : containingBlockChain(floatBox, floatingStateRoot)",
+    "body_excerpt": "borderBoxTopLeft.moveBy(BoxGeometry::borderBoxTopLeft(formattingContext().geometryForBox(containingBlock, FormattingContext::EscapeReason::FloatBoxIsAlwaysRelativeToFloatStateRoot)));"
+   }
+  ],
+  "InlineContent::traverseNonRootInlineBoxes": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/layout/integration/inline/LayoutIntegrationInlineContent.h",
+    "line": 107,
+    "sig": "template<typename Function> void InlineContent::traverseNonRootInlineBoxes(const Layout::Box& layoutBox, Function&& function)",
+    "params": [
+     "layoutBox",
+     "function"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const Layout::Box& layoutBox",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "function",
+    "snapshot": false,
+    "loop_head": "auto index : nonRootInlineBoxIndexesForLayoutBox(layoutBox)",
+    "body_excerpt": "function(displayContent().boxes[index]);"
+   }
+  ],
+  "LegacyWebArchive::create": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/loader/archive/cf/LegacyWebArchive.cpp",
+    "line": 509,
+    "sig": "#endif RefPtr<LegacyWebArchive> LegacyWebArchive::create(const String& markupString, LocalFrame& frame, const Vector<Node*>& nodes, Function<bool(LocalFrame&)>&& frameFilter)",
+    "params": [
+     "markupString",
+     "frame",
+     "nodes",
+     "frameFilter"
+    ],
+    "iter_idx": 2,
+    "cont_type": "const Vector<Node*>& nodes",
+    "cont_member": null,
+    "elem": "Node*",
+    "cb_idx": 3,
+    "cb_param": "frameFilter",
+    "snapshot": false,
+    "loop_head": "auto& nodePtr : nodes",
+    "body_excerpt": "{ Node& node = *nodePtr; LocalFrame* childFrame; if ((is<HTMLFrameElementBase>(node) || is<HTMLObjectElement>(node)) && (childFrame = dynamicDowncast<LocalFrame>(downcast<HTMLFrameOwnerElement>(node)."
+   }
+  ],
+  "PlatformMediaSessionManager::forEachMatchingSession": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/audio/PlatformMediaSessionManager.cpp",
+    "line": 561,
+    "sig": "void PlatformMediaSessionManager::forEachMatchingSession(const Function<bool(const PlatformMediaSession&)>& predicate, const Function<void(PlatformMediaSession&)>& callback)",
+    "params": [
+     "predicate",
+     "callback"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const Function<bool(const PlatformMediaSession&)>& predicate",
+    "cont_member": null,
+    "elem": "bool(const PlatformMediaSession&)",
+    "cb_idx": 1,
+    "cb_param": "callback",
+    "snapshot": false,
+    "loop_head": "auto& session : sessionsMatching(predicate)",
+    "body_excerpt": "{ ASSERT(session); if (session) callback(*session); }"
+   }
+  ],
+  "RadioInputType::forEachButtonInDetachedGroup": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/RadioInputType.cpp",
+    "line": 75,
+    "sig": "void RadioInputType::forEachButtonInDetachedGroup(ContainerNode& rootNode, const String& groupName, const Function<bool(HTMLInputElement&)>& apply)",
+    "params": [
+     "rootNode",
+     "groupName",
+     "apply"
+    ],
+    "iter_idx": 0,
+    "cont_type": "ContainerNode& rootNode",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 2,
+    "cb_param": "apply",
+    "snapshot": false,
+    "loop_head": "auto* descendant = Traversal<HTMLElement>::inclusiveFirstWithin(rootNode); descendant;",
+    "body_excerpt": "{ if (is<HTMLFormElement>(*descendant)) { descendant = Traversal<HTMLElement>::nextSkippingChildren(*descendant, &rootNode); continue; } auto* input = dynamicDowncast<HTMLInputElement>(*descendant); i"
+   }
+  ],
+  "SelectorDataList::executeCompiledSelectorCheckerWithCheckingContext": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/dom/SelectorQuery.cpp",
+    "line": 402,
+    "sig": "template<typename Checker, typename OutputType> ALWAYS_INLINE void SelectorDataList::executeCompiledSelectorCheckerWithCheckingContext(const ContainerNode& rootNode, const ContainerNode& searchRootNod",
+    "params": [
+     "rootNode",
+     "searchRootNode",
+     "selectorChecker",
+     "output",
+     "selectorData"
+    ],
+    "iter_idx": 1,
+    "cont_type": "const ContainerNode& searchRootNode",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 2,
+    "cb_param": "selectorChecker",
+    "snapshot": false,
+    "loop_head": "auto& element : descendantsOfType<Element>(const_cast<ContainerNode&>(searchRootNode))",
+    "body_excerpt": "{ selectorData.compiledSelector.wasUsed(); if (selectorChecker(&element, &checkingContext)) { appendOutputForElement(output, element); if constexpr (std::is_same_v<OutputType, Element*>) return; } }"
+   }
+  ],
+  "SelectorDataList::executeCompiledSimpleSelectorChecker": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/dom/SelectorQuery.cpp",
+    "line": 388,
+    "sig": "#if ENABLE(CSS_SELECTOR_JIT) template<typename Checker, typename OutputType> ALWAYS_INLINE void SelectorDataList::executeCompiledSimpleSelectorChecker(const ContainerNode& searchRootNode, Checker sele",
+    "params": [
+     "searchRootNode",
+     "selectorChecker",
+     "output",
+     "selectorData"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const ContainerNode& searchRootNode",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "selectorChecker",
+    "snapshot": false,
+    "loop_head": "auto& element : descendantsOfType<Element>(const_cast<ContainerNode&>(searchRootNode))",
+    "body_excerpt": "{ selectorData.compiledSelector.wasUsed(); if (selectorChecker(&element)) { appendOutputForElement(output, element); if constexpr (std::is_same_v<OutputType, Element*>) return; } }"
+   }
+  ],
+  "SourceBuffer::sourceBufferPrivateDidReceiveInitializationSegment": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+    "line": 739,
+    "sig": "void SourceBuffer::sourceBufferPrivateDidReceiveInitializationSegment(InitializationSegment&& segment, CompletionHandler<void(ReceiveResult)>&& completionHandler)",
+    "params": [
+     "segment",
+     "completionHandler"
+    ],
+    "iter_idx": 0,
+    "cont_type": "InitializationSegment&& segment",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "completionHandler",
+    "snapshot": false,
+    "loop_head": "auto& audioTrackInfo : segment.audioTracks",
+    "body_excerpt": "{ if (audioTrackInfo.description && allowedMediaAudioCodecIDs->contains(FourCC::fromString(audioTrackInfo.description->codec()))) continue; completionHandler(ReceiveResult::AppendError); return; }"
+   }
+  ],
+  "TreeScopeOrderedMap::get": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/dom/TreeScopeOrderedMap.cpp",
+    "line": 100,
+    "sig": "template <typename KeyMatchingFunction> inline Element* TreeScopeOrderedMap::get(const AtomStringImpl& key, const TreeScope& scope, const KeyMatchingFunction& keyMatches) const",
+    "params": [
+     "key",
+     "scope",
+     "keyMatches"
+    ],
+    "iter_idx": 1,
+    "cont_type": "const TreeScope& scope",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 2,
+    "cb_param": "keyMatches",
+    "snapshot": false,
+    "loop_head": "auto& element : descendantsOfType<Element>(scope.rootNode())",
+    "body_excerpt": "{ if (!element.isInTreeScope()) continue; if (!keyMatches(key, element)) continue; entry.element = &element; RELEASE_ASSERT_WITH_SECURITY_IMPLICATION(&element.treeScope() == &scope); ASSERT_WITH_SECUR"
+   }
+  ],
+  "allOf": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+    "line": 49,
+    "sig": "template<typename ContainerType, typename AllOfFunction> bool allOf(ContainerType&& container, AllOfFunction allOfFunction)",
+    "params": [
+     "container",
+     "allOfFunction"
+    ],
+    "iter_idx": 0,
+    "cont_type": "ContainerType&& container",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "allOfFunction",
+    "snapshot": false,
+    "loop_head": "auto& value : container",
+    "body_excerpt": "{ if (!allOfFunction(value)) return false; }"
+   }
+  ],
+  "anyOf": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+    "line": 39,
+    "sig": "template<typename ContainerType, typename AnyOfFunction> bool anyOf(ContainerType&& container, AnyOfFunction anyOfFunction)",
+    "params": [
+     "container",
+     "anyOfFunction"
+    ],
+    "iter_idx": 0,
+    "cont_type": "ContainerType&& container",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "anyOfFunction",
+    "snapshot": false,
+    "loop_head": "auto& value : container",
+    "body_excerpt": "{ if (anyOfFunction(value)) return true; }"
+   }
+  ],
+  "big5Encode": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/PAL/pal/text/TextCodecCJK.cpp",
+    "line": 781,
+    "sig": "static Vector<uint8_t> big5Encode(StringView string, Function<void(UChar32, Vector<uint8_t>&)>&& unencodableHandler)",
+    "params": [
+     "string",
+     "unencodableHandler"
+    ],
+    "iter_idx": 0,
+    "cont_type": "StringView string",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "unencodableHandler",
+    "snapshot": false,
+    "loop_head": "WTF::CodePointIterator<UChar> iterator(characters.get(), characters.get() + string.length()); !iterator.atEnd(); ++iterator",
+    "body_excerpt": "{ auto codePoint = *iterator; if (isASCII(codePoint)) { result.append(codePoint); continue; } auto pointerRange = findInSortedPairs(big5EncodeIndex(), codePoint); if (pointerRange.first == pointerRang"
+   }
+  ],
+  "capsFromRtpCapabilities": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/mediastream/gstreamer/GStreamerWebRTCUtils.cpp",
+    "line": 490,
+    "sig": "GRefPtr<GstCaps> capsFromRtpCapabilities(RefPtr<UniqueSSRCGenerator> ssrcGenerator, const RTCRtpCapabilities& capabilities, Function<void(GstStructure*)> supplementCapsCallback)",
+    "params": [
+     "ssrcGenerator",
+     "capabilities",
+     "supplementCapsCallback"
+    ],
+    "iter_idx": 1,
+    "cont_type": "const RTCRtpCapabilities& capabilities",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 2,
+    "cb_param": "supplementCapsCallback",
+    "snapshot": false,
+    "loop_head": "unsigned index = 0; auto& codec : capabilities.codecs",
+    "body_excerpt": "{ auto components = codec.mimeType.split( ); auto* codecStructure = gst_structure_new( , , G_TYPE_STRING, components[0].ascii().data(), , G_TYPE_STRING, components[1].ascii().data(), , G_TYPE_INT, cod"
+   }
+  ],
+  "compactMap": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Vector.h",
+    "line": 1843,
+    "sig": "static Vector<DestinationItemType> compactMap(const SourceType& source, const MapFunction& mapFunction)",
+    "params": [
+     "source",
+     "mapFunction"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const SourceType& source",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "mapFunction",
+    "snapshot": false,
+    "loop_head": "auto&& item : source",
+    "body_excerpt": "{ auto itemResult = mapFunction(item); if (CompactMapTraits<ResultItemType>::hasValue(itemResult)) result.append(CompactMapTraits<ResultItemType>::extractValue(WTFMove(itemResult))); }"
+   },
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Vector.h",
+    "line": 1862,
+    "sig": "static Vector<DestinationItemType> compactMap(SourceType&& source, const MapFunction& mapFunction)",
+    "params": [
+     "source",
+     "mapFunction"
+    ],
+    "iter_idx": 0,
+    "cont_type": "SourceType&& source",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "mapFunction",
+    "snapshot": false,
+    "loop_head": "auto&& item : source",
+    "body_excerpt": "{ auto itemResult = mapFunction(WTFMove(item)); if (CompactMapTraits<ResultItemType>::hasValue(itemResult)) result.append(CompactMapTraits<ResultItemType>::extractValue(WTFMove(itemResult))); }"
+   }
+  ],
+  "createNSArray": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/cocoa/VectorCocoa.h",
+    "line": 79,
+    "sig": "template<typename CollectionType, typename MapFunctionType> RetainPtr<NSMutableArray> createNSArray(CollectionType&& collection, MapFunctionType&& function)",
+    "params": [
+     "collection",
+     "function"
+    ],
+    "iter_idx": 0,
+    "cont_type": "CollectionType&& collection",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "function",
+    "snapshot": false,
+    "loop_head": "auto&& element : std::forward<CollectionType>(collection)",
+    "body_excerpt": "{ if constexpr (std::is_rvalue_reference_v<CollectionType&&> && !std::is_const_v<std::remove_reference_t<decltype(element)>>) addUnlessNil(array.get(), getPtr(function(WTFMove(element)))); else addUnl"
+   }
+  ],
+  "encode": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/PAL/pal/text/TextCodecSingleByte.cpp",
+    "line": 253,
+    "sig": "static Vector<uint8_t> encode(const SingleByteEncodeTable& table, StringView string, Function<void(UChar32, Vector<uint8_t>&)>&& unencodableHandler)",
+    "params": [
+     "table",
+     "string",
+     "unencodableHandler"
+    ],
+    "iter_idx": 1,
+    "cont_type": "StringView string",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 2,
+    "cb_param": "unencodableHandler",
+    "snapshot": false,
+    "loop_head": "auto codePoint : string.codePoints()",
+    "body_excerpt": "{ if (isASCII(codePoint)) { result.append(codePoint); continue; } auto byte = findFirstInSortedPairs(table, codePoint); if (!byte) { unencodableHandler(codePoint, result); continue; } result.append(*b"
+   }
+  ],
+  "eucJPEncode": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/PAL/pal/text/TextCodecCJK.cpp",
+    "line": 271,
+    "sig": "static Vector<uint8_t> eucJPEncode(StringView string, Function<void(UChar32, Vector<uint8_t>&)>&& unencodableHandler)",
+    "params": [
+     "string",
+     "unencodableHandler"
+    ],
+    "iter_idx": 0,
+    "cont_type": "StringView string",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "unencodableHandler",
+    "snapshot": false,
+    "loop_head": "WTF::CodePointIterator<UChar> iterator(characters.get(), characters.get() + string.length()); !iterator.atEnd(); ++iterator",
+    "body_excerpt": "{ auto codePoint = *iterator; if (isASCII(codePoint)) { result.append(codePoint); continue; } if (codePoint == 0x00A5) { result.append(0x5C); continue; } if (codePoint == 0x203E) { result.append(0x7E)"
+   }
+  ],
+  "eucKREncode": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/PAL/pal/text/TextCodecCJK.cpp",
+    "line": 710,
+    "sig": "static Vector<uint8_t> eucKREncode(StringView string, Function<void(UChar32, Vector<uint8_t>&)>&& unencodableHandler)",
+    "params": [
+     "string",
+     "unencodableHandler"
+    ],
+    "iter_idx": 0,
+    "cont_type": "StringView string",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "unencodableHandler",
+    "snapshot": false,
+    "loop_head": "WTF::CodePointIterator<UChar> iterator(characters.get(), characters.get() + string.length()); !iterator.atEnd(); ++iterator",
+    "body_excerpt": "{ auto codePoint = *iterator; if (isASCII(codePoint)) { result.append(codePoint); continue; } auto pointer = findFirstInSortedPairs(eucKREncodingIndex(), codePoint); if (!pointer) { unencodableHandler"
+   }
+  ],
+  "forAllDominatorsOf": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Dominators.h",
+    "line": 146,
+    "sig": "template<typename Functor> void forAllDominatorsOf(typename Graph::Node to, const Functor& functor) const",
+    "params": [
+     "to",
+     "functor"
+    ],
+    "iter_idx": 0,
+    "cont_type": "typename Graph::Node to",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "functor",
+    "snapshot": false,
+    "loop_head": "typename Graph::Node block = to; block; block = m_data[block].idomParent",
+    "body_excerpt": "functor(block);"
+   }
+  ],
+  "forAllStrictDominatorsOf": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Dominators.h",
+    "line": 136,
+    "sig": "template<typename Functor> void forAllStrictDominatorsOf(typename Graph::Node to, const Functor& functor) const",
+    "params": [
+     "to",
+     "functor"
+    ],
+    "iter_idx": 0,
+    "cont_type": "typename Graph::Node to",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "functor",
+    "snapshot": false,
+    "loop_head": "typename Graph::Node block = m_data[to].idomParent; block; block = m_data[block].idomParent",
+    "body_excerpt": "functor(block);"
+   }
+  ],
+  "forEach": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+    "line": 32,
+    "sig": "template<typename ContainerType, typename ForEachFunction> void forEach(ContainerType&& container, ForEachFunction forEachFunction)",
+    "params": [
+     "container",
+     "forEachFunction"
+    ],
+    "iter_idx": 0,
+    "cont_type": "ContainerType&& container",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "forEachFunction",
+    "snapshot": false,
+    "loop_head": "auto& value : container",
+    "body_excerpt": "forEachFunction(value);"
+   }
+  ],
+  "gbEncodeShared": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/PAL/pal/text/TextCodecCJK.cpp",
+    "line": 1043,
+    "sig": "static Vector<uint8_t> gbEncodeShared(StringView string, Function<void(UChar32, Vector<uint8_t>&)>&& unencodableHandler, IsGBK isGBK)",
+    "params": [
+     "string",
+     "unencodableHandler",
+     "isGBK"
+    ],
+    "iter_idx": 0,
+    "cont_type": "StringView string",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "unencodableHandler",
+    "snapshot": false,
+    "loop_head": "WTF::CodePointIterator<UChar> iterator(characters.get(), characters.get() + string.length()); !iterator.atEnd(); ++iterator",
+    "body_excerpt": "{ auto codePoint = *iterator; if (isASCII(codePoint)) { result.append(codePoint); continue; } if (codePoint == 0xE5E5) { unencodableHandler(codePoint, result); continue; } if (isGBK == IsGBK::Yes) { i"
+   }
+  ],
+  "iterateClients": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+    "line": 56,
+    "sig": "template<typename T> void iterateClients(WeakHashSet<CSSFontFace::Client>& clients, T callback)",
+    "params": [
+     "clients",
+     "callback"
+    ],
+    "iter_idx": 0,
+    "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+    "cont_member": null,
+    "elem": "CSSFontFace::Client",
+    "cb_idx": 1,
+    "cb_param": "callback",
+    "snapshot": true,
+    "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+    "body_excerpt": "callback(client);"
+   }
+  ],
+  "map": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+    "line": 237,
+    "sig": "template<typename T, typename MapFunction, typename ReturnType = typename std::invoke_result<MapFunction, const T&>::type> FixedVector<ReturnType> map(const FixedVector<T>& source, MapFunction&& mapFu",
+    "params": [
+     "source",
+     "mapFunction"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const FixedVector<T>& source",
+    "cont_member": null,
+    "elem": "T",
+    "cb_idx": 1,
+    "cb_param": "mapFunction",
+    "snapshot": false,
+    "loop_head": "const auto& item : source",
+    "body_excerpt": "{ result[resultIndex] = mapFunction(item); resultIndex++; }"
+   },
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Vector.h",
+    "line": 1783,
+    "sig": "static Vector<DestinationItemType> map(const SourceType& source, const MapFunction& mapFunction)",
+    "params": [
+     "source",
+     "mapFunction"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const SourceType& source",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "mapFunction",
+    "snapshot": false,
+    "loop_head": "auto&& item : source",
+    "body_excerpt": "result.uncheckedAppend(mapFunction(item));"
+   },
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Vector.h",
+    "line": 1799,
+    "sig": "static Vector<DestinationItemType> map(SourceType&& source, const MapFunction& mapFunction)",
+    "params": [
+     "source",
+     "mapFunction"
+    ],
+    "iter_idx": 0,
+    "cont_type": "SourceType&& source",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "mapFunction",
+    "snapshot": false,
+    "loop_head": "auto&& item : source",
+    "body_excerpt": "result.uncheckedAppend(mapFunction(WTFMove(item)));"
+   },
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/WeakHashSet.h",
+    "line": 214,
+    "sig": "static Vector<DestinationItemType> map(const WeakHashSet<T, WeakMapImpl>& source, const MapFunction& mapFunction)",
+    "params": [
+     "source",
+     "mapFunction"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const WeakHashSet<T, WeakMapImpl>& source",
+    "cont_member": null,
+    "elem": "T, WeakMapImpl",
+    "cb_idx": 1,
+    "cb_param": "mapFunction",
+    "snapshot": false,
+    "loop_head": "auto& item : source",
+    "body_excerpt": "result.uncheckedAppend(mapFunction(item));"
+   },
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/WeakListHashSet.h",
+    "line": 341,
+    "sig": "static Vector<DestinationItemType> map(const WeakListHashSet<T, WeakMapImpl>& source, const MapFunction& mapFunction)",
+    "params": [
+     "source",
+     "mapFunction"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const WeakListHashSet<T, WeakMapImpl>& source",
+    "cont_member": null,
+    "elem": "T, WeakMapImpl",
+    "cb_idx": 1,
+    "cb_param": "mapFunction",
+    "snapshot": false,
+    "loop_head": "auto& item : source",
+    "body_excerpt": "result.uncheckedAppend(mapFunction(item));"
+   }
+  ],
+  "removeQueryParameters": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/URL.cpp",
+    "line": 1304,
+    "sig": "Vector<String> removeQueryParameters(URL& url, Function<bool(const String&)>&& shouldRemove)",
+    "params": [
+     "url",
+     "shouldRemove"
+    ],
+    "iter_idx": 0,
+    "cont_type": "URL& url",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "shouldRemove",
+    "snapshot": false,
+    "loop_head": "auto bytes : url.query().split( )",
+    "body_excerpt": "{ auto nameAndValue = URLParser::parseQueryNameAndValue(bytes); if (!nameAndValue) continue; auto& key = nameAndValue->key; if (key.isEmpty()) continue; if (shouldRemove(key)) { removedParameters.appe"
+   }
+  ],
+  "removeSubresourceURLAttributes": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/editing/markup.cpp",
+    "line": 167,
+    "sig": "void removeSubresourceURLAttributes(Ref<DocumentFragment>&& fragment, Function<bool(const URL&)> shouldRemoveURL)",
+    "params": [
+     "fragment",
+     "shouldRemoveURL"
+    ],
+    "iter_idx": 0,
+    "cont_type": "Ref<DocumentFragment>&& fragment",
+    "cont_member": null,
+    "elem": "DocumentFragment",
+    "cb_idx": 1,
+    "cb_param": "shouldRemoveURL",
+    "snapshot": false,
+    "loop_head": "auto& element : descendantsOfType<Element>(fragment)",
+    "body_excerpt": "{ if (!element.hasAttributes()) continue; for (const Attribute& attribute : element.attributesIterator()) { if (element.attributeContainsURL(attribute) && !attribute.value().isEmpty()) { URL url({ }, "
+   }
+  ],
+  "shiftJISEncode": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/PAL/pal/text/TextCodecCJK.cpp",
+    "line": 642,
+    "sig": "static Vector<uint8_t> shiftJISEncode(StringView string, Function<void(UChar32, Vector<uint8_t>&)>&& unencodableHandler)",
+    "params": [
+     "string",
+     "unencodableHandler"
+    ],
+    "iter_idx": 0,
+    "cont_type": "StringView string",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "unencodableHandler",
+    "snapshot": false,
+    "loop_head": "WTF::CodePointIterator<UChar> iterator(characters.get(), characters.get() + string.length()); !iterator.atEnd(); ++iterator",
+    "body_excerpt": "{ auto codePoint = *iterator; if (isASCII(codePoint) || codePoint == 0x0080) { result.append(codePoint); continue; } if (codePoint == 0x00A5) { result.append(0x5C); continue; } if (codePoint == 0x203E"
+   }
+  ],
+  "toHashMap": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/BagToHashMap.h",
+    "line": 35,
+    "sig": "template<typename ElementType, typename BagPtrTraits, typename KeyType, typename HashArg, typename KeyGetterFunctor> void toHashMap(Bag<ElementType, BagPtrTraits>& bag, KeyGetterFunctor& getKey, HashM",
+    "params": [
+     "bag",
+     "getKey",
+     "result"
+    ],
+    "iter_idx": 0,
+    "cont_type": "Bag<ElementType, BagPtrTraits>& bag",
+    "cont_member": null,
+    "elem": "ElementType, BagPtrTraits",
+    "cb_idx": 1,
+    "cb_param": "getKey",
+    "snapshot": false,
+    "loop_head": "typename Bag<ElementType, BagPtrTraits>::iterator iter = bag.begin(); !!iter; ++iter",
+    "body_excerpt": "{ ElementType* element = *iter; KeyType key = getKey(*element); result.add(key, element); }"
+   }
+  ],
+  "traverseRulesInVector": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/StyleSheetContents.cpp",
+    "line": 483,
+    "sig": "static bool traverseRulesInVector(const Vector<Ref<StyleRuleBase>>& rules, const Function<bool(const StyleRuleBase&)>& handler)",
+    "params": [
+     "rules",
+     "handler"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const Vector<Ref<StyleRuleBase>>& rules",
+    "cont_member": null,
+    "elem": "Ref<StyleRuleBase",
+    "cb_idx": 1,
+    "cb_param": "handler",
+    "snapshot": false,
+    "loop_head": "auto& rule : rules",
+    "body_excerpt": "{ if (handler(rule)) return true; if (auto styleRuleWithNesting = dynamicDowncast<StyleRuleWithNesting>(rule.ptr())) { if (traverseRulesInVector(styleRuleWithNesting->nestedRules(), handler)) return t"
+   }
+  ],
+  "traverseSubtreeToUpdateTreeScope": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/dom/Node.cpp",
+    "line": 2083,
+    "sig": "template <typename MoveNodeFunction, typename MoveShadowRootFunction> static void traverseSubtreeToUpdateTreeScope(Node& root, MoveNodeFunction moveNode, MoveShadowRootFunction moveShadowRoot)",
+    "params": [
+     "root",
+     "moveNode",
+     "moveShadowRoot"
+    ],
+    "iter_idx": 0,
+    "cont_type": "Node& root",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "moveNode",
+    "snapshot": false,
+    "loop_head": "Node* node = &root; node; node = NodeTraversal::next(*node, &root)",
+    "body_excerpt": "{ moveNode(*node); if (!is<Element>(*node)) continue; Element& element = downcast<Element>(*node); if (element.hasSyntheticAttrChildNodes()) { for (auto& attr : element.attrNodeList()) moveNode(*attr)"
+   }
+  ],
+  "traverseVisibleNonCompositedDescendantLayers": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/rendering/RenderLayerBacking.cpp",
+    "line": 2936,
+    "sig": "static LayerTraversal traverseVisibleNonCompositedDescendantLayers(RenderLayer& parent, const Function<LayerTraversal(const RenderLayer&)>& layerFunc)",
+    "params": [
+     "parent",
+     "layerFunc"
+    ],
+    "iter_idx": 0,
+    "cont_type": "RenderLayer& parent",
+    "cont_member": null,
+    "elem": null,
+    "cb_idx": 1,
+    "cb_param": "layerFunc",
+    "snapshot": false,
+    "loop_head": "auto* childLayer : parent.normalFlowLayers()",
+    "body_excerpt": "{ if (compositedWithOwnBackingStore(*childLayer)) continue; if (layerFunc(*childLayer) == LayerTraversal::Stop) return LayerTraversal::Stop; if (traverseVisibleNonCompositedDescendantLayers(*childLaye"
+   }
+  ],
+  "updateTracksOfKind": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/avfoundation/objc/MediaPlayerPrivateMediaStreamAVFObjC.mm",
+    "line": 837,
+    "sig": "template <typename RefT> void updateTracksOfKind(MemoryCompactRobinHoodHashMap<String, RefT>& trackMap, TrackKind trackKind, MediaStreamTrackPrivateVector& currentTracks, RefT (*itemFactory)(MediaStre",
+    "params": [
+     "trackMap",
+     "trackKind",
+     "currentTracks",
+     "configureTrack"
+    ],
+    "iter_idx": 0,
+    "cont_type": "MemoryCompactRobinHoodHashMap<String, RefT>& trackMap",
+    "cont_member": null,
+    "elem": "String, RefT",
+    "cb_idx": 3,
+    "cb_param": "configureTrack",
+    "snapshot": false,
+    "loop_head": "const auto& track : trackMap.values()",
+    "body_excerpt": "configureTrack(track.get(), index++, TrackState::Configure);"
+   }
+  ],
+  "verifyVaryingRequestHeadersInternal": [
+   {
+    "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/network/CacheValidation.cpp",
+    "line": 408,
+    "sig": "static bool verifyVaryingRequestHeadersInternal(const Vector<std::pair<String, String>>& varyingRequestHeaders, Function<String(const String&)>&& headerValueForVary)",
+    "params": [
+     "varyingRequestHeaders",
+     "headerValueForVary"
+    ],
+    "iter_idx": 0,
+    "cont_type": "const Vector<std::pair<String, String>>& varyingRequestHeaders",
+    "cont_member": null,
+    "elem": "std::pair<String, String",
+    "cb_idx": 1,
+    "cb_param": "headerValueForVary",
+    "snapshot": false,
+    "loop_head": "auto& varyingRequestHeader : varyingRequestHeaders",
+    "body_excerpt": "{ if (varyingRequestHeader.first == _s) return false; if (headerValueForVary(varyingRequestHeader.first) != varyingRequestHeader.second) return false; }"
+   }
+  ]
+ },
+ "sites": [
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/airplay/WebMediaSessionManager.cpp",
+   "line": 151,
+   "helper": "allOf",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+   "helper_line": 49,
+   "container": "m_clientState",
+   "container_expr": "m_clientState",
+   "cont_type": "ContainerType&& container",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& value : container",
+   "callback": "[] (auto& state) {\n        return state->client.alwaysOnLoggingAllowed();\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.alwaysOnLoggingAllowed"
+   ],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "std::unique_ptr<ClientState>",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/cache/DOMCacheStorage.cpp",
+   "line": 98,
+   "helper": "map",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+   "helper_line": 237,
+   "container": "m_caches",
+   "container_expr": "m_caches",
+   "cont_type": "const FixedVector<T>& source",
+   "elem": "T",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& item : source",
+   "callback": "copyCache",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "Ref<DOMCache>",
+   "site_elem_class": "ref"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/cache/DOMCacheStorage.cpp",
+   "line": 259,
+   "helper": "map",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+   "helper_line": 237,
+   "container": "m_caches",
+   "container_expr": "m_caches",
+   "cont_type": "const FixedVector<T>& source",
+   "elem": "T",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& item : source",
+   "callback": "[] (const auto& cache) {\n            return cache->name();\n        }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "Ref<DOMCache>",
+   "site_elem_class": "ref"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/indexeddb/server/MemoryObjectStore.cpp",
+   "line": 158,
+   "helper": "map",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+   "helper_line": 237,
+   "container": "m_indexesByName",
+   "container_expr": "m_indexesByName",
+   "cont_type": "const FixedVector<T>& source",
+   "elem": "T",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& item : source",
+   "callback": "[](auto& entry) {\n        return entry.value->info().identifier();\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "value.info"
+   ],
+   "shape": "raw",
+   "site_container_kind": "HashMap",
+   "site_elem": "String, RefPtr<MemoryIndex>",
+   "site_elem_class": "refptr"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/indexeddb/shared/IDBDatabaseInfo.cpp",
+   "line": 137,
+   "helper": "map",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+   "helper_line": 237,
+   "container": "m_objectStoreMap",
+   "container_expr": "m_objectStoreMap",
+   "cont_type": "const FixedVector<T>& source",
+   "elem": "T",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& item : source",
+   "callback": "[](auto& pair) {\n        return pair.value.name();\n    }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "HashMap",
+   "site_elem": "uint64_t, IDBObjectStoreInfo",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/indexeddb/shared/IDBObjectStoreInfo.cpp",
+   "line": 112,
+   "helper": "map",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+   "helper_line": 237,
+   "container": "m_indexMap",
+   "container_expr": "m_indexMap",
+   "cont_type": "const FixedVector<T>& source",
+   "elem": "T",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& item : source",
+   "callback": "[](auto& pair) -> String {\n        return pair.value.name();\n    }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "HashMap",
+   "site_elem": "uint64_t, IDBIndexInfo",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/mediastream/RTCRtpSFrameTransformer.cpp",
+   "line": 167,
+   "helper": "anyOf",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+   "helper_line": 39,
+   "container": "m_keys",
+   "container_expr": "m_keys",
+   "cont_type": "ContainerType&& container",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& value : container",
+   "callback": "[keyId](auto& key) { return keyId == key.keyId; }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "String",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 155,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.fontPropertyChanged(*this, oldFamily.get());\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.fontPropertyChanged"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 197,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.fontPropertyChanged(*this);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.fontPropertyChanged"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 234,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.fontPropertyChanged(*this);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.fontPropertyChanged"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 273,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.fontPropertyChanged(*this);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.fontPropertyChanged"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 295,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.fontPropertyChanged(*this);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.fontPropertyChanged"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 322,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.fontPropertyChanged(*this);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.fontPropertyChanged"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 341,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.fontPropertyChanged(*this);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.fontPropertyChanged"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 357,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.fontPropertyChanged(*this);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.fontPropertyChanged"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 436,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.fontLoaded(*this);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.fontLoaded"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 591,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.fontStateChanged(*this, m_status, newStatus);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.fontStateChanged"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "line": 769,
+   "helper": "iterateClients",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp",
+   "helper_line": 56,
+   "container": "m_clients",
+   "container_expr": "m_clients",
+   "cont_type": "WeakHashSet<CSSFontFace::Client>& clients",
+   "elem": "CSSFontFace::Client",
+   "elem_class": "value",
+   "client_shaped": true,
+   "snapshot": true,
+   "loop_head": "auto& client : copyToVectorOf<Ref<CSSFontFace::Client>>(clients)",
+   "callback": "[&](Client& client) {\n        client.updateStyleIfNeeded(*this);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "client.updateStyleIfNeeded"
+   ],
+   "shape": "snapshot",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "Client",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/StyleSheetContents.cpp",
+   "line": 508,
+   "helper": "traverseRulesInVector",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/StyleSheetContents.cpp",
+   "helper_line": 483,
+   "container": "m_childRules",
+   "container_expr": "m_childRules",
+   "cont_type": "const Vector<Ref<StyleRuleBase>>& rules",
+   "elem": "Ref<StyleRuleBase",
+   "elem_class": "ref",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& rule : rules",
+   "callback": "handler",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "Ref<StyleRuleBase>",
+   "site_elem_class": "ref"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/calc/CSSCalcOperationNode.cpp",
+   "line": 1063,
+   "helper": "anyOf",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+   "helper_line": 39,
+   "container": "m_children",
+   "container_expr": "m_children",
+   "cont_type": "ContainerType&& container",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& value : container",
+   "callback": "[lengthConversion] (auto& child) {\n        return child->convertingToLengthRequiresNonNullStyle(lengthConversion);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "child.convertingToLengthRequiresNonNullStyle"
+   ],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "Ref<CSSCalcExpressionNode>",
+   "site_elem_class": "ref"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/typedom/transform/CSSTransformValue.cpp",
+   "line": 141,
+   "helper": "allOf",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+   "helper_line": 49,
+   "container": "m_components",
+   "container_expr": "m_components",
+   "cont_type": "ContainerType&& container",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& value : container",
+   "callback": "[] (auto& component) {\n        return component && component->is2D();\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "component.is2D"
+   ],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "RefPtr<CSSTransformComponent>",
+   "site_elem_class": "refptr"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/dom/TreeScopeOrderedMap.cpp",
+   "line": 232,
+   "helper": "map",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+   "helper_line": 237,
+   "container": "m_map",
+   "container_expr": "m_map",
+   "cont_type": "const FixedVector<T>& source",
+   "elem": "T",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& item : source",
+   "callback": "[](auto& entry) -> AtomString {\n        return const_cast<AtomStringImpl*>(entry.key);\n    }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "HashMap",
+   "site_elem": "QualifiedName, std::variant<AtomString, WeakElementPtr, Vector<WeakEle",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/HTMLFormElement.cpp",
+   "line": 148,
+   "helper": "compactMap",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Vector.h",
+   "helper_line": 1843,
+   "container": "m_imageElements",
+   "container_expr": "m_imageElements",
+   "cont_type": "const SourceType& source",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto&& item : source",
+   "callback": "[](auto& weakPtr) {\n        return RefPtr { weakPtr.get() };\n    }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "WeakPtr<HTMLImageElement, WeakPtrImplWithEventTargetData>",
+   "site_elem_class": "weakptr"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/HTMLFormElement.cpp",
+   "line": 949,
+   "helper": "map",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+   "helper_line": 237,
+   "container": "m_listedElements",
+   "container_expr": "m_listedElements",
+   "cont_type": "const FixedVector<T>& source",
+   "elem": "T",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& item : source",
+   "callback": "[] (auto& weakElement) {\n        RefPtr element { weakElement.get() };\n        ASSERT(element);\n        auto* formListedElement = element->asFormListedElement();\n        ASSERT(formListedElement);\n        return Ref<FormListedElement>(*formListedElement);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "element.asFormListedElement"
+   ],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "WeakPtr<HTMLElement, WeakPtrImplWithEventTargetData>",
+   "site_elem_class": "weakptr"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/HTMLFormElement.cpp",
+   "line": 960,
+   "helper": "compactMap",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Vector.h",
+   "helper_line": 1843,
+   "container": "m_listedElements",
+   "container_expr": "m_listedElements",
+   "cont_type": "const SourceType& source",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto&& item : source",
+   "callback": "[](auto& weakElement) {\n        return RefPtr { weakElement->asValidatedFormListedElement() };\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "weakElement.asValidatedFormListedElement"
+   ],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "WeakPtr<HTMLElement, WeakPtrImplWithEventTargetData>",
+   "site_elem_class": "weakptr"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/loader/DocumentLoader.cpp",
+   "line": 2421,
+   "helper": "map",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+   "helper_line": 237,
+   "container": "m_linkIcons",
+   "container_expr": "m_linkIcons",
+   "cont_type": "const FixedVector<T>& source",
+   "elem": "T",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& item : source",
+   "callback": "[&](auto& icon) -> std::pair<WebCore::LinkIcon&",
+   "nargs": 4,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "LinkIcon",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/loader/ResourceTiming.cpp",
+   "line": 83,
+   "helper": "map",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+   "helper_line": 237,
+   "container": "m_serverTiming",
+   "container_expr": "m_serverTiming",
+   "cont_type": "const FixedVector<T>& source",
+   "elem": "T",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& item : source",
+   "callback": "[] (auto& entry) {\n        return PerformanceServerTiming::create(String(entry.name), entry.duration, String(entry.description));\n    }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "ServerTiming",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/page/Page.cpp",
+   "line": 4107,
+   "helper": "anyOf",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+   "helper_line": 39,
+   "container": "m_corsDisablingPatterns",
+   "container_expr": "m_corsDisablingPatterns",
+   "cont_type": "ContainerType&& container",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& value : container",
+   "callback": "[&] (const auto& pattern) {\n        return pattern.matches(url);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "pattern.matches"
+   ],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "UserContentURLPattern",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/audio/PlatformMediaSessionManager.cpp",
+   "line": 136,
+   "helper": "anyOf",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+   "helper_line": 39,
+   "container": "m_audioCaptureSources",
+   "container_expr": "m_audioCaptureSources",
+   "cont_type": "ContainerType&& container",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& value : container",
+   "callback": "[](auto& source) {\n        return source.isCapturingAudio();\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "source.isCapturingAudio"
+   ],
+   "shape": "raw",
+   "site_container_kind": "WeakHashSet",
+   "site_elem": "PlatformMediaSession::AudioCaptureSource",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/audio/PlatformMediaSessionManager.cpp",
+   "line": 593,
+   "helper": "anyOf",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+   "helper_line": 39,
+   "container": "m_sessions",
+   "container_expr": "m_sessions",
+   "cont_type": "ContainerType&& container",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& value : container",
+   "callback": "[&predicate](const auto& session) {\n        return predicate(*session);\n    }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "WeakPtr<PlatformMediaSession>",
+   "site_elem_class": "weakptr"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/cocoa/SharedBufferCocoa.mm",
+   "line": 166,
+   "helper": "createNSArray",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/cocoa/VectorCocoa.h",
+   "helper_line": 79,
+   "container": "m_segments",
+   "container_expr": "m_segments",
+   "cont_type": "CollectionType&& collection",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto&& element : std::forward<CollectionType>(collection)",
+   "callback": "[] (auto& segment) {\n        return segment.segment->createNSData();\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "segment.createNSData"
+   ],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "CSSUnparsedSegment",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/avfoundation/objc/CDMInstanceFairPlayStreamingAVFObjC.mm",
+   "line": 827,
+   "helper": "createNSArray",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/cocoa/VectorCocoa.h",
+   "helper_line": 79,
+   "container": "m_expiredSessions",
+   "container_expr": "m_expiredSessions",
+   "cont_type": "CollectionType&& collection",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto&& element : std::forward<CollectionType>(collection)",
+   "callback": "[] (auto& data) {\n            return data.get();\n        }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "RetainPtr<NSData>",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/avfoundation/objc/CDMSessionAVContentKeySession.mm",
+   "line": 309,
+   "helper": "createNSArray",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/cocoa/VectorCocoa.h",
+   "helper_line": 79,
+   "container": "m_protocolVersions",
+   "container_expr": "m_protocolVersions",
+   "cont_type": "CollectionType&& collection",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto&& element : std::forward<CollectionType>(collection)",
+   "callback": "[] (int version) -> NSNumber * {\n                return version ? @(version) : nil;\n            }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "int",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/avfoundation/objc/MediaPlayerPrivateMediaStreamAVFObjC.mm",
+   "line": 961,
+   "helper": "updateTracksOfKind",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/avfoundation/objc/MediaPlayerPrivateMediaStreamAVFObjC.mm",
+   "helper_line": 837,
+   "container": "m_audioTrackMap",
+   "container_expr": "m_audioTrackMap",
+   "cont_type": "MemoryCompactRobinHoodHashMap<String, RefT>& trackMap",
+   "elem": "String, RefT",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& track : trackMap.values()",
+   "callback": "&AudioTrackPrivateMediaStream::create",
+   "nargs": 5,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "?",
+   "site_elem": "",
+   "site_elem_class": "unknown"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/avfoundation/objc/MediaPlayerPrivateMediaStreamAVFObjC.mm",
+   "line": 986,
+   "helper": "updateTracksOfKind",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/avfoundation/objc/MediaPlayerPrivateMediaStreamAVFObjC.mm",
+   "helper_line": 837,
+   "container": "m_videoTrackMap",
+   "container_expr": "m_videoTrackMap",
+   "cont_type": "MemoryCompactRobinHoodHashMap<String, RefT>& trackMap",
+   "elem": "String, RefT",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& track : trackMap.values()",
+   "callback": "&VideoTrackPrivateMediaStream::create",
+   "nargs": 5,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "?",
+   "site_elem": "",
+   "site_elem_class": "unknown"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/avfoundation/objc/MediaSourcePrivateAVFObjC.mm",
+   "line": 330,
+   "helper": "anyOf",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+   "helper_line": 39,
+   "container": "m_sourceBuffers",
+   "container_expr": "m_sourceBuffers",
+   "cont_type": "ContainerType&& container",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& value : container",
+   "callback": "[] (auto& sourceBuffer) {\n        return sourceBuffer->waitingForKey();\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "sourceBuffer.waitingForKey"
+   ],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "RefPtr<SourceBufferPrivateAVFObjC>",
+   "site_elem_class": "refptr"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/mediastream/MediaStreamPrivate.cpp",
+   "line": 130,
+   "helper": "anyOf",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+   "helper_line": 39,
+   "container": "m_trackSet",
+   "container_expr": "m_trackSet",
+   "cont_type": "ContainerType&& container",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& value : container",
+   "callback": "[](auto& track) { return !track.value->ended(); }",
+   "nargs": 2,
+   "callback_calls": [
+    "value.ended"
+   ],
+   "shape": "raw",
+   "site_container_kind": "?",
+   "site_elem": "",
+   "site_elem_class": "unknown"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/network/cocoa/ResourceRequestCocoa.mm",
+   "line": 310,
+   "helper": "createNSArray",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/cocoa/VectorCocoa.h",
+   "helper_line": 79,
+   "container": "m_responseContentDispositionEncodingFallbackArray",
+   "container_expr": "m_requestData.m_responseContentDispositionEncodingFallbackArray",
+   "cont_type": "CollectionType&& collection",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto&& element : std::forward<CollectionType>(collection)",
+   "callback": "[] (auto& name) -> NSNumber * {\n        auto encoding = CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding(name.createCFString().get()));\n        if (encoding == kCFStringEncodingInvalidId)\n            return nil;\n        return @(encoding);\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "name.createCFString"
+   ],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "String",
+   "site_elem_class": "value"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/rendering/RenderLayerBacking.cpp",
+   "line": 3001,
+   "helper": "traverseVisibleNonCompositedDescendantLayers",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/rendering/RenderLayerBacking.cpp",
+   "helper_line": 2936,
+   "container": "m_owningLayer",
+   "container_expr": "m_owningLayer",
+   "cont_type": "RenderLayer& parent",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto* childLayer : parent.normalFlowLayers()",
+   "callback": "[&hasPaintingDescendant, &request, this](const RenderLayer& layer) {\n        RenderLayer::PaintedContentRequest localRequest;\n        if (layer.isVisuallyNonEmpty(&localRequest)) {\n            bool mayIntersect = intersectsWithAncestor(layer, m_owningLayer, compositedBounds()).value_or(true);\n            if (mayIntersect) {\n                hasPaintingDescendant = true;\n                request.setH",
+   "nargs": 2,
+   "callback_calls": [
+    "layer.isVisuallyNonEmpty"
+   ],
+   "shape": "raw",
+   "site_container_kind": "?",
+   "site_elem": "",
+   "site_elem_class": "unknown"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/rendering/RenderLayerBacking.cpp",
+   "line": 3019,
+   "helper": "traverseVisibleNonCompositedDescendantLayers",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/rendering/RenderLayerBacking.cpp",
+   "helper_line": 2936,
+   "container": "m_owningLayer",
+   "container_expr": "m_owningLayer",
+   "cont_type": "RenderLayer& parent",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto* childLayer : parent.normalFlowLayers()",
+   "callback": "[&hasVisibleDescendant](const RenderLayer& layer) {\n        hasVisibleDescendant |= layer.hasVisibleContent();\n        return hasVisibleDescendant ? LayerTraversal::Stop : LayerTraversal::Continue;\n    }",
+   "nargs": 2,
+   "callback_calls": [
+    "layer.hasVisibleContent"
+   ],
+   "shape": "raw",
+   "site_container_kind": "?",
+   "site_elem": "",
+   "site_elem_class": "unknown"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/svg/graphics/filters/SVGFilterGraph.h",
+   "line": 121,
+   "helper": "map",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/FixedVector.h",
+   "helper_line": 237,
+   "container": "m_nodeInputs",
+   "container_expr": "m_nodeInputs",
+   "cont_type": "const FixedVector<T>& source",
+   "elem": "T",
+   "elem_class": "value",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "const auto& item : source",
+   "callback": "[] (auto& pair) -> Ref<NodeType> {\n            return pair.key;\n        }",
+   "nargs": 2,
+   "callback_calls": [],
+   "shape": "raw",
+   "site_container_kind": "HashMap",
+   "site_elem": "Ref<NodeType>, NodeVector",
+   "site_elem_class": "ref"
+  },
+  {
+   "shape_owner": false,
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/workers/service/background-fetch/BackgroundFetch.cpp",
+   "line": 211,
+   "helper": "anyOf",
+   "helper_file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h",
+   "helper_line": 39,
+   "container": "m_records",
+   "container_expr": "m_records",
+   "cont_type": "ContainerType&& container",
+   "elem": null,
+   "elem_class": "unknown",
+   "client_shaped": false,
+   "snapshot": false,
+   "loop_head": "auto& value : container",
+   "callback": "[](auto& record) { return !record->isCompleted(); }",
+   "nargs": 2,
+   "callback_calls": [
+    "record.isCompleted"
+   ],
+   "shape": "raw",
+   "site_container_kind": "Vector",
+   "site_elem": "Ref<Record>",
+   "site_elem_class": "ref"
+  }
+ ],
+ "method_sites": [
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/WebGPU/Implementation/WebGPUCompositorIntegrationImpl.cpp",
+   "line": 102,
+   "member": "m_renderBuffers",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "RetainPtr<IOSurfaceRef>",
+   "callback": "[](const auto& renderBuffer) {\n        return MachSendRight::adopt(IOSurfaceCreateMachPort(renderBuffer.get()));\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/async-clipboard/ClipboardItemBindingsDataSource.cpp",
+   "line": 80,
+   "member": "m_itemPromises",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "KeyValuePair<String, RefPtr<DOMPromise>>",
+   "callback": "[&] (auto& typeAndItem) {\n        return typeAndItem.key;\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/async-clipboard/ClipboardItemBindingsDataSource.cpp",
+   "line": 143,
+   "member": "m_itemPromises",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "KeyValuePair<String, RefPtr<DOMPromise>>",
+   "callback": "[&] (auto& typeAndItem) {\n        auto type = typeAndItem.key;\n        auto itemTypeLoader = ClipboardItemTypeLoader::create(destination, type, [this, protectedItem = Ref { m_item }] {\n            ASSERT(m_numberOfPendingClipboardTypes);\n            if (!--m_numberOfPendingClipboardTypes)\n          ",
+   "callback_calls": [
+    "promise.whenSettled",
+    "m_itemTypeLoaders.findIf",
+    "promise.result",
+    "itemTypeLoader.didFailToResolve"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/indexeddb/shared/IDBTransactionInfo.cpp",
+   "line": 87,
+   "member": "m_objectStores",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "String",
+   "callback": "[](auto& objectStore) {\n        return objectStore.isolatedCopy();\n    }",
+   "callback_calls": [
+    "objectStore.isolatedCopy"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/webaudio/AudioWorkletGlobalScope.cpp",
+   "line": 213,
+   "member": "m_processors",
+   "method": "forEach",
+   "container_kind": "Vector",
+   "elem": "std::unique_ptr<WebSocketExtensionProcessor>",
+   "callback": "[&](auto& processor) {\n        addWebCoreOpaqueRoot(visitor, processor);\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/accessibility/AXObjectCache.cpp",
+   "line": 3801,
+   "member": "m_deferredRecomputeTableIsExposedList",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "HTMLTableElement, WeakPtrImplWithEventTargetData",
+   "callback": "[this] (auto& tableElement) {\n        if (auto* axTable = dynamicDowncast<AccessibilityTable>(get(&tableElement)))\n            axTable->recomputeIsExposable();\n    }",
+   "callback_calls": [
+    "axTable.recomputeIsExposable"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/accessibility/AXObjectCache.cpp",
+   "line": 3818,
+   "member": "m_deferredRecomputeTableCellSlotsList",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "AccessibilityTable",
+   "callback": "[this] (auto& axTable) {\n        handleRecomputeCellSlots(axTable);\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/accessibility/AXObjectCache.cpp",
+   "line": 3829,
+   "member": "m_deferredRecomputeIsIgnoredList",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "Element, WeakPtrImplWithEventTargetData",
+   "callback": "[this] (auto& element) {\n        if (auto* renderer = element.renderer())\n            recomputeIsIgnored(renderer);\n    }",
+   "callback_calls": [
+    "element.renderer"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/accessibility/AXObjectCache.cpp",
+   "line": 3836,
+   "member": "m_deferredSelectedChildredChangedList",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "Element, WeakPtrImplWithEventTargetData",
+   "callback": "[this] (auto& selectElement) {\n        selectedChildrenChanged(&selectElement);\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/accessibility/AXObjectCache.cpp",
+   "line": 3902,
+   "member": "m_deferredMenuListChange",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "Element, WeakPtrImplWithEventTargetData",
+   "callback": "[this] (auto& element) {\n        handleMenuListValueChanged(element);\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/accessibility/AXObjectCache.cpp",
+   "line": 3907,
+   "member": "m_deferredScrollbarUpdateChangeList",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "ScrollView",
+   "callback": "[this] (auto& scrollView) {\n        handleScrollbarUpdate(scrollView);\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+   "line": 5620,
+   "member": "m_blobHandles",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "URLKeepingBlobAlive",
+   "callback": "[](auto& handle) {\n        return handle.url().string().isolatedCopy();\n    }",
+   "callback_calls": [
+    "handle.url"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/bindings/js/WebCoreJSClientData.cpp",
+   "line": 142,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "Client",
+   "callback": "[](auto& client) {\n        client.willDestroyVM();\n    }",
+   "callback_calls": [
+    "client.willDestroyVM"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFaceSet.cpp",
+   "line": 78,
+   "member": "m_fontEventClients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "FontEventClient",
+   "callback": "[] (auto& client) {\n            client.startedLoading();\n        }",
+   "callback_calls": [
+    "client.startedLoading"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFaceSet.cpp",
+   "line": 89,
+   "member": "m_fontEventClients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "FontEventClient",
+   "callback": "[] (auto& client) {\n            client.completedLoading();\n        }",
+   "callback_calls": [
+    "client.completedLoading"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFaceSet.cpp",
+   "line": 199,
+   "member": "m_fontModifiedObservers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "FontModifiedObserver",
+   "callback": "[] (auto& observer) {\n        observer();\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFaceSet.cpp",
+   "line": 256,
+   "member": "m_fontModifiedObservers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "FontModifiedObserver",
+   "callback": "[] (auto& observer) {\n        observer();\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFaceSet.cpp",
+   "line": 533,
+   "member": "m_fontEventClients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "FontEventClient",
+   "callback": "[&] (auto& client) {\n            client.faceFinished(face, newState);\n        }",
+   "callback_calls": [
+    "client.faceFinished"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFaceSet.cpp",
+   "line": 549,
+   "member": "m_fontModifiedObservers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "FontModifiedObserver",
+   "callback": "[] (auto& observer) {\n        observer();\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/StyleRule.cpp",
+   "line": 315,
+   "member": "m_nestedRules",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Ref<StyleRuleBase>",
+   "callback": "[](auto& rule) { return rule->copy(); }",
+   "callback_calls": [
+    "rule.copy"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/calc/CSSCalcOperationNode.cpp",
+   "line": 1032,
+   "member": "m_children",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Ref<CSSCalcExpressionNode>",
+   "callback": "[&] (auto& child) {\n        CSSUnitType childType = unitType;\n        if (allowNumbers && unitType != CSSUnitType::CSS_NUMBER && child->primitiveType() == CSSUnitType::CSS_NUMBER)\n            childType = CSSUnitType::CSS_NUMBER;\n        if (isTrigNode() && unitType != CSSUnitType::CSS_NUMBER)\n      ",
+   "callback_calls": [
+    "child.primitiveType",
+    "child.primitiveType",
+    "child.primitiveType",
+    "child.doubleValue"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/calc/CSSCalcOperationNode.cpp",
+   "line": 1050,
+   "member": "m_children",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Ref<CSSCalcExpressionNode>",
+   "callback": "[&] (auto& child) {\n        return child->computeLengthPx(conversionData);\n    }",
+   "callback_calls": [
+    "child.computeLengthPx"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/dom/Document.cpp",
+   "line": 1978,
+   "member": "m_mediaElements",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "HTMLMediaElement, WeakPtrImplWithEventTargetData",
+   "callback": "[&](auto& element) {\n        function(Ref { element });\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/dom/Document.cpp",
+   "line": 6133,
+   "member": "m_captionPreferencesChangedElements",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "HTMLMediaElement, WeakPtrImplWithEventTargetData",
+   "callback": "[](HTMLMediaElement& element) {\n        element.captionPreferencesChanged();\n    }",
+   "callback_calls": [
+    "element.captionPreferencesChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/dom/EventListenerMap.cpp",
+   "line": 89,
+   "member": "m_entries",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "std::pair<AtomString, EventListenerVector>, 0, CrashOnOverflow, 4",
+   "callback": "[](auto& entry) {\n        return entry.first;\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/editing/SelectionGeometryGatherer.cpp",
+   "line": 81,
+   "member": "m_quads",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "FloatQuad",
+   "callback": "[](auto& quad) {\n        return LayoutRect { quad.boundingBox() };\n    }",
+   "callback_calls": [
+    "quad.boundingBox"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/fileapi/FileList.cpp",
+   "line": 44,
+   "member": "m_files",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Ref<File>",
+   "callback": "[](auto& file) {\n        return file->path();\n    }",
+   "callback_calls": [
+    "file.path"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/history/HistoryItem.cpp",
+   "line": 98,
+   "member": "m_children",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Ref<HistoryItem>",
+   "callback": "[](auto& child) { return child->copy(); }",
+   "callback_calls": [
+    "child.copy"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/AudioTrack.cpp",
+   "line": 102,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "AudioTrackClient",
+   "callback": "[&] (auto& client) {\n        client.audioTrackLanguageChanged(*this);\n    }",
+   "callback_calls": [
+    "client.audioTrackLanguageChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/AudioTrack.cpp",
+   "line": 123,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "AudioTrackClient",
+   "callback": "[this] (auto& client) {\n        client.audioTrackEnabledChanged(*this);\n    }",
+   "callback_calls": [
+    "client.audioTrackEnabledChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/AudioTrack.cpp",
+   "line": 152,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "AudioTrackClient",
+   "callback": "[this] (auto& client) {\n        client.audioTrackEnabledChanged(*this);\n    }",
+   "callback_calls": [
+    "client.audioTrackEnabledChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/AudioTrack.cpp",
+   "line": 165,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "AudioTrackClient",
+   "callback": "[this] (auto& client) {\n        client.audioTrackIdChanged(*this);\n    }",
+   "callback_calls": [
+    "client.audioTrackIdChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/AudioTrack.cpp",
+   "line": 173,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "AudioTrackClient",
+   "callback": "[this] (auto& client) {\n        client.audioTrackLabelChanged(*this);\n    }",
+   "callback_calls": [
+    "client.audioTrackLabelChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/AudioTrack.cpp",
+   "line": 185,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "AudioTrackClient",
+   "callback": "[this] (auto& client) {\n        client.willRemoveAudioTrack(*this);\n    }",
+   "callback_calls": [
+    "client.willRemoveAudioTrack"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/InbandTextTrack.cpp",
+   "line": 168,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "AudioTrackClient",
+   "callback": "[&] (auto& client) {\n        client.willRemoveTextTrack(*this);\n    }",
+   "callback_calls": [
+    "client.willRemoveTextTrack"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 117,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[this] (auto& client) {\n            client.textTrackRemoveCues(*this, *m_cues);\n        }",
+   "callback_calls": [
+    "client.textTrackRemoveCues"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 215,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[this] (auto& client) {\n            client.textTrackKindChanged(*this);\n        }",
+   "callback_calls": [
+    "client.textTrackKindChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 258,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[this] (auto& client) {\n            client.textTrackRemoveCues(*this, *m_cues);\n        }",
+   "callback_calls": [
+    "client.textTrackRemoveCues"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 270,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[this] (auto& client) {\n        client.textTrackModeChanged(*this);\n    }",
+   "callback_calls": [
+    "client.textTrackModeChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 294,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[this] (auto& client) {\n        client.textTrackRemoveCues(*this, *m_cues);\n    }",
+   "callback_calls": [
+    "client.textTrackRemoveCues"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 351,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[this, cue] (auto& client) {\n        client.textTrackAddCue(*this, cue);\n    }",
+   "callback_calls": [
+    "client.textTrackAddCue"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 377,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[&] (auto& client) {\n        client.textTrackRemoveCue(*this, cue);\n    }",
+   "callback_calls": [
+    "client.textTrackRemoveCue"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 472,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[&] (auto& client) {\n                                                                                                \n                                                                       \n        client.textTrackRemoveCue(*this, cue);\n    }",
+   "callback_calls": [
+    "client.textTrackRemoveCue"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 485,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[&] (auto& client) {\n        client.textTrackAddCue(*this, cue);\n    }",
+   "callback_calls": [
+    "client.textTrackAddCue"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 629,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[&] (auto& client) {\n        client.textTrackLanguageChanged(*this);\n    }",
+   "callback_calls": [
+    "client.textTrackLanguageChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 637,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[this] (auto& client) {\n        client.textTrackIdChanged(*this);\n    }",
+   "callback_calls": [
+    "client.textTrackIdChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 645,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[this] (auto& client) {\n        client.textTrackLabelChanged(*this);\n    }",
+   "callback_calls": [
+    "client.textTrackLabelChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/TextTrack.cpp",
+   "line": 652,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "TextTrackClient",
+   "callback": "[&] (auto& client) {\n        client.textTrackAddCues(*this, list);\n    }",
+   "callback_calls": [
+    "client.textTrackAddCues"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/VideoTrack.cpp",
+   "line": 108,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "VideoTrackClient",
+   "callback": "[this] (auto& client) {\n        client.videoTrackSelectedChanged(*this);\n    }",
+   "callback_calls": [
+    "client.videoTrackSelectedChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/VideoTrack.cpp",
+   "line": 133,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "VideoTrackClient",
+   "callback": "[this] (auto& client) {\n        client.videoTrackSelectedChanged(*this);\n    }",
+   "callback_calls": [
+    "client.videoTrackSelectedChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/VideoTrack.cpp",
+   "line": 146,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "VideoTrackClient",
+   "callback": "[this] (auto& client) {\n        client.videoTrackIdChanged(*this);\n    }",
+   "callback_calls": [
+    "client.videoTrackIdChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/VideoTrack.cpp",
+   "line": 154,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "VideoTrackClient",
+   "callback": "[this] (auto& client) {\n        client.videoTrackLabelChanged(*this);\n    }",
+   "callback_calls": [
+    "client.videoTrackLabelChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/VideoTrack.cpp",
+   "line": 166,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "VideoTrackClient",
+   "callback": "[this] (auto& client) {\n        client.willRemoveVideoTrack(*this);\n    }",
+   "callback_calls": [
+    "client.willRemoveVideoTrack"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/VideoTrack.cpp",
+   "line": 186,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "VideoTrackClient",
+   "callback": "[this] (auto& client) {\n        client.videoTrackKindChanged(*this);\n    }",
+   "callback_calls": [
+    "client.videoTrackKindChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/track/VideoTrack.cpp",
+   "line": 206,
+   "member": "m_clients",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "VideoTrackClient",
+   "callback": "[&] (auto& client) {\n        client.videoTrackLanguageChanged(*this);\n    }",
+   "callback_calls": [
+    "client.videoTrackLanguageChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/page/ResizeObserver.cpp",
+   "line": 156,
+   "member": "m_activeObservations",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Ref<ResizeObservation>",
+   "callback": "[](auto& observation) {\n        ASSERT(observation->target());\n        return ResizeObserverEntry::create(observation->target(), observation->computeContentRect(), observation->borderBoxSize(), observation->contentBoxSize());\n    }",
+   "callback_calls": [
+    "observation.target",
+    "observation.target",
+    "observation.computeContentRect",
+    "observation.borderBoxSize"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/page/csp/ContentSecurityPolicy.cpp",
+   "line": 207,
+   "member": "m_policies",
+   "method": "map",
+   "container_kind": "?",
+   "elem": "",
+   "callback": "[&makeValidHTTPHeaderIfNeeded](auto& policy) {\n            return std::pair { makeValidHTTPHeaderIfNeeded(policy->header()), policy->headerType() };\n        }",
+   "callback_calls": [
+    "policy.header",
+    "policy.headerType"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/PasteboardCustomData.cpp",
+   "line": 187,
+   "member": "m_data",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Entry",
+   "callback": "[&] (auto& entry) {\n        return entry.type;\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/animation/AcceleratedEffect.cpp",
+   "line": 116,
+   "member": "m_keyframes",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "AcceleratedEffectKeyframe",
+   "callback": "[](const auto& keyframe) {\n        return keyframe.clone();\n    }",
+   "callback_calls": [
+    "keyframe.clone"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/animation/AnimationList.cpp",
+   "line": 43,
+   "member": "m_animations",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Ref<Animation>, 0, CrashOnOverflow, 0",
+   "callback": "[](auto& animation) {\n            return Animation::create(animation.get());\n        }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/audio/mac/AudioSessionMac.mm",
+   "line": 211,
+   "member": "m_configurationChangeObservers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "ConfigurationChangeObserver",
+   "callback": "[this](auto& observer) {\n        observer.sampleRateDidChange(*this);\n    }",
+   "callback_calls": [
+    "observer.sampleRateDidChange"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/audio/mac/AudioSessionMac.mm",
+   "line": 263,
+   "member": "m_configurationChangeObservers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "ConfigurationChangeObserver",
+   "callback": "[this](auto& observer) {\n        observer.bufferSizeDidChange(*this);\n    }",
+   "callback_calls": [
+    "observer.bufferSizeDidChange"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/audio/mac/AudioSessionMac.mm",
+   "line": 484,
+   "member": "m_configurationChangeObservers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "ConfigurationChangeObserver",
+   "callback": "[this](auto& observer) {\n            observer.bufferSizeDidChange(*this);\n        }",
+   "callback_calls": [
+    "observer.bufferSizeDidChange"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/audio/mac/AudioSessionMac.mm",
+   "line": 541,
+   "member": "m_configurationChangeObservers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "ConfigurationChangeObserver",
+   "callback": "[this](auto& observer) {\n        observer.hardwareMutedStateDidChange(*this);\n    }",
+   "callback_calls": [
+    "observer.hardwareMutedStateDidChange"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/cocoa/PlaybackSessionModelMediaElement.mm",
+   "line": 519,
+   "member": "m_audioTracksForMenu",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "RefPtr<AudioTrack>",
+   "callback": "[&](auto& audioTrack) {\n        return captionPreferences.mediaSelectionOptionForTrack(audioTrack.get());\n    }",
+   "callback_calls": [
+    "captionPreferences.mediaSelectionOptionForTrack"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/cocoa/PlaybackSessionModelMediaElement.mm",
+   "line": 541,
+   "member": "m_legibleTracksForMenu",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "RefPtr<TextTrack>",
+   "callback": "[&](auto& track) {\n        return captionPreferences.mediaSelectionOptionForTrack(track.get());\n    }",
+   "callback_calls": [
+    "captionPreferences.mediaSelectionOptionForTrack"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/encryptedmedia/CDMProxy.cpp",
+   "line": 229,
+   "member": "m_keys",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "RefPtr<KeyHandle>",
+   "callback": "[](auto& key) {\n        return std::pair { key->idAsSharedBuffer(), key->status() };\n    }",
+   "callback_calls": [
+    "key.idAsSharedBuffer",
+    "key.status"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/avfoundation/objc/CDMInstanceFairPlayStreamingAVFObjC.mm",
+   "line": 673,
+   "member": "m_keyStatusChangedObservers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "KeyStatusesChangedObserver",
+   "callback": "[] (auto& observer) {\n        observer();\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/mediastream/RealtimeMediaSourceCenter.cpp",
+   "line": 222,
+   "member": "m_observers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "Observer",
+   "callback": "[&](auto& observer) {\n        observer.deviceWillBeRemoved(persistentId);\n    }",
+   "callback_calls": [
+    "observer.deviceWillBeRemoved"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/mediastream/RealtimeMediaSourceCenter.cpp",
+   "line": 230,
+   "member": "m_observers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "Observer",
+   "callback": "[](auto& observer) {\n        observer.devicesChanged();\n    }",
+   "callback_calls": [
+    "observer.devicesChanged"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/mediastream/cocoa/AudioMediaStreamTrackRendererUnit.cpp",
+   "line": 126,
+   "member": "m_resetObservers",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "ResetObserver",
+   "callback": "[](auto& observer) {\n        observer();\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/plugins/DOMMimeTypeArray.cpp",
+   "line": 73,
+   "member": "m_types",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Ref<DOMMimeType>",
+   "callback": "[](auto& type) -> AtomString {\n        return type->type();\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/plugins/DOMPlugin.cpp",
+   "line": 100,
+   "member": "m_mimeTypes",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Ref<DOMMimeType>",
+   "callback": "[](auto& type) {\n        return type->type();\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/plugins/DOMPluginArray.cpp",
+   "line": 82,
+   "member": "m_publiclyVisiblePlugins",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "Ref<DOMPlugin>",
+   "callback": "[](auto& plugin) {\n        return AtomString { plugin->name() };\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/rendering/LayerAncestorClippingStack.cpp",
+   "line": 177,
+   "member": "m_stack",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "ClippingStackEntry",
+   "callback": "[](auto& entry) {\n        return entry.clipData;\n    }",
+   "callback_calls": []
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/rendering/RenderView.cpp",
+   "line": 936,
+   "member": "m_SVGSVGElementsWithPausedImageAnimation",
+   "method": "forEach",
+   "container_kind": "WeakHashSet",
+   "elem": "SVGSVGElement, WeakPtrImplWithEventTargetData",
+   "callback": "[&] (WeakPtr<SVGSVGElement, WeakPtrImplWithEventTargetData> svgSvgElement) {\n        if (svgSvgElement && svgSvgElement->resumePausedAnimationsIfNeeded(visibleRect))\n            svgSvgElementsToRemove.append(svgSvgElement.get());\n    }",
+   "callback_calls": [
+    "svgSvgElement.resumePausedAnimationsIfNeeded"
+   ]
+  },
+  {
+   "file": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/style/StyleScope.cpp",
+   "line": 159,
+   "member": "m_activeStyleSheets",
+   "method": "map",
+   "container_kind": "Vector",
+   "elem": "RefPtr<CSSStyleSheet>",
+   "callback": "[&](auto& sheet) { return RefPtr { &sheet->contents() }; }",
+   "callback_calls": [
+    "sheet.contents"
+   ]
+  }
+ ],
+ "name_accounting": [
+  {
+   "name": "switchOn",
+   "sites": 134,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/fetch/FetchBodyOwner.cpp:374",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  },
+  {
+   "name": "postTaskForModeToWorkerOrWorklet",
+   "sites": 19,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/websockets/WorkerThreadableWebSocketChannel.cpp:178",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  },
+  {
+   "name": "iterateClients",
+   "sites": 11,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp:155",
+   "defs": 2,
+   "defs_iterating_a_param": 1,
+   "defs_calling_a_param_in_that_loop": 1,
+   "resolved_variants": 1,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/CSSFontFace.cpp:56"
+  },
+  {
+   "name": "map",
+   "sites": 9,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/cache/DOMCacheStorage.cpp:259",
+   "defs": 7,
+   "defs_iterating_a_param": 5,
+   "defs_calling_a_param_in_that_loop": 5,
+   "resolved_variants": 5,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/graphics/transforms/TransformationMatrix.h:170"
+  },
+  {
+   "name": "anyOf",
+   "sites": 8,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/mediastream/RTCRtpSFrameTransformer.cpp:167",
+   "defs": 1,
+   "defs_iterating_a_param": 1,
+   "defs_calling_a_param_in_that_loop": 1,
+   "resolved_variants": 1,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h:39"
+  },
+  {
+   "name": "wait",
+   "sites": 4,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/AbortableTaskQueue.h:158",
+   "defs": 4,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/benchmarks/ConditionSpeedTest.cpp:64"
+  },
+  {
+   "name": "callClientOnMainThread",
+   "sites": 4,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/network/curl/CurlStream.cpp:56",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  },
+  {
+   "name": "traverseRuleFeatures",
+   "sites": 4,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/style/AttributeChangeInvalidation.cpp:54",
+   "defs": 1,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/style/StyleInvalidationFunctions.h:70"
+  },
+  {
+   "name": "ensure",
+   "sites": 3,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/webdatabase/Database.cpp:205",
+   "defs": 3,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/LoggingHashMap.h:235"
+  },
+  {
+   "name": "createNSArray",
+   "sites": 3,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/cocoa/SharedBufferCocoa.mm:166",
+   "defs": 2,
+   "defs_iterating_a_param": 2,
+   "defs_calling_a_param_in_that_loop": 1,
+   "resolved_variants": 1,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/cocoa/VectorCocoa.h:71"
+  },
+  {
+   "name": "allOf",
+   "sites": 2,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/airplay/WebMediaSessionManager.cpp:151",
+   "defs": 1,
+   "defs_iterating_a_param": 1,
+   "defs_calling_a_param_in_that_loop": 1,
+   "resolved_variants": 1,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Algorithms.h:49"
+  },
+  {
+   "name": "closeSession",
+   "sites": 2,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/encryptedmedia/MediaKeySession.cpp:560",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  },
+  {
+   "name": "compactMap",
+   "sites": 2,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/html/HTMLFormElement.cpp:148",
+   "defs": 3,
+   "defs_iterating_a_param": 2,
+   "defs_calling_a_param_in_that_loop": 2,
+   "resolved_variants": 2,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WTF/wtf/Vector.h:1843"
+  },
+  {
+   "name": "invokeDidReceiveResponse",
+   "sites": 2,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/network/curl/CurlRequest.cpp:383",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  },
+  {
+   "name": "enchant_broker_list_dicts",
+   "sites": 2,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/text/enchant/TextCheckerEnchant.cpp:155",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  },
+  {
+   "name": "traverseVisibleNonCompositedDescendantLayers",
+   "sites": 2,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/rendering/RenderLayerBacking.cpp:3001",
+   "defs": 1,
+   "defs_iterating_a_param": 1,
+   "defs_calling_a_param_in_that_loop": 1,
+   "resolved_variants": 1,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/rendering/RenderLayerBacking.cpp:2936"
+  },
+  {
+   "name": "ensureOnContextThread",
+   "sites": 1,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/permissions/MainThreadPermissionObserver.cpp:60",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  },
+  {
+   "name": "exchange",
+   "sites": 1,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/speech/SpeechRecognizer.cpp:82",
+   "defs": 11,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/Modules/WebGPU/Implementation/WebGPUPtr.h:42"
+  },
+  {
+   "name": "iterateSet",
+   "sites": 1,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/contentextensions/DFAMinimizer.cpp:349",
+   "defs": 1,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/contentextensions/DFAMinimizer.cpp:185"
+  },
+  {
+   "name": "consumeCommaSeparatedListWithSingleValueOptimization",
+   "sites": 1,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/parser/CSSPropertyParser.cpp:2797",
+   "defs": 1,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/css/parser/CSSPropertyParserHelpers.h:408"
+  },
+  {
+   "name": "beginRoutingArbitrationWithCategory",
+   "sites": 1,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/platform/audio/mac/AudioSessionMac.mm:324",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  },
+  {
+   "name": "backgroundFetchIdentifiers",
+   "sites": 1,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/workers/service/background-fetch/BackgroundFetchManager.cpp:173",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  },
+  {
+   "name": "retrieveRecordResponseBody",
+   "sites": 1,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/workers/service/background-fetch/BackgroundFetchRegistration.cpp:107",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  },
+  {
+   "name": "CancellableTask",
+   "sites": 1,
+   "example": "../out/sony/full/WebKit-1400/WebKit-1400/Source/WebCore/xml/XMLHttpRequest.cpp:893",
+   "defs": 0,
+   "defs_iterating_a_param": 0,
+   "defs_calling_a_param_in_that_loop": 0,
+   "resolved_variants": 0,
+   "first_def": null
+  }
+ ],
+ "n_sites": 42,
+ "n_method_sites": 77,
+ "n_helpers": 37,
+ "n_syntactic_sites": 219
+}

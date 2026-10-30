@@ -1,0 +1,17 @@
+files: 10500 (helper index: 11396)
+helpers: 37 names, 42 variants (iterate-param + call-param inside the loop)
+sites (member in the iterated position): 42
+member declarations indexed: 1316 names
+method-helper sites (m_x.<forEach|map>(lambda)): 77
+syntactic helper(member, lambda) sites: 219 across 24 names
+shapes: {'raw': 31, 'snapshot': 11}
+raw sites: 31, distinct containers 28, client-shaped 0
+  iterateClients                           snapshot  11
+  map                                      raw       10
+  anyOf                                    raw       8
+  createNSArray                            raw       4
+  allOf                                    raw       2
+  compactMap                               raw       2
+  updateTracksOfKind                       raw       2
+  traverseVisibleNonCompositedDescendantLayers raw       2
+  traverseRulesInVector                    raw       1

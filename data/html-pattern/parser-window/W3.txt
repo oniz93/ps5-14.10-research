@@ -1,0 +1,72 @@
+===== W3  port=9743
+access: none
+SUMMARY: none
+-- beacons (seq-ordered):
+   1 START sel=ALL
+   2 P1 inline
+   3 P2 enter
+   4 P2 nested exec
+   5 P2 wrote
+   6 P2 exit
+   7 P3 enter
+   8 P3 open ok
+   9 P3 exit
+   10 S1 n=1 id=s1elm conn=1
+   11 P5 found=1
+   12 P5 reinserted
+   13 P5 fresh appended
+   14 P6 enter
+   15 P6 removed
+   16 P6 wrote
+   17 P6 exit
+   18 P7 enter
+   19 P7 found=1
+   20 P7 removed
+   21 P7 exit
+   22 P8 depth=1
+   23 P8 depth=2
+   24 P8 depth=3
+   25 P8 depth=4
+   26 P8 depth=5
+   27 P8 depth=6
+   28 P8 depth=7
+   29 P8 depth=8
+   30 P8 depth=9
+   31 P8 depth=10
+   32 P8 depth=11
+   33 P8 depth=12
+   34 P8 depth=13
+   35 P8 depth=14
+   36 P8 depth=15
+   37 P8 depth=16
+   38 P8 depth=17
+   39 P8 depth=18
+   40 P8 depth=19
+   41 P8 depth=20
+   42 P8 depth=21
+   43 P8 depth=22
+   44 P8 ret=22
+   45 P8 ret=22
+   46 P8 ret=22
+   47 P8 ret=22
+   48 P8 ret=22
+   49 P8 ret=22
+   50 P8 ret=22
+   51 P8 ret=22
+   52 P8 ret=22
+   53 P8 ret=22
+   54 P8 ret=22
+   55 P8 ret=22
+   56 P8 ret=22
+   57 P8 ret=22
+   58 P8 ret=22
+   59 P8 ret=22
+   60 P8 ret=22
+   61 P8 ret=22
+   62 P8 ret=22
+   63 P8 ret=22
+   64 P8 ret=22
+   65 P8 ret=22
+   66 TAIL
+   67 S1 n=2 id=d1 conn=0
+   68 S1 n=3 id=fresh conn=1

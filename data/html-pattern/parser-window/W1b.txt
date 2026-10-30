@@ -1,0 +1,80 @@
+===== W1b  port=9741
+access: none
+SUMMARY: none
+-- beacons (seq-ordered):
+   P1 inline
+   P2 enter
+   P2 exit
+   P2 nested exec
+   P2 wrote
+   P3 enter
+   P3 exit
+   P3 open ok
+   P5 found=1
+   P5 fresh appended
+   P5 reinserted
+   P6 enter
+   P6 exit
+   P6 removed
+   P6 wrote
+   P7 enter
+   P7 exit
+   P7 found=1
+   P7 removed
+   P8 depth=1
+   P8 depth=10
+   P8 depth=11
+   P8 depth=12
+   P8 depth=13
+   P8 depth=14
+   P8 depth=15
+   P8 depth=16
+   P8 depth=17
+   P8 depth=18
+   P8 depth=19
+   P8 depth=2
+   P8 depth=20
+   P8 depth=21
+   P8 depth=22
+   P8 depth=23
+   P8 depth=24
+   P8 depth=25
+   P8 depth=26
+   P8 depth=3
+   P8 depth=4
+   P8 depth=5
+   P8 depth=6
+   P8 depth=7
+   P8 depth=8
+   P8 depth=9
+   P8 ret=1
+   P8 ret=10
+   P8 ret=11
+   P8 ret=12
+   P8 ret=13
+   P8 ret=14
+   P8 ret=15
+   P8 ret=16
+   P8 ret=17
+   P8 ret=18
+   P8 ret=19
+   P8 ret=2
+   P8 ret=20
+   P8 ret=21
+   P8 ret=22
+   P8 ret=23
+   P8 ret=24
+   P8 ret=25
+   P8 ret=26
+   P8 ret=3
+   P8 ret=4
+   P8 ret=5
+   P8 ret=6
+   P8 ret=7
+   P8 ret=8
+   P8 ret=9
+   S1 n=1 id=s1elm conn=1
+   S1 n=2 id=d1 conn=0
+   S1 n=3 id=fresh conn=1
+   START sel=ALL
+   TAIL

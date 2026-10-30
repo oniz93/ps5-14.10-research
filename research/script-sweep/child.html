@@ -1,0 +1,25 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>evloop child</title>
+<script>
+// Beacons are ordered by when their image request is issued; a document that dies mid-task can drop the ones
+// created just before it, so PARENT alive / PARENT late in the parent are the crash witness.
+function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(m); }
+var RM = (new URLSearchParams(location.search)).get('rm') !== '0';
+ev('CHILD start rm=' + RM);
+setTimeout(function () {
+    ev('TASK start');
+    try {
+        var fe = frameElement;
+        ev('FE ' + (fe ? fe.tagName : 'null'));
+        if (RM) {
+            fe.remove();
+            ev('REMOVED');
+        } else {
+            ev('NOREMOVE fe=' + (frameElement ? 'yes' : 'no'));
+        }
+    } catch (e) { ev('ERR ' + e.name + ':' + e.message); }
+    Promise.resolve().then(function () { ev('MT'); });
+    ev('TASK end');
+}, 60);
+</script>

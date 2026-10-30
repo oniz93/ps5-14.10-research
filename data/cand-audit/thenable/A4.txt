@@ -1,0 +1,10 @@
+===== A4  page=thenable.html  q=k=arr&td=1
+access: none
+SUMMARY: none
+EXIT=124
+-- beacons:
+   START k=arr td=1 md5ish=1
+   THENARR hit=1 len=1
+   LOADOK n=1
+   READY
+   END hits=1 status=loaded size=0

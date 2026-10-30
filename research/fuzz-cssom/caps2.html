@@ -1,0 +1,67 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps2 — why does the iframe's own FontFace window not fire?</title>
+<body>
+<div id="host"></div>
+<script>
+// docs/86 probe 2.  Three questions, one beacon each:
+//   q1 does a <script> inside an iframe's srcdoc run at all?
+//   q2 does an accessor installed on the INNER FontFace.prototype fire when the parent drives a load?
+//   q3 which realm's wrapper does `d.fonts.forEach` hand the parent -- i.e. whose prototype is consulted?
+// The inner script is written as '<scr' + 'ipt>' so no escaping question can hide the answer.
+function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); }
+function T(x) { try { return typeof x; } catch (e) { return 'ERR'; } }
+
+var inner =
+  '<!doctype html><meta charset="utf-8"><body><p>i</p>' +
+  '<scr' + 'ipt>' +
+  'window.__ran = 1; parent.__inran = 1;' +
+  'try { Object.defineProperty(FontFace.prototype, "then", { configurable: true, get: function () {' +
+  '  window.__ith = (window.__ith || 0) + 1;' +
+  '  try { parent.__ith = (parent.__ith || 0) + 1; } catch (e) {}' +
+  '  try { (new Image()).src = "/ev?m=ithen&i=" + window.__ith; } catch (e) {}' +
+  '  return undefined; }, set: function (v) {} }); parent.__inok = 1; }' +
+  'catch (e) { parent.__inerr = String(e && e.name); }' +
+  '</scr' + 'ipt>';
+
+var fr = document.createElement('iframe');
+fr.id = 'f1';
+document.body.appendChild(fr);
+fr.srcdoc = inner;
+
+// the parent's own window, so we can tell "inner accessor" from "parent accessor"
+var pHits = 0;
+Object.defineProperty(FontFace.prototype, 'then', {
+  configurable: true,
+  get: function () { pHits++; ev('pthen&i=' + pHits); return undefined; },
+  set: function (v) {}
+});
+
+setTimeout(function () {
+  ev('q1 ran=' + (window.__inran === 1) + '&ok=' + (window.__inok === 1) + '&err=' + (window.__inerr || '-'));
+
+  var d = fr.contentDocument, W = fr.contentWindow;
+  var el = d.createElement('style');
+  el.textContent = '@font-face{font-family:zzQ;src:local("DejaVu Sans")}';
+  d.head.appendChild(el);
+  d.body.offsetHeight;
+  var f = null;
+  d.fonts.forEach(function (x) { if (String(x.family).indexOf('zzQ') >= 0) f = x; });
+  ev('q3 found=' + (f ? 1 : 0) + '&fc=' + d.fonts.size + '&st=' + (f ? f.status : '-'));
+
+  if (f) {
+    var P = Object.getPrototypeOf(f);
+    ev('q3 protoParent=' + (P === FontFace.prototype) + '&protoInner=' + (P === W.FontFace.prototype) +
+       '&thenP=' + T(FontFace.prototype.then) + '&thenI=' + T(W.FontFace.prototype.then) +
+       '&sameCtor=' + (f.constructor === W.FontFace));
+    try { f.loaded; } catch (e) { ev('q2 loadederr=' + (e && e.name)); }
+    try { f.load(); } catch (e) { ev('q2 loaderr=' + (e && e.name)); }
+    ev('q2 post st=' + f.status + '&ith=' + (window.__ith || 0) + '&phits=' + pHits);
+  }
+  // second path: leave it alone and see whether the window fires later, in a task
+  setTimeout(function () {
+    ev('q4 late ith=' + (window.__ith || 0) + '&phits=' + pHits + '&ran=' + (window.__inran === 1));
+    ev('done caps2');
+  }, 900);
+}, 800);
+</script>

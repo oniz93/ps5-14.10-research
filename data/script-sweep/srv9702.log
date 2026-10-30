@@ -1,0 +1,11 @@
+127.0.0.1 - - [29/Oct/2026 19:25:12] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 19:25:16] "GET /index.html?case=2&rule=%26%20b%7Bcolor%3Agreen%7D HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 19:25:16] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:25:16] "GET /ev?m=start%20case%3D2%20href%3D%2Fs.css%20nlink%3D2 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:25:16] "GET /s.css HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 19:25:16] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:25:16] "GET /ev?m=loaded%20load%2Cload HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:25:16] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:25:16] "GET /ev?m=pre%20sheets%3D3%200%3A%5Binline%20n%3D1%5D%201%3A%5B%2Fs.css%20n%3D1%5D%202%3A%5B%2Fs.css%20n%3D1%5D HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:25:16] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:25:16] "GET /ev?m=target%20idx%3D0%20cls%3DCSSStyleRule%20cssTextLen%3D17%20rule%3D%26%20b%7Bcolor%3Agreen%7D HTTP/1.1" 404 -

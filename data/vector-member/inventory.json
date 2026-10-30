@@ -1,0 +1,1868 @@
+{
+ "counts": {
+  "files_scanned": 10500,
+  "files_cleaned": 962,
+  "member_names_live": 0,
+  "push_sites": 69,
+  "push_in_loop": 16,
+  "with_read": 6,
+  "with_sink": 0,
+  "hash_decls": 31,
+  "hash_push_in_loop": 26,
+  "hash_with_read": 14,
+  "hash_with_sink": 0
+ },
+ "member_decl_count": 49,
+ "member_names": {
+  "m_activeSourceBuffers": [
+   {
+    "owner": "MediaSourcePrivateAVFObjC",
+    "file": "Source/WebCore/platform/graphics/avfoundation/objc/MediaSourcePrivateAVFObjC.h",
+    "line": 138,
+    "container": "Vector",
+    "elem": "SourceBufferPrivateAVFObjC*",
+    "cap": "0",
+    "elem_base": "SourceBufferPrivateAVFObjC",
+    "elem_kind": "ref",
+    "elem_bases": "SourceBufferPrivateAVFObjC > SourceBufferPrivate"
+   },
+   {
+    "owner": "MockMediaSourcePrivate",
+    "file": "Source/WebCore/platform/mock/mediasource/MockMediaSourcePrivate.h",
+    "line": 101,
+    "container": "Vector",
+    "elem": "MockSourceBufferPrivate*",
+    "cap": "0",
+    "elem_base": "MockSourceBufferPrivate",
+    "elem_kind": "ref",
+    "elem_bases": "MockSourceBufferPrivate > SourceBufferPrivate"
+   }
+  ],
+  "m_allAudioRtpExtensions": [
+   {
+    "owner": "GStreamerRegistryScanner",
+    "file": "Source/WebCore/platform/graphics/gstreamer/GStreamerRegistryScanner.h",
+    "line": 177,
+    "container": "Vector",
+    "elem": "const char*",
+    "cap": "0",
+    "elem_base": "char",
+    "elem_kind": "primitive",
+    "elem_bases": ""
+   }
+  ],
+  "m_allVideoRtpExtensions": [
+   {
+    "owner": "GStreamerRegistryScanner",
+    "file": "Source/WebCore/platform/graphics/gstreamer/GStreamerRegistryScanner.h",
+    "line": 182,
+    "container": "Vector",
+    "elem": "const char*",
+    "cap": "0",
+    "elem_base": "char",
+    "elem_kind": "primitive",
+    "elem_bases": ""
+   }
+  ],
+  "m_allocatedBuffers": [
+   {
+    "owner": "ItemBuffer",
+    "file": "Source/WebCore/platform/graphics/displaylists/DisplayListItemBuffer.h",
+    "line": 212,
+    "container": "Vector",
+    "elem": "uint8_t*",
+    "cap": "0",
+    "elem_base": "uint8_t",
+    "elem_kind": "primitive",
+    "elem_bases": ""
+   }
+  ],
+  "m_ancestorTreeScopes": [
+   {
+    "owner": "RelatedNodeRetargeter",
+    "file": "Source/WebCore/dom/EventPath.cpp",
+    "line": 65,
+    "container": "Vector",
+    "elem": "TreeScope*",
+    "cap": "8",
+    "elem_base": "TreeScope",
+    "elem_kind": "other",
+    "elem_bases": "TreeScope"
+   }
+  ],
+  "m_arrayStack": [
+   {
+    "owner": "KeyedDecoderGeneric",
+    "file": "Source/WebCore/platform/generic/KeyedDecoderGeneric.h",
+    "line": 66,
+    "container": "Vector",
+    "elem": "Array*",
+    "cap": "16",
+    "elem_base": "Array",
+    "elem_kind": "other",
+    "elem_bases": "Array"
+   },
+   {
+    "owner": "KeyedDecoderGlib",
+    "file": "Source/WebCore/platform/glib/KeyedDecoderGlib.h",
+    "line": 66,
+    "container": "Vector",
+    "elem": "GVariant*",
+    "cap": "16",
+    "elem_base": "GVariant",
+    "elem_kind": "unknown",
+    "elem_bases": ""
+   }
+  ],
+  "m_attributeNames": [
+   {
+    "owner": "HTMLFastPathParser",
+    "file": "Source/WebCore/html/parser/HTMLDocumentParserFastPath.cpp",
+    "line": 244,
+    "container": "Vector",
+    "elem": "AtomStringImpl*",
+    "cap": "0",
+    "elem_base": "AtomStringImpl",
+    "elem_kind": "unknown",
+    "elem_bases": ""
+   }
+  ],
+  "m_boxes": [
+   {
+    "owner": "SVGTextChunk",
+    "file": "Source/WebCore/rendering/svg/SVGTextChunk.h",
+    "line": 68,
+    "container": "Vector",
+    "elem": "SVGInlineTextBox*",
+    "cap": "0",
+    "elem_base": "SVGInlineTextBox",
+    "elem_kind": "other",
+    "elem_bases": "SVGInlineTextBox > LegacyInlineTextBox > LegacyInlineBox"
+   }
+  ],
+  "m_cachedList": [
+   {
+    "owner": "CollectionIndexCache",
+    "file": "Source/WebCore/dom/CollectionIndexCache.h",
+    "line": 62,
+    "container": "Vector",
+    "elem": "NodeType*",
+    "cap": "0",
+    "elem_base": "NodeType",
+    "elem_kind": "other",
+    "elem_bases": "NodeType"
+   }
+  ],
+  "m_clients": [
+   {
+    "owner": "StyleSheetContents",
+    "file": "Source/WebCore/css/StyleSheetContents.h",
+    "line": 188,
+    "container": "Vector",
+    "elem": "CSSStyleSheet*",
+    "cap": "0",
+    "elem_base": "CSSStyleSheet",
+    "elem_kind": "node",
+    "elem_bases": "CSSStyleSheet > StyleSheet"
+   }
+  ],
+  "m_currentNodeStack": [
+   {
+    "owner": "XMLDocumentParser",
+    "file": "Source/WebCore/xml/parser/XMLDocumentParser.h",
+    "line": 163,
+    "container": "Vector",
+    "elem": "ContainerNode*",
+    "cap": "0",
+    "elem_base": "ContainerNode",
+    "elem_kind": "node",
+    "elem_bases": "ContainerNode > Node > EventTarget > ScriptWrappable"
+   }
+  ],
+  "m_deferredBreakConnectionList": [
+   {
+    "owner": "BaseAudioContext",
+    "file": "Source/WebCore/Modules/webaudio/BaseAudioContext.h",
+    "line": 344,
+    "container": "Vector",
+    "elem": "AudioNode*",
+    "cap": "0",
+    "elem_base": "AudioNode",
+    "elem_kind": "node",
+    "elem_bases": "AudioNode"
+   }
+  ],
+  "m_dictionaryStack": [
+   {
+    "owner": "KeyedDecoderGeneric",
+    "file": "Source/WebCore/platform/generic/KeyedDecoderGeneric.h",
+    "line": 65,
+    "container": "Vector",
+    "elem": "Dictionary*",
+    "cap": "16",
+    "elem_base": "Dictionary",
+    "elem_kind": "other",
+    "elem_bases": "Dictionary"
+   }
+  ],
+  "m_errorClients": [
+   {
+    "owner": "SourceBufferPrivateAVFObjC",
+    "file": "Source/WebCore/platform/graphics/avfoundation/objc/SourceBufferPrivateAVFObjC.h",
+    "line": 211,
+    "container": "Vector",
+    "elem": "SourceBufferPrivateAVFObjCErrorClient*",
+    "cap": "0",
+    "elem_base": "SourceBufferPrivateAVFObjCErrorClient",
+    "elem_kind": "other",
+    "elem_bases": "SourceBufferPrivateAVFObjCErrorClient"
+   }
+  ],
+  "m_fonts": [
+   {
+    "owner": "GlyphBuffer",
+    "file": "Source/WebCore/platform/graphics/GlyphBuffer.h",
+    "line": 262,
+    "container": "Vector",
+    "elem": "const Font*",
+    "cap": "1024",
+    "elem_base": "Font",
+    "elem_kind": "ref",
+    "elem_bases": "Font"
+   }
+  ],
+  "m_itemsWithDefiniteGridAxisPosition": [
+   {
+    "owner": "GridMasonryLayout",
+    "file": "Source/WebCore/rendering/GridMasonryLayout.h",
+    "line": 82,
+    "container": "Vector",
+    "elem": "RenderBox*",
+    "cap": "0",
+    "elem_base": "RenderBox",
+    "elem_kind": "node",
+    "elem_bases": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+   }
+  ],
+  "m_itemsWithIndefiniteGridAxisPosition": [
+   {
+    "owner": "GridMasonryLayout",
+    "file": "Source/WebCore/rendering/GridMasonryLayout.h",
+    "line": 83,
+    "container": "Vector",
+    "elem": "RenderBox*",
+    "cap": "0",
+    "elem_base": "RenderBox",
+    "elem_kind": "node",
+    "elem_bases": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+   }
+  ],
+  "m_layoutAttributes": [
+   {
+    "owner": "RenderSVGText",
+    "file": "Source/WebCore/rendering/svg/RenderSVGText.h",
+    "line": 115,
+    "container": "Vector",
+    "elem": "SVGTextLayoutAttributes*",
+    "cap": "0",
+    "elem_base": "SVGTextLayoutAttributes",
+    "elem_kind": "other",
+    "elem_bases": "SVGTextLayoutAttributes"
+   }
+  ],
+  "m_lineLayoutBoxes": [
+   {
+    "owner": "SVGTextLayoutEngine",
+    "file": "Source/WebCore/rendering/svg/SVGTextLayoutEngine.h",
+    "line": 79,
+    "container": "Vector",
+    "elem": "SVGInlineTextBox*",
+    "cap": "0",
+    "elem_base": "SVGInlineTextBox",
+    "elem_kind": "other",
+    "elem_bases": "SVGInlineTextBox > LegacyInlineTextBox > LegacyInlineBox"
+   }
+  ],
+  "m_mediaElements": [
+   {
+    "owner": "MediaController",
+    "file": "Source/WebCore/html/MediaController.h",
+    "line": 141,
+    "container": "Vector",
+    "elem": "HTMLMediaElement*",
+    "cap": "0",
+    "elem_base": "HTMLMediaElement",
+    "elem_kind": "node",
+    "elem_bases": "HTMLMediaElement > HTMLElement > MediaControllerInterface > PlatformMediaSessionClient > MediaCanStartListener > MediaPlayerClient"
+   }
+  ],
+  "m_nextPoints": [
+   {
+    "owner": "Node",
+    "file": "Source/WebCore/platform/graphics/PathUtilities.cpp",
+    "line": 66,
+    "container": "Vector",
+    "elem": "Node*",
+    "cap": "0",
+    "elem_base": "Node",
+    "elem_kind": "node",
+    "elem_bases": "Node > EventTarget > ScriptWrappable"
+   }
+  ],
+  "m_nodesMarkedForDeletion": [
+   {
+    "owner": "BaseAudioContext",
+    "file": "Source/WebCore/Modules/webaudio/BaseAudioContext.h",
+    "line": 299,
+    "container": "Vector",
+    "elem": "AudioNode*",
+    "cap": "0",
+    "elem_base": "AudioNode",
+    "elem_kind": "node",
+    "elem_bases": "AudioNode"
+   }
+  ],
+  "m_nodesToDelete": [
+   {
+    "owner": "BaseAudioContext",
+    "file": "Source/WebCore/Modules/webaudio/BaseAudioContext.h",
+    "line": 333,
+    "container": "Vector",
+    "elem": "AudioNode*",
+    "cap": "0",
+    "elem_base": "AudioNode",
+    "elem_kind": "node",
+    "elem_bases": "AudioNode"
+   }
+  ],
+  "m_observers": [
+   {
+    "owner": "MediaStreamTrack",
+    "file": "Source/WebCore/Modules/mediastream/MediaStreamTrack.h",
+    "line": 196,
+    "container": "Vector",
+    "elem": "Observer*",
+    "cap": "0",
+    "elem_base": "Observer",
+    "elem_kind": "ref",
+    "elem_bases": "Observer"
+   }
+  ],
+  "m_outlineObjects": [
+   {
+    "owner": "InlineContentPainter",
+    "file": "Source/WebCore/layout/integration/inline/LayoutIntegrationInlineContentPainter.h",
+    "line": 71,
+    "container": "ListHashSet",
+    "elem": "RenderInline*",
+    "cap": "0",
+    "elem_base": "RenderInline",
+    "elem_kind": "node",
+    "elem_bases": "RenderInline > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+   }
+  ],
+  "m_outputConstraintSpaces": [
+   {
+    "owner": "JSHeapData",
+    "file": "Source/WebCore/bindings/js/WebCoreJSClientData.h",
+    "line": 102,
+    "container": "Vector",
+    "elem": "JSC::IsoSubspace*",
+    "cap": "0",
+    "elem_base": "IsoSubspace",
+    "elem_kind": "other",
+    "elem_bases": "IsoSubspace > Subspace"
+   }
+  ],
+  "m_pageRules": [
+   {
+    "owner": "RuleSet",
+    "file": "Source/WebCore/style/RuleSet.h",
+    "line": 190,
+    "container": "Vector",
+    "elem": "StyleRulePage*",
+    "cap": "0",
+    "elem_base": "StyleRulePage",
+    "elem_kind": "ref",
+    "elem_bases": "StyleRulePage > StyleRuleBase"
+   }
+  ],
+  "m_pathLayoutBoxes": [
+   {
+    "owner": "SVGTextLayoutEngine",
+    "file": "Source/WebCore/rendering/svg/SVGTextLayoutEngine.h",
+    "line": 80,
+    "container": "Vector",
+    "elem": "SVGInlineTextBox*",
+    "cap": "0",
+    "elem_base": "SVGInlineTextBox",
+    "elem_kind": "other",
+    "elem_bases": "SVGInlineTextBox > LegacyInlineTextBox > LegacyInlineBox"
+   }
+  ],
+  "m_pendingRenderingOutputs": [
+   {
+    "owner": "AudioSummingJunction",
+    "file": "Source/WebCore/Modules/webaudio/AudioSummingJunction.h",
+    "line": 89,
+    "container": "Vector",
+    "elem": "AudioNodeOutput*",
+    "cap": "0",
+    "elem_base": "AudioNodeOutput",
+    "elem_kind": "other",
+    "elem_bases": "AudioNodeOutput"
+   }
+  ],
+  "m_pointers": [
+   {
+    "owner": "CARingBuffer",
+    "file": "Source/WebCore/platform/audio/cocoa/CARingBuffer.h",
+    "line": 89,
+    "container": "Vector",
+    "elem": "Byte*",
+    "cap": "0",
+    "elem_base": "Byte",
+    "elem_kind": "unknown",
+    "elem_bases": ""
+   }
+  ],
+  "m_popupOpeningObservers": [
+   {
+    "owner": "Chrome",
+    "file": "Source/WebCore/page/Chrome.h",
+    "line": 249,
+    "container": "Vector",
+    "elem": "PopupOpeningObserver*",
+    "cap": "0",
+    "elem_base": "PopupOpeningObserver",
+    "elem_kind": "other",
+    "elem_bases": "PopupOpeningObserver"
+   }
+  ],
+  "m_positionedObjects": [
+   {
+    "owner": "LineBreaker",
+    "file": "Source/WebCore/rendering/line/LineBreaker.h",
+    "line": 74,
+    "container": "Vector",
+    "elem": "RenderBox*",
+    "cap": "0",
+    "elem_base": "RenderBox",
+    "elem_kind": "node",
+    "elem_bases": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient"
+   }
+  ],
+  "m_propertyWrappers": [
+   {
+    "owner": "ShorthandPropertyWrapper",
+    "file": "Source/WebCore/animation/CSSPropertyAnimation.cpp",
+    "line": 2462,
+    "container": "Vector",
+    "elem": "AnimationPropertyWrapperBase*",
+    "cap": "0",
+    "elem_base": "AnimationPropertyWrapperBase",
+    "elem_kind": "unknown",
+    "elem_bases": ""
+   }
+  ],
+  "m_renderingAutomaticPullNodes": [
+   {
+    "owner": "BaseAudioContext",
+    "file": "Source/WebCore/Modules/webaudio/BaseAudioContext.h",
+    "line": 342,
+    "container": "Vector",
+    "elem": "AudioNode*",
+    "cap": "0",
+    "elem_base": "AudioNode",
+    "elem_kind": "node",
+    "elem_bases": "AudioNode"
+   }
+  ],
+  "m_renderingOutputs": [
+   {
+    "owner": "AudioSummingJunction",
+    "file": "Source/WebCore/Modules/webaudio/AudioSummingJunction.h",
+    "line": 80,
+    "container": "Vector",
+    "elem": "AudioNodeOutput*",
+    "cap": "0",
+    "elem_base": "AudioNodeOutput",
+    "elem_kind": "other",
+    "elem_bases": "AudioNodeOutput"
+   }
+  ],
+  "m_results": [
+   {
+    "owner": "InspectorNodeFinder",
+    "file": "Source/WebCore/inspector/InspectorNodeFinder.h",
+    "line": 66,
+    "container": "ListHashSet",
+    "elem": "Node*",
+    "cap": "0",
+    "elem_base": "Node",
+    "elem_kind": "node",
+    "elem_bases": "Node > EventTarget > ScriptWrappable"
+   }
+  ],
+  "m_sessions": [
+   {
+    "owner": "CDMPrivateMediaSourceAVFObjC",
+    "file": "Source/WebCore/platform/graphics/avfoundation/CDMPrivateMediaSourceAVFObjC.h",
+    "line": 64,
+    "container": "Vector",
+    "elem": "CDMSessionMediaSourceAVFObjC*",
+    "cap": "0",
+    "elem_base": "CDMSessionMediaSourceAVFObjC",
+    "elem_kind": "ref",
+    "elem_bases": "CDMSessionMediaSourceAVFObjC > SourceBufferPrivateAVFObjCErrorClient"
+   }
+  ],
+  "m_set": [
+   {
+    "owner": "AncestorStack",
+    "file": "Source/WebCore/layout/formattingContexts/inline/display/InlineDisplayContentBuilder.cpp",
+    "line": 554,
+    "container": "ListHashSet",
+    "elem": "const ElementBox*",
+    "cap": "0",
+    "elem_base": "ElementBox",
+    "elem_kind": "other",
+    "elem_bases": "ElementBox > Box"
+   }
+  ],
+  "m_sourceBuffersNeedingSessions": [
+   {
+    "owner": "MediaSourcePrivateAVFObjC",
+    "file": "Source/WebCore/platform/graphics/avfoundation/objc/MediaSourcePrivateAVFObjC.h",
+    "line": 139,
+    "container": "Deque",
+    "elem": "SourceBufferPrivateAVFObjC*",
+    "cap": "0",
+    "elem_base": "SourceBufferPrivateAVFObjC",
+    "elem_kind": "ref",
+    "elem_bases": "SourceBufferPrivateAVFObjC > SourceBufferPrivate"
+   }
+  ],
+  "m_spanCells": [
+   {
+    "owner": "AutoTableLayout",
+    "file": "Source/WebCore/rendering/AutoTableLayout.h",
+    "line": 63,
+    "container": "Vector",
+    "elem": "RenderTableCell*",
+    "cap": "0",
+    "elem_base": "RenderTableCell",
+    "elem_kind": "node",
+    "elem_bases": "RenderTableCell > RenderBlockFlow > RenderBlock > RenderBox > RenderBoxModelObject > RenderLayerModelObject"
+   }
+  ],
+  "m_spannerStack": [
+   {
+    "owner": "RenderRangeIterator",
+    "file": "Source/WebCore/rendering/HighlightData.h",
+    "line": 81,
+    "container": "Vector",
+    "elem": "RenderMultiColumnSpannerPlaceholder*",
+    "cap": "0",
+    "elem_base": "RenderMultiColumnSpannerPlaceholder",
+    "elem_kind": "node",
+    "elem_bases": "RenderMultiColumnSpannerPlaceholder > RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject"
+   }
+  ],
+  "m_styleRuleStack": [
+   {
+    "owner": "RuleSetBuilder",
+    "file": "Source/WebCore/style/RuleSetBuilder.h",
+    "line": 88,
+    "container": "Vector",
+    "elem": "const CSSSelectorList*",
+    "cap": "0",
+    "elem_base": "CSSSelectorList",
+    "elem_kind": "other",
+    "elem_bases": "CSSSelectorList"
+   }
+  ],
+  "m_textBoxes": [
+   {
+    "owner": "SVGTextQuery",
+    "file": "Source/WebCore/rendering/svg/SVGTextQuery.h",
+    "line": 67,
+    "container": "Vector",
+    "elem": "SVGInlineTextBox*",
+    "cap": "0",
+    "elem_base": "SVGInlineTextBox",
+    "elem_kind": "other",
+    "elem_bases": "SVGInlineTextBox > LegacyInlineTextBox > LegacyInlineBox"
+   }
+  ],
+  "m_textMarkerNodes": [
+   {
+    "owner": "AXObjectCache",
+    "file": "Source/WebCore/accessibility/AXObjectCache.h",
+    "line": 621,
+    "container": "ListHashSet",
+    "elem": "Node*",
+    "cap": "0",
+    "elem_base": "Node",
+    "elem_kind": "node",
+    "elem_bases": "Node > EventTarget > ScriptWrappable"
+   }
+  ],
+  "m_transactionOperationsInProgressQueue": [
+   {
+    "owner": "IDBTransaction",
+    "file": "Source/WebCore/Modules/indexeddb/IDBTransaction.h",
+    "line": 252,
+    "container": "Deque",
+    "elem": "IDBClient::TransactionOperation*",
+    "cap": "0",
+    "elem_base": "TransactionOperation",
+    "elem_kind": "ref",
+    "elem_bases": "TransactionOperation"
+   }
+  ],
+  "m_variantBuilderStack": [
+   {
+    "owner": "KeyedEncoderGlib",
+    "file": "Source/WebCore/platform/glib/KeyedEncoderGlib.h",
+    "line": 63,
+    "container": "Vector",
+    "elem": "GVariantBuilder*",
+    "cap": "16",
+    "elem_base": "GVariantBuilder",
+    "elem_kind": "unknown",
+    "elem_bases": ""
+   }
+  ],
+  "m_wrapOpportunityList": [
+   {
+    "owner": "LineBuilder",
+    "file": "Source/WebCore/layout/formattingContexts/inline/InlineLineBuilder.h",
+    "line": 186,
+    "container": "Vector",
+    "elem": "const InlineItem*",
+    "cap": "0",
+    "elem_base": "InlineItem",
+    "elem_kind": "other",
+    "elem_bases": "InlineItem"
+   }
+  ]
+ },
+ "members": [
+  {
+   "owner": "GridMasonryLayout",
+   "file": "Source/WebCore/rendering/GridMasonryLayout.h",
+   "line": 82,
+   "container": "Vector",
+   "elem": "RenderBox*",
+   "cap": "0",
+   "elem_base": "RenderBox",
+   "elem_kind": "node",
+   "elem_bases": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient",
+   "func": "GridMasonryLayout::collectMasonryItems",
+   "func_file": "Source/WebCore/rendering/GridMasonryLayout.cpp",
+   "func_line": 76,
+   "push_line": 91,
+   "loop": "for",
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "append",
+    "gridAxisDirection",
+    "hasDefiniteGridAxisPosition",
+    "if",
+    "masonryAutoFlow",
+    "style"
+   ],
+   "cb": [],
+   "interval": "m_itemsWithDefiniteGridAxisPosition.append(child); else if (m_renderGrid.style().masonryAutoFlow().placementOrder == MasonryAutoFlowPlacementOrder::DefiniteFirst) { if (hasDefiniteGridAxisPosition(*child, gridAxisDirection())) m_itemsWithDefiniteGridAxisPosition.append(child); else m_itemsWithIndefiniteGridAxisPosition.append(child); } } }",
+   "thru": []
+  },
+  {
+   "owner": "GridMasonryLayout",
+   "file": "Source/WebCore/rendering/GridMasonryLayout.h",
+   "line": 82,
+   "container": "Vector",
+   "elem": "RenderBox*",
+   "cap": "0",
+   "elem_base": "RenderBox",
+   "elem_kind": "node",
+   "elem_bases": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient",
+   "func": "GridMasonryLayout::collectMasonryItems",
+   "func_file": "Source/WebCore/rendering/GridMasonryLayout.cpp",
+   "func_line": 76,
+   "push_line": 94,
+   "loop": "for",
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "append"
+   ],
+   "cb": [],
+   "interval": "m_itemsWithDefiniteGridAxisPosition.append(child); else m_itemsWithIndefiniteGridAxisPosition.append(child); } } }",
+   "thru": []
+  },
+  {
+   "owner": "GridMasonryLayout",
+   "file": "Source/WebCore/rendering/GridMasonryLayout.h",
+   "line": 83,
+   "container": "Vector",
+   "elem": "RenderBox*",
+   "cap": "0",
+   "elem_base": "RenderBox",
+   "elem_kind": "node",
+   "elem_bases": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient",
+   "func": "GridMasonryLayout::collectMasonryItems",
+   "func_file": "Source/WebCore/rendering/GridMasonryLayout.cpp",
+   "func_line": 76,
+   "push_line": 96,
+   "loop": "for",
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "append"
+   ],
+   "cb": [],
+   "interval": "m_itemsWithIndefiniteGridAxisPosition.append(child); } } }",
+   "thru": []
+  },
+  {
+   "owner": "CollectionIndexCache",
+   "file": "Source/WebCore/dom/CollectionIndexCache.h",
+   "line": 62,
+   "container": "Vector",
+   "elem": "NodeType*",
+   "cap": "0",
+   "elem_base": "NodeType",
+   "elem_kind": "other",
+   "elem_bases": "NodeType",
+   "func": "::computeNodeCountUpdatingListCache",
+   "func_file": "Source/WebCore/dom/CollectionIndexCacheInlines.h",
+   "func_line": 48,
+   "push_line": 55,
+   "loop": "while",
+   "reads": 1,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "ASSERT",
+    "append",
+    "capacity",
+    "collectionTraverseForward",
+    "if",
+    "reportExtraMemoryAllocatedForCollectionIndexCache",
+    "sizeof"
+   ],
+   "cb": [],
+   "interval": "m_cachedList.append(&*current); unsigned traversed; collection.collectionTraverseForward(current, 1, traversed); ASSERT(traversed == (current ? 1 : 0)); } m_listValid = true; if (unsigned capacityDifference = m_cachedList.capacity() - oldCapacity) reportExtraMemoryAllocatedForCollectionIndexCache(capacityDifference * sizeof(NodeType*)); return",
+   "thru": []
+  },
+  {
+   "owner": "KeyedDecoderGeneric",
+   "file": "Source/WebCore/platform/generic/KeyedDecoderGeneric.h",
+   "line": 65,
+   "container": "Vector",
+   "elem": "Dictionary*",
+   "cap": "16",
+   "elem_base": "Dictionary",
+   "elem_kind": "other",
+   "elem_bases": "Dictionary",
+   "func": "KeyedDecoderGeneric::KeyedDecoderGeneric",
+   "func_file": "Source/WebCore/platform/generic/KeyedDecoderGeneric.cpp",
+   "func_line": 92,
+   "push_line": 171,
+   "loop": "while",
+   "reads": 7,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "WTFMove",
+    "append",
+    "get",
+    "if",
+    "isEmpty",
+    "last",
+    "readString",
+    "removeLast",
+    "size",
+    "while"
+   ],
+   "cb": [],
+   "interval": "m_dictionaryStack.append(newDictionary.get()); currentDictinary->add(*key, WTFMove(newDictionary)); break; } case KeyedEncoderGeneric::Type::EndObject: m_dictionaryStack.removeLast(); if (m_dictionaryStack.isEmpty()) ok = false; break; case KeyedEncoderGeneric::Type::BeginArray: { auto key = readString(decoder); if (!key) ok = false; if (!ok) break; auto newArray = makeUnique<Array>(); m_arrayStack.append(newArray.get()); m_dictionaryStack.last()->add(*key, WTFMove(newArray)); break; } case Keye",
+   "thru": []
+  },
+  {
+   "owner": "KeyedDecoderGeneric",
+   "file": "Source/WebCore/platform/generic/KeyedDecoderGeneric.h",
+   "line": 66,
+   "container": "Vector",
+   "elem": "Array*",
+   "cap": "16",
+   "elem_base": "Array",
+   "elem_kind": "other",
+   "elem_bases": "Array",
+   "func": "KeyedDecoderGeneric::KeyedDecoderGeneric",
+   "func_file": "Source/WebCore/platform/generic/KeyedDecoderGeneric.cpp",
+   "func_line": 92,
+   "push_line": 187,
+   "loop": "while",
+   "reads": 6,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "WTFMove",
+    "append",
+    "get",
+    "if",
+    "isEmpty",
+    "last",
+    "removeLast",
+    "size",
+    "while"
+   ],
+   "cb": [],
+   "interval": "m_arrayStack.append(newArray.get()); m_dictionaryStack.last()->add(*key, WTFMove(newArray)); break; } case KeyedEncoderGeneric::Type::BeginArrayElement: { ok = !m_arrayStack.isEmpty(); if (!ok) break; auto newDictionary = makeUnique<Dictionary>(); m_dictionaryStack.append(newDictionary.get()); m_arrayStack.last()->append(WTFMove(newDictionary)); break; } case KeyedEncoderGeneric::Type::EndArrayElement: m_dictionaryStack.removeLast(); if (m_dictionaryStack.isEmpty()) ok = false; break; case Keyed",
+   "thru": []
+  },
+  {
+   "owner": "KeyedDecoderGeneric",
+   "file": "Source/WebCore/platform/generic/KeyedDecoderGeneric.h",
+   "line": 65,
+   "container": "Vector",
+   "elem": "Dictionary*",
+   "cap": "16",
+   "elem_base": "Dictionary",
+   "elem_kind": "other",
+   "elem_bases": "Dictionary",
+   "func": "KeyedDecoderGeneric::KeyedDecoderGeneric",
+   "func_file": "Source/WebCore/platform/generic/KeyedDecoderGeneric.cpp",
+   "func_line": 92,
+   "push_line": 196,
+   "loop": "while",
+   "reads": 4,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "WTFMove",
+    "append",
+    "get",
+    "if",
+    "isEmpty",
+    "last",
+    "removeLast",
+    "size",
+    "while"
+   ],
+   "cb": [],
+   "interval": "m_dictionaryStack.append(newDictionary.get()); m_arrayStack.last()->append(WTFMove(newDictionary)); break; } case KeyedEncoderGeneric::Type::EndArrayElement: m_dictionaryStack.removeLast(); if (m_dictionaryStack.isEmpty()) ok = false; break; case KeyedEncoderGeneric::Type::EndArray: ok = !m_arrayStack.isEmpty(); if (!ok) break; m_arrayStack.removeLast(); break; } } while (m_dictionaryStack.size() > 1)",
+   "thru": []
+  },
+  {
+   "owner": "SVGTextQuery",
+   "file": "Source/WebCore/rendering/svg/SVGTextQuery.h",
+   "line": 67,
+   "container": "Vector",
+   "elem": "SVGInlineTextBox*",
+   "cap": "0",
+   "elem_base": "SVGInlineTextBox",
+   "elem_kind": "other",
+   "elem_bases": "SVGInlineTextBox > LegacyInlineTextBox > LegacyInlineBox",
+   "func": "SVGTextQuery::collectTextBoxesInFlowBox",
+   "func_file": "Source/WebCore/rendering/svg/SVGTextQuery.cpp",
+   "func_line": 90,
+   "push_line": 105,
+   "loop": "for",
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "append"
+   ],
+   "cb": [],
+   "interval": "m_textBoxes.append(downcast<SVGInlineTextBox>(child)); } }",
+   "thru": []
+  },
+  {
+   "owner": "ItemBuffer",
+   "file": "Source/WebCore/platform/graphics/displaylists/DisplayListItemBuffer.h",
+   "line": 212,
+   "container": "Vector",
+   "elem": "uint8_t*",
+   "cap": "0",
+   "elem_base": "uint8_t",
+   "elem_kind": "primitive",
+   "elem_bases": "",
+   "func": "ItemBuffer::createItemBuffer",
+   "func_file": "Source/WebCore/platform/graphics/displaylists/DisplayListItemBuffer.cpp",
+   "func_line": 711,
+   "push_line": 721,
+   "loop": "recursion",
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "append"
+   ],
+   "cb": [],
+   "interval": "m_allocatedBuffers.append(buffer); return { ItemBufferIdentifier::generate(), buffer, newBufferCapacity }; }",
+   "thru": []
+  },
+  {
+   "owner": "IDBTransaction",
+   "file": "Source/WebCore/Modules/indexeddb/IDBTransaction.h",
+   "line": 252,
+   "container": "Deque",
+   "elem": "IDBClient::TransactionOperation*",
+   "cap": "0",
+   "elem_base": "TransactionOperation",
+   "elem_kind": "ref",
+   "elem_bases": "TransactionOperation",
+   "func": "IDBTransaction::abortInProgressOperations",
+   "func_file": "Source/WebCore/Modules/indexeddb/IDBTransaction.cpp",
+   "func_line": 266,
+   "push_line": 273,
+   "loop": "for",
+   "reads": 0,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "append",
+    "clear",
+    "connectionProxy",
+    "forgetActiveOperations",
+    "get"
+   ],
+   "cb": [],
+   "interval": "m_transactionOperationsInProgressQueue.append(operation.get()); m_currentlyCompletingRequest = nullptr; operation->doComplete(IDBResultData::error(operation->identifier(), error)); } m_transactionOperationResultMap.clear(); m_currentlyCompletingRequest = nullptr; connectionProxy().forgetActiveOperations(inProgressAbortVector); }",
+   "thru": []
+  },
+  {
+   "owner": "IDBTransaction",
+   "file": "Source/WebCore/Modules/indexeddb/IDBTransaction.h",
+   "line": 252,
+   "container": "Deque",
+   "elem": "IDBClient::TransactionOperation*",
+   "cap": "0",
+   "elem_base": "TransactionOperation",
+   "elem_kind": "ref",
+   "elem_bases": "TransactionOperation",
+   "func": "IDBTransaction::abortOnServerAndCancelRequests",
+   "func_file": "Source/WebCore/Modules/indexeddb/IDBTransaction.cpp",
+   "func_line": 285,
+   "push_line": 304,
+   "loop": "for",
+   "reads": 0,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "ASSERT",
+    "append",
+    "clear",
+    "get",
+    "isEmpty"
+   ],
+   "cb": [],
+   "interval": "m_transactionOperationsInProgressQueue.append(operation.get()); operation->doComplete(IDBResultData::error(operation->identifier(), error)); m_currentlyCompletingRequest = nullptr; } m_abortQueue.clear(); m_openRequests.clear(); ASSERT(m_pendingTransactionOperationQueue.isEmpty()); }",
+   "thru": []
+  },
+  {
+   "owner": "IDBTransaction",
+   "file": "Source/WebCore/Modules/indexeddb/IDBTransaction.h",
+   "line": 252,
+   "container": "Deque",
+   "elem": "IDBClient::TransactionOperation*",
+   "cap": "0",
+   "elem_base": "TransactionOperation",
+   "elem_kind": "ref",
+   "elem_bases": "TransactionOperation",
+   "func": "IDBTransaction::connectionClosedFromServer",
+   "func_file": "Source/WebCore/Modules/indexeddb/IDBTransaction.cpp",
+   "func_line": 1439,
+   "push_line": 1455,
+   "loop": "for",
+   "reads": 1,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "ASSERT",
+    "append",
+    "get"
+   ],
+   "cb": [],
+   "interval": "m_transactionOperationsInProgressQueue.append(operation.get()); ASSERT(",
+   "thru": []
+  },
+  {
+   "owner": "IDBTransaction",
+   "file": "Source/WebCore/Modules/indexeddb/IDBTransaction.h",
+   "line": 252,
+   "container": "Deque",
+   "elem": "IDBClient::TransactionOperation*",
+   "cap": "0",
+   "elem_base": "TransactionOperation",
+   "elem_kind": "ref",
+   "elem_bases": "TransactionOperation",
+   "func": "IDBTransaction::handlePendingOperations",
+   "func_file": "Source/WebCore/Modules/indexeddb/IDBTransaction.cpp",
+   "func_line": 1489,
+   "push_line": 1500,
+   "loop": "while",
+   "reads": 0,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "append",
+    "get",
+    "if"
+   ],
+   "cb": [],
+   "interval": "m_transactionOperationsInProgressQueue.append(operation.get()); operation->perform(); if (!operation->nextRequestCanGoToServer()) break; } }",
+   "thru": []
+  },
+  {
+   "owner": "CDMPrivateMediaSourceAVFObjC",
+   "file": "Source/WebCore/platform/graphics/avfoundation/CDMPrivateMediaSourceAVFObjC.h",
+   "line": 64,
+   "container": "Vector",
+   "elem": "CDMSessionMediaSourceAVFObjC*",
+   "cap": "0",
+   "elem_base": "CDMSessionMediaSourceAVFObjC",
+   "elem_kind": "ref",
+   "elem_bases": "CDMSessionMediaSourceAVFObjC > SourceBufferPrivateAVFObjCErrorClient",
+   "func": "MediaKeys::createSession",
+   "func_file": "Source/WebCore/Modules/encryptedmedia/MediaKeys.cpp",
+   "func_line": 75,
+   "push_line": 104,
+   "loop": "recursion",
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "append",
+    "copyRef"
+   ],
+   "cb": [],
+   "interval": "m_sessions.append(session.copyRef()); return session; }",
+   "thru": []
+  },
+  {
+   "owner": "ShorthandPropertyWrapper",
+   "file": "Source/WebCore/animation/CSSPropertyAnimation.cpp",
+   "line": 2462,
+   "container": "Vector",
+   "elem": "AnimationPropertyWrapperBase*",
+   "cap": "0",
+   "elem_base": "AnimationPropertyWrapperBase",
+   "elem_kind": "unknown",
+   "elem_bases": "",
+   "func": "CSSPropertyAnimationWrapperMap::CSSPropertyAnimationWrapperMap",
+   "func_file": "Source/WebCore/animation/CSSPropertyAnimation.cpp",
+   "func_line": 3441,
+   "push_line": 3823,
+   "loop": "for",
+   "reads": 2,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "ASSERT",
+    "for",
+    "if",
+    "indexFromPropertyID",
+    "length",
+    "reserveInitialCapacity",
+    "shorthandForProperty",
+    "uncheckedAppend"
+   ],
+   "cb": [],
+   "interval": "m_propertyWrappers.uncheckedAppend(std::unique_ptr<AnimationPropertyWrapperBase>(wrapper)); indexFromPropertyID(wrapper->property()) = i; } for (size_t i = 0; i < animatableShorthandPropertiesCount; ++i) { CSSPropertyID propertyID = animatableShorthandProperties[i]; auto shorthand = shorthandForProperty(propertyID); if (!shorthand.length()) continue; Vector<AnimationPropertyWrapperBase*> longhandWrappers; longhandWrappers.reserveInitialCapacity(shorthand.length()); for (auto longhand : shorthand",
+   "thru": []
+  },
+  {
+   "owner": "ShorthandPropertyWrapper",
+   "file": "Source/WebCore/animation/CSSPropertyAnimation.cpp",
+   "line": 2462,
+   "container": "Vector",
+   "elem": "AnimationPropertyWrapperBase*",
+   "cap": "0",
+   "elem_base": "AnimationPropertyWrapperBase",
+   "elem_kind": "unknown",
+   "elem_bases": "",
+   "func": "CSSPropertyAnimationWrapperMap::CSSPropertyAnimationWrapperMap",
+   "func_file": "Source/WebCore/animation/CSSPropertyAnimation.cpp",
+   "func_line": 3441,
+   "push_line": 3844,
+   "loop": "for",
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "ASSERT_UNUSED",
+    "ENABLE",
+    "PLATFORM",
+    "WTFMove",
+    "allCSSProperties",
+    "for",
+    "if",
+    "indexFromPropertyID",
+    "switch",
+    "uncheckedAppend",
+    "wrapperForProperty"
+   ],
+   "cb": [],
+   "interval": "m_propertyWrappers.uncheckedAppend(makeUnique<ShorthandPropertyWrapper>(propertyID, WTFMove(longhandWrappers))); indexFromPropertyID(propertyID) = animatableLonghandPropertiesCount + i; } #ifndef NDEBUG for (auto property : allCSSProperties()) { switch (property) { #if ENABLE(DARK_MODE_CSS) case CSSPropertyColorScheme: #endif case CSSPropertyDirection: case CSSPropertyDisplay: #if ENABLE(VARIATION_FONTS) case CSSPropertyFontOpticalSizing: #endif case CSSPropertyTextOrientation: case CSSPropertyW",
+   "thru": []
+  }
+ ],
+ "hash": [
+  {
+   "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+   "line": 5374,
+   "func": "SerializedScriptValue::create",
+   "func_line": 5361,
+   "container": "HashSet",
+   "elem": "JSC::JSObject*",
+   "name": "uniqueTransferables",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "DECLARE_THROW_SCOPE",
+    "ENABLE",
+    "SerializedScriptValue",
+    "WTFMove",
+    "add",
+    "adoptRef",
+    "append",
+    "canDetachRTCDataChannels",
+    "canOffscreenCanvasesDetach",
+    "containsDuplicates",
+    "errorMessageForTransfer",
+    "exceptionForSerializationFailure",
+    "for",
+    "get",
+    "hasException",
+    "if",
+    "map",
+    "maybeThrowExceptionIfSerializationFailed",
+    "releaseException",
+    "releaseReturnValue",
+    "throwVMTypeError",
+    "toPossiblySharedArrayBuffer",
+    "transferArrayBuffers"
+   ],
+   "elem_base": "JSObject",
+   "elem_kind": "gc",
+   "elem_bases": "JSObject > JSCell > HeapCell",
+   "interval": "uniqueTransferables.add(transferable.get()).isNewEntry) return Exception { DataCloneError, _s }; if (auto arrayBuffer = toPossiblySharedArrayBuffer(vm, transferable.get())) { if (arrayBuffer->isDetached() || arrayBuffer->isShared()) return Exception { DataCloneError }; if (arrayBuffer->isLocked()) { auto scope = DECLARE_THROW_SCOPE(vm); throwVMTypeError(&lexicalGlobalObject, scope, errorMessageForTransfer(arrayBuffer)); return Exception { ExistingExceptionError }; } arrayBuffers.append(WTFMove(a",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+   "line": 5319,
+   "func": "canOffscreenCanvasesDetach",
+   "func_line": 5318,
+   "container": "HashSet",
+   "elem": "OffscreenCanvas*",
+   "name": "visited",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "add",
+    "get"
+   ],
+   "elem_base": "OffscreenCanvas",
+   "elem_kind": "node",
+   "elem_bases": "OffscreenCanvas > CanvasBase > EventTarget > ScriptWrappable",
+   "interval": "visited.add(offscreenCanvas.get())) return false; } return true; }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+   "line": 5334,
+   "func": "canDetachRTCDataChannels",
+   "func_line": 5333,
+   "container": "HashSet",
+   "elem": "RTCDataChannel*",
+   "name": "visited",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add",
+    "ptr"
+   ],
+   "elem_base": "RTCDataChannel",
+   "elem_kind": "node",
+   "elem_bases": "RTCDataChannel > RTCDataChannelHandlerClient > EventTarget > ScriptWrappable",
+   "interval": "visited.add(channel.ptr())) return false; } return true; }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/dom/MessagePort.cpp",
+   "line": 349,
+   "func": "MessagePort::disentanglePorts",
+   "func_line": 344,
+   "container": "HashSet",
+   "elem": "MessagePort*",
+   "name": "portSet",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "add",
+    "get"
+   ],
+   "elem_base": "MessagePort",
+   "elem_kind": "node",
+   "elem_bases": "MessagePort > EventTarget > ScriptWrappable",
+   "interval": "portSet.add(port.get()).isNewEntry) return Exception { DataCloneError }; } return WTF::map(ports, [](auto& port) { return port->disentangle(); }); }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/html/CanvasBase.cpp",
+   "line": 234,
+   "func": "CanvasBase::cssCanvasClients",
+   "func_line": 233,
+   "container": "HashSet",
+   "elem": "Element*",
+   "name": "cssCanvasClients",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add"
+   ],
+   "elem_base": "Element",
+   "elem_kind": "node",
+   "elem_bases": "Element > ContainerNode > Node > EventTarget > ScriptWrappable",
+   "interval": "cssCanvasClients.add(element); } } return cssCanvasClients; }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/rendering/RenderBlockFlow.cpp",
+   "line": 202,
+   "func": "RenderBlockFlow::rebuildFloatingObjectSetFromIntrudingFloats",
+   "func_line": 198,
+   "container": "HashSet",
+   "elem": "RenderBox*",
+   "name": "oldIntrudingFloatSet",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 5,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "ASSERT",
+    "add",
+    "addIntrudingFloats",
+    "avoidsFloats",
+    "begin",
+    "childrenInline",
+    "end",
+    "for",
+    "get",
+    "if",
+    "isDescendant",
+    "isDocumentElementRenderer",
+    "isEmpty",
+    "isFloatingOrOutOfFlowPositioned",
+    "isRenderView",
+    "isTableCell",
+    "logicalBottomForFloat",
+    "logicalLeftForFloat",
+    "logicalLeftOffsetForContent",
+    "logicalTop",
+    "logicalTopForFloat",
+    "logicalWidthForFloat",
+    "lowestFloatLogicalBottom",
+    "markAllDescendantsWithFloatsForLayout"
+   ],
+   "elem_base": "RenderBox",
+   "elem_kind": "node",
+   "elem_bases": "RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject > CachedImageClient",
+   "interval": "oldIntrudingFloatSet.add(&floatingObject->renderer()); } } if (avoidsFloats() || isDocumentElementRenderer() || isRenderView() || isFloatingOrOutOfFlowPositioned() || isTableCell()) { if (m_floatingObjects) m_floatingObjects->clear(); if (!oldIntrudingFloatSet.isEmpty()) markAllDescendantsWithFloatsForLayout(); return; } RendererToFloatInfoMap floatMap; if (m_floatingObjects) { if (childrenInline()) m_floatingObjects->moveAllToFloatInfoMap(floatMap); else m_floatingObjects->clear(); } if (!is<Re",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/rendering/RenderObject.cpp",
+   "line": 2265,
+   "func": "borderAndTextRects",
+   "func_line": 2258,
+   "container": "HashSet",
+   "elem": "Element*",
+   "name": "selectedElementsSet",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 2,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add",
+    "contains",
+    "for",
+    "if",
+    "intersectingNodesWithDeprecatedZeroOffsetStartQuirk",
+    "nodeBefore",
+    "parentElement",
+    "remove"
+   ],
+   "elem_base": "Element",
+   "elem_kind": "node",
+   "elem_bases": "Element > ContainerNode > Node > EventTarget > ScriptWrappable",
+   "interval": "selectedElementsSet.add(&downcast<Element>(node)); } if (auto lastNode = nodeBefore(range.end)) { for (auto& ancestor : ancestorsOfType<Element>(*lastNode)) selectedElementsSet.remove(&ancestor); } constexpr OptionSet<RenderObject::VisibleRectContextOption> visibleRectOptions = { RenderObject::VisibleRectContextOption::UseEdgeInclusiveIntersection, RenderObject::VisibleRectContextOption::ApplyCompositedClips, RenderObject::VisibleRectContextOption::ApplyCompositedContainerScrolls }; for (auto& n",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/rendering/RenderTableSection.cpp",
+   "line": 1290,
+   "func": "RenderTableSection::paintObject",
+   "func_line": 1216,
+   "container": "HashSet",
+   "elem": "RenderTableCell*",
+   "name": "spanningCells",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add",
+    "append",
+    "begin",
+    "end",
+    "flipForWritingModeForChild",
+    "for",
+    "if",
+    "paintCell",
+    "size"
+   ],
+   "elem_base": "RenderTableCell",
+   "elem_kind": "node",
+   "elem_bases": "RenderTableCell > RenderBlockFlow > RenderBlock > RenderBox > RenderBoxModelObject > RenderLayerModelObject",
+   "interval": "spanningCells.add(current.cells[i]).isNewEntry) continue; } cells.append(current.cells[i]); } } } if (!m_overflowingCells.size()) std::stable_sort(cells.begin(), cells.end(), compareCellPositions); else std::sort(cells.begin(), cells.end(), compareCellPositionsWithOverflowingCells); if (paintInfo.phase == PaintPhase::CollapsedTableBorders) { for (unsigned i = cells.size(); i > 0; --i) { LayoutPoint cellPoint = flipForWritingModeForChild(*cells[i - 1], paintOffset); cells[i - 1]->paintCollapsedBo",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/rendering/SelectionRangeData.cpp",
+   "line": 144,
+   "func": "SelectionRangeData::repaint",
+   "func_line": 143,
+   "container": "HashSet",
+   "elem": "RenderBlock*",
+   "name": "processedBlocks",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "RenderSelectionInfo",
+    "add",
+    "repaint"
+   ],
+   "elem_base": "RenderBlock",
+   "elem_kind": "node",
+   "elem_bases": "RenderBlock > RenderBox > RenderBoxModelObject > RenderLayerModelObject > RenderElement > RenderObject",
+   "interval": "processedBlocks.add(block).isNewEntry) break; RenderSelectionInfo(*block, true).repaint(); } } }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/rendering/svg/SVGContainerLayout.cpp",
+   "line": 58,
+   "func": "SVGContainerLayout::layoutChildren",
+   "func_line": 55,
+   "container": "HashSet",
+   "elem": "RenderElement*",
+   "name": "elementsThatDidNotReceiveLayout",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 2,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "ASSERT",
+    "add",
+    "checkForRepaintDuringLayout",
+    "for",
+    "if",
+    "invalidateResourcesOfChildren",
+    "needsLayout",
+    "repaint"
+   ],
+   "elem_base": "RenderElement",
+   "elem_kind": "node",
+   "elem_bases": "RenderElement > RenderObject > CachedImageClient",
+   "interval": "elementsThatDidNotReceiveLayout.add(&element); if (!childEverHadLayout && element.checkForRepaintDuringLayout()) child.repaint(); } ASSERT(!child.needsLayout()); } if (layoutSizeChanged) { for (auto* element : elementsThatDidNotReceiveLayout) invalidateResourcesOfChildren(*element); } else ASSERT(",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/rendering/svg/SVGRenderSupport.cpp",
+   "line": 246,
+   "func": "SVGRenderSupport::layoutChildren",
+   "func_line": 243,
+   "container": "HashSet",
+   "elem": "RenderElement*",
+   "name": "elementsThatDidNotReceiveLayout",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 2,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "ASSERT",
+    "add",
+    "if",
+    "isEmpty",
+    "needsLayout"
+   ],
+   "elem_base": "RenderElement",
+   "elem_kind": "node",
+   "elem_bases": "RenderElement > RenderObject > CachedImageClient",
+   "interval": "elementsThatDidNotReceiveLayout.add(&downcast<RenderElement>(child)); ASSERT(!child.needsLayout()); } if (!layoutSizeChanged) { ASSERT(elementsThatDidNotReceiveLayout.isEmpty()); return; }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/svg/SVGRadialGradientElement.cpp",
+   "line": 155,
+   "func": "SVGRadialGradientElement::collectGradientAttributes",
+   "func_line": 151,
+   "container": "HashSet",
+   "elem": "SVGGradientElement*",
+   "name": "processedGradients",
+   "loop": "while",
+   "pushes": 2,
+   "reads": 1,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "add",
+    "get",
+    "if",
+    "treeScopeForSVGReferences",
+    "while"
+   ],
+   "elem_base": "SVGGradientElement",
+   "elem_kind": "node",
+   "elem_bases": "SVGGradientElement > SVGElement > SVGURIReference > StyledElement > SVGPropertyOwner > Element",
+   "interval": "processedGradients.add(current); while (true) { auto target = SVGURIReference::targetElementFromIRIString(current->href(), treeScopeForSVGReferences()); if (is<SVGGradientElement>(target.element)) { current = downcast<SVGGradientElement>(target.element.get()); if (",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/animation/DocumentTimeline.cpp",
+   "line": 422,
+   "func": "DocumentTimeline::applyPendingAcceleratedAnimations",
+   "func_line": 410,
+   "container": "HashSet",
+   "elem": "KeyframeEffectStack*",
+   "name": "keyframeEffectStacksToUpdate",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 1,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add"
+   ],
+   "elem_base": "KeyframeEffectStack",
+   "elem_kind": "other",
+   "elem_bases": "KeyframeEffectStack",
+   "interval": "keyframeEffectStacksToUpdate.add(keyframeEffectStack); } } }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+   "line": 5243,
+   "func": "transferArrayBuffers",
+   "func_line": 5237,
+   "container": "HashSet",
+   "elem": "JSC::ArrayBuffer*",
+   "name": "visited",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "add",
+    "get",
+    "if"
+   ],
+   "elem_base": "ArrayBuffer",
+   "elem_kind": "other",
+   "elem_bases": "ArrayBuffer > GCIncomingRefCounted",
+   "interval": "visited.add(arrayBuffers[arrayBufferIndex].get()); bool result = arrayBuffers[arrayBufferIndex]->transferTo(vm, contents->at(arrayBufferIndex)); if (!result) return Exception { TypeError }; } return contents; }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/layout/formattingContexts/inline/InlineLineBuilder.cpp",
+   "line": 707,
+   "func": "LineBuilder::candidateContentForLine",
+   "func_line": 684,
+   "container": "HashSet",
+   "elem": "const Box*",
+   "name": "inlineBoxListWithClonedDecorationEnd",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 1,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add",
+    "if"
+   ],
+   "elem_base": "Box",
+   "elem_kind": "other",
+   "elem_bases": "Box",
+   "interval": "inlineBoxListWithClonedDecorationEnd.add(&layoutBox); else if (",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/rendering/MarkedText.cpp",
+   "line": 78,
+   "func": "MarkedText::subdivide",
+   "func_line": 47,
+   "container": "HashSet",
+   "elem": "const MarkedText*",
+   "name": "processedMarkedTexts",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add",
+    "begin",
+    "end",
+    "if"
+   ],
+   "elem_base": "MarkedText",
+   "elem_kind": "other",
+   "elem_bases": "MarkedText",
+   "interval": "processedMarkedTexts.add(offsets[i].markedText); } if (overlapStrategy == OverlapStrategy::None) std::sort(result.begin(), result.end(), [] (const MarkedText& a, const MarkedText& b) { return a.startOffset < b.startOffset || (a.startOffset == b.startOffset && a.type < b.type); }); return result; }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/Modules/indexeddb/server/IDBServer.cpp",
+   "line": 602,
+   "func": "IDBServer::closeDatabasesForOrigins",
+   "func_line": 598,
+   "container": "HashSet",
+   "elem": "UniqueIDBDatabase*",
+   "name": "openDatabases",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 1,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "add",
+    "get"
+   ],
+   "elem_base": "UniqueIDBDatabase",
+   "elem_kind": "ref",
+   "elem_bases": "UniqueIDBDatabase",
+   "interval": "openDatabases.add(database.get()); }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/accessibility/AccessibilityTable.cpp",
+   "line": 485,
+   "func": "AccessibilityTable::addChildren",
+   "func_line": 456,
+   "container": "HashSet",
+   "elem": "AccessibilityObject*",
+   "name": "appendedRows",
+   "loop": "recursion",
+   "pushes": 1,
+   "reads": 1,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "add",
+    "addChild",
+    "append",
+    "ensureRowAndColumn",
+    "for",
+    "get",
+    "if",
+    "isTableRow",
+    "isValid",
+    "node",
+    "return",
+    "while"
+   ],
+   "elem_base": "AccessibilityObject",
+   "elem_kind": "ref",
+   "elem_bases": "AccessibilityObject > AXCoreObject",
+   "interval": "appendedRows.add(row); if (yHeight <= yCurrent) yHeight = yCurrent + 1; unsigned xCurrent = 0; for (const auto& child : row->children()) { auto* currentCell = dynamicDowncast<AccessibilityTableCell>(child.get()); if (!currentCell) continue; ensureRowAndColumn(yCurrent, xCurrent); while (m_cellSlots[yCurrent][xCurrent].isValid()) { xCurrent += 1; ensureRowAndColumn(yCurrent, xCurrent); } if (xCurrent >= xWidth) xWidth = xCurrent + 1; unsigned colSpan = currentCell->colSpan(); unsigned rowSpan = c",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/bindings/js/SerializedScriptValue.cpp",
+   "line": 5308,
+   "func": "containsDuplicates",
+   "func_line": 5307,
+   "container": "HashSet",
+   "elem": "ImageBitmap*",
+   "name": "visited",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "add",
+    "get"
+   ],
+   "elem_base": "ImageBitmap",
+   "elem_kind": "ref",
+   "elem_bases": "ImageBitmap > ScriptWrappable",
+   "interval": "visited.add(imageBitmap.get())) return true; } return false; }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/css/CSSFontFaceSet.cpp",
+   "line": 406,
+   "func": "CSSFontFaceSet::matchingFacesExcludingPreinstalledFonts",
+   "func_line": 382,
+   "container": "HashSet",
+   "elem": "CSSFontFace*",
+   "name": "resultConstituents",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add",
+    "if",
+    "ptr"
+   ],
+   "elem_base": "CSSFontFace",
+   "elem_kind": "ref",
+   "elem_bases": "CSSFontFace",
+   "interval": "resultConstituents.add(constituentFace.ptr()); found = true; break; } } if (found) break; } } return WTF::map(resultConstituents, [](auto* constituent) -> std::reference_wrapper<CSSFontFace> { return *constituent; }); }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/loader/archive/Archive.cpp",
+   "line": 38,
+   "func": "Archive::clearAllSubframeArchives",
+   "func_line": 37,
+   "container": "HashSet",
+   "elem": "Archive*",
+   "name": "clearedArchives",
+   "loop": "recursion",
+   "pushes": 1,
+   "reads": 0,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add",
+    "clearAllSubframeArchives"
+   ],
+   "elem_base": "Archive",
+   "elem_kind": "ref",
+   "elem_bases": "Archive",
+   "interval": "clearedArchives.add(this); clearAllSubframeArchives(clearedArchives); }",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/rendering/LegacyLineLayout.cpp",
+   "line": 461,
+   "func": "setLogicalWidthForTextRun",
+   "func_line": 460,
+   "container": "HashSet",
+   "elem": "const Font*",
+   "name": "fallbackFonts",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 1,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "ASSERT",
+    "add",
+    "clear",
+    "if",
+    "isFirstLine",
+    "width"
+   ],
+   "elem_base": "Font",
+   "elem_kind": "ref",
+   "elem_bases": "Font",
+   "interval": "fallbackFonts.add(font); } if (measuredWidth && lastEndOffset != run->m_stop) { measuredWidth = 0; fallbackFonts.clear(); } } if (!measuredWidth) measuredWidth = renderer.width(run->m_start, run->m_stop - run->m_start, xPos, lineInfo.isFirstLine(), &fallbackFonts, &glyphOverflow); ASSERT(measuredWidth >= 0); ASSERT(hyphenWidth >= 0); run->box()->setLogicalWidth(measuredWidth + hyphenWidth); if (!",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/rendering/RenderLayerCompositor.cpp",
+   "line": 1553,
+   "func": "RenderLayerCompositor::adjustOverflowScrollbarContainerLayers",
+   "func_line": 1549,
+   "container": "HashMap",
+   "elem": "RenderLayer*",
+   "name": "overflowScrollToLastContainedLayerMap",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 2,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "find",
+    "for",
+    "if",
+    "set"
+   ],
+   "elem_base": "RenderLayer",
+   "elem_kind": "ref",
+   "elem_bases": "RenderLayer",
+   "interval": "overflowScrollToLastContainedLayerMap.set(layer, clippedLayer); } } for (auto* overflowScrollingLayer : overflowScrollLayers) { auto it = overflowScrollToLastContainedLayerMap.find(overflowScrollingLayer); if (it ==",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/html/HTMLObjectElement.cpp",
+   "line": 163,
+   "func": "HTMLObjectElement::parametersForPlugin",
+   "func_line": 162,
+   "container": "HashSet",
+   "elem": "StringImpl*",
+   "name": "uniqueParamNames",
+   "loop": "for",
+   "pushes": 1,
+   "reads": 1,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add",
+    "append",
+    "attributesIterator",
+    "equalLettersIgnoringASCIICase",
+    "find",
+    "for",
+    "hasAttributes",
+    "if",
+    "impl",
+    "isEmpty",
+    "left",
+    "localName",
+    "name",
+    "string",
+    "trim",
+    "value"
+   ],
+   "elem_base": "StringImpl",
+   "elem_kind": "unknown",
+   "elem_bases": "",
+   "interval": "uniqueParamNames.add(name.impl()); paramNames.append(param.name()); paramValues.append(param.value()); if (url.isEmpty() && urlParameter.isEmpty() && (equalLettersIgnoringASCIICase(name, _s) || equalLettersIgnoringASCIICase(name, _s) || equalLettersIgnoringASCIICase(name, _s) || equalLettersIgnoringASCIICase(name, _s))) urlParameter = param.value().string().trim(isASCIIWhitespace); if (serviceType.isEmpty() && equalLettersIgnoringASCIICase(name, _s)) { serviceType = param.value(); size_t pos = s",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/html/HTMLVideoElement.cpp",
+   "line": 854,
+   "func": "HTMLVideoElement::sortByRenderingOrder",
+   "func_line": 849,
+   "container": "HashMap",
+   "elem": "Vector<const RenderLayer*>",
+   "name": "elementsAncestorRenderLayers",
+   "loop": "for",
+   "pushes": 2,
+   "reads": 2,
+   "direct": [],
+   "prop": [],
+   "calls": [
+    "add",
+    "ancestorRenderLayers",
+    "begin",
+    "compareRenderingOrder",
+    "end",
+    "find"
+   ],
+   "elem_base": "Vector",
+   "elem_kind": "unknown",
+   "elem_bases": "",
+   "interval": "elementsAncestorRenderLayers.add(element, Vector<const RenderLayer*>()); continue; } elementsAncestorRenderLayers.add(element, ancestorRenderLayers(element->renderer()->layer())); } std::sort(elements.begin(), elements.end(), [&elementsAncestorRenderLayers](WebCore::HTMLVideoElement* lhs, WebCore::HTMLVideoElement* rhs) { return compareRenderingOrder(lhs, rhs, elementsAncestorRenderLayers.find(lhs)->value,",
+   "thru": []
+  },
+  {
+   "file": "Source/WebCore/inspector/DOMPatchSupport.cpp",
+   "line": 299,
+   "func": "DOMPatchSupport::innerPatchChildren",
+   "func_line": 290,
+   "container": "HashMap",
+   "elem": "Digest*",
+   "name": "merges",
+   "loop": "for",
+   "pushes": 3,
+   "reads": 2,
+   "direct": [],
+   "prop": [
+    "get"
+   ],
+   "calls": [
+    "add",
+    "contains",
+    "for",
+    "get",
+    "hasException",
+    "if",
+    "innerPatchNode",
+    "markNodeAsUsed",
+    "releaseException",
+    "removeChildAndMoveToNew",
+    "set",
+    "size"
+   ],
+   "elem_base": "Digest",
+   "elem_kind": "unknown",
+   "elem_bases": "",
+   "interval": "merges.set(newList[anchorCandidate].get(), oldList[i].get()); else { auto result = removeChildAndMoveToNew(*oldList[i]); if (result.hasException()) return result.releaseException(); } } else { auto result = removeChildAndMoveToNew(*oldList[i]); if (result.hasException()) return result.releaseException(); } } HashSet<size_t, IntHash<size_t>, WTF::UnsignedWithZeroKeyHashTraits<size_t>> usedOldOrdinals; for (size_t i = 0; i < newList.size(); ++i) { if (!newMap[i].first) continue; size_t oldOrdinal ",
+   "thru": []
+  }
+ ]
+}

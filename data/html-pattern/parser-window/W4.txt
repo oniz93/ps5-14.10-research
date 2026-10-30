@@ -1,0 +1,13 @@
+===== W4  port=9744
+access: none
+SUMMARY: none
+-- beacons (seq-ordered):
+   1 START sel=P2
+   2 P1 inline
+   3 P2 enter
+   4 P2 nested exec
+   5 P2 wrote
+   6 P2 exit
+   7 S1 n=1 id=s1elm conn=1
+   8 TAIL
+   9 S1 n=2 id=d1 conn=1

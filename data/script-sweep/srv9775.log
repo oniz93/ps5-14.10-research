@@ -1,0 +1,10 @@
+127.0.0.1 - - [29/Oct/2026 20:49:09] "GET /evloop.html?x=1 HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 20:49:09] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:49:09] "GET /ev?m=PARENT%20start%20rm%3D1 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:49:09] "GET /child.html?rm=1 HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 20:49:09] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:49:09] "GET /ev?m=CHILD%20start%20rm%3Dtrue HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:49:10] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:49:10] "GET /ev?m=PARENT%20alive%20fe%3Dno HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:49:11] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:49:11] "GET /ev?m=PARENT%20late HTTP/1.1" 404 -

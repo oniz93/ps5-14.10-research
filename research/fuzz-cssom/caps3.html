@@ -1,0 +1,60 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps3 — what happens when the iframe removes itself inside its own FontFace window</title>
+<body>
+<div id="host"></div>
+<script>
+// docs/86 probe 3.  seq2's Aframe arm shows `ktry=23&killed=0` — the counter written *after*
+// removeChild never lands.  Two explanations: the removal aborts the inner script context before
+// its next statement, or the removal throws.  A step counter written into the PARENT before and
+// after each statement tells them apart, and the parent's own post-conditions (isConnected, f.status)
+// are observations the inner context cannot fake.
+function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); }
+
+var inner =
+  '<!doctype html><meta charset="utf-8"><body><p>i</p>' +
+  '<scr' + 'ipt>' +
+  'window.__ran=1;' +
+  'Object.defineProperty(FontFace.prototype,"then",{configurable:true,get:function(){' +
+  '  var P=parent; P.__st=1; P.__ith=(P.__ith||0)+1; P.__st=2;' +
+  '  var fe=window.frameElement; P.__st=(fe?3:23);' +
+  '  if(fe&&fe.parentNode){ P.__st=4; fe.parentNode.removeChild(fe); P.__st=5; } else { P.__st=24; }' +
+  '  return undefined; },set:function(v){}});' +
+  '</scr' + 'ipt>';
+
+var fr = document.createElement('iframe');
+fr.id = 'f1';
+document.body.appendChild(fr);
+fr.srcdoc = inner;
+
+setTimeout(function () {
+  ev('p1 ran=' + (fr.contentWindow && fr.contentWindow.__ran === 1) + '&conn=' + fr.isConnected);
+  var d = fr.contentDocument, W = fr.contentWindow;
+  var el = d.createElement('style');
+  el.textContent = '@font-face{font-family:zzK;src:local("DejaVu Sans")}';
+  d.head.appendChild(el);
+  d.body.offsetHeight;
+  var f = null;
+  d.fonts.forEach(function (x) { if (String(x.family).indexOf('zzK') >= 0) f = x; });
+  ev('p2 found=' + (f ? 1 : 0) + '&st=' + (f ? f.status : '-'));
+
+  if (f) {
+    try { f.loaded; } catch (e) { ev('p loadederr=' + (e && e.name)); }
+    var threw = '';
+    try { f.load(); } catch (e) { threw = (e && e.name) + ':' + (e && e.message); }
+    // everything below is measured by the PARENT, after the call returned
+    var st = '?';
+    try { st = f.status; } catch (e) { st = 'ERR:' + e.name; }
+    ev('p3 threw=' + (threw || '-') + '&st=' + st + '&st4=' + (window.__st || 0) +
+       '&ith=' + (window.__ith || 0) + '&conn=' + fr.isConnected +
+       '&kids=' + document.body.childElementCount);
+    setTimeout(function () {
+      var st2 = '?';
+      try { st2 = f.status; } catch (e) { st2 = 'ERR:' + e.name; }
+      ev('p4 late st=' + st2 + '&st4=' + (window.__st || 0) + '&ith=' + (window.__ith || 0) +
+         '&conn=' + fr.isConnected + '&killed=' + (window.__killed || 0));
+      ev('done caps3');
+    }, 800);
+  } else { ev('done caps3'); }
+}, 800);
+</script>

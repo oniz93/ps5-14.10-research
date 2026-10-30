@@ -1,0 +1,1 @@
+KINDS: Counter({'node': 28, 'other': 25, 'ref': 19, 'unknown': 16, 'gc': 3, 'primitive': 2})

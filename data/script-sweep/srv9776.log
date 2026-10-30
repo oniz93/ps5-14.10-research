@@ -1,0 +1,46 @@
+127.0.0.1 - - [29/Oct/2026 20:49:35] "GET /evloop.html?x=1 HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 20:49:36] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:49:36] "GET /ev?m=PARENT%20start%20rm%3D1 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:49:36] "GET /child.html?rm=1 HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 20:49:36] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:49:36] "GET /ev?m=CHILD%20start%20rm%3Dtrue HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:49:36] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:49:36] "GET /ev?m=TASK%20start HTTP/1.1" 404 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 59314)
+Traceback (most recent call last):
+  File "/usr/lib64/python3.12/http/server.py", line 731, in send_head
+    f = open(path, 'rb')
+        ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/wkp/ev'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib64/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib64/python3.12/http/server.py", line 1311, in finish_request
+    self.RequestHandlerClass(request, client_address, self,
+  File "/usr/lib64/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib64/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib64/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib64/python3.12/http/server.py", line 424, in handle_one_request
+    method()
+  File "/usr/lib64/python3.12/http/server.py", line 676, in do_GET
+    f = self.send_head()
+        ^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.12/http/server.py", line 733, in send_head
+    self.send_error(HTTPStatus.NOT_FOUND, "File not found")
+  File "/usr/lib64/python3.12/http/server.py", line 491, in send_error
+    self.wfile.write(body)
+  File "/usr/lib64/python3.12/socketserver.py", line 840, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+127.0.0.1 - - [29/Oct/2026 20:49:36] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:49:36] "GET /ev?m=PARENT%20alive%20fe%3Dno HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 20:49:37] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 20:49:37] "GET /ev?m=PARENT%20late HTTP/1.1" 404 -

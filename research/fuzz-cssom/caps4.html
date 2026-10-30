@@ -1,0 +1,52 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps4 — where does seq2's kill branch stop?</title>
+<body>
+<div id="host"></div>
+<script>
+// docs/86 probe 4.  seq2's Aframe arm reports ktry=N, killed=0, nofe=0, kerr=0 — every attempt
+// increments the FIRST counter and then nothing, so the branch dies between `parent.__killTry++`
+// and the if.  This page runs seq2's exact kill block with a step marker between each statement.
+function ev(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); }
+
+var inner =
+  '<!doctype html><meta charset="utf-8"><body><p>i</p>' +
+  '<scr' + 'ipt>' +
+  'window.__ran=1;' +
+  'Object.defineProperty(FontFace.prototype,"then",{configurable:true,get:function(){' +
+  'var P=parent; P.__st=1;' +
+  'try{ P.__killTry=(P.__killTry||0)+1; P.__st=2; var fe=window.frameElement; P.__st=3;' +
+  '  if(fe&&fe.parentNode){ P.__st=4; fe.parentNode.removeChild(fe); P.__st=5; P.__killed=(P.__killed||0)+1; }' +
+  '  else { P.__st=24; P.__nofe=(P.__nofe||0)+1; }' +
+  '}catch(e){ P.__st=90; P.__kerr=(P.__kerr||0)+1; try{P.__err=String(e&&e.name);}catch(e2){} }' +
+  'return undefined; },set:function(v){}});' +
+  '</scr' + 'ipt>';
+
+var fr = document.createElement('iframe');
+fr.id = 'f1';
+document.body.appendChild(fr);
+fr.srcdoc = inner;
+
+setTimeout(function () {
+  var d = fr.contentDocument, W = fr.contentWindow;
+  ev('p1 ran=' + (W && W.__ran === 1));
+  var el = d.createElement('style');
+  el.textContent = '@font-face{font-family:zzK;src:local("DejaVu Sans")}';
+  d.head.appendChild(el);
+  d.body.offsetHeight;
+  var f = null;
+  d.fonts.forEach(function (x) { if (String(x.family).indexOf('zzK') >= 0) f = x; });
+  if (!f) { ev('p2 noface'); ev('done caps4'); return; }
+  try { f.loaded; } catch (e) {}
+  var threw = '';
+  try { f.load(); } catch (e) { threw = (e && e.name); }
+  ev('p3 threw=' + (threw || '-') + '&st=' + f.status + '&step=' + (window.__st || 0) +
+     '&ktry=' + (window.__killTry || 0) + '&killed=' + (window.__killed || 0) +
+     '&nofe=' + (window.__nofe || 0) + '&kerr=' + (window.__kerr || 0) +
+     '&err=' + (window.__err || '-') + '&conn=' + fr.isConnected);
+  setTimeout(function () {
+    ev('p4 late step=' + (window.__st || 0) + '&killed=' + (window.__killed || 0) + '&conn=' + fr.isConnected);
+    ev('done caps4');
+  }, 700);
+}, 800);
+</script>

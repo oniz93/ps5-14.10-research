@@ -1,0 +1,21 @@
+127.0.0.1 - - [29/Oct/2026 19:35:24] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /index.html?case=12 HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /ev?m=start%20case%3D12%20href%3D%2Fs.css%20nlink%3D1 HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /s.css HTTP/1.1" 200 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /ev?m=loaded%20load HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /ev?m=pre%20sheets%3D2%200%3A%5Binline%20n%3D1%5D%201%3A%5B%2Fs.css%20n%3D1%5D HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /ev?m=pick%20n%3D0%20hits%3D1%20href%3D%2Fs.css HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /ev?m=T12%20pre%20%5Bcolor%3A%20red%3B%5D HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /ev?m=T12%20set%20ok%20readback%3D%5B%5D HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /ev?m=T12%20post%20%5Bcolor%3A%20red%3B%5D%20samesheet%20rule0%3D%5B%5D HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /ev?m=after%20sheets%3D2%200%3A%5Binline%20n%3D1%5D%201%3A%5B%2Fs.css%20n%3D1%5D HTTP/1.1" 404 -
+127.0.0.1 - - [29/Oct/2026 19:35:29] code 404, message File not found
+127.0.0.1 - - [29/Oct/2026 19:35:29] "GET /ev?m=done%20case%3D12 HTTP/1.1" 404 -

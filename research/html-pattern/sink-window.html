@@ -1,0 +1,56 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>sink window</title>
+<!-- GOAL action: html/ pattern audit (docs/70).  One page, two synchronous sinks, one knob (wipe).
+
+     k=val : a `required` empty input inside a submitting form.  `btn.click()` runs interactive
+             validation, which dispatches `invalid` (cancelable) at the control.  The control never
+             gets a JS wrapper: the page only ever names #wrap and #b, and the capture listener never
+             touches event.target / event.currentTarget, so `JSDOMWrapper::m_wrapped` (a Ref) cannot
+             be what keeps it alive.
+     k=pop : showPopover()'s `beforetoggle` (cancelable, synchronous) then checkPopoverValidity(*this).
+
+     wipe=0/1 toggles ONLY what the listener does: nothing, or empty #wrap (a full subtree teardown
+     executed inside the window).  Scored from the /ev beacon log. -->
+<div id=wrap>
+  <div id=p popover>P</div>
+  <form id=f action="/ev?m=FORM-SUBMITTED"><input id=i required><button id=b type=submit>go</button></form>
+</div>
+<script>
+const Q = new URLSearchParams(location.search);
+const K = Q.get('k') || 'val';
+const WIPE = Q.get('wipe') === '1';
+function ev(msg) { new Image().src = '/ev?m=' + encodeURIComponent(msg); }
+
+ev('START k=' + K + ' wipe=' + (WIPE ? 1 : 0));
+
+const TYPE = (K === 'pop') ? 'beforetoggle' : 'invalid';
+// Capture on document: for a non-bubbling event this is the only way in from a listener that is
+// not on the node itself, and it keeps the node wrapper-free.
+document.addEventListener(TYPE, function (e) {
+  // Deliberately no e.target / e.currentTarget: naming the node would create its wrapper and the
+  // wrapper's Ref<impl> would protect it, which is exactly the variable this page is testing.
+  ev('HIT type=' + e.type + ' cancelable=' + e.cancelable + ' conn=1');
+  if (WIPE)
+    document.getElementById('wrap').innerHTML = '';
+  ev('HIT2 kids=' + document.getElementById('wrap').childElementCount);
+}, true);
+ev('REG ' + TYPE);
+
+try {
+  if (K === 'pop') {
+    document.getElementById('p').showPopover();
+    ev('CALL ok');
+  } else {
+    document.getElementById('b').click();
+    ev('CALL ok');
+  }
+} catch (err) {
+  ev('CALL err=' + err.name);
+}
+
+ev('POST kids=' + document.getElementById('wrap').childElementCount
+   + ' inp=' + (document.getElementById('i') ? 1 : 0)
+   + ' pop=' + (document.getElementById('p') ? 1 : 0));
+ev('END');
+</script>

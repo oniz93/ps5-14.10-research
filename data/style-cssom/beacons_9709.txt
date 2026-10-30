@@ -1,0 +1,11 @@
+start case=6 href=/m.css nlink=2
+loaded load,load
+pre sheets=3 0:[inline n=1] 1:[/m.css n=1] 2:[/m.css n=1]
+pick n=1 hits=2 href=/m.css
+target idx=0 cls=CSSMediaRule cssTextLen=34 rule=& b{color:green}
+target cssText=[@media all {
+  a { color: red; }
+}]
+INS ret=0 nestedLen=2
+after sheets=3 0:[inline n=1] 1:[/m.css n=1] 2:[/m.css n=1]
+done case=6

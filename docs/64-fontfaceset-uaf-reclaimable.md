@@ -102,6 +102,67 @@ has finished allocating its own, or make the object that lands in the slot a `CS
 influence through the descriptors we pass to `new FontFace(...)`. The fault landing 194 bytes past a live 192-byte
 region (rather than at a fixed offset inside a known object) says the current spray is nowhere near the slot yet.
 
+## CORRECTION: the spray never reclaimed anything; the crash was switched off by a different edit
+
+The experiments below are recorded as they happened, then corrected here, because the correction changes what we
+know: **no reclaim has been demonstrated.**
+
+The page that produced "no crash, RESOLVED n=2" differed from the crashing page in three ways at once: it sprayed
+strings, it dropped `document.fonts.delete(this)` from the getter, and it dropped the forced layout
+(`document.body.offsetHeight`). A control run that keeps the dropped-call change and replaces 3000 strings with
+3000 plain numbers — no fastMalloc allocation at all — also returns `RESOLVED n=2` with no sanitizer report.
+
+So the absent crash is a property of **not calling `delete(this)` / not forcing layout** in the getter, not of the
+spray. The string spray, at every length tried (160, 168, 176, 184) and every fill (0, 3, 4, 255), never won the
+slot. The single-variable rule applies: only a run that changes one thing can attribute a result.
+
+What survives from this section: the UAF itself (confirmed under ASAN from the drop), the 192-byte plain-fastMalloc
+class, and the fact that the crash is reachable or not depending on what the getter does — which is itself a
+usable oracle for building the real groom.
+
+## The string-class spray (confounded — see the correction above)
+
+A JS string of 176 characters is a `StringImpl` whose header plus inline 8-bit characters lands in the 192-byte
+class, with attacker-chosen bytes — including offset 0x82, where `status()` reads. Spraying 4000 of them inside the
+getter, after `style.remove()`:
+
+| fill byte | result |
+|---|---|
+| 3 (`Success`) | `RESOLVED n=2`, no sanitizer report, process alive |
+| 0 (`Pending`) | `RESOLVED n=2`, no sanitizer report, process alive |
+| 255 | `RESOLVED n=2`, no sanitizer report, process alive |
+| 4 (`Failure`) — earlier run | `RESOLVED n=2`, no sanitizer report, process alive |
+
+The crash is gone, which is progress: the stale pointer now lands on valid memory and the call completes. But the
+outcome is **identical for every fill byte**, and `Failure` would have taken the reject branch. So the occupant is
+not our string. Something the font machinery itself allocated took the slot, and we are aliasing a real
+`CSSFontFace` rather than one we control.
+
+That is a benign alias — a correctness problem, not a primitive — and it is the same shape as the canvas result:
+a genuine UAF that survives, with the reclaim going to the subsystem's own allocations rather than to ours.
+
+## Isolated test: the spray does not change the crash
+
+One page, three toggles (`l` = forced layout, `d` = `document.fonts.delete(this)`, `s` = string spray count), run with
+quarantine off so a freed slot can be reused:
+
+| config | sanitizer | beacons |
+|---|---|---|
+| `l=1&d=1&s=0` | `heap-buffer-overflow` at `CSSFontFace.h:104` | `layout deleted getter-returning` |
+| `l=1&d=1&s=3000` | `heap-buffer-overflow` at `CSSFontFace.h:104` | `layout deleted getter-returning` |
+| `l=1&d=0&s=3000` (earlier) | none | `... RESOLVED n=2` |
+| `l=0&d=0&s=0`, numbers only (earlier) | none | `... RESOLVED n=2` |
+
+Two conclusions, both negative and both worth having:
+
+1. The crash is controlled by `delete(this)` / forced layout, not by any allocation we perform. With those calls
+   present the bug fires every time; without them it never fires, whatever the heap is doing.
+2. **No string length or fill has yet won the slot.** 168 characters with fill 4 in the crashing configuration still
+   faults identically to no spray at all.
+
+So the next variable to sweep is the allocation *class*, not the count: the report must be made to change its
+`SUMMARY` line (or its fault address) for a spray to count as a reclaim.
+
 ## Status
 
 * ASAN: confirmed (above).

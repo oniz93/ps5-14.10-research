@@ -1,0 +1,6 @@
+start case=8 href=/m.css nlink=1
+loaded load
+pre sheets=2 0:[inline n=1] 1:[/m.css n=1]
+pick n=0 hits=1 href=/m.css
+target idx=0 cls=CSSStyleRule cssTextLen=17 rule=& b{color:green}
+target cssText=[a { color: red; }]

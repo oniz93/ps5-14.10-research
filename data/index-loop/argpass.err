@@ -1,0 +1,11 @@
+owner rows 310 | calls 1368 | args 992
+argpass 0 depth2 0 alias-rows 0 member-in-callee 0 growth-ctrl 0 member-arg-ctrl 0 {'container-not-a-member': 16}
+callee scan: 1321 calls, 333 resolved, unresolved {'max': 37, 'builder.append': 18, '.get': 16, 'min': 15, '->data': 11, '->mutableData': 8, 'inlineItem.isInlineBoxStart': 8, '->process': 7}
+mentions {'element-index': 108, 'size': 1}
+control all loops: 5399 calls 16 hits
+control iterateClients: [{'file': 'Source/WebCore/css/CSSFontFace.cpp', 'arg0': 'WeakHashSet<CSSFontFace::Client>& clients', 'matched': False, 'how': ''}, {'file': 'Source/WebCore/css/CSSFontFace.cpp', 'arg0': 'm_clients', 'matched': True, 'how': 'handle'}, {'file': 'Source/WebCore/css/CSSFontFace.cpp', 'arg0': 'm_clients', 'matched': True, 'how': 'handle'}]
+real 113.04
+user 109.00
+sys 1.20
+EXIT=0
+c8d46cd36313cbb657a0e1ebf33633ed

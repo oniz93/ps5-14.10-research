@@ -1,0 +1,10 @@
+srv=200
+===== P0  q=k=pop&wipe=0
+access: none
+SUMMARY: none
+-- beacons:
+   START k=pop wipe=0
+   REG beforetoggle
+   CALL err=TypeError
+   POST kids=2 inp=1 pop=1
+   END

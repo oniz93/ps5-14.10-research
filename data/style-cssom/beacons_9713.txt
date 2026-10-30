@@ -1,0 +1,9 @@
+start case=12 href=/s.css nlink=1
+loaded load
+pre sheets=2 0:[inline n=1] 1:[/s.css n=1]
+pick n=0 hits=1 href=/s.css
+T12 pre [color: red;]
+T12 set ok readback=[]
+T12 post [color: red;] samesheet rule0=[]
+after sheets=2 0:[inline n=1] 1:[/s.css n=1]
+done case=12
