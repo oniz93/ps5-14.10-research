@@ -465,6 +465,28 @@ not as a memory-corruption primitive.
   One instrument defect found and fixed on the way: an unguarded `moFrame` drove the initial empty
   document of a frame whose srcdoc had not run (`ith=1` against `mofd=20`), now gated on `W.__ran` and
   counted as `mofearly`.
+- **The transfer list is reached and swept, and it produced the programme's first sanitizer-free
+  WebProcess abort from a message (`docs/89`).** `workers/Worker.idl:35` and `dom/MessagePort.idl:35`
+  really carry `postMessage(any message, sequence<object> transfer)`; `CloneSerializer::serialize`
+  (`SerializedScriptValue.cpp:5463`) runs the whole walk — page getters included — **before**
+  `transferArrayBuffers` (`:5477`) detaches, measured (`gx=192` inside the getter, `tx=0` after the
+  call, `rx=192` at the receiver; the `wxk=0` control gives `tx=200`). A getter that shrinks a
+  **resizable** buffer after the view was dumped makes the payload's length and the arrived contents
+  disagree. **Typed arrays** then arrive as out-of-bounds views (`vl=0`, writes silently dropped —
+  `GenericTypedArrayView::wrapImpl` uses the non-verifying `create`), while a **`DataView` with an
+  explicit `byteLength`** makes `JSDataView::create` throw `RangeError("Length out of range of buffer")`
+  (`JSDataView.cpp:35`), the exception survives `MessageEvent::create`, and both dispatch callers
+  `RELEASE_ASSERT(vm.hasPendingTerminationException())` (`MessagePort.cpp:295`,
+  `WorkerMessagingProxy.cpp:245`) — **four aborts, two call sites, two spellings**
+  (`caps9.html?view=dv&res=1&shrink=1`). Controls: no shrink, non-resizable, auto-length view,
+  getter-before-view (`DataCloneError` at `postMessage`), and `structuredClone` without a transfer
+  list. This is a **DoS, not a primitive**, and `RELEASE_ASSERT` is enabled in release builds.
+  Instrument `seq5.html` (40 ops, `wxt`/`wxk`): calibration **6/6** (3 `WRITE` at `:595`, 3 `READ` at
+  `:592`, base+`0x82`), sweep **336,446 operations and 18,016 transfers in the four required arms**
+  (504,624 over six, `wxtx=0` on every buffer), 25,596 `setStatus` and 23,542 `Animation` windows,
+  **0 sanitizer reports, 0 exceptions**. The GC arm collected in **0 of 6** sampled windows
+  (`pre=8/8 post=8/8`) and is recorded as the negative it is.
+
 - **Console** is wedged on the Guide menu with a dead WebProcess; needs a manual app restart by the operator before
   any on-console case can run. Local ASAN work is unaffected.
 - **The flip needs no attacker bytes — measured, and this is the console page.** `docs/65`, "Attempt 9":
@@ -480,29 +502,43 @@ not as a memory-corruption primitive.
 
 ## Next actions, in order, each with its verification
 
-1. **Next: probe the one IDL on this build that really carries a transfer list —
-   `Worker.postMessage(message, [buf])` — where `m_arrayBufferContentsArray` is actually read.**
-   `docs/67` closed the top-ranked deserialization candidate (`cfe38930db`) on the *BroadcastChannel*
-   spelling, and for a reason that does not generalise: `dom/BroadcastChannel.idl:34` declares
-   `postMessage(any message)` with **no** transfer argument, so ArrayBuffers are written in-line and
-   copied (`SerializedScriptValue.cpp:3238-3250`) and the consumed `m_arrayBufferContentsArray`
-   (`:4667`, read at `:5187`) is never reached. The worker spelling does have the list:
-   `workers/Worker.idl:35` and `dom/MessagePort.idl:35` are `postMessage(any message,
-   sequence<object> transfer)`, and `Aworker` already keeps a live blob worker in the pool
-   (`wterm=64` per arm, `wecho` 2,251-2,294 in `docs/88`'s arms) — the path `docs/67` could not reach
-   is two lines away from an op that already runs. Three things to measure, one knob apart: (a) does a
-   transferred buffer really arrive (`tx=1`: the sender reads `byteLength === 0` after the call;
-   `docs/67`'s B2/B3 arms are what its absence looks like); (b) does an **enumerable getter** in the
-   message object run inside `SerializedScriptValue::create` on the *posting* side — the same walk
-   `Cclone` uses, in a different C++ frame (`Worker::postMessage` -> `::create`); (c) **the ordering**:
-   with a buffer in the transfer list *and* a getter in the same message, what does the getter read
-   from `buf.byteLength` — 0 (the transfer ran first) or the full length (the walk ran first)? That
-   single number decides whether page script can touch a buffer that is mid-transfer, and no run has
-   ever read it.
-   Verify: an `only=Awxfer&dbg=1&n=300` arm beacons `tx=1`, `rx=1` (the receiver's length restored)
-   and `gx=<0|len>` from inside the walk; only when all three are wired, four 20k arms in `docs/89`
-   with the getter doing the docs/65 arming and a transferred buffer of the 192-byte class. Do **not**
-   re-enter the console for this.
+1. **Next: enumerate the family behind that abort — every page-reachable way to make message
+   deserialization fail, and which of them need a resizable ArrayBuffer.**
+   `docs/89` §3 measured one member and showed the defect is in the *handling*, not the input: a
+   deserialization that fails, or leaves a pending exception, for any reason other than termination hits
+   `RELEASE_ASSERT(vm.hasPendingTerminationException())` at `MessagePort.cpp:295` and
+   `WorkerMessagingProxy.cpp:245`. The size of that input set is unknown. `CloneDeserializer` has many
+   `fail()` returns, and `SerializedScriptValue::create` has several `SerializationReturnCode` producers
+   (the transfer-list rejections at `:5377-5399`, detached/locked buffers, `read*` failures in the
+   deserializer, `ValidationError` from `readArrayBufferViewImpl`'s `return false` paths). The ones that
+   matter are those a page can steer **without** a resizable buffer, because whether the console build
+   keeps `Options::useResizableArrayBuffer` (default **true** in this drop, `OptionsList.h:578`) is
+   unmeasured. Audit every failure return in `SerializedScriptValue.cpp`'s neighbourhood for a
+   page-controlled input, then for each candidate run one arm of `caps9.html`'s shape with the one
+   variable changed, plus a control that differs only in that variable.
+   **Verify:** each candidate is its own arm, scored from whether the harness aborts (`EXIT` plus a
+   `WTFCrashWithInfo` frame in the ASAN log naming `MessagePort.cpp:295` or
+   `WorkerMessagingProxy.cpp:245`), never from a beacon; record the ones that abort with the exact site
+   and the ones that return cleanly with the reason they are filtered. Do **not** re-enter the console
+   for this.
+1. ~~**Probe the one IDL on this build that really carries a transfer list —
+   `Worker.postMessage(message, [buf])` — where `m_arrayBufferContentsArray` is actually read.**~~ **DONE
+   2026-10-30 — the transfer is real, the walk provably runs before the detach, and the shrink that makes
+   the payload and the contents disagree is a deterministic WebProcess abort (`docs/89`).**
+   `CloneSerializer::serialize` (`:5463`) runs the whole walk before `transferArrayBuffers` (`:5477`), so
+   the getter reads the **full** length (`wxgx=200`) and the buffer is still attached while page script
+   runs; after the call it is detached (`wxtx=0`), and the `wxk=0` control reads `wxtx=200` — same stream,
+   one field different. The 192-byte class was used throughout (192/200/208 on `b % 3`). The extra
+   finding: an explicit-length `DataView` over a resizable buffer that a getter shrinks **after** the view
+   was dumped deserializes into a `RangeError` that `MessagePort.cpp:295` and `WorkerMessagingProxy.cpp:245`
+   both `RELEASE_ASSERT` against — four aborts, two sites, two spellings, and five controls (no shrink,
+   non-resizable, auto-length, getter-first → `DataCloneError`, `structuredClone` without a list). Page
+   `research/fuzz-cssom/seq5.html` (md5 `e82af40a01f49f423ad2a456e39ffa32`, 40 ops, builder
+   `build_seq5.py`) adds `Mwx` (MessagePort) and `Awx` (a dedicated blob worker) with `wxt`/`wxk`; the
+   automatic receiver keeps the crash out of the alphabet on purpose (it would end every arm that drew
+   it). Calibration **6/6**; sweep 4×20k = **336,446 operations, 18,016 transfers, 0 sanitizer reports,
+   0 exceptions**, six arms 504,624 operations, the GC arm collecting in 0 of 6 sampled windows. Logs
+   `/tmp/S_seq5.html.99*.log`, `/tmp/srv1002*.log`, scorer `score_seq.py`.
 1. ~~**Give `ext` a per-surface split, and use the one nesting `docs/87` measured to build a
    three-level frame.**~~ **DONE 2026-10-30 — `extf`/`extw`/`extm` are separate variables, the second
    document is a window surface again (11,109 windows against `docs/87`'s 0), and the three-level frame

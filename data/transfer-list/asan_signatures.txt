@@ -1,0 +1,21 @@
+## /tmp/S_caps8.html.9902.log
+==762581==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000ba2d5 (pc 0x7f77c55828a4 bp 0x7ffe2b6c7e50 sp 0x7ffe2b6c7e10 T0)
+    #3 0x7f77d3c5d1c2 in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7f77d3c5d1c2 in operator() /home/<user>/wk/WebKit/Source/WebCore/dom/MessagePort.cpp:295
+SUMMARY: AddressSanitizer: ABRT (/lib64/libc.so.6+0x908a4) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851) in __pthread_kill_implementation
+## /tmp/S_caps9.html.9914.log
+==765629==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000baebd (pc 0x7f8d8c9828a4 bp 0x7ffd04c50bd0 sp 0x7ffd04c50b90 T0)
+    #3 0x7f8d9b05d1c2 in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7f8d9b05d1c2 in operator() /home/<user>/wk/WebKit/Source/WebCore/dom/MessagePort.cpp:295
+SUMMARY: AddressSanitizer: ABRT (/lib64/libc.so.6+0x908a4) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851) in __pthread_kill_implementation
+## /tmp/S_caps9.html.9917.log
+==765296==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000bad70 (pc 0x7fe9ecd828a4 bp 0x7fe9ca965e70 sp 0x7fe9ca965e30 T9)
+    #3 0x7fe9ff7090ad in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7fe9ff7090ad in operator()<WebCore::ScriptExecutionContext> /home/<user>/wk/WebKit/Source/WebCore/workers/WorkerMessagingProxy.cpp:245
+    #6 0x7fe9ff6ff92f in WebCore::WorkerMessagingProxy::startWorkerGlobalScope(WTF::URL const&, PAL::SessionID, WTF::String const&, WebCore::WorkerInitializationData&&, WebCore::ScriptBuffer const&, WebCore::ContentSecurityPolicyResponseHeaders const&, bool, WebCore::CrossOriginEmbedderPolicy const&, WTF::MonotonicTime, WebCore::ReferrerPolicy, WebCore::WorkerType, WebCore::FetchOptionsCredentials, JSC::RuntimeFlags) /home/<user>/wk/WebKit/Source/WebCore/workers/WorkerMessagingProxy.cpp:167
+SUMMARY: AddressSanitizer: ABRT (/lib64/libc.so.6+0x908a4) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851) in __pthread_kill_implementation
+## /tmp/S_caps9.html.9945.log
+==824695==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000c9577 (pc 0x7fc9927828a4 bp 0x7ffc13b4bfa0 sp 0x7ffc13b4bf60 T0)
+    #3 0x7fc9a0c5d1c2 in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7fc9a0c5d1c2 in operator() /home/<user>/wk/WebKit/Source/WebCore/dom/MessagePort.cpp:295
+SUMMARY: AddressSanitizer: ABRT (/lib64/libc.so.6+0x908a4) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851) in __pthread_kill_implementation

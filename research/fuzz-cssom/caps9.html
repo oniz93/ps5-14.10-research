@@ -1,0 +1,145 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps9 — one transfer test per run, parameterised: which combination makes the deserializer fail</title>
+<body><p id="p">caps9</p>
+<script>
+// docs/89 isolation page.  caps8 measured the ordering and then aborted the WebProcess at
+// MessagePort.cpp:295 in its G test (DataView + shrink).  This page runs ONE combination per arm so
+// the trigger can be attributed to a single variable:
+//
+//   view=u8|u8x|dv|dva  u8/dv are explicit-length?  NO: u8 and dva are AUTO-length (the payload
+//                       then carries autoLengthMarker); u8x and dv carry an explicit byteLength.
+//   res=0|1             resizable ArrayBuffer or plain
+//   shrink=0|1          the getter calls buf.resize(0) after the view was dumped
+//   rev=0|1            property order: 0 = view then getter, 1 = getter then view
+//   recv=port|clone|wk  MessagePort postMessage / structuredClone / Worker.postMessage
+//   len=192             buffer size (and the view's length)
+//   reps=N              how many times to repeat in this run
+//
+// Every rep beacons one `wx` line with the sender's witnesses (`gx` = what the getter read,
+// `tx` = buf.byteLength after the call) and — when the message arrives — the receiver's view shape.
+(function () {
+  'use strict';
+  function B(m, x) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {} }
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+
+  var VIEW   = K('view', 'u8');
+  var RES    = K('res', '1') === '1';
+  var SHRINK = K('shrink', '0') === '1';
+  var REV    = K('rev', '0') === '1';
+  var RECV   = K('recv', 'port');
+  var LEN    = Math.max(8, parseInt(K('len', '192'), 10));
+  var REPS   = Math.max(1, parseInt(K('reps', '1'), 10));
+  var wrk = null;
+
+  B('cap', 'view=' + VIEW + '&res=' + (RES ? 1 : 0) + '&shrink=' + (SHRINK ? 1 : 0) + '&rev=' + (REV ? 1 : 0) +
+    '&recv=' + RECV + '&len=' + LEN + '&reps=' + REPS +
+    '&resize=' + (typeof ArrayBuffer.prototype.resize) + '&mc=' + (typeof MessageChannel));
+
+  function rd1(v, i) {
+    if (typeof v.getUint8 === 'function' && v.length === undefined) return String(v.getUint8(i));
+    return String(v[i]);
+  }
+  function wr1(v, i, x) {
+    if (typeof v.setUint8 === 'function' && v.length === undefined) { v.setUint8(i, x); return; }
+    v[i] = x;
+  }
+
+  function mkWorker(cb) {
+    var src = 'onmessage=function(e){var r={n:e.data&&e.data.n};' +
+      'try{var v=e.data&&e.data.v;if(v){r.vl=v.length;r.vb=v.byteLength;r.bb=v.buffer.byteLength;' +
+      'r.mx=(v.buffer.maxByteLength===undefined?-1:v.buffer.maxByteLength);}}catch(x){r.err=x.name;}' +
+      'try{postMessage(r);}catch(x){}};';
+    try { wrk = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' }))); }
+    catch (e) { wrk = null; B('wkfail', 'e=' + e.name); return; }
+    wrk.onmessage = function (e) { cb(e.data); };
+    wrk.onerror = function (e) { B('wkerr', 'm=' + encodeURIComponent(String(e && e.message))); };
+  }
+
+  var rep = 0, done = 0;
+  function next() { if (done >= REPS) { B('done', 'n=' + done + '&view=' + VIEW + '&res=' + (RES ? 1 : 0) + '&shrink=' + (SHRINK ? 1 : 0) + '&recv=' + RECV); return; } setTimeout(run, 30); }
+
+  function run() {
+    var tag = 'R' + rep;
+    var buf;
+    try { buf = RES ? new ArrayBuffer(LEN, { maxByteLength: LEN }) : new ArrayBuffer(LEN); }
+    catch (e) { B('wx' + tag, 'mkerr=' + e.name); return done++; }
+    var view;
+    try {
+      // explicit-length views carry their byteLength in the payload; auto-length ones carry
+      // `autoLengthMarker` instead, so a shrink cannot make the payload and the contents disagree.
+      if (VIEW === 'dv') view = new DataView(buf, 0, LEN);
+      else if (VIEW === 'dva') view = new DataView(buf);
+      else if (VIEW === 'u8x') view = new Uint8Array(buf, 0, LEN);
+      else view = new Uint8Array(buf);
+    }
+    catch (e) { B('wx' + tag, 'vwerr=' + e.name); return done++; }
+    var gx = -1, gx2 = -1, ger = '', gn = 0, tx = -1, txe = '';
+    function getter() {
+      gn++; gx = buf.byteLength;
+      try { if (SHRINK) { buf.resize(0); gx2 = buf.byteLength; } } catch (e) { ger = e.name; }
+      return 1;
+    }
+    var msg = { c: rep };
+    if (REV) { Object.defineProperty(msg, 'g', { enumerable: true, configurable: true, get: getter }); msg.v = view; }
+    else { msg.v = view; Object.defineProperty(msg, 'g', { enumerable: true, configurable: true, get: getter }); }
+    // NB: built at beacon time, not here — the getter runs inside the serializer walk *after* this
+    // point, so a snapshot taken now would report gx=-1 / gn=0 for every arm (caps9's first build did
+    // exactly that, and it is why its gx columns read -1).
+    function base() {
+      return 'view=' + VIEW + '&res=' + (RES ? 1 : 0) + '&shrink=' + (SHRINK ? 1 : 0) + '&rev=' + (REV ? 1 : 0) +
+        '&gx=' + gx + '&gx2=' + gx2 + '&gerr=' + (ger || '-') + '&gn=' + gn;
+    }
+
+    if (RECV === 'clone') {
+      var out = null, ce = '';
+      try { out = structuredClone(msg); } catch (e) { ce = e.name; }
+      if (ce) B('wx' + tag, base() + '&clerr=' + ce);
+      else {
+        var v = out && out.v;
+        B('wx' + tag, base() + '&cl=1&rxv=' + (v ? 1 : 0) + '&vl=' + (v ? v.length : '-') + '&vb=' + (v ? v.byteLength : '-') +
+          '&bb=' + (v && v.buffer ? v.buffer.byteLength : -1));
+      }
+      rep++; done++; return next();
+    }
+
+    if (RECV === 'wk') {
+      if (!wrk) mkWorker(function (d) {
+        B('wx' + tag, 'recv=wk&echo=1&vl=' + d.vl + '&vb=' + d.vb + '&bb=' + d.bb + '&mx=' + d.mx + '&err=' + (d.err || '-'));
+        rep++; done++; next();
+      });
+      if (!wrk) { done++; return next(); }
+      try { wrk.postMessage(msg, [buf]); tx = buf.byteLength; } catch (e) { txe = e.name; tx = buf.byteLength; }
+      B('wx' + tag, 'recv=wk&' + base() + '&tx=' + tx + '&txe=' + (txe || '-'));
+      return;
+    }
+
+    var ch = new MessageChannel();
+    var fin = false;
+    ch.port2.onmessage = function (e) {
+      if (fin) return; fin = true;
+      var d = e.data, v = d && d.v;
+      var out = base() + '&tx=' + tx + '&txe=' + (txe || '-') + '&cn=' + (d && d.c) + '&rxv=' + (v ? 1 : 0);
+      if (v) {
+        out += '&vl=' + v.length + '&vb=' + v.byteLength + '&bb=' + (v.buffer ? v.buffer.byteLength : -1) +
+          '&mx=' + (v.buffer && v.buffer.maxByteLength !== undefined ? v.buffer.maxByteLength : -1);
+        try { out += '&rd=' + rd1(v, 64); } catch (x) { out += '&rde=' + x.name; }
+        try { wr1(v, 64, 0x41); out += '&wr=1&rd2=' + rd1(v, 64); } catch (x) { out += '&wre=' + x.name; }
+      }
+      B('wx' + tag, out);
+      try { ch.port1.close(); ch.port2.close(); } catch (x) {}
+      rep++; done++; next();
+    };
+    try { ch.port1.postMessage(msg, [buf]); tx = buf.byteLength; }
+    catch (e) { txe = e.name; tx = buf.byteLength; B('wx' + tag, base() + '&tx=' + tx + '&txe=' + txe); try { ch.port1.close(); ch.port2.close(); } catch (x) {} rep++; done++; return next(); }
+    setTimeout(function () {
+      if (fin) return; fin = true;
+      B('wx' + tag, base() + '&tx=' + tx + '&norx=1');
+      rep++; done++; next();
+    }, 500);
+  }
+  setTimeout(run, 0);
+})();
+</script>
+</body>

