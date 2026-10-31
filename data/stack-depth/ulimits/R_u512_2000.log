@@ -1,0 +1,324 @@
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+MESA: error: ZINK: vkEnumeratePhysicalDevices failed (VK_ERROR_INITIALIZATION_FAILED)
+MESA: error: ZINK: failed to choose pdev
+glx: failed to create drisw screen
+failed to load driver: zink
+Gtk-Message: 17:10:48.469: Failed to load module "colorreload-gtk-module"
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+MESA: error: ZINK: vkEnumeratePhysicalDevices failed (VK_ERROR_INITIALIZATION_FAILED)
+MESA: error: ZINK: failed to choose pdev
+libEGL warning: egl: failed to create dri2 screen
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+libEGL warning: egl: failed to create dri2 screen
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+libEGL warning: egl: failed to create dri2 screen
+Gtk-Message: 17:10:48.817: Failed to load module "colorreload-gtk-module"
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==1523810==ERROR: AddressSanitizer: stack-overflow on address 0x7fc5a617fd48 (pc 0x7fc5d9c75a48 bp 0x7fc5a6180590 sp 0x7fc5a617fd30 T9)
+    #0 0x7fc5d9c75a48 in __sanitizer_annotate_contiguous_container (/lib64/libasan.so.8+0xdda48) (BuildId: a42b37cdd3e851809894c84b99bfdb7c8fa9e357)
+    #1 0x7fc5d1d13767 in WTF::Vector<JSC::JSArray*, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc>::asanBufferSizeWillChangeTo(unsigned long) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Vector.h:1276
+    #2 0x7fc5d1d13767 in bool WTF::Vector<JSC::JSArray*, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc>::append<(WTF::FailureAction)0, JSC::JSArray*&>(JSC::JSArray*&) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Vector.h:1407
+    #3 0x7fc5d1d13767 in void WTF::Vector<JSC::JSArray*, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc>::append<JSC::JSArray*&>(JSC::JSArray*&) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Vector.h:840
+    #4 0x7fc5d1d13767 in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:228
+    #5 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #6 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #7 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #8 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #9 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #10 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #11 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #12 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #13 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #14 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #15 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #16 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #17 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #18 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #19 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #20 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #21 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #22 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #23 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #24 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #25 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #26 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #27 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #28 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #29 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #30 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #31 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #32 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #33 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #34 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #35 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #36 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #37 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #38 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #39 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #40 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #41 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #42 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #43 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #44 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #45 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #46 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #47 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #48 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #49 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #50 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #51 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #52 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #53 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #54 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #55 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #56 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #57 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #58 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #59 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #60 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #61 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #62 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #63 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #64 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #65 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #66 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #67 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #68 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #69 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #70 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #71 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #72 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #73 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #74 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #75 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #76 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #77 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #78 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #79 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #80 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #81 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #82 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #83 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #84 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #85 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #86 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #87 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #88 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #89 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #90 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #91 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #92 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #93 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #94 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #95 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #96 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #97 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #98 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #99 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #100 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #101 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #102 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #103 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #104 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #105 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #106 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #107 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #108 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #109 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #110 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #111 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #112 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #113 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #114 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #115 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #116 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #117 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #118 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #119 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #120 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #121 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #122 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #123 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #124 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #125 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #126 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #127 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #128 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #129 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #130 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #131 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #132 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #133 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #134 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #135 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #136 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #137 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #138 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #139 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #140 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #141 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #142 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #143 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #144 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #145 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #146 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #147 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #148 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #149 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #150 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #151 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #152 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #153 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #154 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #155 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #156 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #157 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #158 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #159 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #160 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #161 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #162 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #163 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #164 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #165 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #166 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #167 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #168 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #169 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #170 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #171 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #172 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #173 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #174 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #175 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #176 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #177 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #178 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #179 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #180 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #181 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #182 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #183 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #184 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #185 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #186 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #187 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #188 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #189 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #190 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #191 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #192 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #193 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #194 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #195 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #196 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #197 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #198 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #199 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #200 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #201 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #202 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #203 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #204 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #205 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #206 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #207 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #208 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #209 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #210 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #211 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #212 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #213 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #214 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #215 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #216 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #217 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #218 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #219 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #220 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #221 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #222 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #223 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #224 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #225 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #226 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #227 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #228 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #229 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #230 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #231 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #232 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #233 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #234 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #235 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #236 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #237 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #238 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #239 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #240 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #241 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #242 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #243 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #244 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #245 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #246 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #247 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #248 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+    #249 0x7fc5d1d1438a in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:234
+
+SUMMARY: AddressSanitizer: stack-overflow (/lib64/libasan.so.8+0xdda48) (BuildId: a42b37cdd3e851809894c84b99bfdb7c8fa9e357) in __sanitizer_annotate_contiguous_container
+Thread T9 (WebCore: Worker) created by T0 here:
+    #0 0x7fc5d9be0966 in pthread_create (/lib64/libasan.so.8+0x48966) (BuildId: a42b37cdd3e851809894c84b99bfdb7c8fa9e357)
+    #1 0x7fc5c9ea4892 in WTF::Thread::establishHandle(WTF::Thread::NewThreadContext*, std::optional<unsigned long>, WTF::Thread::QOS) /home/<user>/wk/WebKit/Source/WTF/wtf/posix/ThreadingPOSIX.cpp:296
+    #2 0x7fc5c9d4814c in WTF::Thread::create(char const*, WTF::Function<void ()>&&, WTF::ThreadType, WTF::Thread::QOS) /home/<user>/wk/WebKit/Source/WTF/wtf/Threading.cpp:266
+    #3 0x7fc5d7360c3d in WebCore::WorkerThread::createThread() /home/<user>/wk/WebKit/Source/WebCore/workers/WorkerThread.cpp:130
+    #4 0x7fc5d73310ab in WebCore::WorkerOrWorkletThread::start(WTF::Function<void (WTF::String const&)>&&) /home/<user>/wk/WebKit/Source/WebCore/workers/WorkerOrWorkletThread.cpp:262
+    #5 0x7fc5d72ff92f in WebCore::DedicatedWorkerThread::start() /home/<user>/wk/WebKit/Source/WebCore/workers/DedicatedWorkerThread.h:51
+    #6 0x7fc5d72ff92f in WebCore::WorkerMessagingProxy::startWorkerGlobalScope(WTF::URL const&, PAL::SessionID, WTF::String const&, WebCore::WorkerInitializationData&&, WebCore::ScriptBuffer const&, WebCore::ContentSecurityPolicyResponseHeaders const&, bool, WebCore::CrossOriginEmbedderPolicy const&, WTF::MonotonicTime, WebCore::ReferrerPolicy, WebCore::WorkerType, WebCore::FetchOptionsCredentials, JSC::RuntimeFlags) /home/<user>/wk/WebKit/Source/WebCore/workers/WorkerMessagingProxy.cpp:167
+    #7 0x7fc5d72c0773 in WebCore::Worker::notifyFinished() /home/<user>/wk/WebKit/Source/WebCore/workers/Worker.cpp:229
+    #8 0x7fc5d7334e23 in WebCore::WorkerScriptLoader::notifyFinished() /home/<user>/wk/WebKit/Source/WebCore/workers/WorkerScriptLoader.cpp:346
+    #9 0x7fc5d7336678 in WebCore::WorkerScriptLoader::didFinishLoading(WTF::ObjectIdentifierGeneric<WebCore::ResourceLoader, WTF::ObjectIdentifierThreadSafeAccessTraits>, WebCore::NetworkLoadMetrics const&) /home/<user>/wk/WebKit/Source/WebCore/workers/WorkerScriptLoader.cpp:317
+    #10 0x7fc5d44d1d95 in WebCore::DocumentThreadableLoader::didFinishLoading(WTF::ObjectIdentifierGeneric<WebCore::ResourceLoader, WTF::ObjectIdentifierThreadSafeAccessTraits>, WebCore::NetworkLoadMetrics const&) /home/<user>/wk/WebKit/Source/WebCore/loader/DocumentThreadableLoader.cpp:520
+    #11 0x7fc5d44d8a94 in WebCore::DocumentThreadableLoader::notifyFinished(WebCore::CachedResource&, WebCore::NetworkLoadMetrics const&) /home/<user>/wk/WebKit/Source/WebCore/loader/DocumentThreadableLoader.cpp:489
+    #12 0x7fc5d47e4905 in WebCore::CachedResource::checkNotify(WebCore::NetworkLoadMetrics const&) /home/<user>/wk/WebKit/Source/WebCore/loader/cache/CachedResource.cpp:326
+    #13 0x7fc5d47cbf98 in WebCore::CachedResource::finishLoading(WebCore::FragmentedSharedBuffer const*, WebCore::NetworkLoadMetrics const&) /home/<user>/wk/WebKit/Source/WebCore/loader/cache/CachedResource.cpp:343
+    #14 0x7fc5d47e135b in WebCore::CachedRawResource::finishLoading(WebCore::FragmentedSharedBuffer const*, WebCore::NetworkLoadMetrics const&) /home/<user>/wk/WebKit/Source/WebCore/loader/cache/CachedRawResource.cpp:128
+    #15 0x7fc5d46e908d in WebCore::SubresourceLoader::didFinishLoading(WebCore::NetworkLoadMetrics const&) /home/<user>/wk/WebKit/Source/WebCore/loader/SubresourceLoader.cpp:753
+    #16 0x7fc5ce11c804 in WebKit::WebResourceLoader::didFinishResourceLoad(WebCore::NetworkLoadMetrics&&) /home/<user>/wk/WebKit/Source/WebKit/WebProcess/Network/WebResourceLoader.cpp:263
+    #17 0x7fc5cc4246cd in auto IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&)::{lambda((auto:1&&)...)#1}::operator()<WebCore::NetworkLoadMetrics>(WebCore::NetworkLoadMetrics&&) const /home/<user>/wk/WebKit/Source/WebKit/Platform/IPC/HandleMessage.h:136
+    #18 0x7fc5cc4246cd in void std::__invoke_impl<void, IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&)::{lambda((auto:1&&)...)#1}, WebCore::NetworkLoadMetrics>(std::__invoke_other, IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&)::{lambda((auto:1&&)...)#1}&&, WebCore::NetworkLoadMetrics&&) /usr/include/c++/13/bits/invoke.h:61
+    #19 0x7fc5cc4246cd in std::__invoke_result<IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&)::{lambda((auto:1&&)...)#1}, WebCore::NetworkLoadMetrics>::type std::__invoke<IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&)::{lambda((auto:1&&)...)#1}, WebCore::NetworkLoadMetrics>(IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&)::{lambda((auto:1&&)...)#1}&&, WebCore::NetworkLoadMetrics&&) /usr/include/c++/13/bits/invoke.h:96
+    #20 0x7fc5cc4246cd in decltype(auto) std::__apply_impl<IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&)::{lambda((auto:1&&)...)#1}, std::tuple<WebCore::NetworkLoadMetrics>, 0ul>(IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&)::{lambda((auto:1&&)...)#1}&&, std::tuple<WebCore::NetworkLoadMetrics>&&, std::integer_sequence<unsigned long, 0ul>) /usr/include/c++/13/tuple:2302
+    #21 0x7fc5cc4246cd in decltype(auto) std::apply<IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&)::{lambda((auto:1&&)...)#1}, std::tuple<WebCore::NetworkLoadMetrics> >(IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&)::{lambda((auto:1&&)...)#1}&&, std::tuple<WebCore::NetworkLoadMetrics>&&) /usr/include/c++/13/tuple:2313
+    #22 0x7fc5cc4246cd in void IPC::callMemberFunction<WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics> >(WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&), std::tuple<WebCore::NetworkLoadMetrics>&&) /home/<user>/wk/WebKit/Source/WebKit/Platform/IPC/HandleMessage.h:134
+    #23 0x7fc5cc4246cd in void IPC::handleMessage<Messages::WebResourceLoader::DidFinishResourceLoad, WebKit::WebResourceLoader, WebKit::WebResourceLoader, void (WebCore::NetworkLoadMetrics&&)>(IPC::Connection&, IPC::Decoder&, WebKit::WebResourceLoader*, void (WebKit::WebResourceLoader::*)(WebCore::NetworkLoadMetrics&&)) /home/<user>/wk/WebKit/Source/WebKit/Platform/IPC/HandleMessage.h:236
+    #24 0x7fc5cc40a20d in WebKit::WebResourceLoader::didReceiveWebResourceLoaderMessage(IPC::Connection&, IPC::Decoder&) /home/<user>/wk/WebKit/WebKitBuild/ASAN/DerivedSources/WebKit/WebResourceLoaderMessageReceiver.cpp:78
+    #25 0x7fc5ce0c8406 in WebKit::NetworkProcessConnection::didReceiveMessage(IPC::Connection&, IPC::Decoder&) /home/<user>/wk/WebKit/Source/WebKit/WebProcess/Network/NetworkProcessConnection.cpp:101
+    #26 0x7fc5cd0ca073 in IPC::Connection::dispatchMessage(IPC::Decoder&) /home/<user>/wk/WebKit/Source/WebKit/Platform/IPC/Connection.cpp:1228
+    #27 0x7fc5cd0cef10 in IPC::Connection::dispatchMessage(std::unique_ptr<IPC::Decoder, std::default_delete<IPC::Decoder> >) /home/<user>/wk/WebKit/Source/WebKit/Platform/IPC/Connection.cpp:1276
+    #28 0x7fc5cd0d3f6c in IPC::Connection::dispatchOneIncomingMessage() /home/<user>/wk/WebKit/Source/WebKit/Platform/IPC/Connection.cpp:1341
+    #29 0x7fc5cd0d421a in operator() /home/<user>/wk/WebKit/Source/WebKit/Platform/IPC/Connection.cpp:1190
+    #30 0x7fc5cd0d421a in call /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Function.h:53
+    #31 0x7fc5c9d3a9f8 in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/Source/WTF/wtf/Function.h:82
+    #32 0x7fc5c9d3a9f8 in WTF::RunLoop::performWork() /home/<user>/wk/WebKit/Source/WTF/wtf/RunLoop.cpp:147
+    #33 0x7fc5c9e903a6 in operator() /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:80
+    #34 0x7fc5c9e903a6 in _FUN /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:82
+    #35 0x7fc5c9e93070 in operator() /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:53
+    #36 0x7fc5c9e93070 in _FUN /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:56
+    #37 0x7fc5ca56be5b in g_main_context_dispatch_unlocked.lto_priv.0 (/lib64/libglib-2.0.so.0+0x5be5b) (BuildId: 0db4819f356ae2bda594693a4ddd401695247bb3)
+    #38 0x7fc5ca5c6f67 in g_main_context_iterate_unlocked.isra.0 (/lib64/libglib-2.0.so.0+0xb6f67) (BuildId: 0db4819f356ae2bda594693a4ddd401695247bb3)
+    #39 0x7fc5ca56d446 in g_main_loop_run (/lib64/libglib-2.0.so.0+0x5d446) (BuildId: 0db4819f356ae2bda594693a4ddd401695247bb3)
+    #40 0x7fc5c9e941d9 in WTF::RunLoop::run() /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:108
+    #41 0x7fc5ce5250a0 in WebKit::AuxiliaryProcessMainBase<WebKit::WebProcess, true>::run(int, char**) /home/<user>/wk/WebKit/Source/WebKit/Shared/AuxiliaryProcessMain.h:72
+    #42 0x7fc5ce5250a0 in int WebKit::AuxiliaryProcessMain<WebKit::WebProcessMainGtk>(int, char**) /home/<user>/wk/WebKit/Source/WebKit/Shared/AuxiliaryProcessMain.h:98
+    #43 0x7fc5ce52341c in WebKit::WebProcessMain(int, char**) /home/<user>/wk/WebKit/Source/WebKit/WebProcess/gtk/WebProcessMainGtk.cpp:98
+    #44 0x40114e in main /home/<user>/wk/WebKit/Source/WebKit/WebProcess/EntryPoint/unix/WebProcessMain.cpp:31
+    #45 0x7fc5c4a3f149 in __libc_start_call_main (/lib64/libc.so.6+0x28149) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851)
+    #46 0x7fc5c4a3f20a in __libc_start_main_impl (/lib64/libc.so.6+0x2820a) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851)
+    #47 0x401084 in _start (/home/<user>/wk/WebKit/WebKitBuild/ASAN/bin/WebKitWebProcess+0x401084) (BuildId: 519695c9add5270e8c889f0230bf5e79254f132a)
+
+==1523810==ABORTING
+
+** (MiniBrowser:1523792): WARNING **: 17:10:58.570: WebProcess CRASHED
+EXIT=124

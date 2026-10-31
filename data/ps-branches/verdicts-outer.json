@@ -1,0 +1,6454 @@
+[
+ {
+  "file": "Source/WTF/wtf/Assertions.cpp",
+  "line": 126,
+  "ps_cond_lines": [
+   126
+  ],
+  "block_open": 126,
+  "block_close": 141,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 14,
+    "code": [
+     "static AssertReportFunction releaseAssertReportFunction = nullptr;",
+     "static Lock releaseAssertReportFunctionLock;",
+     "void setAssertReportFunction(AssertReportFunction assertReportFunction)",
+     "{",
+     "Locker locker(releaseAssertReportFunctionLock);",
+     "releaseAssertReportFunction = assertReportFunction;",
+     "}",
+     "void callAssertReportFunction(const char* file, unsigned line)"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "setAssertReportFunction/callAssertReportFunction hook"
+ },
+ {
+  "file": "Source/WTF/wtf/Assertions.cpp",
+  "line": 342,
+  "ps_cond_lines": [
+   342
+  ],
+  "block_open": 342,
+  "block_close": 366,
+  "conds": [
+   "#if !defined(NDEBUG) || !(OS(DARWIN) || PLATFORM(PLAYSTATION))",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if !defined(NDEBUG) || !(OS(DARWIN) || PLATFORM(PLAYSTATION))",
+    "nlines": 15,
+    "code": [
+     "void WTFCrash()",
+     "{",
+     "WTFReportBacktrace();",
+     "#if ASAN_ENABLED",
+     "__builtin_trap();",
+     "#else",
+     "*(int *)(uintptr_t)0xbbadbeef = 0;",
+     "// More reliable, but doesn't say BBADBEEF."
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 7,
+    "code": [
+     "// We need to keep WTFCrash() around (even on non-debug OS(DARWIN) builds) as a workaround",
+     "// for presently shipping (circa early 2016) SafariForWebKitDevelopment binaries which still",
+     "// expects to link to it.",
+     "void WTFCrash()",
+     "{",
+     "CRASH();",
+     "}"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "WTFCrash() is CRASH() (SIGTRAP inline asm) in NDEBUG on PS instead of WTFReportBacktrace + a 0xbbadbeef write"
+ },
+ {
+  "file": "Source/WTF/wtf/Assertions.cpp",
+  "line": 652,
+  "ps_cond_lines": [
+   652
+  ],
+  "block_open": 652,
+  "block_close": 763,
+  "conds": [
+   "#if (OS(DARWIN) || PLATFORM(PLAYSTATION)) && (CPU(X86_64) || CPU(ARM64))",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if (OS(DARWIN) || PLATFORM(PLAYSTATION)) && (CPU(X86_64) || CPU(ARM64))",
+    "nlines": 100,
+    "code": [
+     "#if CPU(X86_64)",
+     "#define CRASH_INST \"int3\"",
+     "// This ordering was chosen to be consistent with JSC's JIT asserts. We probably shouldn't change this ordering",
+     "// since it would make tooling crash reports much harder. If, for whatever reason, we decide to change the ordering",
+     "// here we should update the abortWithuint64_t functions.",
+     "#define CRASH_GPR0 \"r11\"",
+     "#define CRASH_GPR1 \"r10\"",
+     "#define CRASH_GPR2 \"r9\""
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 9,
+    "code": [
+     "void WTFCrashWithInfoImpl(int, const char*, const char*, int, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t) { CRASH(); }",
+     "void WTFCrashWithInfoImpl(int, const char*, const char*, int, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t) { CRASH(); }",
+     "void WTFCrashWithInfoImpl(int, const char*, const char*, int, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t) { CRASH(); }",
+     "void WTFCrashWithInfoImpl(int, const char*, const char*, int, uint64_t, uint64_t, uint64_t, uint64_t) { CRASH(); }",
+     "void WTFCrashWithInfoImpl(int, const char*, const char*, int, uint64_t, uint64_t, uint64_t) { CRASH(); }",
+     "void WTFCrashWithInfoImpl(int, const char*, const char*, int, uint64_t, uint64_t) { CRASH(); }",
+     "void WTFCrashWithInfoImpl(int, const char*, const char*, int, uint64_t) { CRASH(); }"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "the CRASH_WITH_INFO implementation with register dumps is compiled for PS as it is for Darwin (elsewhere every arity forwards to CRASH())"
+ },
+ {
+  "file": "Source/WTF/wtf/Assertions.h",
+  "line": 190,
+  "ps_cond_lines": [
+   190
+  ],
+  "block_open": 186,
+  "block_close": 194,
+  "conds": [
+   "#if PLATFORM(GTK)",
+   "#elif PLATFORM(WPE)",
+   "#elif PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 4,
+  "has_alt": true,
+  "alt_conds": [
+   "#if PLATFORM(GTK)",
+   "#elif PLATFORM(WPE)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(GTK)",
+    "nlines": 1,
+    "code": [
+     "#define LOG_CHANNEL_WEBKIT_SUBSYSTEM \"WebKitGTK\""
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(WPE)",
+    "nlines": 1,
+    "code": [
+     "#define LOG_CHANNEL_WEBKIT_SUBSYSTEM \"WPEWebKit\""
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define LOG_CHANNEL_WEBKIT_SUBSYSTEM \"SceNKWebKit\""
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#define LOG_CHANNEL_WEBKIT_SUBSYSTEM \"com.apple.WebKit\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "LOG_CHANNEL_WEBKIT_SUBSYSTEM \"SceNKWebKit\""
+ },
+ {
+  "file": "Source/WTF/wtf/Assertions.h",
+  "line": 271,
+  "ps_cond_lines": [
+   271
+  ],
+  "block_open": 271,
+  "block_close": 294,
+  "conds": [
+   "#if defined(NDEBUG) && (OS(DARWIN) || PLATFORM(PLAYSTATION))",
+   "#elif !ENABLE(DEVELOPER_MODE) && !OS(DARWIN)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#elif !ENABLE(DEVELOPER_MODE) && !OS(DARWIN)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if defined(NDEBUG) && (OS(DARWIN) || PLATFORM(PLAYSTATION))",
+    "nlines": 11,
+    "code": [
+     "// Crash with a SIGTRAP i.e EXC_BREAKPOINT.",
+     "// We are not using __builtin_trap because it is only guaranteed to abort, but not necessarily",
+     "// trigger a SIGTRAP. Instead, we use inline asm to ensure that we trigger the SIGTRAP.",
+     "#define CRASH() do { \\",
+     "WTFBreakpointTrap(); \\",
+     "__builtin_unreachable(); \\",
+     "} while (0)",
+     "#define CRASH_UNDER_CONSTEXPR_CONTEXT() do { \\"
+    ]
+   },
+   {
+    "cond": "#elif !ENABLE(DEVELOPER_MODE) && !OS(DARWIN)",
+    "nlines": 7,
+    "code": [
+     "#ifdef __cplusplus",
+     "#define CRASH() std::abort()",
+     "#define CRASH_UNDER_CONSTEXPR_CONTEXT() WTFBreakpointTrapUnderConstexprContext()",
+     "#else",
+     "#define CRASH() abort()",
+     "#define CRASH_UNDER_CONSTEXPR_CONTEXT() WTFBreakpointTrapUnderConstexprContext()",
+     "#endif // __cplusplus"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 2,
+    "code": [
+     "#define CRASH() WTFCrash()",
+     "#define CRASH_UNDER_CONSTEXPR_CONTEXT() WTFBreakpointTrapUnderConstexprContext()"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "CRASH() is a breakpoint trap (SIGTRAP) in NDEBUG on PS; on every non-Darwin port it is std::abort()"
+ },
+ {
+  "file": "Source/WTF/wtf/Assertions.h",
+  "line": 766,
+  "ps_cond_lines": [
+   766
+  ],
+  "block_open": 766,
+  "block_close": 771,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "typedef void (*AssertReportFunction)(const char* filename, uint32_t line);",
+     "// WTF_EXPORT_PRIVATE AssertReportFunction getAssertReportFunction();",
+     "void setAssertReportFunction(AssertReportFunction);",
+     "WTF_EXPORT_PRIVATE void callAssertReportFunction(const char* file, unsigned line);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "AssertReportFunction typedef and declarations"
+ },
+ {
+  "file": "Source/WTF/wtf/Assertions.h",
+  "line": 812,
+  "ps_cond_lines": [
+   812
+  ],
+  "block_open": 812,
+  "block_close": 825,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "#define CRASH_WITH_INFO(...) do { \\",
+     "WTF::isIntegralOrPointerType(__VA_ARGS__); \\",
+     "WTF::callAssertReportFunction(__FILE__, __LINE__); \\",
+     "compilerFenceForCrash(); \\",
+     "WTFCrashWithInfo(__LINE__, __FILE__, WTF_PRETTY_FUNCTION, __COUNTER__, ##__VA_ARGS__); \\",
+     "} while (false)"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 5,
+    "code": [
+     "#define CRASH_WITH_INFO(...) do { \\",
+     "WTF::isIntegralOrPointerType(__VA_ARGS__); \\",
+     "compilerFenceForCrash(); \\",
+     "WTFCrashWithInfo(__LINE__, __FILE__, WTF_PRETTY_FUNCTION, __COUNTER__ __VA_OPT__(,) __VA_ARGS__); \\",
+     "} while (false)"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "CRASH_WITH_INFO calls callAssertReportFunction(__FILE__,__LINE__) first: Sony s assert reporter runs on every release assert"
+ },
+ {
+  "file": "Source/WTF/wtf/CurrentTime.cpp",
+  "line": 269,
+  "ps_cond_lines": [
+   269
+  ],
+  "block_open": 263,
+  "block_close": 284,
+  "conds": [
+   "#if USE(GLIB)",
+   "#elif OS(DARWIN)",
+   "#elif OS(FUCHSIA)",
+   "#elif PLATFORM(PLAYSTATION) && HAVE_CLOCK_GETTIME_NP",
+   "#elif OS(LINUX) || OS(FREEBSD) || OS(OPENBSD) || OS(NETBSD)",
+   "#else"
+  ],
+  "n_branches": 6,
+  "has_alt": true,
+  "alt_conds": [
+   "#if USE(GLIB)",
+   "#elif OS(DARWIN)",
+   "#elif OS(FUCHSIA)",
+   "#elif OS(LINUX) || OS(FREEBSD) || OS(OPENBSD) || OS(NETBSD)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if USE(GLIB)",
+    "nlines": 1,
+    "code": [
+     "return fromRawSeconds(static_cast<double>(g_get_monotonic_time() / 1000000.0));"
+    ]
+   },
+   {
+    "cond": "#elif OS(DARWIN)",
+    "nlines": 1,
+    "code": [
+     "return fromMachAbsoluteTime(mach_absolute_time());"
+    ]
+   },
+   {
+    "cond": "#elif OS(FUCHSIA)",
+    "nlines": 1,
+    "code": [
+     "return fromRawSeconds(zx_clock_get_monotonic() / static_cast<double>(ZX_SEC(1)));"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION) && HAVE_CLOCK_GETTIME_NP",
+    "nlines": 3,
+    "code": [
+     "struct timespec ts { };",
+     "clock_gettime_np(CLOCK_MONOTONIC, &ts);",
+     "return fromRawSeconds(static_cast<double>(ts.tv_sec) + ts.tv_nsec / 1.0e9);"
+    ]
+   },
+   {
+    "cond": "#elif OS(LINUX) || OS(FREEBSD) || OS(OPENBSD) || OS(NETBSD)",
+    "nlines": 3,
+    "code": [
+     "struct timespec ts { };",
+     "clock_gettime(CLOCK_MONOTONIC, &ts);",
+     "return fromRawSeconds(static_cast<double>(ts.tv_sec) + ts.tv_nsec / 1.0e9);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 6,
+    "code": [
+     "static double lastTime = 0;",
+     "double currentTimeNow = currentTime();",
+     "if (currentTimeNow < lastTime)",
+     "return lastTime;",
+     "lastTime = currentTimeNow;",
+     "return fromRawSeconds(currentTimeNow);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "clock_gettime_np(CLOCK_MONOTONIC)"
+ },
+ {
+  "file": "Source/WTF/wtf/DataLog.cpp",
+  "line": 151,
+  "ps_cond_lines": [
+   151
+  ],
+  "block_open": 151,
+  "block_close": 155,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "file = new (s_fileData) FilePrintStream(stdout, FilePrintStream::Borrow);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "file = new (s_fileData) FilePrintStream(stderr, FilePrintStream::Borrow);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "DataLog writes to stdout"
+ },
+ {
+  "file": "Source/WTF/wtf/DataLog.cpp",
+  "line": 158,
+  "ps_cond_lines": [
+   158
+  ],
+  "block_open": 158,
+  "block_close": 160,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "if (file->file() != stdout) // We don't prefer unbuffered stdout."
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "stdout is not set unbuffered"
+ },
+ {
+  "file": "Source/WTF/wtf/DateMath.cpp",
+  "line": 180,
+  "ps_cond_lines": [
+   180
+  ],
+  "block_open": 180,
+  "block_close": 190,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 9,
+    "code": [
+     "// FIXME: This change is workaround and downstream-only for PPRBUG-58239.",
+     "//",
+     "// This function may make an incorrect DST calculation after 2038.",
+     "// As an example, if year is 2038, this function returns 2010.",
+     "// This means that if your country had implemented DST in 2010, DST would also be applied in local time calculation in 2038.",
+     "//",
+     "// Our SDK declares time_t as long, so the \"Year 2038 problem\" can be avoided.",
+     "// In other words, this function should have no problem returning year as is, even if year is greater than 2038."
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "the 2038 local-time-offset workaround is replaced by a PS body with a comment that DST may be wrong after 2038"
+ },
+ {
+  "file": "Source/WTF/wtf/DateMath.h",
+  "line": 112,
+  "ps_cond_lines": [
+   112
+  ],
+  "block_open": 112,
+  "block_close": 118,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "// FIXME: This change is workaround and downstream-only for PPRBUG-58239.",
+     "// The playstation platform allows to be set year 2099 as date.",
+     "static constexpr double maxUnixTime = 4102444740.0; // 12/31/2099"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "static constexpr double maxUnixTime = 2145859200.0; // 12/31/2037"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "maxUnixTime 4102444740 (12/31/2099) instead of 2145859200 (12/31/2037): Date can represent 62 more years"
+ },
+ {
+  "file": "Source/WTF/wtf/FileSystem.cpp",
+  "line": 641,
+  "ps_cond_lines": [
+   641
+  ],
+  "block_open": 641,
+  "block_close": 659,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 17,
+    "code": [
+     "bool moveFile(const String& oldPath, const String& newPath)",
+     "{",
+     "auto fsOldPath = toStdFileSystemPath(oldPath);",
+     "auto fsNewPath = toStdFileSystemPath(newPath);",
+     "std::error_code ec;",
+     "std::filesystem::rename(fsOldPath, fsNewPath, ec);",
+     "if (!ec)",
+     "return true;"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "moveFile: PS body in playstation/FileSystemPlayStation.cpp"
+ },
+ {
+  "file": "Source/WTF/wtf/FileSystem.cpp",
+  "line": 696,
+  "ps_cond_lines": [
+   696
+  ],
+  "block_open": 696,
+  "block_close": 714,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 17,
+    "code": [
+     "std::optional<uint64_t> volumeFreeSpace(const String& path)",
+     "{",
+     "std::error_code ec;",
+     "auto spaceInfo = std::filesystem::space(toStdFileSystemPath(path), ec);",
+     "if (ec)",
+     "return std::nullopt;",
+     "return spaceInfo.available;",
+     "}"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "volumeFreeSpace: PS body in playstation/FileSystemPlayStation.cpp"
+ },
+ {
+  "file": "Source/WTF/wtf/FileSystem.cpp",
+  "line": 751,
+  "ps_cond_lines": [
+   751
+  ],
+  "block_open": 751,
+  "block_close": 758,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "bool deleteNonEmptyDirectory(const String& path)",
+     "{",
+     "std::error_code ec;",
+     "std::filesystem::remove_all(toStdFileSystemPath(path), ec);",
+     "return !ec;",
+     "}"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "deleteNonEmptyDirectory: PS body in playstation/FileSystemPlayStation.cpp"
+ },
+ {
+  "file": "Source/WTF/wtf/FileSystem.cpp",
+  "line": 826,
+  "ps_cond_lines": [
+   826
+  ],
+  "block_open": 826,
+  "block_close": 833,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "String realPath(const String& path)",
+     "{",
+     "std::error_code ec;",
+     "auto canonicalPath = std::filesystem::canonical(toStdFileSystemPath(path), ec);",
+     "return ec ? path : fromStdFileSystemPath(canonicalPath);",
+     "}"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "realPath: PS body in playstation/FileSystemPlayStation.cpp"
+ },
+ {
+  "file": "Source/WTF/wtf/FileSystem.cpp",
+  "line": 835,
+  "ps_cond_lines": [
+   835
+  ],
+  "block_open": 835,
+  "block_close": 848,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 12,
+    "code": [
+     "Vector<String> listDirectory(const String& path)",
+     "{",
+     "Vector<String> fileNames;",
+     "std::error_code ec;",
+     "auto entries = std::filesystem::directory_iterator(toStdFileSystemPath(path), ec);",
+     "for (auto it = std::filesystem::begin(entries), end = std::filesystem::end(entries); !ec && it != end; it.increment(ec)) {",
+     "auto fileName = fromStdFileSystemPath(it->path().filename());",
+     "if (!fileName.isNull())"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "listDirectory: PS body in playstation/FileSystemPlayStation.cpp"
+ },
+ {
+  "file": "Source/WTF/wtf/FileSystem.cpp",
+  "line": 894,
+  "ps_cond_lines": [
+   894
+  ],
+  "block_open": 894,
+  "block_close": 912,
+  "conds": [
+   "#if !OS(WINDOWS) && !PLATFORM(COCOA) && !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !OS(WINDOWS) && !PLATFORM(COCOA) && !PLATFORM(PLAYSTATION)",
+    "nlines": 17,
+    "code": [
+     "String createTemporaryDirectory()",
+     "{",
+     "std::error_code ec;",
+     "std::string tempDir = std::filesystem::temp_directory_path(ec);",
+     "if (ec)",
+     "return String();",
+     "std::string newTempDirTemplate = tempDir + \"XXXXXXXX\";",
+     "Vector<char> newTempDir(newTempDirTemplate.c_str(), newTempDirTemplate.size());"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "createTemporaryDirectory: PS body in playstation/FileSystemPlayStation.cpp"
+ },
+ {
+  "file": "Source/WTF/wtf/FileSystem.h",
+  "line": 230,
+  "ps_cond_lines": [
+   230
+  ],
+  "block_open": 230,
+  "block_close": 232,
+  "conds": [
+   "#if !OS(WINDOWS) && !PLATFORM(COCOA) && !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !OS(WINDOWS) && !PLATFORM(COCOA) && !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "WTF_EXPORT_PRIVATE String createTemporaryDirectory();"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "createTemporaryDirectory declaration withheld for PS"
+ },
+ {
+  "file": "Source/WTF/wtf/NumberOfCores.cpp",
+  "line": 50,
+  "ps_cond_lines": [
+   50
+  ],
+  "block_open": 50,
+  "block_close": 55,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "char coresEnv[4];",
+     "if (!getenv_np(\"WTF_numberOfProcessorCores\", coresEnv, sizeof coresEnv)) {"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "if (const char* coresEnv = getenv(\"WTF_numberOfProcessorCores\")) {"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "getenv_np(\"WTF_numberOfProcessorCores\")"
+ },
+ {
+  "file": "Source/WTF/wtf/PageBlock.h",
+  "line": 52,
+  "ps_cond_lines": [
+   52
+  ],
+  "block_open": 52,
+  "block_close": 60,
+  "conds": [
+   "#if OS(DARWIN) || PLATFORM(PLAYSTATION) || CPU(MIPS) || CPU(MIPS64) || CPU(LOONGARCH64) || (OS(LINUX) && CPU(ARM64) && !USE(64KB_PAGE_BLOCK))",
+   "#elif USE(64KB_PAGE_BLOCK) || CPU(PPC) || CPU(PPC64) || CPU(PPC64LE) || CPU(UNKNOWN)",
+   "#elif OS(WINDOWS) || CPU(X86) || CPU(X86_64) || CPU(ARM) || CPU(ARM64) || CPU(RISCV64)",
+   "#else"
+  ],
+  "n_branches": 4,
+  "has_alt": true,
+  "alt_conds": [
+   "#elif USE(64KB_PAGE_BLOCK) || CPU(PPC) || CPU(PPC64) || CPU(PPC64LE) || CPU(UNKNOWN)",
+   "#elif OS(WINDOWS) || CPU(X86) || CPU(X86_64) || CPU(ARM) || CPU(ARM64) || CPU(RISCV64)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if OS(DARWIN) || PLATFORM(PLAYSTATION) || CPU(MIPS) || CPU(MIPS64) || CPU(LOONGARCH64) || (OS(LINUX) && CPU(ARM64) && !USE(64KB_PAGE_BLOCK))",
+    "nlines": 1,
+    "code": [
+     "constexpr size_t CeilingOnPageSize = 16 * KB;"
+    ]
+   },
+   {
+    "cond": "#elif USE(64KB_PAGE_BLOCK) || CPU(PPC) || CPU(PPC64) || CPU(PPC64LE) || CPU(UNKNOWN)",
+    "nlines": 1,
+    "code": [
+     "constexpr size_t CeilingOnPageSize = 64 * KB;"
+    ]
+   },
+   {
+    "cond": "#elif OS(WINDOWS) || CPU(X86) || CPU(X86_64) || CPU(ARM) || CPU(ARM64) || CPU(RISCV64)",
+    "nlines": 1,
+    "code": [
+     "constexpr size_t CeilingOnPageSize = 4 * KB;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#error Must set CeilingOnPageSize in PageBlock.h when adding a new CPU architecture!"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "CeilingOnPageSize 16 KB where every 4 KB port uses 4 KB: pageSize() is min(systemPageSize(), ceiling), so this *permits* a 16 KB page (the console value is unmeasured); pageSize() feeds isPageAligned and PageBlock::size in 27 files"
+ },
+ {
+  "file": "Source/WTF/wtf/PlatformEnable.h",
+  "line": 94,
+  "ps_cond_lines": [
+   94
+  ],
+  "block_open": 94,
+  "block_close": 96,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <wtf/PlatformEnablePlayStation.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "includes wtf/PlatformEnablePlayStation.h"
+ },
+ {
+  "file": "Source/WTF/wtf/PlatformEnable.h",
+  "line": 891,
+  "ps_cond_lines": [
+   891
+  ],
+  "block_open": 891,
+  "block_close": 893,
+  "conds": [
+   "#if !defined(ENABLE_OPENTYPE_MATH) && (OS(DARWIN) && USE(CG)) || PLATFORM(WIN) || PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !defined(ENABLE_OPENTYPE_MATH) && (OS(DARWIN) && USE(CG)) || PLATFORM(WIN) || PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define ENABLE_OPENTYPE_MATH 1"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "inert",
+  "note": "ENABLE_OPENTYPE_MATH 1 on PS (0 on GTK/WPE) \u2014 inert here because OptionsPlayStation.cmake:268 sets ENABLE_MATHML OFF, so no MathML layout reaches OpenTypeMathData"
+ },
+ {
+  "file": "Source/WTF/wtf/PlatformEnable.h",
+  "line": 899,
+  "ps_cond_lines": [
+   899
+  ],
+  "block_open": 899,
+  "block_close": 901,
+  "conds": [
+   "#if ((PLATFORM(COCOA) || PLATFORM(PLAYSTATION) || PLATFORM(WPE)) && ENABLE(ASYNC_SCROLLING)) || PLATFORM(GTK)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ((PLATFORM(COCOA) || PLATFORM(PLAYSTATION) || PLATFORM(WPE)) && ENABLE(ASYNC_SCROLLING)) || PLATFORM(GTK)",
+    "nlines": 1,
+    "code": [
+     "#define ENABLE_KINETIC_SCROLLING 1"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "ENABLE_KINETIC_SCROLLING also on PS (GTK already had it)"
+ },
+ {
+  "file": "Source/WTF/wtf/PlatformEnablePlayStation.h",
+  "line": 32,
+  "ps_cond_lines": [
+   32
+  ],
+  "block_open": 32,
+  "block_close": 34,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#error \"This file should only be included when building the PlayStation port.\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "guard #error"
+ },
+ {
+  "file": "Source/WTF/wtf/PlatformHave.h",
+  "line": 119,
+  "ps_cond_lines": [
+   119
+  ],
+  "block_open": 119,
+  "block_close": 121,
+  "conds": [
+   "#if !defined(HAVE_MISSING_STD_FILESYSTEM_PATH_CONSTRUCTOR) && PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !defined(HAVE_MISSING_STD_FILESYSTEM_PATH_CONSTRUCTOR) && PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define HAVE_MISSING_STD_FILESYSTEM_PATH_CONSTRUCTOR 1"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "HAVE_MISSING_STD_FILESYSTEM_PATH_CONSTRUCTOR"
+ },
+ {
+  "file": "Source/WTF/wtf/PlatformHave.h",
+  "line": 387,
+  "ps_cond_lines": [
+   387
+  ],
+  "block_open": 387,
+  "block_close": 389,
+  "conds": [
+   "#if !OS(WINDOWS) && !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !OS(WINDOWS) && !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define HAVE_MEMMEM 1"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "inert",
+  "note": "HAVE_MEMMEM is not defined for PS (it is for every other non-Windows port): String::find/contains take the non-memmem path"
+ },
+ {
+  "file": "Source/WTF/wtf/Threading.cpp",
+  "line": 106,
+  "ps_cond_lines": [
+   106
+  ],
+  "block_open": 106,
+  "block_close": 114,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#elif OS(DARWIN) && ASAN_ENABLED",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#elif OS(DARWIN) && ASAN_ENABLED",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "if (threadType == ThreadType::JavaScript)",
+     "return 512 * KB;"
+    ]
+   },
+   {
+    "cond": "#elif OS(DARWIN) && ASAN_ENABLED",
+    "nlines": 2,
+    "code": [
+     "if (threadType == ThreadType::Compiler)",
+     "return 1 * MB; // ASan needs more stack space (especially on Debug builds)."
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "UNUSED_PARAM(threadType);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "JavaScript threads get a 512 KB stack; every other WTF thread falls through to DEFAULT_THREAD_STACK_SIZE_IN_KB, which PlatformPlayStation.cmake:44 sets to 64 on PS only (other ports: std::nullopt = the libc default, 8 MB on glibc)"
+ },
+ {
+  "file": "Source/WTF/wtf/ThreadingPrimitives.h",
+  "line": 77,
+  "ps_cond_lines": [
+   77
+  ],
+  "block_open": 77,
+  "block_close": 81,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "WTF_EXPORT_PRIVATE Mutex();"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "constexpr Mutex() = default;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "Mutex() declared out-of-line"
+ },
+ {
+  "file": "Source/WTF/wtf/posix/ThreadingPOSIX.cpp",
+  "line": 572,
+  "ps_cond_lines": [
+   572
+  ],
+  "block_open": 572,
+  "block_close": 586,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 13,
+    "code": [
+     "Mutex::Mutex()",
+     "{",
+     "pthread_mutexattr_t attr;",
+     "pthread_mutexattr_init(&attr);",
+     "pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_NORMAL);",
+     "int result = pthread_mutex_init(&m_mutex, &attr);",
+     "ASSERT_UNUSED(result, !result);",
+     "pthread_mutex_setname_np(&m_mutex, \"SceNKWTF\");"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "inert",
+  "note": "Mutex::Mutex() is out-of-line (pthread_mutex_init + PTHREAD_MUTEX_NORMAL + pthread_mutex_setname_np); the type constant matches the shared initializer, the naming has no consequence"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/Cookies/WebCookieManager.h",
+  "line": 94,
+  "ps_cond_lines": [
+   94
+  ],
+  "block_open": 94,
+  "block_close": 96,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "void setCookieForHostname(PAL::SessionID, const String&, const String&);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/Cookies/playstation/WebCookieManagerPlayStation.cpp",
+  "line": 37,
+  "ps_cond_lines": [
+   37
+  ],
+  "block_open": 37,
+  "block_close": 43,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 5,
+    "code": [
+     "void WebCookieManager::setCookieForHostname(PAL::SessionID sessionID, const String& hostname, const String& value)",
+     "{",
+     "if (auto* storageSession = m_process.storageSession(sessionID))",
+     "storageSession->setCookiesFromDOM(URL(), { }, URL({ }, hostname), std::nullopt, std::nullopt, WebCore::ApplyTrackingPrevention::No, value, ShouldRelaxThirdPartyCookieBlocking::No);",
+     "}"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkCORSPreflightChecker.cpp",
+  "line": 111,
+  "ps_cond_lines": [
+   111
+  ],
+  "block_open": 111,
+  "block_close": 114,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "if (m_networkResourceLoader)",
+     "challenge.setIsInMainFrame(m_networkResourceLoader->isMainFrameLoad());"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkLoad.cpp",
+  "line": 226,
+  "ps_cond_lines": [
+   226
+  ],
+  "block_open": 226,
+  "block_close": 228,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "challenge.setIsInMainFrame(m_parameters.isMainFrameNavigation);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkProcess.cpp",
+  "line": 118,
+  "ps_cond_lines": [
+   118
+  ],
+  "block_open": 118,
+  "block_close": 121,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "#include \"AssertReportPlayStation.h\"",
+     "#include \"AssertReportProxyMessages.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkProcess.cpp",
+  "line": 182,
+  "ps_cond_lines": [
+   182
+  ],
+  "block_open": 182,
+  "block_close": 184,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "AssertReportPlayStation::singleton(this);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkProcess.h",
+  "line": 509,
+  "ps_cond_lines": [
+   509
+  ],
+  "block_open": 509,
+  "block_close": 514,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 4,
+    "code": [
+     "void setAdditionalRootCA(PAL::SessionID, String&&);",
+     "void setClientCertificate(PAL::SessionID, WebCore::CertificateInfo&&);",
+     "void setNetworkBandwidth(PAL::SessionID, uint32_t);",
+     "void setWebSecurityTMService(PAL::SessionID, int);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkResourceLoader.cpp",
+  "line": 811,
+  "ps_cond_lines": [
+   811
+  ],
+  "block_open": 811,
+  "block_close": 820,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 8,
+    "code": [
+     "static BrowsingContextGroupSwitchDecision toBrowsingContextGroupSwitchDecision(const std::optional<CrossOriginOpenerPolicyEnforcementResult>& currentCoopEnforcementResult)",
+     "{",
+     "if (!currentCoopEnforcementResult || !currentCoopEnforcementResult->needsBrowsingContextGroupSwitch)",
+     "return BrowsingContextGroupSwitchDecision::StayInGroup;",
+     "if (currentCoopEnforcementResult->crossOriginOpenerPolicy.value == CrossOriginOpenerPolicyValue::SameOriginPlusCOEP)",
+     "return BrowsingContextGroupSwitchDecision::NewIsolatedGroup;",
+     "return BrowsingContextGroupSwitchDecision::NewSharedGroup;",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkResourceLoader.cpp",
+  "line": 989,
+  "ps_cond_lines": [
+   989
+  ],
+  "block_open": 989,
+  "block_close": 1001,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 9,
+    "code": [
+     "// FIXME: This is workaround for playstation-616 branch. There is no need to merge this to playstation branch.",
+     "//",
+     "//        If an enum value other than StayInGroup is used here, UIProcess will attempt to create a new WebContext and WebProcess.",
+     "//        This behavior works correctly in multi webprocesses, but assertion and WebDriverException occur in SingleWebProcess mode which our port uses.",
+     "//        This issue has already been fixed on upstream, but its change was difficult to cherry-pick to playstaion-616.",
+     "//        For information about upstream change, see <http://webkit.org/b/263185> and https://commits.webkit.org/278467@main",
+     "//",
+     "//        Based on the above, StayInGroup is always used here as a workaround for only playstation-616 branch."
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "auto browsingContextGroupSwitchDecision = toBrowsingContextGroupSwitchDecision(m_currentCoopEnforcementResult);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "sec",
+  "note": "BrowsingContextGroupSwitchDecision is always StayInGroup: the COOP-driven process swap/isolation is disabled (single-WebProcess port, comment cites webkit.org/b/263185)"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkSessionCreationParameters.cpp",
+  "line": 73,
+  "ps_cond_lines": [
+   73
+  ],
+  "block_open": 73,
+  "block_close": 78,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 4,
+    "code": [
+     "encoder << additionalRootCA;",
+     "encoder << clientCertificate;",
+     "encoder << networkBandwidthMode;",
+     "encoder << webSecurityTMService;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkSessionCreationParameters.cpp",
+  "line": 239,
+  "ps_cond_lines": [
+   239
+  ],
+  "block_open": 239,
+  "block_close": 259,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 19,
+    "code": [
+     "std::optional<String> additionalRootCA;",
+     "decoder >> additionalRootCA;",
+     "if (!additionalRootCA)",
+     "return std::nullopt;",
+     "std::optional<WebCore::CertificateInfo> clientCertificate;",
+     "decoder >> clientCertificate;",
+     "if (!clientCertificate)",
+     "return std::nullopt;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkSessionCreationParameters.cpp",
+  "line": 516,
+  "ps_cond_lines": [
+   516
+  ],
+  "block_open": 516,
+  "block_close": 521,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 4,
+    "code": [
+     ", WTFMove(*additionalRootCA)",
+     ", WTFMove(*clientCertificate)",
+     ", *networkBandwidthMode",
+     ", *webSecurityTMService"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkSessionCreationParameters.h",
+  "line": 47,
+  "ps_cond_lines": [
+   47
+  ],
+  "block_open": 47,
+  "block_close": 49,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "#include <WebCore/CertificateInfo.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/NetworkSessionCreationParameters.h",
+  "line": 94,
+  "ps_cond_lines": [
+   94
+  ],
+  "block_open": 94,
+  "block_close": 99,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 4,
+    "code": [
+     "String additionalRootCA;",
+     "WebCore::CertificateInfo clientCertificate;",
+     "uint32_t networkBandwidthMode { 1 }; // kWKNetworkBandwidthModeNormal",
+     "int webSecurityTMService { 0 };"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/cache/NetworkCacheStorage.cpp",
+  "line": 367,
+  "ps_cond_lines": [
+   367
+  ],
+  "block_open": 367,
+  "block_close": 377,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 9,
+    "code": [
+     "static std::once_flag s_onceFlag;",
+     "static unsigned blockSize = 0;",
+     "call_once(s_onceFlag, [filePath]() {",
+     "blockSize = FileSystem::volumeFileBlockSize(filePath).value_or(0);",
+     "});",
+     "long long fileSize = FileSystem::fileSize(filePath).value_or(0);",
+     "fileSize = ((fileSize + blockSize - 1) / blockSize) * blockSize;",
+     "recordsSize += fileSize;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "recordsSize from real block-rounded file sizes"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/cache/NetworkCacheStorage.cpp",
+  "line": 384,
+  "ps_cond_lines": [
+   384
+  ],
+  "block_open": 384,
+  "block_close": 386,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "recordsSize = estimateRecordsSize(recordCount, blobCount);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "the estimateRecordsSize() shortcut is not taken"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/cache/NetworkCacheStorage.cpp",
+  "line": 878,
+  "ps_cond_lines": [
+   878
+  ],
+  "block_open": 878,
+  "block_close": 882,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "return false;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return bodyData.size() > maximumInlineBodySize();"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "shouldStoreBodyAsBlob() returns false: every cache body is written inline in the record file instead of as a separate blob, so the on-disk record is the container shared code uses for small bodies only"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkDataTaskCurl.cpp",
+  "line": 53,
+  "ps_cond_lines": [
+   53
+  ],
+  "block_open": 53,
+  "block_close": 56,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "#include <WebCore/CurlTMServiceRequest.h>",
+     "#include <WebSecurity/WebSecurity.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkDataTaskCurl.cpp",
+  "line": 97,
+  "ps_cond_lines": [
+   97
+  ],
+  "block_open": 97,
+  "block_close": 100,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "if (static_cast<NetworkSessionCurl&>(*m_session).clientCertificate())",
+     "m_curlRequest->setClientCertificate(*(static_cast<NetworkSessionCurl&>(*m_session).clientCertificate()));"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkDataTaskCurl.cpp",
+  "line": 155,
+  "ps_cond_lines": [
+   155
+  ],
+  "block_open": 155,
+  "block_close": 160,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "auto isMainResource = firstRequest().requester() == ResourceRequestRequester::Main;",
+     "return CurlTMServiceRequest::create(request, *this, captureMetrics, isMainResource);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return CurlRequest::create(request, *this, captureMetrics);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "CurlTMServiceRequest for main resources"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkDataTaskCurl.cpp",
+  "line": 185,
+  "ps_cond_lines": [
+   185
+  ],
+  "block_open": 185,
+  "block_close": 190,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 4,
+    "code": [
+     "if (WebSecurity::shouldBlock(receivedResponse.statusCode, receivedResponse.httpConnectCode)) {",
+     "m_response.setHTTPStatusCode(302);",
+     "m_response.addHTTPHeaderField(HTTPHeaderName::Location, String::fromLatin1(WebSecurity::getBlockPageUrl()));",
+     "}"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "sec",
+  "note": "a response Sony s WebSecurity library blocks is rewritten into a 302 to WebSecurity::getBlockPageUrl() before the client sees it"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkDataTaskCurl.cpp",
+  "line": 438,
+  "ps_cond_lines": [
+   438
+  ],
+  "block_open": 438,
+  "block_close": 441,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "if (static_cast<NetworkSessionCurl&>(*m_session).clientCertificate())",
+     "m_curlRequest->setClientCertificate(*(static_cast<NetworkSessionCurl&>(*m_session).clientCertificate()));"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkDataTaskCurl.cpp",
+  "line": 536,
+  "ps_cond_lines": [
+   536
+  ],
+  "block_open": 536,
+  "block_close": 538,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "challenge.setIsForMainResource(firstRequest().requester() == ResourceRequestRequester::Main);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "challenge.setIsForMainResource"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkDataTaskCurl.cpp",
+  "line": 551,
+  "ps_cond_lines": [
+   551
+  ],
+  "block_open": 551,
+  "block_close": 555,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "m_client->didCompleteWithError(ResourceError::cancelledInServerTrustEvaluationError(challenge.error()));"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "m_client->didCompleteWithError(challenge.error());"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "a server-trust failure is reported as ResourceError::cancelledInServerTrustEvaluationError(challenge.error())"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkDataTaskCurl.cpp",
+  "line": 573,
+  "ps_cond_lines": [
+   573
+  ],
+  "block_open": 573,
+  "block_close": 576,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "if (static_cast<NetworkSessionCurl&>(*m_session).clientCertificate())",
+     "m_curlRequest->setClientCertificate(*(static_cast<NetworkSessionCurl&>(*m_session).clientCertificate()));"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkProcessCurl.cpp",
+  "line": 72,
+  "ps_cond_lines": [
+   72
+  ],
+  "block_open": 72,
+  "block_close": 96,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 23,
+    "code": [
+     "void NetworkProcess::setAdditionalRootCA(PAL::SessionID sessionID, String&& rootCA)",
+     "{",
+     "if (auto* session = networkSession(sessionID))",
+     "static_cast<NetworkSessionCurl&>(*session).setAdditionalRootCA(WTFMove(rootCA));",
+     "}",
+     "void NetworkProcess::setClientCertificate(PAL::SessionID sessionID, WebCore::CertificateInfo&& clientCertificate)",
+     "{",
+     "if (auto* session = networkSession(sessionID))"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkSessionCurl.cpp",
+  "line": 37,
+  "ps_cond_lines": [
+   37
+  ],
+  "block_open": 37,
+  "block_close": 40,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "#include <NetworkControl/NetworkControl.h>",
+     "#include <WebSecurity/WebSecurity.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkSessionCurl.cpp",
+  "line": 63,
+  "ps_cond_lines": [
+   63
+  ],
+  "block_open": 63,
+  "block_close": 70,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 6,
+    "code": [
+     "auto additionalRootCA = parameters.additionalRootCA;",
+     "auto clientCertificate = parameters.clientCertificate;",
+     "setAdditionalRootCA(WTFMove(additionalRootCA));",
+     "setClientCertificate(WTFMove(clientCertificate));",
+     "setNetworkBandwidth(parameters.networkBandwidthMode);",
+     "setWebSecurityTMService(parameters.webSecurityTMService);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkSessionCurl.cpp",
+  "line": 89,
+  "ps_cond_lines": [
+   89
+  ],
+  "block_open": 89,
+  "block_close": 110,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 20,
+    "code": [
+     "void NetworkSessionCurl::setAdditionalRootCA(String&& rootCA)",
+     "{",
+     "if (!rootCA.isEmpty())",
+     "CurlContext::singleton().setAdditionalRootCA(WTFMove(rootCA));",
+     "}",
+     "void NetworkSessionCurl::setClientCertificate(WebCore::CertificateInfo&& clientCertificate)",
+     "{",
+     "m_clientCertificate = WTFMove(clientCertificate);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkSessionCurl.h",
+  "line": 45,
+  "ps_cond_lines": [
+   45
+  ],
+  "block_open": 45,
+  "block_close": 51,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 5,
+    "code": [
+     "void setAdditionalRootCA(String&&);",
+     "void setClientCertificate(WebCore::CertificateInfo&&);",
+     "const std::optional<WebCore::CertificateInfo>& clientCertificate() const { return m_clientCertificate; }",
+     "void setNetworkBandwidth(uint32_t);",
+     "void setWebSecurityTMService(int);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/NetworkProcess/curl/NetworkSessionCurl.h",
+  "line": 56,
+  "ps_cond_lines": [
+   56
+  ],
+  "block_open": 56,
+  "block_close": 58,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "std::optional<WebCore::CertificateInfo> m_clientCertificate;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/Platform/IPC/Connection.h",
+  "line": 616,
+  "ps_cond_lines": [
+   616
+  ],
+  "block_open": 616,
+  "block_close": 618,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "RefPtr<WTF::Thread> m_socketMonitor;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "m_socketMonitor member"
+ },
+ {
+  "file": "Source/WebKit/Platform/IPC/unix/ConnectionUnix.cpp",
+  "line": 55,
+  "ps_cond_lines": [
+   55
+  ],
+  "block_open": 55,
+  "block_close": 63,
+  "conds": [
+   "#if defined(SOCK_SEQPACKET) && !OS(DARWIN) && !PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if defined(SOCK_SEQPACKET) && !OS(DARWIN) && !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define SOCKET_TYPE SOCK_SEQPACKET"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 5,
+    "code": [
+     "#if USE(GLIB) || PLATFORM(PLAYSTATION)",
+     "#define SOCKET_TYPE SOCK_STREAM",
+     "#else",
+     "#define SOCKET_TYPE SOCK_DGRAM",
+     "#endif"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "SOCKET_TYPE SOCK_STREAM"
+ },
+ {
+  "file": "Source/WebKit/Platform/IPC/unix/ConnectionUnix.cpp",
+  "line": 58,
+  "ps_cond_lines": [
+   58
+  ],
+  "block_open": 58,
+  "block_close": 62,
+  "conds": [
+   "#if USE(GLIB) || PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if USE(GLIB) || PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define SOCKET_TYPE SOCK_STREAM"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#define SOCKET_TYPE SOCK_DGRAM"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "SOCKET_TYPE SOCK_STREAM"
+ },
+ {
+  "file": "Source/WebKit/Platform/IPC/unix/ConnectionUnix.cpp",
+  "line": 127,
+  "ps_cond_lines": [
+   127
+  ],
+  "block_open": 127,
+  "block_close": 132,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "if (m_socketMonitor) {",
+     "m_socketMonitor->detach();",
+     "m_socketMonitor = nullptr;",
+     "}"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "platformInvalidate closes the descriptor (:113-116) *before* it detaches the monitor thread and before it sets m_socketDescriptor = -1 (:134), so the thread re-reads the closed fd in a hot select() loop and could select() a descriptor number the process has since reused"
+ },
+ {
+  "file": "Source/WebKit/Platform/IPC/unix/ConnectionUnix.cpp",
+  "line": 364,
+  "ps_cond_lines": [
+   364
+  ],
+  "block_open": 364,
+  "block_close": 383,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 18,
+    "code": [
+     "m_socketMonitor = Thread::create(\"SocketMonitor\", [protectedThis] {",
+     "{",
+     "int fd;",
+     "while ((fd = protectedThis->m_socketDescriptor) != -1) {",
+     "int maxFd = fd;",
+     "fd_set fdSet;",
+     "FD_ZERO(&fdSet);",
+     "FD_SET(fd, &fdSet);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "platformOpen spawns a SocketMonitor thread that calls readyReadHandler() from that thread (select() on one fd) instead of dispatching to m_connectionQueue"
+ },
+ {
+  "file": "Source/WebKit/Platform/IPC/unix/ConnectionUnix.cpp",
+  "line": 493,
+  "ps_cond_lines": [
+   493
+  ],
+  "block_open": 493,
+  "block_close": 596,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 53,
+    "code": [
+     "size_t bytesToWrite = 0;",
+     "for (int i = 0; i < iovLength; i++) {",
+     "size_t bytesToWriteToBeChecked = bytesToWrite + iov[i].iov_len;",
+     "// Checking overflow",
+     "RELEASE_ASSERT(bytesToWriteToBeChecked >= bytesToWrite);",
+     "bytesToWrite = bytesToWriteToBeChecked;",
+     "}",
+     "while (bytesToWrite > 0) {"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 48,
+    "code": [
+     "while (sendmsg(m_socketDescriptor, &message, MSG_NOSIGNAL) == -1) {",
+     "if (errno == EINTR)",
+     "continue;",
+     "if (errno == EAGAIN || errno == EWOULDBLOCK) {",
+     "#if USE(GLIB)",
+     "m_pendingOutputMessage = makeUnique<UnixMessage>(WTFMove(outputMessage));",
+     "m_writeSocketMonitor.start(m_socket.get(), G_IO_OUT, m_connectionQueue->runLoop(), [this, protectedThis = Ref { *this }] (GIOCondition condition) -> gboolean {",
+     "if (condition & G_IO_OUT) {"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "the sendmsg loop is replaced by a partial-write walk over msg_iov with poll(POLLOUT) on EAGAIN/EMSGSIZE (Sony comment: sendmsg may fail with EMSGSIZE); the GLib write-monitor path is not built"
+ },
+ {
+  "file": "Source/WebKit/Shared/API/APIObject.h",
+  "line": 223,
+  "ps_cond_lines": [
+   223
+  ],
+  "block_open": 223,
+  "block_close": 228,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "PopupMenuItem,",
+     "#if ENABLE(ACCESSIBILITY)",
+     "AccessibilityObject,",
+     "#endif"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/Shared/CacheModel.cpp",
+  "line": 141,
+  "ps_cond_lines": [
+   141
+  ],
+  "block_open": 141,
+  "block_close": 152,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "urlCacheDiskCapacity = 128 * MB;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 8,
+    "code": [
+     "if (diskFreeSize >= 16384)",
+     "urlCacheDiskCapacity = 75 * MB;",
+     "else if (diskFreeSize >= 8192)",
+     "urlCacheDiskCapacity = 40 * MB;",
+     "else if (diskFreeSize >= 4096)",
+     "urlCacheDiskCapacity = 30 * MB;",
+     "else",
+     "urlCacheDiskCapacity = 20 * MB;"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "urlCacheDiskCapacity is a fixed 128 MB instead of the four-tier 20/30/40/75 MB computed from disk free space"
+ },
+ {
+  "file": "Source/WebKit/Shared/CoordinatedGraphics/CoordinatedGraphicsScene.cpp",
+  "line": 373,
+  "ps_cond_lines": [
+   373
+  ],
+  "block_open": 373,
+  "block_close": 378,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)",
+    "nlines": 4,
+    "code": [
+     "// Make sure that calling TextureMapperPlatformLayerProxy::swapBuffer() always swap the buffers.",
+     "// FIXME: This is just a workaround, need to be removed by re-visiting TextureMapperPlatformProxy::invalidate calls.",
+     "if (impl.needsSwapBuffersOnCompositingThread())",
+     "impl.swapBuffersIfNeeded();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/Shared/EditorState.h",
+  "line": 165,
+  "ps_cond_lines": [
+   165
+  ],
+  "block_open": 165,
+  "block_close": 180,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 14,
+    "code": [
+     "int fieldType { -1 };",
+     "int fieldLang { -1 };",
+     "WebCore::IntRect fieldRect;",
+     "String fieldText;",
+     "WebCore::IntRect compositionRect;",
+     "WebCore::IntRect selectedRect;",
+     "String selectedText;",
+     "String psOSKAttr;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/Shared/NativeWebKeyboardEvent.h",
+  "line": 61,
+  "ps_cond_lines": [
+   61
+  ],
+  "block_open": 61,
+  "block_close": 63,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <WebKit/WKEventPlayStation.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/Shared/NativeWebKeyboardEvent.h",
+  "line": 81,
+  "ps_cond_lines": [
+   81
+  ],
+  "block_open": 70,
+  "block_close": 88,
+  "conds": [
+   "#if USE(APPKIT)",
+   "#elif PLATFORM(GTK)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif PLATFORM(PLAYSTATION)",
+   "#elif USE(LIBWPE)",
+   "#elif PLATFORM(WIN)"
+  ],
+  "n_branches": 6,
+  "has_alt": true,
+  "alt_conds": [
+   "#if USE(APPKIT)",
+   "#elif PLATFORM(GTK)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif USE(LIBWPE)",
+   "#elif PLATFORM(WIN)"
+  ],
+  "branches": [
+   {
+    "cond": "#if USE(APPKIT)",
+    "nlines": 2,
+    "code": [
+     "// FIXME: Share iOS's HandledByInputMethod enum here instead of passing a boolean.",
+     "NativeWebKeyboardEvent(NSEvent *, bool handledByInputMethod, bool replacesSoftSpace, const Vector<WebCore::KeypressCommand>&);"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(GTK)",
+    "nlines": 4,
+    "code": [
+     "NativeWebKeyboardEvent(const NativeWebKeyboardEvent&);",
+     "NativeWebKeyboardEvent(GdkEvent*, const String&, bool isAutoRepeat, Vector<String>&& commands);",
+     "NativeWebKeyboardEvent(const String&, std::optional<Vector<WebCore::CompositionUnderline>>&&, std::optional<EditingRange>&&);",
+     "NativeWebKeyboardEvent(WebEventType, const String& text, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, Vector<String>&& commands, bool isAutoRepeat, bool isKeypad, OptionSet<WebEventModifier>);"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(IOS_FAMILY)",
+    "nlines": 2,
+    "code": [
+     "enum class HandledByInputMethod : bool { No, Yes };",
+     "NativeWebKeyboardEvent(::WebEvent *, HandledByInputMethod);"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "NativeWebKeyboardEvent(const WKKeyboardEvent&);"
+    ]
+   },
+   {
+    "cond": "#elif USE(LIBWPE)",
+    "nlines": 2,
+    "code": [
+     "enum class HandledByInputMethod : bool { No, Yes };",
+     "NativeWebKeyboardEvent(struct wpe_input_keyboard_event*, const String&, bool isAutoRepeat, HandledByInputMethod, std::optional<Vector<WebCore::CompositionUnderline>>&&, std::optional<EditingRange>&&);"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(WIN)",
+    "nlines": 1,
+    "code": [
+     "NativeWebKeyboardEvent(HWND, UINT message, WPARAM, LPARAM, Vector<MSG>&& pendingCharEvents);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "WKKeyboardEvent constructor"
+ },
+ {
+  "file": "Source/WebKit/Shared/NativeWebKeyboardEvent.h",
+  "line": 99,
+  "ps_cond_lines": [
+   99
+  ],
+  "block_open": 90,
+  "block_close": 103,
+  "conds": [
+   "#if USE(APPKIT)",
+   "#elif PLATFORM(GTK)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif PLATFORM(WIN)",
+   "#elif PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 6,
+  "has_alt": true,
+  "alt_conds": [
+   "#if USE(APPKIT)",
+   "#elif PLATFORM(GTK)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif PLATFORM(WIN)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if USE(APPKIT)",
+    "nlines": 1,
+    "code": [
+     "NSEvent *nativeEvent() const { return m_nativeEvent.get(); }"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(GTK)",
+    "nlines": 1,
+    "code": [
+     "GdkEvent* nativeEvent() const { return m_nativeEvent.get(); }"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(IOS_FAMILY)",
+    "nlines": 1,
+    "code": [
+     "::WebEvent* nativeEvent() const { return m_nativeEvent.get(); }"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(WIN)",
+    "nlines": 2,
+    "code": [
+     "const MSG* nativeEvent() const { return &m_nativeEvent; }",
+     "const Vector<MSG>& pendingCharEvents() const { return m_pendingCharEvents; }"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "const WKKeyboardEvent* nativeEvent() const { return &m_nativeEvent; }"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "const void* nativeEvent() const { return nullptr; }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "nativeEvent() -> WKKeyboardEvent"
+ },
+ {
+  "file": "Source/WebKit/Shared/NativeWebKeyboardEvent.h",
+  "line": 117,
+  "ps_cond_lines": [
+   117
+  ],
+  "block_open": 106,
+  "block_close": 119,
+  "conds": [
+   "#if USE(APPKIT)",
+   "#elif PLATFORM(GTK) && USE(GTK4)",
+   "#elif PLATFORM(GTK)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif PLATFORM(WIN)",
+   "#elif PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 6,
+  "has_alt": true,
+  "alt_conds": [
+   "#if USE(APPKIT)",
+   "#elif PLATFORM(GTK) && USE(GTK4)",
+   "#elif PLATFORM(GTK)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif PLATFORM(WIN)"
+  ],
+  "branches": [
+   {
+    "cond": "#if USE(APPKIT)",
+    "nlines": 1,
+    "code": [
+     "RetainPtr<NSEvent> m_nativeEvent;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(GTK) && USE(GTK4)",
+    "nlines": 1,
+    "code": [
+     "GRefPtr<GdkEvent> m_nativeEvent;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(GTK)",
+    "nlines": 1,
+    "code": [
+     "GUniquePtr<GdkEvent> m_nativeEvent;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(IOS_FAMILY)",
+    "nlines": 1,
+    "code": [
+     "RetainPtr<::WebEvent> m_nativeEvent;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(WIN)",
+    "nlines": 2,
+    "code": [
+     "MSG m_nativeEvent;",
+     "Vector<MSG> m_pendingCharEvents;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "WKKeyboardEvent m_nativeEvent;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "WKKeyboardEvent member"
+ },
+ {
+  "file": "Source/WebKit/Shared/WebKeyboardEvent.cpp",
+  "line": 102,
+  "ps_cond_lines": [
+   102
+  ],
+  "block_open": 38,
+  "block_close": 162,
+  "conds": [
+   "#if USE(APPKIT)",
+   "#elif PLATFORM(GTK)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif PLATFORM(PLAYSTATION) && !USE(WPE_BACKEND_PLAYSTATION)",
+   "#elif USE(LIBWPE)",
+   "#else"
+  ],
+  "n_branches": 6,
+  "has_alt": true,
+  "alt_conds": [
+   "#if USE(APPKIT)",
+   "#elif PLATFORM(GTK)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif USE(LIBWPE)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if USE(APPKIT)",
+    "nlines": 20,
+    "code": [
+     "WebKeyboardEvent::WebKeyboardEvent(WebEvent&& event, const String& text, const String& unmodifiedText, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, int macCharCode, bool handledByInputMethod, const Vector<WebCore::KeypressCommand>& commands, bool isAutoRepeat, bool isKeypad, bool isSystemKey)",
+     ": WebEvent(WTFMove(event))",
+     ", m_text(text)",
+     ", m_unmodifiedText(unmodifiedText)",
+     ", m_key(key)",
+     ", m_code(code)",
+     ", m_keyIdentifier(keyIdentifier)",
+     ", m_windowsVirtualKeyCode(windowsVirtualKeyCode)"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(GTK)",
+    "nlines": 22,
+    "code": [
+     "WebKeyboardEvent::WebKeyboardEvent(WebEvent&& event, const String& text, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, bool handledByInputMethod, std::optional<Vector<WebCore::CompositionUnderline>>&& preeditUnderlines, std::optional<EditingRange>&& preeditSelectionRange, Vector<String>&& commands, bool isAutoRepeat, bool isKeypad)",
+     ": WebEvent(WTFMove(event))",
+     ", m_text(text)",
+     ", m_unmodifiedText(text)",
+     ", m_key(key)",
+     ", m_code(code)",
+     ", m_keyIdentifier(keyIdentifier)",
+     ", m_windowsVirtualKeyCode(windowsVirtualKeyCode)"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(IOS_FAMILY)",
+    "nlines": 19,
+    "code": [
+     "WebKeyboardEvent::WebKeyboardEvent(WebEvent&& event, const String& text, const String& unmodifiedText, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, int macCharCode, bool handledByInputMethod, bool isAutoRepeat, bool isKeypad, bool isSystemKey)",
+     ": WebEvent(WTFMove(event))",
+     ", m_text(text)",
+     ", m_unmodifiedText(unmodifiedText)",
+     ", m_key(key)",
+     ", m_code(code)",
+     ", m_keyIdentifier(keyIdentifier)",
+     ", m_windowsVirtualKeyCode(windowsVirtualKeyCode)"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION) && !USE(WPE_BACKEND_PLAYSTATION)",
+    "nlines": 18,
+    "code": [
+     "WebKeyboardEvent::WebKeyboardEvent(WebEvent&& event, const String& text, const String& unmodifiedText, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, int macCharCode)",
+     ": WebEvent(WTFMove(event))",
+     ", m_text(text)",
+     ", m_unmodifiedText(unmodifiedText)",
+     ", m_key(key)",
+     ", m_code(code)",
+     ", m_keyIdentifier(keyIdentifier)",
+     ", m_windowsVirtualKeyCode(windowsVirtualKeyCode)"
+    ]
+   },
+   {
+    "cond": "#elif USE(LIBWPE)",
+    "nlines": 21,
+    "code": [
+     "WebKeyboardEvent::WebKeyboardEvent(WebEvent&& event, const String& text, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, bool handledByInputMethod, std::optional<Vector<WebCore::CompositionUnderline>>&& preeditUnderlines, std::optional<EditingRange>&& preeditSelectionRange, bool isAutoRepeat, bool isKeypad)",
+     ": WebEvent(WTFMove(event))",
+     ", m_text(text)",
+     ", m_unmodifiedText(text)",
+     ", m_key(key)",
+     ", m_code(code)",
+     ", m_keyIdentifier(keyIdentifier)",
+     ", m_windowsVirtualKeyCode(windowsVirtualKeyCode)"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 18,
+    "code": [
+     "WebKeyboardEvent::WebKeyboardEvent(WebEvent&& event, const String& text, const String& unmodifiedText, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, int macCharCode, bool isAutoRepeat, bool isKeypad, bool isSystemKey)",
+     ": WebEvent(WTFMove(event))",
+     ", m_text(text)",
+     ", m_unmodifiedText(unmodifiedText)",
+     ", m_key(key)",
+     ", m_code(code)",
+     ", m_keyIdentifier(keyIdentifier)",
+     ", m_windowsVirtualKeyCode(windowsVirtualKeyCode)"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "PS keyboard event constructor (no handledByInputMethod/commands)"
+ },
+ {
+  "file": "Source/WebKit/Shared/WebKeyboardEvent.h",
+  "line": 50,
+  "ps_cond_lines": [
+   50
+  ],
+  "block_open": 44,
+  "block_close": 56,
+  "conds": [
+   "#if USE(APPKIT)",
+   "#elif PLATFORM(GTK)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif PLATFORM(PLAYSTATION) && !USE(WPE_BACKEND_PLAYSTATION)",
+   "#elif USE(LIBWPE)",
+   "#else"
+  ],
+  "n_branches": 6,
+  "has_alt": true,
+  "alt_conds": [
+   "#if USE(APPKIT)",
+   "#elif PLATFORM(GTK)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif USE(LIBWPE)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if USE(APPKIT)",
+    "nlines": 1,
+    "code": [
+     "WebKeyboardEvent(WebEvent&&, const String& text, const String& unmodifiedText, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, int macCharCode, bool handledByInputMethod, const Vector<WebCore::KeypressCommand>&, bool isAutoRepeat, bool isKeypad, bool isSystemKey);"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(GTK)",
+    "nlines": 1,
+    "code": [
+     "WebKeyboardEvent(WebEvent&&, const String& text, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, bool handledByInputMethod, std::optional<Vector<WebCore::CompositionUnderline>>&&, std::optional<EditingRange>&&, Vector<String>&& commands, bool isAutoRepeat, bool isKeypad);"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(IOS_FAMILY)",
+    "nlines": 1,
+    "code": [
+     "WebKeyboardEvent(WebEvent&&, const String& text, const String& unmodifiedText, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, int macCharCode, bool handledByInputMethod, bool isAutoRepeat, bool isKeypad, bool isSystemKey);"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION) && !USE(WPE_BACKEND_PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "WebKeyboardEvent(WebEvent&&, const String& text, const String& unmodifiedText, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, int macCharCode);"
+    ]
+   },
+   {
+    "cond": "#elif USE(LIBWPE)",
+    "nlines": 1,
+    "code": [
+     "WebKeyboardEvent(WebEvent&&, const String& text, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, bool handledByInputMethod, std::optional<Vector<WebCore::CompositionUnderline>>&&, std::optional<EditingRange>&&, bool isAutoRepeat, bool isKeypad);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "WebKeyboardEvent(WebEvent&&, const String& text, const String& unmodifiedText, const String& key, const String& code, const String& keyIdentifier, int windowsVirtualKeyCode, int nativeVirtualKeyCode, int macCharCode, bool isAutoRepeat, bool isKeypad, bool isSystemKey);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "declaration"
+ },
+ {
+  "file": "Source/WebKit/Shared/WebProcessCreationParameters.h",
+  "line": 182,
+  "ps_cond_lines": [
+   182
+  ],
+  "block_open": 182,
+  "block_close": 184,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)",
+    "nlines": 1,
+    "code": [
+     "bool accessibilityEnabled { false };"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/API/APIHTTPCookieStore.h",
+  "line": 72,
+  "ps_cond_lines": [
+   72
+  ],
+  "block_open": 72,
+  "block_close": 74,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "void setCookieForHostname(const WTF::String& hostname, const WTF::String& value);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/API/APIProcessPoolConfiguration.cpp",
+  "line": 72,
+  "ps_cond_lines": [
+   72
+  ],
+  "block_open": 72,
+  "block_close": 76,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "copy->m_webProcessPath = this->m_webProcessPath;",
+     "copy->m_networkProcessPath = this->m_networkProcessPath;",
+     "copy->m_userId = this->m_userId;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/API/APIProcessPoolConfiguration.h",
+  "line": 139,
+  "ps_cond_lines": [
+   139
+  ],
+  "block_open": 139,
+  "block_close": 148,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 8,
+    "code": [
+     "const WTF::String& webProcessPath() const { return m_webProcessPath; }",
+     "void setWebProcessPath(const WTF::String& webProcessPath) { m_webProcessPath = webProcessPath; }",
+     "const WTF::String& networkProcessPath() const { return m_networkProcessPath; }",
+     "void setNetworkProcessPath(const WTF::String& networkProcessPath) { m_networkProcessPath = networkProcessPath; }",
+     "int32_t userId() const { return m_userId; }",
+     "void setUserId(const int32_t userId) { m_userId = userId; }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/API/APIProcessPoolConfiguration.h",
+  "line": 188,
+  "ps_cond_lines": [
+   188
+  ],
+  "block_open": 188,
+  "block_close": 192,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "WTF::String m_webProcessPath;",
+     "WTF::String m_networkProcessPath;",
+     "int32_t m_userId { -1 };"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/API/C/WKPage.cpp",
+  "line": 340,
+  "ps_cond_lines": [
+   340
+  ],
+  "block_open": 340,
+  "block_close": 345,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 4,
+    "code": [
+     "// Because memory cache conditional requests fail under certain conditions,",
+     "// we add the ExpiredOnly option when reloading to reduce the number of",
+     "// conditional requests being issued.",
+     "reloadOptions.add(WebCore::ReloadOption::ExpiredOnly);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "every reload adds ReloadOption::ExpiredOnly, so a reload may serve an expired cache entry without revalidating"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/API/neko/APIHTTPCookieStorePlayStation.cpp",
+  "line": 37,
+  "ps_cond_lines": [
+   37
+  ],
+  "block_open": 37,
+  "block_close": 43,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 5,
+    "code": [
+     "void HTTPCookieStore::setCookieForHostname(const WTF::String& hostname, const WTF::String& value)",
+     "{",
+     "if (auto* networkProcess = networkProcessIfExists())",
+     "networkProcess->send(Messages::WebCookieManager::SetCookieForHostname(m_sessionID, hostname, value), 0);",
+     "}"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/Automation/WebAutomationSession.cpp",
+  "line": 364,
+  "ps_cond_lines": [
+   364
+  ],
+  "block_open": 364,
+  "block_close": 367,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "// We don't have to close page/window/application, but want to disconnect to automation frontend.",
+     "terminate();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/CoordinatedGraphics/DrawingAreaProxyCoordinatedGraphics.cpp",
+  "line": 200,
+  "ps_cond_lines": [
+   200
+  ],
+  "block_open": 200,
+  "block_close": 202,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "if (!m_isWaitingForDidUpdateGeometry)"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "DisplayDidRefresh is sent even while m_isWaitingForDidUpdateGeometry is set"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/Launcher/ProcessLauncher.cpp",
+  "line": 56,
+  "ps_cond_lines": [
+   56
+  ],
+  "block_open": 56,
+  "block_close": 58,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "close(identifier);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "inert",
+  "note": "when there is no client the PS branch closes the IPC identifier fd; Darwin releases the mach port instead \u2014 a fix, not a deviation"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/Launcher/ProcessLauncher.h",
+  "line": 97,
+  "ps_cond_lines": [
+   97
+  ],
+  "block_open": 97,
+  "block_close": 100,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "String processPath;",
+     "int32_t userId { -1 };"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/Network/NetworkProcessProxy.cpp",
+  "line": 231,
+  "ps_cond_lines": [
+   231
+  ],
+  "block_open": 231,
+  "block_close": 234,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "if (AssertReportProxy::singleton())",
+     "addMessageReceiver(Messages::AssertReportProxy::messageReceiverName(), *AssertReportProxy::singleton());"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/Network/NetworkProcessProxy.cpp",
+  "line": 267,
+  "ps_cond_lines": [
+   267
+  ],
+  "block_open": 267,
+  "block_close": 273,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 5,
+    "code": [
+     "// FIXME: SUPER-4291",
+     "RELEASE_ASSERT(!WebProcessPool::allProcessPools().isEmpty());",
+     "auto webProcessPool = WebProcessPool::allProcessPools()[0];",
+     "launchOptions.processPath = webProcessPool->networkProcessPath();",
+     "launchOptions.userId = webProcessPool->userId();"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "getLaunchOptions RELEASE_ASSERTs that some WebProcessPool exists and takes allProcessPools()[0] (FIXME SUPER-4291)"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/Network/NetworkProcessProxy.h",
+  "line": 56,
+  "ps_cond_lines": [
+   56
+  ],
+  "block_open": 56,
+  "block_close": 59,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "#include \"AssertReportProxy.h\"",
+     "#include \"AssertReportProxyMessages.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/PageClient.h",
+  "line": 58,
+  "ps_cond_lines": [
+   58
+  ],
+  "block_open": 58,
+  "block_close": 65,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "#include \"EditorState.h\"",
+     "#if ENABLE(ACCESSIBILITY)",
+     "#include <Webcore/AXObjectCache.h>",
+     "#include \"WebAccessibilityObject.h\"",
+     "#endif"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/PageClient.h",
+  "line": 438,
+  "ps_cond_lines": [
+   438
+  ],
+  "block_open": 438,
+  "block_close": 440,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "virtual int launchOpenGLServerProcess() = 0;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/PageClient.h",
+  "line": 679,
+  "ps_cond_lines": [
+   679
+  ],
+  "block_open": 679,
+  "block_close": 692,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 12,
+    "code": [
+     "virtual void doneWithMouseUpEvent(bool wasEventHandled) = 0;",
+     "virtual void didChangeEditorState(const WebKit::EditorState&) = 0;",
+     "virtual void didChangeSelectionState(const String& selectedText, const WebCore::IntRect& selectedRect) = 0;",
+     "virtual void didChangeCompositionState(const WebCore::IntRect& compositionRect) = 0;",
+     "#if ENABLE(ACCESSIBILITY)",
+     "virtual void handleAccessibilityNotification(WebAccessibilityObject*, WebCore::AXObjectCache::AXNotification) = 0;",
+     "virtual void handleAccessibilityTextChange(WebAccessibilityObject*, WebCore::AXTextChange, uint32_t offset, const String& text) = 0;",
+     "virtual void handleAccessibilityLoadingEvent(WebAccessibilityObject*, WebCore::AXObjectCache::AXLoadingEvent) = 0;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebPageProxy.cpp",
+  "line": 8486,
+  "ps_cond_lines": [
+   8486
+  ],
+  "block_open": 8486,
+  "block_close": 8489,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "if (eventType == WebEventType::MouseUp)",
+     "m_pageClient->doneWithMouseUpEvent(handled);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "doneWithMouseUpEvent(handled) is called on every mouse-up"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebPageProxy.cpp",
+  "line": 8542,
+  "ps_cond_lines": [
+   8542
+  ],
+  "block_open": 8542,
+  "block_close": 8553,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 8,
+    "code": [
+     "if ((nextEvent.type() == WebEventType::KeyDown) && ((nextEvent.keyIdentifier() == \"Accept\"_s) || (nextEvent.keyIdentifier() == \"Convert\"_s) || (nextEvent.keyIdentifier() == \"Cancel\"_s))) {",
+     "const WKKeyboardEvent* keyEvent = nextEvent.nativeEvent();",
+     "send(Messages::WebPage::KeyEventPlayStation(nextEvent, keyEvent->caretOffset));",
+     "} else if ((nextEvent.type() == WebEventType::RawKeyDown) && (nextEvent.keyIdentifier() == \"TabJump\"_s)) {",
+     "const WKKeyboardEvent* keyEvent = nextEvent.nativeEvent();",
+     "send(Messages::WebPage::KeyEventPlayStation(nextEvent, keyEvent->caretOffset));",
+     "} else",
+     "send(Messages::WebPage::KeyEvent(nextEvent));"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "send(Messages::WebPage::KeyEvent(internals().keyEventQueue.first()));"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "Accept/Convert/Cancel/TabJump key events go through KeyEventPlayStation with a caretOffset instead of the generic KeyEvent message"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebPageProxy.h",
+  "line": 37,
+  "ps_cond_lines": [
+   37
+  ],
+  "block_open": 37,
+  "block_close": 39,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include \"Attachment.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebPageProxy.h",
+  "line": 410,
+  "ps_cond_lines": [
+   410
+  ],
+  "block_open": 410,
+  "block_close": 412,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)",
+    "nlines": 1,
+    "code": [
+     "class WebAccessibilityObjectData;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebPageProxy.h",
+  "line": 1306,
+  "ps_cond_lines": [
+   1306
+  ],
+  "block_open": 1306,
+  "block_close": 1329,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 22,
+    "code": [
+     "void handleKeyboardEventPlayStation(const NativeWebKeyboardEvent&, int);",
+     "void clearSelectionWithoutBlur();",
+     "void setComposition(const String&, Vector<WebCore::CompositionUnderline>&&, uint64_t, uint64_t, uint64_t, uint64_t);",
+     "void confirmComposition(const String&, int64_t, int64_t);",
+     "void exitComposition();",
+     "void setValueToFocusedNode(const String&);",
+     "void setCaretVisible(bool);",
+     "void launchOpenGLServerProcess(CompletionHandler<void(IPC::Attachment)>&&);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebPreferences.cpp",
+  "line": 243,
+  "ps_cond_lines": [
+   243
+  ],
+  "block_open": 243,
+  "block_close": 248,
+  "conds": [
+   "#if !PLATFORM(COCOA) && !PLATFORM(GTK) && !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(COCOA) && !PLATFORM(GTK) && !PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "void WebPreferences::platformInitializeStore()",
+     "{",
+     "notImplemented();",
+     "}"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "platformInitializeStore: PS body in UIProcess/neko/WebPreferencesPlayStation.cpp"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebProcessPool.h",
+  "line": 458,
+  "ps_cond_lines": [
+   458
+  ],
+  "block_open": 458,
+  "block_close": 469,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 10,
+    "code": [
+     "static String legacyPlatformDefaultWebProcessPath();",
+     "static String legacyPlatformDefaultNetworkProcessPath();",
+     "void setAssertReportCallback(WTF::AssertReportFunction);",
+     "#if ENABLE(ACCESSIBILITY)",
+     "void setAccessibilityEnabled(bool);",
+     "bool accessibilityEnabled() const { return m_accessibilityEnabled; };",
+     "#endif",
+     "#if ENABLE(REMOTE_INSPECTOR)"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebProcessPool.h",
+  "line": 523,
+  "ps_cond_lines": [
+   523
+  ],
+  "block_open": 523,
+  "block_close": 527,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "const String& webProcessPath() const { return m_resolvedPaths.webProcessPath; }",
+     "const String& networkProcessPath() const { return m_resolvedPaths.networkProcessPath; }",
+     "int32_t userId() const { return m_userId; }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebProcessPool.h",
+  "line": 780,
+  "ps_cond_lines": [
+   780
+  ],
+  "block_open": 780,
+  "block_close": 783,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "String webProcessPath;",
+     "String networkProcessPath;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebProcessPool.h",
+  "line": 826,
+  "ps_cond_lines": [
+   826
+  ],
+  "block_open": 826,
+  "block_close": 831,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "int32_t m_userId { -1 };",
+     "#if ENABLE(ACCESSIBILITY)",
+     "bool m_accessibilityEnabled { false };",
+     "#endif"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebProcessProxy.cpp",
+  "line": 306,
+  "ps_cond_lines": [
+   306
+  ],
+  "block_open": 306,
+  "block_close": 309,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "if (AssertReportProxy::singleton())",
+     "addMessageReceiver(Messages::AssertReportProxy::messageReceiverName(), *AssertReportProxy::singleton());"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebProcessProxy.cpp",
+  "line": 513,
+  "ps_cond_lines": [
+   513
+  ],
+  "block_open": 513,
+  "block_close": 516,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "launchOptions.processPath = m_processPool->webProcessPath();",
+     "launchOptions.userId = m_processPool->userId();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebProcessProxy.cpp",
+  "line": 1945,
+  "ps_cond_lines": [
+   1945
+  ],
+  "block_open": 1945,
+  "block_close": 1950,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "if (state() != WebProcessProxy::State::Terminated)",
+     "m_backgroundResponsivenessTimer.updateState();"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "m_backgroundResponsivenessTimer.updateState();"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "the responsiveness timer is only updated when state() != Terminated"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebProcessProxy.h",
+  "line": 71,
+  "ps_cond_lines": [
+   71
+  ],
+  "block_open": 71,
+  "block_close": 74,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "#include \"AssertReportProxy.h\"",
+     "#include \"AssertReportProxyMessages.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.cpp",
+  "line": 2038,
+  "ps_cond_lines": [
+   2038
+  ],
+  "block_open": 2038,
+  "block_close": 2042,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"storage\"_s, baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"Storage\"_s, baseDataDirectory);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "directory name \"storage\""
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.cpp",
+  "line": 2047,
+  "ps_cond_lines": [
+   2047
+  ],
+  "block_open": 2047,
+  "block_close": 2051,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+    "nlines": 1,
+    "code": [
+     "return cacheDirectoryFileSystemRepresentation(\"WebKitCache\"_s, baseCacheDirectory);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return cacheDirectoryFileSystemRepresentation(\"NetworkCache\"_s, baseCacheDirectory);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "directory name \"WebKitCache\""
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.cpp",
+  "line": 2056,
+  "ps_cond_lines": [
+   2056
+  ],
+  "block_open": 2056,
+  "block_close": 2060,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+    "nlines": 1,
+    "code": [
+     "return cacheDirectoryFileSystemRepresentation(\"applications\"_s, baseCacheDirectory);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return cacheDirectoryFileSystemRepresentation(\"ApplicationCache\"_s, baseCacheDirectory);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "directory name \"applications\""
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.cpp",
+  "line": 2070,
+  "ps_cond_lines": [
+   2070
+  ],
+  "block_open": 2070,
+  "block_close": 2076,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#elif USE(GLIB)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#elif USE(GLIB)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"indexeddb\"_s, baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#elif USE(GLIB)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(String::fromUTF8(\"databases\" G_DIR_SEPARATOR_S \"indexeddb\"), baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"IndexedDB\"_s, baseDataDirectory);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "directory name \"indexeddb\""
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.cpp",
+  "line": 2081,
+  "ps_cond_lines": [
+   2081
+  ],
+  "block_open": 2081,
+  "block_close": 2085,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"serviceworkers\"_s, baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"ServiceWorkers\"_s, baseDataDirectory);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "directory name \"serviceworkers\""
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.cpp",
+  "line": 2090,
+  "ps_cond_lines": [
+   2090
+  ],
+  "block_open": 2090,
+  "block_close": 2096,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#elif USE(GLIB)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#elif USE(GLIB)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"websql\"_s, baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#elif USE(GLIB)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"databases\"_s, baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"WebSQL\"_s, baseDataDirectory);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "directory name \"websql\""
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.cpp",
+  "line": 2113,
+  "ps_cond_lines": [
+   2113
+  ],
+  "block_open": 2113,
+  "block_close": 2119,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#elif USE(GLIB)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#elif USE(GLIB)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"local\"_s, baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#elif USE(GLIB)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"localstorage\"_s, baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"LocalStorage\"_s, baseDataDirectory);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "directory name \"local\""
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.cpp",
+  "line": 2124,
+  "ps_cond_lines": [
+   2124
+  ],
+  "block_open": 2124,
+  "block_close": 2130,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+   "#elif OS(WINDOWS)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#elif OS(WINDOWS)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"mediakeys\"_s, baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#elif OS(WINDOWS)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"MediaKeyStorage\"_s, baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"MediaKeys\"_s, baseDataDirectory);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "directory name \"mediakeys\""
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.cpp",
+  "line": 2149,
+  "ps_cond_lines": [
+   2149
+  ],
+  "block_open": 2149,
+  "block_close": 2153,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) || USE(GLIB)",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"itp\"_s, baseDataDirectory);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return websiteDataDirectoryFileSystemRepresentation(\"ResourceLoadStatistics\"_s, baseDataDirectory);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "directory name \"itp\""
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.h",
+  "line": 64,
+  "ps_cond_lines": [
+   64
+  ],
+  "block_open": 64,
+  "block_close": 66,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "#include <WebCore/CertificateInfo.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.h",
+  "line": 321,
+  "ps_cond_lines": [
+   321
+  ],
+  "block_open": 321,
+  "block_close": 327,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 5,
+    "code": [
+     "void setAdditionalRootCA(String&&);",
+     "void setClientCertificate(WebCore::CertificateInfo&&);",
+     "void setNetworkBandwidth(uint32_t);",
+     "int webSecurityTMService() const { return m_webSecurityTMService; }",
+     "void setWebSecurityTMService(int);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/WebsiteDataStore.h",
+  "line": 565,
+  "ps_cond_lines": [
+   565
+  ],
+  "block_open": 565,
+  "block_close": 570,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 4,
+    "code": [
+     "String m_additionalRootCA;",
+     "WebCore::CertificateInfo m_clientCertificate;",
+     "uint32_t m_networkBandwidthMode { 1 }; // kWKNetworkBandwidthModeNormal",
+     "int m_webSecurityTMService { 0 };"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/curl/WebsiteDataStoreCurl.cpp",
+  "line": 47,
+  "ps_cond_lines": [
+   47
+  ],
+  "block_open": 47,
+  "block_close": 52,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 4,
+    "code": [
+     "parameters.networkSessionParameters.additionalRootCA = m_additionalRootCA;",
+     "parameters.networkSessionParameters.clientCertificate = m_clientCertificate;",
+     "parameters.networkSessionParameters.networkBandwidthMode = m_networkBandwidthMode;",
+     "parameters.networkSessionParameters.webSecurityTMService = m_webSecurityTMService;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/UIProcess/WebsiteData/curl/WebsiteDataStoreCurl.cpp",
+  "line": 62,
+  "ps_cond_lines": [
+   62
+  ],
+  "block_open": 62,
+  "block_close": 90,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 27,
+    "code": [
+     "void WebsiteDataStore::setAdditionalRootCA(String&& rootCA)",
+     "{",
+     "m_additionalRootCA = WTFMove(rootCA);",
+     "networkProcess().send(Messages::NetworkProcess::SetAdditionalRootCA(m_sessionID, m_additionalRootCA), 0);",
+     "}",
+     "void WebsiteDataStore::setClientCertificate(WebCore::CertificateInfo&& certificateInfo)",
+     "{",
+     "m_clientCertificate = WTFMove(certificateInfo);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/Inspector/WebInspectorClient.cpp",
+  "line": 114,
+  "ps_cond_lines": [
+   114
+  ],
+  "block_open": 114,
+  "block_close": 119,
+  "conds": [
+   "#if PLATFORM(GTK) || PLATFORM(WIN) || PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(GTK) || PLATFORM(WIN) || PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "// FIXME: It can be optimized by marking only highlighted rect dirty.",
+     "// setNeedsDisplay always makes whole rect dirty, and could lead to poor performance.",
+     "// https://bugs.webkit.org/show_bug.cgi?id=195933",
+     "m_page->drawingArea()->setNeedsDisplay();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/Inspector/WebInspectorClient.cpp",
+  "line": 142,
+  "ps_cond_lines": [
+   142
+  ],
+  "block_open": 142,
+  "block_close": 150,
+  "conds": [
+   "#if PLATFORM(GTK) || PLATFORM(WIN) || PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(GTK) || PLATFORM(WIN) || PLATFORM(PLAYSTATION)",
+    "nlines": 7,
+    "code": [
+     "if (!m_page->corePage()->settings().acceleratedCompositingEnabled()) {",
+     "// FIXME: It can be optimized by marking only highlighted rect dirty.",
+     "// setNeedsDisplay always makes whole rect dirty, and could lead to poor performance.",
+     "// https://bugs.webkit.org/show_bug.cgi?id=195933",
+     "m_page->drawingArea()->setNeedsDisplay();",
+     "return;",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebCoreSupport/WebChromeClient.cpp",
+  "line": 1611,
+  "ps_cond_lines": [
+   1611
+  ],
+  "block_open": 1611,
+  "block_close": 1638,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)",
+    "nlines": 26,
+    "code": [
+     "void WebChromeClient::postAccessibilityNotification(WebCore::AccessibilityObject& object, WebCore::AXObjectCache::AXNotification notification)",
+     "{",
+     "if (!WebCore::AXObjectCache::accessibilityEnabled())",
+     "return;",
+     "WebAccessibilityObjectData data(&object);",
+     "m_page.send(Messages::WebPageProxy::AccessibilityNotification(data, static_cast<uint32_t>(notification)));",
+     "}",
+     "void WebChromeClient::postAccessibilityNodeTextChangeNotification(WebCore::AccessibilityObject* object, WebCore::AXTextChange textChange, unsigned offset, const String& text)"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebCoreSupport/WebChromeClient.h",
+  "line": 442,
+  "ps_cond_lines": [
+   442
+  ],
+  "block_open": 442,
+  "block_close": 446,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)",
+    "nlines": 3,
+    "code": [
+     "void postAccessibilityNotification(WebCore::AccessibilityObject&, WebCore::AXObjectCache::AXNotification) final;",
+     "void postAccessibilityNodeTextChangeNotification(WebCore::AccessibilityObject*, WebCore::AXTextChange, unsigned offset, const String& text) final;",
+     "void postAccessibilityFrameLoadingEventNotification(WebCore::AccessibilityObject*, WebCore::AXObjectCache::AXLoadingEvent) final;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebCoreSupport/WebLocalFrameLoaderClient.cpp",
+  "line": 103,
+  "ps_cond_lines": [
+   103
+  ],
+  "block_open": 103,
+  "block_close": 106,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "#include <WebCore/FrameLoadRequest.h>",
+     "#include <wtf/HexNumber.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebCoreSupport/WebLocalFrameLoaderClient.cpp",
+  "line": 682,
+  "ps_cond_lines": [
+   682
+  ],
+  "block_open": 682,
+  "block_close": 711,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 28,
+    "code": [
+     "NeverDestroyed<const ResourceError> interruptedForPolicyChangeError(this->interruptedForPolicyChangeError(ResourceRequest()));",
+     "bool isInterruptedForPolicyChangeError = (error.domain() == interruptedForPolicyChangeError.get().domain() && error.errorCode() == interruptedForPolicyChangeError.get().errorCode());",
+     "bool isCancelledError = (error.domain() == API::Error::webKitNetworkErrorDomain() && error.errorCode() == API::Error::Network::Cancelled);",
+     "if (m_frame->coreFrame() && !isInterruptedForPolicyChangeError && !isCancelledError) {",
+     "String htmlString = makeString(",
+     "\"<HTML><HEAD><TITLE>Network Error</TITLE></HEAD><STYLE TYPE=\\\"text/css\\\">body { color: #888888; }</STYLE>\"",
+     "\"<BODY><P>ERROR: 0x\", pad('0', 8, WTF::hex(error.errorCode())),",
+     "\"<BR>SSLError: 0x\", pad('0', 8, WTF::hex(error.tlsVerificationError())),"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "dispatchDidFailProvisionalLoad loads a substitute HTML error document *inside* the failure dispatch (same-origin with the failing URL, error code + descriptions interpolated). FrameLoader.cpp:2649-2652 handles a load started by the delegate callback, and the only post-callback use of provisionalDocumentLoader is under ENABLE(CONTENT_FILTERING) (off), so the re-entrancy is guarded \u2014 recorded because it is the docs/65 shape"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/AcceleratedSurface.cpp",
+  "line": 44,
+  "ps_cond_lines": [
+   44
+  ],
+  "block_open": 44,
+  "block_close": 46,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include \"AcceleratedSurfacePlayStation.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/AcceleratedSurface.cpp",
+  "line": 73,
+  "ps_cond_lines": [
+   73
+  ],
+  "block_open": 73,
+  "block_close": 76,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "if (PlatformDisplay::sharedDisplay().type() == PlatformDisplay::Type::PlayStation)",
+     "return AcceleratedSurfacePlayStation::create(webPage, client);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp",
+  "line": 51,
+  "ps_cond_lines": [
+   51
+  ],
+  "block_open": 51,
+  "block_close": 54,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && HAVE(OPENGL_SERVER_SUPPORT)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && HAVE(OPENGL_SERVER_SUPPORT)",
+    "nlines": 2,
+    "code": [
+     "#include \"MessageSenderInlines.h\"",
+     "#include <slimglipc.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp",
+  "line": 87,
+  "ps_cond_lines": [
+   87
+  ],
+  "block_open": 87,
+  "block_close": 90,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && HAVE(OPENGL_SERVER_SUPPORT)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && HAVE(OPENGL_SERVER_SUPPORT)",
+    "nlines": 2,
+    "code": [
+     "if (sceSlimglSupportServerProcess())",
+     "launchOpenGLServerProcess();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp",
+  "line": 584,
+  "ps_cond_lines": [
+   584
+  ],
+  "block_open": 584,
+  "block_close": 592,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && HAVE(OPENGL_SERVER_SUPPORT)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && HAVE(OPENGL_SERVER_SUPPORT)",
+    "nlines": 7,
+    "code": [
+     "void LayerTreeHost::launchOpenGLServerProcess()",
+     "{",
+     "auto sendResult = m_webPage.sendSync(Messages::WebPageProxy::LaunchOpenGLServerProcess());",
+     "auto [sockFd] = sendResult.takeReply();",
+     "sceSlimglIPCSetup(sockFd.value());",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.h",
+  "line": 145,
+  "ps_cond_lines": [
+   145
+  ],
+  "block_open": 145,
+  "block_close": 147,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && HAVE(OPENGL_SERVER_SUPPORT)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && HAVE(OPENGL_SERVER_SUPPORT)",
+    "nlines": 1,
+    "code": [
+     "void launchOpenGLServerProcess();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/WebPage.cpp",
+  "line": 942,
+  "ps_cond_lines": [
+   942
+  ],
+  "block_open": 942,
+  "block_close": 945,
+  "conds": [
+   "#if ENABLE(LEGACY_ENCRYPTED_MEDIA) || (PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA))"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(LEGACY_ENCRYPTED_MEDIA) || (PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA))",
+    "nlines": 2,
+    "code": [
+     "if (WebMediaKeyStorageManager* manager = webProcess.supplement<WebMediaKeyStorageManager>())",
+     "m_page->settings().setMediaKeysStorageDirectory(manager->mediaKeyStorageDirectory());"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/WebPage.cpp",
+  "line": 2189,
+  "ps_cond_lines": [
+   2189
+  ],
+  "block_open": 2189,
+  "block_close": 2202,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 7,
+    "code": [
+     "// [Bug 68264]",
+     "// We don't use the layout size specified with a viewport meta tag.",
+     "attr.layoutSize = m_viewSize;",
+     "attr.initialScale = -1;",
+     "contentFixedSize.scale(1 / attr.initialScale);",
+     "view->setFixedVisibleContentRect(IntRect(contentFixedOrigin, roundedIntSize(contentFixedSize)));"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 4,
+    "code": [
+     "contentFixedSize.scale(1 / attr.initialScale);",
+     "view->setFixedVisibleContentRect(IntRect(contentFixedOrigin, roundedIntSize(contentFixedSize)));",
+     "attr.initialScale = m_page->viewportArguments().zoom; // Resets auto (-1) if no value was set by user."
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "sendViewportAttributesChanged ignores <meta viewport>: attr.layoutSize = m_viewSize, attr.initialScale = -1 before contentFixedSize.scale(1 / attr.initialScale), i.e. the fixed visible content rect is built from scale(-1) \u2014 a negative-size IntRect \u2014 and every viewport change re-runs LocalFrameView::setFixedVisibleContentRect's size test (LocalFrameView.cpp:2800)"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/WebPage.cpp",
+  "line": 2254,
+  "ps_cond_lines": [
+   2254
+  ],
+  "block_open": 2254,
+  "block_close": 2260,
+  "conds": [
+   "#if PLATFORM(GTK) || PLATFORM(WIN) || PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(GTK) || PLATFORM(WIN) || PLATFORM(PLAYSTATION)",
+    "nlines": 5,
+    "code": [
+     "if (!m_page->settings().acceleratedCompositingEnabled() && m_page->inspectorController().enabled() && m_page->inspectorController().shouldShowOverlay()) {",
+     "graphicsContext.beginTransparencyLayer(1);",
+     "m_page->inspectorController().drawHighlight(graphicsContext);",
+     "graphicsContext.endTransparencyLayer();",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/WebPage.cpp",
+  "line": 3383,
+  "ps_cond_lines": [
+   3383
+  ],
+  "block_open": 3383,
+  "block_close": 3406,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 17,
+    "code": [
+     "case PlatformEvent::Type::MouseReleased: {",
+     "if (mouseEvent.gestureWasCancelled() == GestureWasCancelled::Yes)",
+     "localMainFrame->eventHandler().invalidateClick();",
+     "EditorState editorState = page->editorState();",
+     "page->send(Messages::WebPageProxy::EditorStateChanged(editorState));",
+     "bool handled = page->corePage()->userInputBridge().handleMouseReleaseEvent(platformMouseEvent);",
+     "// FIXME: WEBBROWSER-426, Notify again after mouse release if the isContentEditable status has changed.",
+     "bool isContentEditable = editorState.isContentEditable;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 4,
+    "code": [
+     "case PlatformEvent::Type::MouseReleased:",
+     "if (mouseEvent.gestureWasCancelled() == GestureWasCancelled::Yes)",
+     "localMainFrame->eventHandler().invalidateClick();",
+     "return page->corePage()->userInputBridge().handleMouseReleaseEvent(platformMouseEvent);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "MouseReleased takes an extra EditorState round trip and re-sends EditorStateChanged after the release"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/WebPage.cpp",
+  "line": 4582,
+  "ps_cond_lines": [
+   4582
+  ],
+  "block_open": 4582,
+  "block_close": 4587,
+  "conds": [
+   "#if !PLATFORM(GTK) && !PLATFORM(WIN) && !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(GTK) && !PLATFORM(WIN) && !PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "if (!settings.acceleratedCompositingEnabled()) {",
+     "WEBPAGE_RELEASE_LOG(Layers, \"updatePreferences: acceleratedCompositingEnabled setting was false. WebKit cannot function in this mode; changing setting to true\");",
+     "settings.setAcceleratedCompositingEnabled(true);",
+     "}"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "PS is excluded from the block that forces acceleratedCompositingEnabled to true: a PS page can run with compositing off, where shared code refuses the configuration"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/WebPage.h",
+  "line": 160,
+  "ps_cond_lines": [
+   160
+  ],
+  "block_open": 160,
+  "block_close": 162,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)",
+    "nlines": 1,
+    "code": [
+     "#include \"WebAccessibilityObject.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/WebPage.h",
+  "line": 1090,
+  "ps_cond_lines": [
+   1090
+  ],
+  "block_open": 1090,
+  "block_close": 1104,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 13,
+    "code": [
+     "void clearSelectionWithoutBlur();",
+     "void setCaretVisible(bool);",
+     "#if ENABLE(ACCESSIBILITY)",
+     "void accessibilityNotification(const WebAccessibilityObjectData&, uint32_t notification);",
+     "void accessibilityTextChange(const WebAccessibilityObjectData&, uint32_t textChange, uint32_t offset, const String& text);",
+     "void accessibilityLoadingEvent(const WebAccessibilityObjectData&, uint32_t loadingEvent);",
+     "void accessibilityRootObject();",
+     "void accessibilityFocusedObject();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/WebPage.h",
+  "line": 2378,
+  "ps_cond_lines": [
+   2378
+  ],
+  "block_open": 2378,
+  "block_close": 2385,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "void keyEventPlayStation(const WebKeyboardEvent&, int);",
+     "void setComposition(const String&, Vector<WebCore::CompositionUnderline>, uint64_t, uint64_t, uint64_t, uint64_t);",
+     "void confirmComposition(const String&, int64_t, int64_t);",
+     "void exitComposition();",
+     "void setValueToFocusedNode(const String&);",
+     "void moveFocusInTabOrder(bool);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.h",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 80,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 51,
+    "code": [
+     "#include \"AcceleratedSurface.h\"",
+     "#include \"WebPage.h\"",
+     "#include <EGL/egl.h>",
+     "#include <GLES2/gl2.h>",
+     "#include <VBlankMonitor/VBlankMonitor.h>",
+     "#include <canvas/canvas.h>",
+     "#include <utility>",
+     "namespace WebKit {"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebProcess.cpp",
+  "line": 186,
+  "ps_cond_lines": [
+   186
+  ],
+  "block_open": 186,
+  "block_close": 189,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "#include \"AssertReportPlayStation.h\"",
+     "#include \"AssertReportProxyMessages.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebProcess.cpp",
+  "line": 327,
+  "ps_cond_lines": [
+   327
+  ],
+  "block_open": 327,
+  "block_close": 329,
+  "conds": [
+   "#if ENABLE(LEGACY_ENCRYPTED_MEDIA) || (PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA))"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(LEGACY_ENCRYPTED_MEDIA) || (PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA))",
+    "nlines": 1,
+    "code": [
+     "addSupplement<WebMediaKeyStorageManager>();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebProcess.cpp",
+  "line": 368,
+  "ps_cond_lines": [
+   368
+  ],
+  "block_open": 368,
+  "block_close": 370,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "AssertReportPlayStation::singleton(this);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/WebKit/WebProcess/WebProcess.h",
+  "line": 360,
+  "ps_cond_lines": [
+   360
+  ],
+  "block_open": 360,
+  "block_close": 362,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)",
+    "nlines": 1,
+    "code": [
+     "void setAccessibilityEnabled(bool);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/BAssert.h",
+  "line": 35,
+  "ps_cond_lines": [
+   35,
+   57
+  ],
+  "block_open": 35,
+  "block_close": 76,
+  "conds": [
+   "#if defined(NDEBUG) && (BOS(DARWIN) || BPLATFORM(PLAYSTATION))",
+   "#else // not defined(NDEBUG) && (BOS(DARWIN) || BPLATFORM(PLAYSTATION))"
+  ],
+  "n_branches": 2,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if defined(NDEBUG) && (BOS(DARWIN) || BPLATFORM(PLAYSTATION))",
+    "nlines": 21,
+    "code": [
+     "#if BASAN_ENABLED",
+     "#define BBreakpointTrap()  __builtin_trap()",
+     "#elif BCPU(X86_64) || BCPU(X86)",
+     "#define BBreakpointTrap()  __asm__ volatile (\"int3\")",
+     "#elif BCPU(ARM_THUMB2)",
+     "#define BBreakpointTrap()  __asm__ volatile (\"bkpt #0\")",
+     "#elif BCPU(ARM64)",
+     "#define BBreakpointTrap()  __asm__ volatile (\"brk #0xc471\")"
+    ]
+   },
+   {
+    "cond": "#else // not defined(NDEBUG) && (BOS(DARWIN) || BPLATFORM(PLAYSTATION))",
+    "nlines": 18,
+    "code": [
+     "#if BASAN_ENABLED",
+     "#define BCRASH() __builtin_trap()",
+     "#else",
+     "#if defined(__GNUC__) // GCC or Clang",
+     "#define BCRASH() do { \\",
+     "*(int*)0xbbadbeef = 0; \\",
+     "__builtin_trap(); \\",
+     "} while (0)"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "in NDEBUG on PS BCRASH() is a breakpoint trap (SIGTRAP) where every other non-Darwin port writes 0xbbadbeef; BASSERT is unconditional, so bmalloc assertions stay live in a release build with a different crash signature"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/BPlatform.h",
+  "line": 341,
+  "ps_cond_lines": [
+   341
+  ],
+  "block_open": 341,
+  "block_close": 348,
+  "conds": [
+   "#if BCPU(ADDRESS64) && (BOS(DARWIN) || (BOS(LINUX) && (BCPU(X86_64) || BCPU(ARM64))) || BPLATFORM(PLAYSTATION))",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if BCPU(ADDRESS64) && (BOS(DARWIN) || (BOS(LINUX) && (BCPU(X86_64) || BCPU(ARM64))) || BPLATFORM(PLAYSTATION))",
+    "nlines": 4,
+    "code": [
+     "#define BENABLE_LIBPAS 1",
+     "#ifndef PAS_BMALLOC",
+     "#define PAS_BMALLOC 1",
+     "#endif"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#define BENABLE_LIBPAS 0"
+    ]
+   }
+  ],
+  "category": "flag",
+  "kind": "",
+  "note": "BENABLE_LIBPAS 1 by default for PS/ADDRESS64, but OptionsPlayStation.cmake:284,286,741-742 forces -DBENABLE_LIBPAS=0, which is the build that ships (docs/106 \u00a76.6) \u2014 so all 14 PAS_PLATFORM(PLAYSTATION) blocks below are unreachable"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/BPlatform.h",
+  "line": 360,
+  "ps_cond_lines": [
+   360
+  ],
+  "block_open": 360,
+  "block_close": 363,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "#define BUSE_PTHREAD_MUTEX 1",
+     "#define BUSE_RELEASE_LARGE_FREE 0"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "flag",
+  "note": "BUSE_PTHREAD_MUTEX 1 and BUSE_RELEASE_LARGE_FREE 0: the second one makes the PS purge path dead (see bmalloc.cpp:151), the first selects the pthread Mutex"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/BVMTags.h",
+  "line": 30,
+  "ps_cond_lines": [
+   30
+  ],
+  "block_open": 30,
+  "block_close": 32,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <sys/mman.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include <sys/mman.h>"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/BVMTags.h",
+  "line": 64,
+  "ps_cond_lines": [
+   64
+  ],
+  "block_open": 36,
+  "block_close": 78,
+  "conds": [
+   "#if BOS(DARWIN)",
+   "#elif BPLATFORM(PLAYSTATION) && defined(VM_MAKE_TAG)",
+   "#else // BOS(DARWIN)"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#if BOS(DARWIN)",
+   "#else // BOS(DARWIN)"
+  ],
+  "branches": [
+   {
+    "cond": "#if BOS(DARWIN)",
+    "nlines": 27,
+    "code": [
+     "#include <mach/vm_statistics.h>",
+     "#if defined(VM_MEMORY_TCMALLOC)",
+     "#define VM_TAG_FOR_TCMALLOC_MEMORY VM_MAKE_TAG(VM_MEMORY_TCMALLOC)",
+     "#else",
+     "#define VM_TAG_FOR_TCMALLOC_MEMORY VM_MAKE_TAG(53)",
+     "#endif // defined(VM_MEMORY_TCMALLOC)",
+     "#if defined(VM_MEMORY_JAVASCRIPT_JIT_EXECUTABLE_ALLOCATOR)",
+     "#define VM_TAG_FOR_EXECUTABLEALLOCATOR_MEMORY VM_MAKE_TAG(VM_MEMORY_JAVASCRIPT_JIT_EXECUTABLE_ALLOCATOR)"
+    ]
+   },
+   {
+    "cond": "#elif BPLATFORM(PLAYSTATION) && defined(VM_MAKE_TAG)",
+    "nlines": 6,
+    "code": [
+     "#define VM_TAG_FOR_TCMALLOC_MEMORY VM_MAKE_TAG(VM_TYPE_USER1)",
+     "#define VM_TAG_FOR_ISOHEAP_MEMORY VM_MAKE_TAG(VM_TYPE_USER2)",
+     "#define VM_TAG_FOR_EXECUTABLEALLOCATOR_MEMORY VM_MAKE_TAG(VM_TYPE_USER3)",
+     "#define VM_TAG_FOR_GIGACAGE_MEMORY VM_MAKE_TAG(VM_TYPE_USER4)"
+    ]
+   },
+   {
+    "cond": "#else // BOS(DARWIN)",
+    "nlines": 6,
+    "code": [
+     "#define VM_TAG_FOR_TCMALLOC_MEMORY -1",
+     "#define VM_TAG_FOR_GIGACAGE_MEMORY -1",
+     "#define VM_TAG_FOR_EXECUTABLEALLOCATOR_MEMORY -1",
+     "#define VM_TAG_FOR_ISOHEAP_MEMORY -1"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "VM_TYPE_USER1..4 tags"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/Environment.cpp",
+  "line": 130,
+  "ps_cond_lines": [
+   130
+  ],
+  "block_open": 112,
+  "block_close": 139,
+  "conds": [
+   "#if BOS(DARWIN)",
+   "#elif BOS(UNIX) && !BPLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#if BOS(DARWIN)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if BOS(DARWIN)",
+    "nlines": 17,
+    "code": [
+     "static const char sanitizerPrefix[] = \"/libclang_rt.\";",
+     "static const char asanName[] = \"asan_\";",
+     "static const char tsanName[] = \"tsan_\";",
+     "uint32_t imageCount = _dyld_image_count();",
+     "for (uint32_t i = 0; i < imageCount; ++i) {",
+     "const char* imageName = _dyld_get_image_name(i);",
+     "if (!imageName)",
+     "continue;"
+    ]
+   },
+   {
+    "cond": "#elif BOS(UNIX) && !BPLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "void* handle = dlopen(nullptr, RTLD_NOW);",
+     "if (!handle)",
+     "return false;",
+     "bool result = !!dlsym(handle, \"__asan_init\") || !!dlsym(handle, \"__tsan_init\");",
+     "dlclose(handle);",
+     "return result;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return false;"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "isSanitizerEnabled() returns false on PS by compile-time exclusion; combined with computeIsDebugHeapEnabled() (:182) this is why the *oracle* runs bmalloc as a debug heap (malloc fill) and the console does not \u2014 an allocator mode difference, not a console behaviour"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/Heap.cpp",
+  "line": 138,
+  "ps_cond_lines": [
+   138
+  ],
+  "block_open": 138,
+  "block_close": 143,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "void Heap::releaseLargeFree(const LockHolder&)",
+     "{",
+     "m_largeFree.purge();",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "Heap::releaseLargeFree -> m_largeFree.purge(); only caller is compiled out (BUSE_RELEASE_LARGE_FREE 0)"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/Heap.h",
+  "line": 91,
+  "ps_cond_lines": [
+   91
+  ],
+  "block_open": 91,
+  "block_close": 93,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "void releaseLargeFree(const LockHolder&);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "declaration for the dead purge path"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/LargeMap.cpp",
+  "line": 91,
+  "ps_cond_lines": [
+   91
+  ],
+  "block_open": 91,
+  "block_close": 143,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION)",
+    "nlines": 51,
+    "code": [
+     "void LargeMap::purge()",
+     "{",
+     "#if !defined(NDEBUG)",
+     "size_t beforeSize = 0;",
+     "size_t purged = 0;",
+     "for (auto& range : m_free)",
+     "beforeSize += range.size();",
+     "#endif"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "LargeMap::purge(): decommits free large ranges; dead under BUSE_RELEASE_LARGE_FREE 0"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/LargeMap.h",
+  "line": 49,
+  "ps_cond_lines": [
+   49
+  ],
+  "block_open": 49,
+  "block_close": 51,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "void purge();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "declaration for the dead purge path"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/Mutex.h",
+  "line": 36,
+  "ps_cond_lines": [
+   36
+  ],
+  "block_open": 36,
+  "block_close": 38,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <pthread_np.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include <pthread_np.h>"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/Mutex.h",
+  "line": 101,
+  "ps_cond_lines": [
+   101
+  ],
+  "block_open": 101,
+  "block_close": 103,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "pthread_mutex_setname_np(&m_mutex, \"SceNKBMalloc\");"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "pthread_mutex_setname_np(&m_mutex, \"SceNKBMalloc\")"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/Scavenger.cpp",
+  "line": 43,
+  "ps_cond_lines": [
+   43
+  ],
+  "block_open": 43,
+  "block_close": 45,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <pthread_np.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include <pthread_np.h>"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/Scavenger.cpp",
+  "line": 386,
+  "ps_cond_lines": [
+   386
+  ],
+  "block_open": 386,
+  "block_close": 394,
+  "conds": [
+   "#if BOS(DARWIN) || BPLATFORM(PLAYSTATION)",
+   "#elif BOS(LINUX)"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#elif BOS(LINUX)"
+  ],
+  "branches": [
+   {
+    "cond": "#if BOS(DARWIN) || BPLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "pthread_setname_np(name);"
+    ]
+   },
+   {
+    "cond": "#elif BOS(LINUX)",
+    "nlines": 5,
+    "code": [
+     "// Truncate the given name since Linux limits the size of the thread name 16 including null terminator.",
+     "std::array<char, 16> buf;",
+     "strncpy(buf.data(), name, buf.size() - 1);",
+     "buf[buf.size() - 1] = '\\0';",
+     "pthread_setname_np(pthread_self(), buf.data());"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "pthread_setname_np(name) \u2014 one-argument FreeBSD form"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/VMAllocate.h",
+  "line": 135,
+  "ps_cond_lines": [
+   135
+  ],
+  "block_open": 135,
+  "block_close": 140,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION) && BENABLE(MAT)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION) && BENABLE(MAT)",
+    "nlines": 4,
+    "code": [
+     "if constexpr (matLogVMAllocate) {",
+     "MatReserveVirtualRange(result, vmSize, MAP_PRIVATE | MAP_ANON, 0);",
+     "MatMemoryPoolCommit(result, vmSize, 0, PROT_READ | PROT_WRITE, 0);",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "MAT logging only (BENABLE(MAT) OFF)"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/VMAllocate.h",
+  "line": 154,
+  "ps_cond_lines": [
+   154
+  ],
+  "block_open": 154,
+  "block_close": 157,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION) && BENABLE(MAT)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION) && BENABLE(MAT)",
+    "nlines": 2,
+    "code": [
+     "if constexpr (matLogVMAllocate)",
+     "MatUnmapMemory(p, vmSize);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "MAT logging only"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/VMAllocate.h",
+  "line": 174,
+  "ps_cond_lines": [
+   174
+  ],
+  "block_open": 174,
+  "block_close": 179,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION) && BENABLE(MAT)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION) && BENABLE(MAT)",
+    "nlines": 4,
+    "code": [
+     "if constexpr (matLogVMAllocate) {",
+     "MatReserveVirtualRange(result, vmSize, MAP_PRIVATE | MAP_ANON | MAP_FIXED, 0);",
+     "MatMemoryPoolCommit(result, vmSize, 0, PROT_READ | PROT_WRITE, 0);",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "MAT logging only"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/VMAllocate.h",
+  "line": 233,
+  "ps_cond_lines": [
+   233
+  ],
+  "block_open": 233,
+  "block_close": 236,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION) && BENABLE(MAT)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION) && BENABLE(MAT)",
+    "nlines": 2,
+    "code": [
+     "if constexpr (matLogVMAllocate)",
+     "MatMemoryPoolDecommit(p, vmSize, 0);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "MAT logging only"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/VMAllocate.h",
+  "line": 254,
+  "ps_cond_lines": [
+   254
+  ],
+  "block_open": 254,
+  "block_close": 257,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION) && BENABLE(MAT)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION) && BENABLE(MAT)",
+    "nlines": 2,
+    "code": [
+     "if constexpr (matLogVMAllocate)",
+     "MatMemoryPoolCommit(p, vmSize, 0, PROT_READ | PROT_WRITE, 0);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "MAT logging only"
+ },
+ {
+  "file": "Source/bmalloc/bmalloc/bmalloc.cpp",
+  "line": 151,
+  "ps_cond_lines": [
+   151
+  ],
+  "block_open": 151,
+  "block_close": 158,
+  "conds": [
+   "#if BPLATFORM(PLAYSTATION) && BUSE(RELEASE_LARGE_FREE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if BPLATFORM(PLAYSTATION) && BUSE(RELEASE_LARGE_FREE)",
+    "nlines": 6,
+    "code": [
+     "LockHolder lock(Heap::mutex());",
+     "for (unsigned i = numHeaps; i--;) {",
+     "if (!isActiveHeapKind(static_cast<HeapKind>(i)))",
+     "continue;",
+     "PerProcess<PerHeapKind<Heap>>::get()->at(i).releaseLargeFree(lock);",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "the purge call site, #if BPLATFORM(PLAYSTATION) && BUSE(RELEASE_LARGE_FREE) \u2014 both false in this build"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_compact_heap_reservation.c",
+  "line": 35,
+  "ps_cond_lines": [
+   35
+  ],
+  "block_open": 35,
+  "block_close": 37,
+  "conds": [
+   "#if PAS_PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include \"vss-wrapper.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_compact_heap_reservation.c",
+  "line": 46,
+  "ps_cond_lines": [
+   46
+  ],
+  "block_open": 46,
+  "block_close": 48,
+  "conds": [
+   "#if PAS_PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "uintptr_t pas_compact_heap_reservation_committed = 0;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_compact_heap_reservation.c",
+  "line": 63,
+  "ps_cond_lines": [
+   63
+  ],
+  "block_open": 63,
+  "block_close": 75,
+  "conds": [
+   "#if PAS_PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "pas_zero_memory(&page_result, sizeof(pas_aligned_allocation_result));",
+     "page_result.result = memoryextra_vss_reserve(pas_compact_heap_reservation_size, pas_page_malloc_alignment());",
+     "PAS_ASSERT(page_result.result);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 6,
+    "code": [
+     "page_result = pas_page_malloc_try_allocate_without_deallocating_padding(",
+     "pas_compact_heap_reservation_size, pas_alignment_create_trivial());",
+     "PAS_ASSERT(!page_result.left_padding_size);",
+     "PAS_ASSERT(!page_result.right_padding_size);",
+     "PAS_ASSERT(page_result.result);",
+     "PAS_ASSERT(page_result.result_size == pas_compact_heap_reservation_size);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_compact_heap_reservation.c",
+  "line": 97,
+  "ps_cond_lines": [
+   97
+  ],
+  "block_open": 97,
+  "block_close": 122,
+  "conds": [
+   "#if PAS_PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 24,
+    "code": [
+     "if (pas_compact_heap_reservation_committed < allocation_end && size > 0) {",
+     "uintptr_t need_commit_start;",
+     "uintptr_t need_commit_end;",
+     "bool success;",
+     "uintptr_t page_size;",
+     "if (!pas_compact_heap_reservation_committed)",
+     "pas_compact_heap_reservation_committed = pas_compact_heap_reservation_base + pas_compact_heap_reservation_guard_size;",
+     "page_size = pas_page_malloc_alignment();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_config.h",
+  "line": 41,
+  "ps_cond_lines": [
+   41
+  ],
+  "block_open": 41,
+  "block_close": 45,
+  "conds": [
+   "#if ((PAS_OS(DARWIN) && __PAS_ARM64 && !__PAS_ARM64E) || PAS_PLATFORM(PLAYSTATION)) && defined(NDEBUG)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if ((PAS_OS(DARWIN) && __PAS_ARM64 && !__PAS_ARM64E) || PAS_PLATFORM(PLAYSTATION)) && defined(NDEBUG)",
+    "nlines": 1,
+    "code": [
+     "#define PAS_ENABLE_ASSERT 0"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#define PAS_ENABLE_ASSERT 1"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_config.h",
+  "line": 57,
+  "ps_cond_lines": [
+   57
+  ],
+  "block_open": 57,
+  "block_close": 61,
+  "conds": [
+   "#if PAS_ARM || PAS_PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PAS_ARM || PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define PAS_MAX_GRANULES                 256"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#define PAS_MAX_GRANULES                 1024"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_config.h",
+  "line": 102,
+  "ps_cond_lines": [
+   102
+  ],
+  "block_open": 102,
+  "block_close": 106,
+  "conds": [
+   "#if PAS_OS(DARWIN) || PAS_PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PAS_OS(DARWIN) || PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define PAS_USE_SPINLOCKS                0"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#define PAS_USE_SPINLOCKS                1"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_internal_config.h",
+  "line": 52,
+  "ps_cond_lines": [
+   52
+  ],
+  "block_open": 52,
+  "block_close": 56,
+  "conds": [
+   "#if PAS_ARM64 || PAS_PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PAS_ARM64 || PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define PAS_GRANULE_DEFAULT_SHIFT        14"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#define PAS_GRANULE_DEFAULT_SHIFT        12"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_lock.h",
+  "line": 195,
+  "ps_cond_lines": [
+   195
+  ],
+  "block_open": 54,
+  "block_close": 281,
+  "conds": [
+   "#if PAS_USE_SPINLOCKS",
+   "#elif PAS_OS(DARWIN) /* !PAS_USE_SPINLOCKS */",
+   "#elif PAS_PLATFORM(PLAYSTATION) /* !PAS_USE_SPINLOCKS */",
+   "#else /* !PAS_USE_SPINLOCKS */"
+  ],
+  "n_branches": 4,
+  "has_alt": true,
+  "alt_conds": [
+   "#if PAS_USE_SPINLOCKS",
+   "#elif PAS_OS(DARWIN) /* !PAS_USE_SPINLOCKS */",
+   "#else /* !PAS_USE_SPINLOCKS */"
+  ],
+  "branches": [
+   {
+    "cond": "#if PAS_USE_SPINLOCKS",
+    "nlines": 63,
+    "code": [
+     "PAS_BEGIN_EXTERN_C;",
+     "struct pas_lock;",
+     "typedef struct pas_lock pas_lock;",
+     "struct pas_lock {",
+     "bool lock;",
+     "bool is_spinning;",
+     "};",
+     "#define PAS_LOCK_INITIALIZER ((pas_lock){ .lock = false, .is_spinning = false })"
+    ]
+   },
+   {
+    "cond": "#elif PAS_OS(DARWIN) /* !PAS_USE_SPINLOCKS */",
+    "nlines": 76,
+    "code": [
+     "#if defined(__has_include) && __has_include(<os/lock_private.h>) && (defined(LIBPAS) || defined(PAS_BMALLOC)) && (!defined(OS_UNFAIR_LOCK_INLINE) || OS_UNFAIR_LOCK_INLINE)",
+     "#ifndef OS_UNFAIR_LOCK_INLINE",
+     "#define OS_UNFAIR_LOCK_INLINE 1",
+     "#endif",
+     "#include <os/lock_private.h>",
+     "#else",
+     "#include <os/lock.h>",
+     "#define os_unfair_lock_lock_inline os_unfair_lock_lock"
+    ]
+   },
+   {
+    "cond": "#elif PAS_PLATFORM(PLAYSTATION) /* !PAS_USE_SPINLOCKS */",
+    "nlines": 83,
+    "code": [
+     "#include <errno.h>",
+     "#include <pthread_np.h>",
+     "PAS_BEGIN_EXTERN_C;",
+     "struct pas_lock;",
+     "typedef struct pas_lock pas_lock;",
+     "struct pas_lock {",
+     "pthread_mutex_t mutex;",
+     "};"
+    ]
+   },
+   {
+    "cond": "#else /* !PAS_USE_SPINLOCKS */",
+    "nlines": 1,
+    "code": [
+     "#error \"No pas_lock implementation found\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_monotonic_time.c",
+  "line": 83,
+  "ps_cond_lines": [
+   83
+  ],
+  "block_open": 35,
+  "block_close": 92,
+  "conds": [
+   "#if PAS_OS(DARWIN)",
+   "#elif PAS_OS(LINUX)",
+   "#elif PAS_PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#if PAS_OS(DARWIN)",
+   "#elif PAS_OS(LINUX)"
+  ],
+  "branches": [
+   {
+    "cond": "#if PAS_OS(DARWIN)",
+    "nlines": 38,
+    "code": [
+     "static mach_timebase_info_data_t timebase_info;",
+     "static mach_timebase_info_data_t* timebase_info_ptr;",
+     "static PAS_NEVER_INLINE mach_timebase_info_data_t* get_timebase_info_slow(void)",
+     "{",
+     "kern_return_t kern_return;",
+     "kern_return = mach_timebase_info(&timebase_info);",
+     "PAS_ASSERT(kern_return == KERN_SUCCESS);",
+     "pas_fence();"
+    ]
+   },
+   {
+    "cond": "#elif PAS_OS(LINUX)",
+    "nlines": 8,
+    "code": [
+     "uint64_t pas_get_current_monotonic_time_nanoseconds(void)",
+     "{",
+     "struct timespec ts;",
+     "clock_gettime(CLOCK_MONOTONIC_COARSE, &ts);",
+     "return ts.tv_sec * 1.0e9 + ts.tv_nsec;",
+     "}"
+    ]
+   },
+   {
+    "cond": "#elif PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 8,
+    "code": [
+     "uint64_t pas_get_current_monotonic_time_nanoseconds(void)",
+     "{",
+     "struct timespec ts;",
+     "clock_gettime_np(CLOCK_MONOTONIC_FAST, &ts);",
+     "return ts.tv_sec * 1000u * 1000u * 1000u + ts.tv_nsec;",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_page_malloc.c",
+  "line": 57,
+  "ps_cond_lines": [
+   57
+  ],
+  "block_open": 55,
+  "block_close": 61,
+  "conds": [
+   "#if PAS_OS(DARWIN)",
+   "#elif PAS_PLATFORM(PLAYSTATION) && defined(VM_MAKE_TAG)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#if PAS_OS(DARWIN)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PAS_OS(DARWIN)",
+    "nlines": 1,
+    "code": [
+     "#define PAS_VM_TAG VM_MAKE_TAG(VM_MEMORY_TCMALLOC)"
+    ]
+   },
+   {
+    "cond": "#elif PAS_PLATFORM(PLAYSTATION) && defined(VM_MAKE_TAG)",
+    "nlines": 1,
+    "code": [
+     "#define PAS_VM_TAG VM_MAKE_TAG(VM_TYPE_USER1)"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#define PAS_VM_TAG -1"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_page_malloc.c",
+  "line": 215,
+  "ps_cond_lines": [
+   215
+  ],
+  "block_open": 213,
+  "block_close": 219,
+  "conds": [
+   "#if PAS_OS(LINUX)",
+   "#elif PAS_PLATFORM(PLAYSTATION)",
+   "#elif PAS_OS(FREEBSD)"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#if PAS_OS(LINUX)",
+   "#elif PAS_OS(FREEBSD)"
+  ],
+  "branches": [
+   {
+    "cond": "#if PAS_OS(LINUX)",
+    "nlines": 1,
+    "code": [
+     "PAS_SYSCALL(madvise(ptr, size, MADV_DODUMP));"
+    ]
+   },
+   {
+    "cond": "#elif PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "// We don't need to call madvise to map page."
+    ]
+   },
+   {
+    "cond": "#elif PAS_OS(FREEBSD)",
+    "nlines": 1,
+    "code": [
+     "PAS_SYSCALL(madvise(ptr, size, MADV_NORMAL));"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_scavenger.c",
+  "line": 175,
+  "ps_cond_lines": [
+   175
+  ],
+  "block_open": 175,
+  "block_close": 181,
+  "conds": [
+   "#if PAS_OS(DARWIN) || PAS_PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PAS_OS(DARWIN) || PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 5,
+    "code": [
+     "#if PAS_BMALLOC",
+     "pthread_setname_np(\"JavaScriptCore libpas scavenger\");",
+     "#else",
+     "pthread_setname_np(\"libpas scavenger\");",
+     "#endif"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_thread_local_cache.c",
+  "line": 50,
+  "ps_cond_lines": [
+   50
+  ],
+  "block_open": 50,
+  "block_close": 52,
+  "conds": [
+   "#if PAS_PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <pthread_np.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_thread_local_cache.c",
+  "line": 215,
+  "ps_cond_lines": [
+   215
+  ],
+  "block_open": 215,
+  "block_close": 219,
+  "conds": [
+   "#if PAS_PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PAS_PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "getname_result = pthread_get_name_np(thread, thread_name);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "getname_result = pthread_getname_np(thread, thread_name, sizeof(thread_name));"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ },
+ {
+  "file": "Source/bmalloc/libpas/src/libpas/pas_utils.h",
+  "line": 69,
+  "ps_cond_lines": [
+   69
+  ],
+  "block_open": 69,
+  "block_close": 75,
+  "conds": [
+   "#if PAS_PLATFORM(PLAYSTATION) && !defined(alignof)",
+   "#elif defined(__cplusplus)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#elif defined(__cplusplus)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PAS_PLATFORM(PLAYSTATION) && !defined(alignof)",
+    "nlines": 1,
+    "code": [
+     "#define PAS_ALIGNOF(type) _Alignof(type)"
+    ]
+   },
+   {
+    "cond": "#elif defined(__cplusplus)",
+    "nlines": 1,
+    "code": [
+     "#define PAS_ALIGNOF(type) alignof(type)"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#define PAS_ALIGNOF(type) _Alignof(type)"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field/method"
+ }
+]

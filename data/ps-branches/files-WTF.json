@@ -1,0 +1,611 @@
+[
+ {
+  "file": "unix/UnixFileDescriptor.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "generic/MainThreadGeneric.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "generic/MemoryFootprintGeneric.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "generic/RunLoopGeneric.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "RunLoop::run",
+    "also": [
+     "cf/RunLoopCF.cpp",
+     "glib/RunLoopGLib.cpp",
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "RunLoop::setWakeUpCallback",
+    "also": [
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "RunLoop::stop",
+    "also": [
+     "cf/RunLoopCF.cpp",
+     "glib/RunLoopGLib.cpp",
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "RunLoop::wakeUp",
+    "also": [
+     "cf/RunLoopCF.cpp",
+     "glib/RunLoopGLib.cpp",
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "RunLoop::cycle",
+    "also": [
+     "cf/RunLoopCF.cpp",
+     "glib/RunLoopGLib.cpp",
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "TimerBase::TimerBase",
+    "also": [
+     "cf/RunLoopCF.cpp",
+     "glib/RunLoopGLib.cpp",
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "TimerBase::start",
+    "also": [
+     "cf/RunLoopCF.cpp",
+     "glib/RunLoopGLib.cpp",
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "TimerBase::stop",
+    "also": [
+     "cf/RunLoopCF.cpp",
+     "glib/RunLoopGLib.cpp",
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "TimerBase::isActive",
+    "also": [
+     "cf/RunLoopCF.cpp",
+     "glib/RunLoopGLib.cpp",
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "TimerBase::isActiveWithLock",
+    "also": [
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "TimerBase::secondsUntilFire",
+    "also": [
+     "cf/RunLoopCF.cpp",
+     "glib/RunLoopGLib.cpp",
+     "win/RunLoopWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 17
+ },
+ {
+  "file": "generic/WorkQueueGeneric.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WorkQueueBase::platformInitialize",
+    "also": [
+     "cocoa/WorkQueueCocoa.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WorkQueueBase::platformInvalidate",
+    "also": [
+     "cocoa/WorkQueueCocoa.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WorkQueueBase::dispatch",
+    "also": [
+     "cocoa/WorkQueueCocoa.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WorkQueueBase::dispatchAfter",
+    "also": [
+     "cocoa/WorkQueueCocoa.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WorkQueue::constructMainWorkQueue",
+    "also": [
+     "cocoa/WorkQueueCocoa.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WorkQueue::threadLikeAssertion",
+    "also": [
+     "cocoa/WorkQueueCocoa.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 6
+ },
+ {
+  "file": "playstation/FileSystemPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "playstation/LanguagePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "playstation/OSAllocatorPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "OSAllocator::tryReserveAndCommit",
+    "also": [
+     "posix/OSAllocatorPOSIX.cpp",
+     "win/OSAllocatorWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "OSAllocator::tryReserveUncommitted",
+    "also": [
+     "posix/OSAllocatorPOSIX.cpp",
+     "win/OSAllocatorWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "OSAllocator::reserveUncommitted",
+    "also": [
+     "posix/OSAllocatorPOSIX.cpp",
+     "win/OSAllocatorWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "OSAllocator::tryReserveUncommittedAligned",
+    "also": [
+     "posix/OSAllocatorPOSIX.cpp",
+     "win/OSAllocatorWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "OSAllocator::reserveAndCommit",
+    "also": [
+     "posix/OSAllocatorPOSIX.cpp",
+     "win/OSAllocatorWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "OSAllocator::commit",
+    "also": [
+     "posix/OSAllocatorPOSIX.cpp",
+     "win/OSAllocatorWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "OSAllocator::decommit",
+    "also": [
+     "posix/OSAllocatorPOSIX.cpp",
+     "win/OSAllocatorWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "OSAllocator::hintMemoryNotNeededSoon",
+    "also": [
+     "posix/OSAllocatorPOSIX.cpp",
+     "win/OSAllocatorWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "OSAllocator::releaseDecommitted",
+    "also": [
+     "posix/OSAllocatorPOSIX.cpp",
+     "win/OSAllocatorWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "OSAllocator::protect",
+    "also": [
+     "posix/OSAllocatorPOSIX.cpp",
+     "win/OSAllocatorWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 10
+ },
+ {
+  "file": "playstation/UniStdExtrasPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "posix/CPUTimePOSIX.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "CPUTime::get",
+    "also": [
+     "fuchsia/CPUTimeFuchsia.cpp",
+     "win/CPUTimeWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "CPUTime::forCurrentThread",
+    "also": [
+     "fuchsia/CPUTimeFuchsia.cpp",
+     "win/CPUTimeWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 2
+ },
+ {
+  "file": "posix/FileSystemPOSIX.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "posix/ThreadingPOSIX.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "Thread::initializePlatformThreading",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::currentID",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::initializeCurrentThreadEvenIfNonWTFCreated",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::establishHandle",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::initializeCurrentThreadInternal",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::changePriority",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::waitForCompletion",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::detach",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::initializeCurrentTLS",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::suspend",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::resume",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::getRegisters",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::establishPlatformSpecificHandle",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::initializeTLS",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Mutex::lock",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Mutex::tryLock",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Mutex::unlock",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "ThreadCondition::wait",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "ThreadCondition::timedWait",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "ThreadCondition::signal",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "ThreadCondition::broadcast",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Thread::yield",
+    "also": [
+     "win/ThreadingWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 27
+ },
+ {
+  "file": "text/unix/TextBreakIteratorInternalICUUnix.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "unix/LoggingUnix.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "unix/MemoryPressureHandlerUnix.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "MemoryPressureHandler::install",
+    "also": [
+     "cocoa/MemoryPressureHandlerCocoa.mm",
+     "generic/MemoryPressureHandlerGeneric.cpp",
+     "win/MemoryPressureHandlerWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "MemoryPressureHandler::uninstall",
+    "also": [
+     "cocoa/MemoryPressureHandlerCocoa.mm",
+     "generic/MemoryPressureHandlerGeneric.cpp",
+     "win/MemoryPressureHandlerWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "MemoryPressureHandler::holdOff",
+    "also": [
+     "cocoa/MemoryPressureHandlerCocoa.mm",
+     "generic/MemoryPressureHandlerGeneric.cpp",
+     "win/MemoryPressureHandlerWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "MemoryPressureHandler::respondToMemoryPressure",
+    "also": [
+     "cocoa/MemoryPressureHandlerCocoa.mm",
+     "generic/MemoryPressureHandlerGeneric.cpp",
+     "win/MemoryPressureHandlerWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "MemoryPressureHandler::platformReleaseMemory",
+    "also": [
+     "cocoa/MemoryPressureHandlerCocoa.mm",
+     "generic/MemoryPressureHandlerGeneric.cpp",
+     "win/MemoryPressureHandlerWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "ReliefLogger::platformMemoryUsage",
+    "also": [
+     "cocoa/MemoryPressureHandlerCocoa.mm",
+     "generic/MemoryPressureHandlerGeneric.cpp",
+     "win/MemoryPressureHandlerWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 8
+ }
+]

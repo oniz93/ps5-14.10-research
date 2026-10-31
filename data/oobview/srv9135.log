@@ -1,0 +1,5 @@
+127.0.0.1 - - [30/Oct/2026 12:17:53] "GET /caps15.html?arm=c2 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 12:17:53] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:17:53] "GET /ev?m=caps15%20arm%3Dc2%20only%3D-%20resize%3Dfunction%20idbkr%3Dfunction%20onlyfn%3Dfunction%20sc%3Dfunction%20idb%3Dobject HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:17:53] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:17:53] "GET /ev?m=C2%20pre%20jsBL%3D0%20jsLen%3D0%20rawLen%3D4160%20off%3D0%20bufBL%3D16 HTTP/1.1" 404 -

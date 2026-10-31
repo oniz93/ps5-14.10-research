@@ -1,0 +1,122 @@
+# The gate, quoted from the drop (WebKit-1400), one line per fact.
+# Paths are relative to out/sony/full/WebKit-1400/WebKit-1400.
+
+## 1. The condition that decides the macro
+
+Source/WTF/wtf/IsoMalloc.h:31-47
+    #if USE(SYSTEM_MALLOC) || !USE(ISO_MALLOC)
+    #include <wtf/FastMalloc.h>
+    #define WTF_MAKE_ISO_ALLOCATED(name) WTF_MAKE_FAST_ALLOCATED
+    #define WTF_MAKE_ISO_ALLOCATED_EXPORT(name, exportMacro) WTF_MAKE_FAST_ALLOCATED
+    #define WTF_MAKE_ISO_NONALLOCATABLE(name) WTF_FORBID_HEAP_ALLOCATION
+    #else
+    #include <bmalloc/IsoHeap.h>
+    #define WTF_NOEXPORT
+    #define WTF_MAKE_ISO_ALLOCATED(name) MAKE_BISO_MALLOCED(name, WTF_NOEXPORT)
+    #define WTF_MAKE_ISO_ALLOCATED_EXPORT(name, exportMacro) MAKE_BISO_MALLOCED(name, exportMacro)
+    #define WTF_MAKE_ISO_NONALLOCATABLE(name) WTF_FORBID_HEAP_ALLOCATION
+    #endif
+
+Source/WTF/wtf/IsoMallocInlines.h:30-44  (same condition, the IMPL half)
+    #if USE(SYSTEM_MALLOC) || !USE(ISO_MALLOC)
+    #define WTF_MAKE_ISO_ALLOCATED_INLINE(name) WTF_MAKE_FAST_ALLOCATED
+    #define WTF_MAKE_ISO_ALLOCATED_IMPL(name) struct WTFIsoMallocSemicolonifier##name { }
+    #define WTF_MAKE_ISO_ALLOCATED_IMPL_TEMPLATE(name) struct WTFIsoMallocSemicolonifier##name { }
+    #else
+    #define WTF_MAKE_ISO_ALLOCATED_INLINE(name) MAKE_BISO_MALLOCED_INLINE(name)
+    #define WTF_MAKE_ISO_ALLOCATED_IMPL(name) MAKE_BISO_MALLOCED_IMPL(name)
+    #define WTF_MAKE_ISO_ALLOCATED_IMPL_TEMPLATE(name) MAKE_BISO_MALLOCED_IMPL_TEMPLATE(name)
+    #endif
+
+Source/WTF/wtf/PlatformUse.h:36
+    #define USE(WTF_FEATURE) (defined USE_##WTF_FEATURE && USE_##WTF_FEATURE)
+
+Source/WTF/wtf/PlatformUse.h:324-326
+    #if !defined(USE_ISO_MALLOC)
+    #define USE_ISO_MALLOC 1
+    #endif
+    (i.e. 1 is only a default; a cmake config header that defines it 0 wins)
+
+## 2. The two option defaults
+
+Source/cmake/WebKitFeatures.cmake:267
+    WEBKIT_OPTION_DEFINE(USE_ISO_MALLOC "Toggle IsoMalloc support" PRIVATE ON)
+
+Source/cmake/OptionsPlayStation.cmake:211
+    # Don't use IsoMalloc
+    WEBKIT_OPTION_DEFAULT_PORT_VALUE(USE_ISO_MALLOC PRIVATE OFF)
+
+`grep -rn "USE_ISO_MALLOC" Source/cmake/` returns exactly those two sites and nothing else.
+
+## 3. What each branch compiles to
+
+ISO OFF branch -> Source/WTF/wtf/FastMalloc.h:312-330
+    #define WTF_MAKE_FAST_ALLOCATED_IMPL \
+        void* operator new(size_t, void* p) { return p; } \
+        ...
+        void* operator new(size_t size) \
+        { \
+            return ::WTF::fastMalloc(size); \
+        } \
+        void operator delete(void* p) \
+        { \
+            ::WTF::fastFree(p); \
+        } \
+        ...
+
+ISO ON branch -> Source/bmalloc/bmalloc/IsoHeap.h:136-149
+    #define MAKE_BISO_MALLOCED(isoType, exportMacro) \
+    public: \
+        static exportMacro ::bmalloc::api::IsoHeap<isoType>& bisoHeap(); \
+        ...
+        exportMacro void* operator new(size_t size);\
+        exportMacro void operator delete(void* p);\
+        ...
+        exportMacro static void freeAfterDestruction(void*); \
+
+Source/bmalloc/bmalloc/IsoHeapInlines.h:155-162
+    static ::bmalloc::api::IsoHeap<isoType> heap("WebKit "#isoType);
+    return heap;
+    }
+    void* isoType::operator new(size_t size)
+    {
+        RELEASE_BASSERT(size == sizeof(isoType));
+        return bisoHeap().allocate();
+    }
+
+=> The binary signature of an ISO class is a mangled `_ZN6bmalloc3api7IsoHeap...`
+   (plus `bisoHeap()`), and its `operator new` is *defined* in the class's own TU.
+   With the gate off, no such symbol can exist and `operator new` is inlined into
+   `::WTF::fastMalloc`, which is an undefined symbol in the same object.
+
+## 4. What fastMalloc is on a USE(SYSTEM_MALLOC) build
+
+Source/WTF/wtf/FastMalloc.cpp:156  #if USE(SYSTEM_MALLOC)
+Source/WTF/wtf/FastMalloc.cpp:236  void* fastMalloc(size_t n) { ... void* result = malloc(n); ... }
+Source/WTF/wtf/FastMalloc.cpp:265  void fastFree(void* p)  -> free(p)
+
+=> the 834 classes land in libc malloc, i.e. ASAN's allocator, on the oracle.
+   On the console (bmalloc, ISO off per the port default) they land in the general
+   bmalloc heap - which is what docs/107 §3 already recorded.
+
+## 5. Which classes this concerns (source-measured)
+
+Source/WebCore/css/CSSFontFace.h:61
+    WTF_MAKE_FAST_ALLOCATED_WITH_HEAP_IDENTIFIER(CSSFontFace);
+    -> docs/65's object is NOT an ISO class in any build; its verdicts never
+       depended on this gate.
+
+Source/WebCore/html/canvas/CanvasRenderingContext2D.h:37
+    WTF_MAKE_ISO_ALLOCATED(CanvasRenderingContext2D);
+Source/WebCore/html/canvas/CanvasRenderingContext2DBase.h:93
+    WTF_MAKE_ISO_ALLOCATED(CanvasRenderingContext2DBase);
+Source/WebCore/html/canvas/CanvasRenderingContext2D.cpp:69
+    WTF_MAKE_ISO_ALLOCATED_IMPL(CanvasRenderingContext2D);
+    -> the class of the console case c043b IS governed by the gate.
+
+grep -rl "WTF_MAKE_ISO_ALLOCATED" Source/WebCore --include="*.h" | wc -l  -> 834
+grep -rh "WTF_MAKE_ISO_ALLOCATED(" Source/WebCore --include="*.h" | wc -l -> 834
+
+grep -rn "USE(ISO_MALLOC)|USE_ISO_MALLOC" Source/JavaScriptCore -> no output
+    -> JSC's IsoSubspace (docs/76's stringSpace) is JSC's own cell space and is
+       independent of this gate; docs/76 stands either way.

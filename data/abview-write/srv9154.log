@@ -1,0 +1,23 @@
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /caps16.html?arm=ok HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /ev?m=caps16%20arm%3Dok%20only%3D-%20resize%3Dfunction%20grv%3Dfunction%20te%3Dfunction%20idbkr%3Dfunction%20sab%3Dundefined%20gpu%3Dundefined%20vf%3Dundefined%20glctx%3Dnull%20glc%3Dundefined HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /ev?m=O%20index%20in-bounds%20at4128%3D71 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /ev?m=O%20dv%20in-bounds%20at5000%3D72%20dvBL%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /ev?m=O%20encodeInto%20in-bounds%20TypeError%3AArgument%202%20(%27destination%27)%20to%20TextEncoder.encodeInto%20must%20be%20an%20 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /ev?m=O%20grv%20in-bounds%20TypeError%3AArgument%201%20(%27array%27)%20to%20Crypto.getRandomValues%20must%20be%20an%20instan HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /ev?m=O%20shrunk%20jsBL%3D0%20len%3D0%20dvBL%3DTypeError HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /ev?m=O%20post-shrink%20index%20read%3Dundefined HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /ev?m=O%20post-shrink%20dv%20TypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20view%20or%20out-of HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /ev?m=O%20post-shrink%20encodeInto%20TypeError%3AArgument%202%20(%27destination%27)%20to%20TextEncoder.encodeInto%20must%20be%20an%20 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /ev?m=done%20arm%3Dok HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:40:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:40:39] "GET /favicon.ico HTTP/1.1" 404 -

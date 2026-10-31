@@ -1,0 +1,10 @@
+== arm base_nofill (port 12413)
+-- beacons:
+  cap%26arm%3Dbase%26ua%3DMozilla%252F5.0%2520(X11%253B%2520Linux%2520x86_64)%2520AppleWeb
+  pre%26srcw%3D8%26n%3D20000%26cls%3D32%26pat%3D41
+  getter%26when%3Dafterdump
+  closed%26srcw%3D0
+-- asan:
+  ==933797==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7f2c8b0bbd0b bp 0x7ffe91d55550 sp 0x7ffe91d55540 T0)
+  SUMMARY: AddressSanitizer: SEGV /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >)
+  EXIT=124

@@ -1,0 +1,66 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>font parser corpus</title>
+<!-- docs/99: load every arm in f/manifest.json as a @font-face over HTTP, then
+     force a glyph page fill (measureText) and a vertical layout, and beacon one
+     line per arm.  A crash leaves the last BEG line without its RES line. -->
+<body style="margin:0"><div id="stage"></div>
+<script>
+const P = new URLSearchParams(location.search);
+const ONLY = P.get('only') ? P.get('only').split(',') : null;
+const KINDS = P.get('kinds') ? P.get('kinds').split(',') : null;
+const TMO = +(P.get('tmo') || 1500);
+const VERT = P.get('vert') || 'vertical-rl';
+function log(m) { new Image().src = '/ev?m=' + encodeURIComponent(m); }
+(async function () {
+  let man;
+  try { man = await (await fetch('f/manifest.json', { cache: 'no-store' })).json(); }
+  catch (e) { log('MANFAIL ' + e.name + ':' + e.message); return; }
+  const arms = man.arms.filter(a => (!ONLY || ONLY.includes(a.id)) &&
+                                  (!KINDS || KINDS.includes(a.kind)));
+  log('MAN n=' + arms.length + '/' + man.arms.length + ' base=' + man.base_md5 +
+      ' tables=' + man.tables.length);
+  const c0 = document.createElement('canvas').getContext('2d');
+  c0.font = '24px monospace';
+  log('BASE fallback_w=' + c0.measureText('AVTo').width.toFixed(2));
+  let ok = 0, err = 0;
+  for (const a of arms) {
+    log('BEG ' + a.id + ' ' + a.kind);
+    let r = 'st=? res=? w=? vh=? vw=? hh=?';
+    let f = null;
+    try {
+      f = new FontFace('fp_' + a.id, 'url(f/' + a.file + ')');
+      document.fonts.add(f);
+      const res = await Promise.race([
+        f.load().then(() => 'loaded', e => 'rejected:' + (e && e.name)),
+        new Promise(r2 => setTimeout(() => r2('timeout'), TMO))]);
+      const c = document.createElement('canvas').getContext('2d');
+      c.font = '24px "fp_' + a.id + '", monospace';
+      const w = c.measureText('AVTo').width.toFixed(2);
+      const d = document.createElement('div');
+      d.style.cssText = 'position:absolute;left:-9999px;top:0;font-size:24px;' +
+        'font-family:"fp_' + a.id + '",monospace;writing-mode:' + VERT + ';';
+      d.textContent = 'AVAWA';
+      document.body.appendChild(d);
+      const vh = d.offsetHeight, vw = d.offsetWidth;
+      d.style.writingMode = 'horizontal-tb';
+      const hh = d.offsetHeight;
+      d.remove();
+      // upright ideographs are the only text that reaches OpenTypeVerticalData
+      const dj = document.createElement('div');
+      dj.style.cssText = 'position:absolute;left:-9999px;top:0;font-size:24px;' +
+        'font-family:"fp_' + a.id + '",monospace;writing-mode:' + VERT + ';';
+      dj.textContent = '\u4e2d\u4e2d\u4e2d';
+      document.body.appendChild(dj);
+      const vj = dj.offsetHeight, wj = dj.offsetWidth;
+      dj.remove();
+      r = 'st=' + f.status + ' res=' + res + ' w=' + w + ' vh=' + vh +
+          ' vw=' + vw + ' hh=' + hh + ' vj=' + vj + ' wj=' + wj;
+      if (f.status === 'loaded') ok++; else err++;
+    } catch (e) { r += ' EXC=' + e.name + ':' + e.message; err++; }
+    log('RES ' + a.id + ' ' + r);
+    try { if (f) document.fonts.delete(f); } catch (e) {}
+  }
+  log('DONE n=' + arms.length + ' loaded=' + ok + ' other=' + err);
+})();
+</script>

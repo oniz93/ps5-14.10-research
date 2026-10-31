@@ -1,0 +1,184 @@
+[New LWP 1602769]
+[New LWP 1602768]
+[New LWP 1602767]
+[New LWP 1602766]
+[New LWP 1602761]
+[New LWP 1602745]
+[New LWP 1602744]
+[New LWP 1602743]
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <ima:enforcing>
+  <https://debuginfod.fedoraproject.org/>
+  <ima:ignore>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+
+warning: Can't read data for section '.debug_info' in file 'target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0'
+
+warning: Expected absolute pathname for libpthread in the inferior, but got target:/lib64/libc.so.6.
+
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+
+warning: Section .debug_aranges in target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0 entry at offset 0 debug_info_offset 0 does not exists, ignoring .debug_aranges.
+0x00007f5c6fdf9ebd in poll () from target:/lib64/libc.so.6
+Breakpoint 1 at 0x7f5c7edeaa5e (2 locations)
+Breakpoint 2 at 0x7f5c750b831b: file /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp, line 266.
+Breakpoint 3 at 0x7f5c750b8202: file /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp, line 237.
+SIZES CanvasRenderingContext2D=? CachedImage=? CachedResource=? StringImpl=24
+slotwatch armed: dtor=1 free=2 alloc=3
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   <MULTIPLE>         
+1.1                         y   0x00007f5c7edeaa5e <WebCore::CanvasRenderingContext::~CanvasRenderingContext()+20>
+1.2                         y   0x00007f5c7edeb5cf <WebCore::CanvasRenderingContext::~CanvasRenderingContext()+9>
+2       breakpoint     keep n   0x00007f5c750b831b in WTF::fastFree(void*) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:266
+3       breakpoint     keep n   0x00007f5c750b8202 in WTF::fastMalloc(unsigned long) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:237
+CTXDTOR A=0x617000021800
+#0  0x00007f5c7edeaa5e in WebCore::CanvasRenderingContext::~CanvasRenderingContext() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007f5c7edec5c8 in WebCore::CanvasRenderingContext2DBase::~CanvasRenderingContext2DBase() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f5c7edec70c in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f5c7edec733 in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f5c7e9ba82d in WebCore::HTMLCanvasElement::createContextBitmapRenderer(WTF::String const&, WebCore::ImageBitmapRenderingContextSettings&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#5  0x00007f5c7e9bd12d in WebCore::HTMLCanvasElement::getContext(JSC::JSGlobalObject&, WTF::String const&, WTF::FixedVector<JSC::Strong<JSC::Unknown, (JSC::ShouldStrongDestructorGrabLock)0> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FREED-A ptr=0x617000021800
+#0  WTF::fastFree (p=0x617000021800) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:266
+#1  0x00007f5c7edec73b in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f5c7e9ba82d in WebCore::HTMLCanvasElement::createContextBitmapRenderer(WTF::String const&, WebCore::ImageBitmapRenderingContextSettings&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f5c7e9bd12d in WebCore::HTMLCanvasElement::getContext(JSC::JSGlobalObject&, WTF::String const&, WTF::FixedVector<JSC::Strong<JSC::Unknown, (JSC::ShouldStrongDestructorGrabLock)0> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f5c7aa9ff8f in WebCore::jsHTMLCanvasElementPrototypeFunction_getContext(JSC::JSGlobalObject*, JSC::CallFrame*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FREE-RETURNED
+Hardware watchpoint 4: *(unsigned long*)0x617000021800
+WATCH installed on 0x617000021800
+ALLOC req=712 ret=0x617000021800 n=1  <== A
+#0  0x00007f5c75244a44 in WTF::FastMalloc::malloc (size=<optimized out>) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.h:218
+#1  WTF::StringImpl::createUninitializedInternalNonEmpty<unsigned char> (data=<synthetic pointer>: <optimized out>, length=692) at /home/<user>/wk/WebKit/Source/WTF/wtf/text/StringImpl.cpp:189
+#2  WTF::StringImpl::createInternal<unsigned char> (length=692, characters=0x619000066880 'A' <repeats 692 times>, "\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\004") at /home/<user>/wk/WebKit/Source/WTF/wtf/text/StringImpl.cpp:261
+#3  WTF::StringImpl::create (characters=characters@entry=0x619000066880 'A' <repeats 692 times>, "\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\004", length=<optimized out>) at /home/<user>/wk/WebKit/Source/WTF/wtf/text/StringImpl.cpp:273
+#4  0x00007f5c75273ac3 in WTF::String::String (this=0x7ffd54334ff0, characters=0x619000066880 'A' <repeats 692 times>, "\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\004", length=<optimized out>) at /home/<user>/wk/WebKit/Source/WTF/wtf/text/WTFString.cpp:50
+#5  0x00007f5c7fa9076e in WebCore::Base64Utilities::atob(WTF::String const&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#6  0x00007f5c7b13cbc0 in WebCore::jsLocalDOMWindowInstanceFunction_atob(JSC::JSGlobalObject*, JSC::CallFrame*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#7  0x00007f5c752cd701 in llint_native_call_trampoline () at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LowLevelInterpreter64.asm:2780
+WROTE-A addr=0x617000021800 val=0x2
+#0  0x00007f5c75244a7e in WTF::StringImplShape::StringImplShape (hashAndFlags=4, data8=0x617000021814 "", length=692, refCount=2, this=0x617000021800) at /home/<user>/wk/WebKit/Source/WTF/wtf/text/StringImpl.h:811
+#1  WTF::StringImpl::StringImpl (length=692, this=0x617000021800) at /home/<user>/wk/WebKit/Source/WTF/wtf/text/StringImpl.h:889
+#2  WTF::StringImpl::constructInternal<unsigned char> (length=692, string=...) at /home/<user>/wk/WebKit/Source/WTF/wtf/text/StringImpl.h:651
+#3  WTF::StringImpl::createUninitializedInternalNonEmpty<unsigned char> (data=<synthetic pointer>: 0x617000021814 "", length=692) at /home/<user>/wk/WebKit/Source/WTF/wtf/text/StringImpl.cpp:191
+#4  WTF::StringImpl::createInternal<unsigned char> (length=692, characters=0x619000066880 'A' <repeats 692 times>, "\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\004") at /home/<user>/wk/WebKit/Source/WTF/wtf/text/StringImpl.cpp:261
+#5  WTF::StringImpl::create (characters=characters@entry=0x619000066880 'A' <repeats 692 times>, "\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\004", length=<optimized out>) at /home/<user>/wk/WebKit/Source/WTF/wtf/text/StringImpl.cpp:273
+#6  0x00007f5c75273ac3 in WTF::String::String (this=0x7ffd54334ff0, characters=0x619000066880 'A' <repeats 692 times>, "\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\005\001\020\024\004", length=<optimized out>) at /home/<user>/wk/WebKit/Source/WTF/wtf/text/WTFString.cpp:50
+#7  0x00007f5c7fa9076e in WebCore::Base64Utilities::atob(WTF::String const&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#8  0x00007f5c7b13cbc0 in WebCore::jsLocalDOMWindowInstanceFunction_atob(JSC::JSGlobalObject*, JSC::CallFrame*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#9  0x00007f5c752cd701 in llint_native_call_trampoline () at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LowLevelInterpreter64.asm:2780
+ALLOC req=712 ret=0x617000021b80 n=2
+ALLOC req=712 ret=0x617000021f00 n=3
+ALLOC req=712 ret=0x617000022280 n=4
+ALLOC req=712 ret=0x617000022600 n=5
+ALLOC req=712 ret=0x617000022980 n=6
+ALLOC req=712 ret=0x617000022d00 n=7
+ALLOC req=712 ret=0x617000023080 n=8
+ALLOC req=712 ret=0x617000023400 n=9
+ALLOC req=712 ret=0x617000023780 n=10
+ALLOC req=712 ret=0x617000023b00 n=11
+ALLOC req=712 ret=0x617000023e80 n=12
+ALLOC req=712 ret=0x617000024200 n=13
+ALLOC req=712 ret=0x617000024580 n=14
+ALLOC req=712 ret=0x617000024900 n=15
+ALLOC req=712 ret=0x617000024c80 n=16
+ALLOC req=712 ret=0x617000025000 n=17
+ALLOC req=712 ret=0x617000025380 n=18
+ALLOC req=712 ret=0x617000025700 n=19
+ALLOC req=712 ret=0x617000025a80 n=20
+ALLOC req=712 ret=0x617000025e00 n=21
+ALLOC req=712 ret=0x617000026180 n=22
+ALLOC req=712 ret=0x617000026500 n=23
+ALLOC req=712 ret=0x617000026880 n=24
+ALLOC req=712 ret=0x617000026c00 n=25
+ALLOC req=712 ret=0x617000026f80 n=26
+ALLOC req=712 ret=0x617000027300 n=27
+ALLOC req=712 ret=0x617000027680 n=28
+ALLOC req=712 ret=0x617000027a00 n=29
+ALLOC req=712 ret=0x617000027d80 n=30
+ALLOC req=712 ret=0x617000028100 n=31
+ALLOC req=712 ret=0x617000028480 n=32
+ALLOC req=712 ret=0x617000028800 n=33
+ALLOC req=712 ret=0x617000028b80 n=34
+ALLOC req=712 ret=0x617000028f00 n=35
+ALLOC req=712 ret=0x617000029280 n=36
+ALLOC req=712 ret=0x617000029600 n=37
+ALLOC req=712 ret=0x617000029980 n=38
+ALLOC req=712 ret=0x617000029d00 n=39
+ALLOC req=712 ret=0x61700002a080 n=40
+ALLOC req=712 ret=0x61700002a400 n=41
+ALLOC req=712 ret=0x61700002a780 n=42
+ALLOC req=712 ret=0x61700002ab00 n=43
+ALLOC req=712 ret=0x61700002ae80 n=44
+ALLOC req=712 ret=0x61700002b200 n=45
+ALLOC req=712 ret=0x61700002b580 n=46
+ALLOC req=712 ret=0x61700002b900 n=47
+ALLOC req=712 ret=0x61700002bc80 n=48
+ALLOC req=712 ret=0x61700002c000 n=49
+ALLOC req=712 ret=0x61700002c380 n=50
+ALLOC req=712 ret=0x61700002c700 n=51
+ALLOC req=712 ret=0x61700002ca80 n=52
+ALLOC req=712 ret=0x61700002ce00 n=53
+ALLOC req=712 ret=0x61700002d180 n=54
+ALLOC req=712 ret=0x61700002d500 n=55
+ALLOC req=712 ret=0x61700002d880 n=56
+ALLOC req=712 ret=0x61700002dc00 n=57
+ALLOC req=712 ret=0x61700002df80 n=58
+ALLOC req=712 ret=0x61700002e300 n=59
+ALLOC req=712 ret=0x61700002e680 n=60
+ALLOC req=712 ret=0x61700002ea00 n=61
+ALLOC req=712 ret=0x61700002ed80 n=62
+ALLOC req=712 ret=0x61700002f100 n=63
+ALLOC req=712 ret=0x61700002f480 n=64
+ALLOC req=712 ret=0x61700002f800 n=65
+ALLOC req=712 ret=0x61700002fb80 n=66
+ALLOC req=712 ret=0x61700002ff00 n=67
+ALLOC req=712 ret=0x617000030280 n=68
+ALLOC req=712 ret=0x617000030600 n=69
+ALLOC req=712 ret=0x617000030980 n=70
+ALLOC req=712 ret=0x617000030d00 n=71
+ALLOC req=712 ret=0x617000031080 n=72
+ALLOC req=712 ret=0x617000031400 n=73
+ALLOC req=712 ret=0x617000031780 n=74
+ALLOC req=712 ret=0x617000031b00 n=75
+ALLOC req=712 ret=0x617000031e80 n=76
+ALLOC req=712 ret=0x617000032200 n=77
+ALLOC req=712 ret=0x617000032580 n=78
+ALLOC req=712 ret=0x617000032900 n=79
+ALLOC req=712 ret=0x617000032c80 n=80
+ALLOC req=720 ret=0x617000033000 n=81
+ALLOC req=720 ret=0x617000033380 n=82
+ALLOC req=744 ret=0x617000033700 n=83
+
+Thread 1 "WebKitWebProces" received signal SIGSEGV, Segmentation fault.
+0x00007f5c7f06401a in WebCore::enabledCanvasAgent(WebCore::CanvasRenderingContext&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FAULT si_addr=$1 = 0x0
+SLOT A=0x617000021800
+SLOT shadow=0xc2e7fffc300:	0x00
+SLOT first32:
+0x617000021800:	0x000002b400000002	0x0000617000021814
+0x617000021810:	0x414141410000000c	0x4141414141414141
+REGS
+rip            0x7f5c7f06401a      0x7f5c7f06401a <WebCore::enabledCanvasAgent(WebCore::CanvasRenderingContext&)+35>
+rax            0x828282828282828   587763904309372968
+rbx            0x7ffd543347b0      140726016100272
+rdi            0x4141414141414141  4702111234474983745
+rsi            0x617000021800      107133664368640
+FAULT_BT
+#0  0x00007f5c7f06401a in WebCore::enabledCanvasAgent(WebCore::CanvasRenderingContext&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007f5c7f0644d4 in WebCore::InspectorCanvasCallTracer::processArgument(WebCore::CanvasRenderingContext&, std::variant<WTF::String, WTF::RefPtr<WebCore::CanvasGradient, WTF::RawPtrTraits<WebCore::CanvasGradient>, WTF::DefaultRefDerefTraits<WebCore::CanvasGradient> >, WTF::RefPtr<WebCore::CanvasPattern, WTF::RawPtrTraits<WebCore::CanvasPattern>, WTF::DefaultRefDerefTraits<WebCore::CanvasPattern> > >&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f5c79fa7c78 in WebCore::setJSCanvasRenderingContext2D_fillStyle(JSC::JSGlobalObject*, long, long, JSC::PropertyName) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f5c7469b136 in WTF::FunctionPtr<(WTF::PtrTag)30177, bool(JSC::JSGlobalObject*, long, long, JSC::PropertyName), (WTF::FunctionAttributes)1>::operator() (in#3=..., in#2=108645492750048, in#1=<optimized out>, in#0=<optimized out>, this=0x7ffd54334a00) at /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/FunctionPtr.h:104
+#4  JSC::JSObject::putInlineSlow (this=this@entry=0x60d000040618, globalObject=globalObject@entry=0x61f0000038e8, propertyName=..., value=..., slot=...) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSObject.cpp:837
+#5  0x00007f5c73ac87d9 in JSC::JSObject::putInlineForJSObject (cell=0x60d000040618, globalObject=globalObject@entry=0x61f0000038e8, propertyName=..., value=..., value@entry=..., slot=...) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSObjectInlines.h:299
+#6  0x00007f5c73a7ae9d in JSC::JSCell::putInline (slot=..., value=..., propertyName=..., globalObject=0x61f0000038e8, this=<optimized out>) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSCellInlines.h:475
+#7  JSC::JSValue::putInline (slot=..., value=..., propertyName=..., globalObject=0x61f0000038e8, this=0x7ffd543350c0) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSCJSValueInlines.h:1160
+#8  JSC::LLInt::llint_slow_path_put_by_id (callFrame=<optimized out>, pc=<optimized out>) at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LLIntSlowPaths.cpp:963
+#9  0x00007f5c752b8bdb in llint_op_put_by_id () at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LowLevelInterpreter64.asm:118
+#10 0x0000000000000000 in ?? ()
+SLOT occupant:
+No symbol matches *(void**)$A.
+[Inferior 1 (process 1602739) detached]

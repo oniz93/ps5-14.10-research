@@ -1,0 +1,25 @@
+=== D3 port=12983 secs=30 q=
+--- beacons (in order):
+BOOT+decode
+det_ctl=pos=nz=4/16 ptr=1[@0=0x0000610000010540] neg=nz=4/16 ptr=0
+src_png=len=254 sig=137,80,78,71
+src_jpg=len=893
+d_png50=ok 32x32 nz=0/16384 ptr=0
+d_png75=ok 32x32 nz=0/16384 ptr=0
+d_png90=ok 32x32 nz=0/16384 ptr=0
+d_png99=ok 32x32 nz=0/16384 ptr=0
+d_pngflip=ok 32x32 nz=0/16384 ptr=0
+d_jpg50=FAIL InvalidStateError: Cannot decode the data in the argument to createImageBitmap
+d_jpg90=ok 32x32 nz=0/16384 ptr=0
+d_jpgflip=FAIL InvalidStateError: Cannot decode the data in the argument to createImageBitmap
+d_garbage=FAIL InvalidStateError: Cannot decode the data in the argument to createImageBitmap
+svg_blur=ok 64x64 nz=800/16384 ptr=0
+svg_turb=ok 64x64 nz=16346/16384 ptr=0
+svg_offset=ok 64x64 nz=2/16384 ptr=0
+draw_border=nz=0/16384 ptr=0
+draw_corner=nz=0/16384 ptr=0
+DONE=sent=17
+--- maps samples: 21
+--- crash/abort:
+  access: none
+EXIT=124

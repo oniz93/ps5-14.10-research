@@ -1,0 +1,1122 @@
+{
+ "data/otf-dump/g4/g4.otf": {
+  "GSUB": {
+   "lookupListOffset": 116,
+   "lookups": [
+    {
+     "flag": 0,
+     "index": 0,
+     "subtables": [
+      {
+       "coverage": {
+        "at": 934,
+        "format": 1,
+        "glyphCount": 1,
+        "glyphs": [
+         1
+        ]
+       },
+       "coverageOffset": 26,
+       "format": 1,
+       "ligatureSetCount": 2,
+       "ligatureSets": [
+        {
+         "index": 0,
+         "ligatureCount": 2,
+         "ligatures": [
+          {
+           "compCount": 2,
+           "components": [
+            4
+           ],
+           "ligGlyph": 2,
+           "offset": 6
+          },
+          {
+           "compCount": 2,
+           "components": [
+            5
+           ],
+           "ligGlyph": 3,
+           "offset": 12
+          }
+         ],
+         "offset": 8
+        },
+        {
+         "index": 1,
+         "ligatureCount": 26,
+         "ligatures": [
+          {
+           "compCount": 8,
+           "components": [
+            2,
+            6,
+            12,
+            2,
+            2,
+            4,
+            3
+           ],
+           "ligGlyph": 2,
+           "offset": 2
+          },
+          {
+           "compCount": 12,
+           "components": [
+            2,
+            2,
+            4,
+            3,
+            2,
+            5,
+            1,
+            1,
+            1,
+            2,
+            6
+           ],
+           "ligGlyph": 6,
+           "offset": 8
+          },
+          {
+           "compCount": 8,
+           "components": [
+            2,
+            6,
+            12,
+            2,
+            2,
+            4,
+            3
+           ],
+           "ligGlyph": 2,
+           "offset": 2
+          },
+          {
+           "compCount": 6,
+           "components": [
+            12,
+            2,
+            2,
+            4,
+            3
+           ],
+           "ligGlyph": 2,
+           "offset": 6
+          }
+         ],
+         "note": "walked as a reader that trusts the declared count would",
+         "offset": 2
+        }
+       ],
+       "offset": 908,
+       "offsetSlots": [
+        8,
+        2
+       ],
+       "raw": "0001001a0002000800020006000c0002000200040003000200050001000100010002000600000001000000020006000000010000000200060000000100000001",
+       "slot2Bytes": 2,
+       "type": 4
+      }
+     ],
+     "type": 4
+    },
+    {
+     "flag": 0,
+     "index": 1,
+     "subtables": [
+      {
+       "offset": 940,
+       "type": 1
+      }
+     ],
+     "type": 1
+    },
+    {
+     "flag": 0,
+     "index": 2,
+     "subtables": [
+      {
+       "offset": 950,
+       "type": 1
+      }
+     ],
+     "type": 1
+    },
+    {
+     "flag": 0,
+     "index": 3,
+     "subtables": [
+      {
+       "offset": 960,
+       "type": 1
+      }
+     ],
+     "type": 1
+    },
+    {
+     "flag": 0,
+     "index": 4,
+     "subtables": [
+      {
+       "offset": 970,
+       "type": 3
+      }
+     ],
+     "type": 3
+    }
+   ],
+   "version": "1.0"
+  },
+  "cmap": {
+   "numSubtables": 3,
+   "records": [
+    {
+     "encoding": 3,
+     "offset": 28,
+     "platform": 0
+    },
+    {
+     "encoding": 1,
+     "offset": 92,
+     "platform": 3
+    },
+    {
+     "encoding": 10,
+     "offset": 28,
+     "platform": 3
+    }
+   ],
+   "subtables": [
+    {
+     "declaredLength": 64,
+     "firstGroups": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       97,
+       97,
+       1
+      ],
+      [
+       98,
+       98,
+       4
+      ]
+     ],
+     "format": 12,
+     "language": 0,
+     "numGroups": 4,
+     "offset": 28
+    },
+    {
+     "bytesLeftInCmapTable": 56,
+     "declaredLength": 56,
+     "endCodesHead": [
+      0,
+      97,
+      98,
+      99
+     ],
+     "entrySelector": 2,
+     "format": 4,
+     "language": 0,
+     "offset": 92,
+     "rangeShift": 2,
+     "searchRange": 8,
+     "segCountX2": 10
+    }
+   ],
+   "version": 0
+  },
+  "fontTools": {
+   "GSUB": "FAILED: ValueError: ('bytes length not a multiple of item size', 'Component', 'Ligature', 'LigatureSet', 'SubTable', 'Lookup', 'LookupList')",
+   "cmap": [
+    {
+     "format": 12,
+     "n": 3,
+     "platEncID": 3,
+     "platformID": 0
+    },
+    {
+     "format": 4,
+     "n": 3,
+     "platEncID": 1,
+     "platformID": 3
+    },
+    {
+     "format": 12,
+     "n": 3,
+     "platEncID": 10,
+     "platformID": 3
+    }
+   ],
+   "loaded": true,
+   "tables": [
+    "CFF ",
+    "GSUB",
+    "OS/2",
+    "VORG",
+    "cmap",
+    "head",
+    "hhea",
+    "hmtx",
+    "kern",
+    "maxp",
+    "name",
+    "post",
+    "vhea",
+    "vmtx"
+   ]
+  },
+  "maxp": {
+   "numGlyphs": 6,
+   "version": 65536
+  },
+  "path": "data/otf-dump/g4/g4.otf",
+  "sfnt": {
+   "entrySelector": 3,
+   "numTables": 14,
+   "order": [
+    "CFF ",
+    "GSUB",
+    "OS/2",
+    "VORG",
+    "cmap",
+    "head",
+    "hhea",
+    "hmtx",
+    "kern",
+    "maxp",
+    "name",
+    "post",
+    "vhea",
+    "vmtx"
+   ],
+   "rangeShift": 96,
+   "searchRange": 128,
+   "tables": {
+    "CFF ": {
+     "checksum": 3038653210,
+     "length": 504,
+     "offset": 236,
+     "tag": "CFF "
+    },
+    "GSUB": {
+     "checksum": 3412112722,
+     "length": 240,
+     "offset": 740,
+     "tag": "GSUB"
+    },
+    "OS/2": {
+     "checksum": 1121409441,
+     "length": 100,
+     "offset": 980,
+     "tag": "OS/2"
+    },
+    "VORG": {
+     "checksum": 65536,
+     "length": 8,
+     "offset": 1080,
+     "tag": "VORG"
+    },
+    "cmap": {
+     "checksum": 21955463,
+     "length": 148,
+     "offset": 1088,
+     "tag": "cmap"
+    },
+    "head": {
+     "checksum": 1694123208,
+     "length": 54,
+     "offset": 1236,
+     "tag": "head"
+    },
+    "hhea": {
+     "checksum": 124715415,
+     "length": 36,
+     "offset": 1292,
+     "tag": "hhea"
+    },
+    "hmtx": {
+     "checksum": 209715200,
+     "length": 24,
+     "offset": 1328,
+     "tag": "hmtx"
+    },
+    "kern": {
+     "checksum": 1048592,
+     "length": 32,
+     "offset": 1352,
+     "tag": "kern"
+    },
+    "maxp": {
+     "checksum": 851968,
+     "length": 32,
+     "offset": 1384,
+     "tag": "maxp"
+    },
+    "name": {
+     "checksum": 12845258,
+     "length": 26,
+     "offset": 1416,
+     "tag": "name"
+    },
+    "post": {
+     "checksum": 196608,
+     "length": 32,
+     "offset": 1444,
+     "tag": "post"
+    },
+    "vhea": {
+     "checksum": 104992276,
+     "length": 36,
+     "offset": 1476,
+     "tag": "vhea"
+    },
+    "vmtx": {
+     "checksum": 65866280,
+     "length": 24,
+     "offset": 1512,
+     "tag": "vmtx"
+    }
+   },
+   "version": "OTTO"
+  },
+  "size": 1536
+ },
+ "data/otf-dump/g6/g6.otf": {
+  "GSUB": {
+   "lookupListOffset": 116,
+   "lookups": [
+    {
+     "flag": 0,
+     "index": 0,
+     "subtables": [
+      {
+       "coverage": {
+        "at": 782,
+        "format": 1,
+        "glyphCount": 1,
+        "glyphs": [
+         1
+        ]
+       },
+       "coverageOffset": 18,
+       "format": 1,
+       "ligatureSetCount": 1,
+       "ligatureSets": [
+        {
+         "index": 0,
+         "ligatureCount": 1,
+         "ligatures": [
+          {
+           "compCount": 2,
+           "components": [
+            3
+           ],
+           "ligGlyph": 2,
+           "offset": 4
+          }
+         ],
+         "offset": 8
+        }
+       ],
+       "offset": 764,
+       "offsetSlots": [
+        8
+       ],
+       "raw": "00010012000100080001000400020002000300010001000100020006000000010000000200060000000100000002000600000001000000010006000000010000",
+       "type": 4
+      }
+     ],
+     "type": 4
+    },
+    {
+     "flag": 0,
+     "index": 1,
+     "subtables": [
+      {
+       "offset": 788,
+       "type": 1
+      }
+     ],
+     "type": 1
+    },
+    {
+     "flag": 0,
+     "index": 2,
+     "subtables": [
+      {
+       "offset": 798,
+       "type": 1
+      }
+     ],
+     "type": 1
+    },
+    {
+     "flag": 0,
+     "index": 3,
+     "subtables": [
+      {
+       "offset": 808,
+       "type": 1
+      }
+     ],
+     "type": 1
+    },
+    {
+     "flag": 0,
+     "index": 4,
+     "subtables": [
+      {
+       "offset": 818,
+       "type": 3
+      }
+     ],
+     "type": 3
+    }
+   ],
+   "version": "1.0"
+  },
+  "cmap": {
+   "numSubtables": 3,
+   "records": [
+    {
+     "encoding": 3,
+     "offset": 28,
+     "platform": 0
+    },
+    {
+     "encoding": 1,
+     "offset": 80,
+     "platform": 3
+    },
+    {
+     "encoding": 10,
+     "offset": 28,
+     "platform": 3
+    }
+   ],
+   "subtables": [
+    {
+     "declaredLength": 52,
+     "firstGroups": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       97,
+       97,
+       1
+      ],
+      [
+       98,
+       98,
+       3
+      ]
+     ],
+     "format": 12,
+     "language": 0,
+     "numGroups": 3,
+     "offset": 28
+    },
+    {
+     "bytesLeftInCmapTable": 48,
+     "declaredLength": 48,
+     "endCodesHead": [
+      0,
+      97,
+      98,
+      65535
+     ],
+     "entrySelector": 2,
+     "format": 4,
+     "language": 0,
+     "offset": 80,
+     "rangeShift": 0,
+     "searchRange": 8,
+     "segCountX2": 8
+    }
+   ],
+   "version": 0
+  },
+  "fontTools": {
+   "GSUB": "decompiled",
+   "GSUB_features": [
+    [
+     "liga",
+     [
+      0
+     ]
+    ],
+    [
+     "fina",
+     [
+      1
+     ]
+    ],
+    [
+     "medi",
+     [
+      2
+     ]
+    ],
+    [
+     "init",
+     [
+      3
+     ]
+    ],
+    [
+     "rlig",
+     [
+      4
+     ]
+    ]
+   ],
+   "GSUB_lookups": [
+    {
+     "subtables": [
+      {
+       "firstGlyphs": {
+        "UnknownChar": [
+         [
+          "UnknownChar.1",
+          [
+           "UnknownChar.2"
+          ]
+         ]
+        ]
+       }
+      }
+     ],
+     "type": 4
+    },
+    {
+     "subtables": [
+      "SingleSubst"
+     ],
+     "type": 1
+    },
+    {
+     "subtables": [
+      "SingleSubst"
+     ],
+     "type": 1
+    },
+    {
+     "subtables": [
+      "SingleSubst"
+     ],
+     "type": 1
+    },
+    {
+     "subtables": [
+      "AlternateSubst"
+     ],
+     "type": 3
+    }
+   ],
+   "cmap": [
+    {
+     "format": 12,
+     "n": 2,
+     "platEncID": 3,
+     "platformID": 0
+    },
+    {
+     "format": 4,
+     "n": 2,
+     "platEncID": 1,
+     "platformID": 3
+    },
+    {
+     "format": 12,
+     "n": 2,
+     "platEncID": 10,
+     "platformID": 3
+    }
+   ],
+   "loaded": true,
+   "tables": [
+    "CFF ",
+    "GSUB",
+    "OS/2",
+    "VORG",
+    "cmap",
+    "head",
+    "hhea",
+    "hmtx",
+    "kern",
+    "maxp",
+    "name",
+    "post",
+    "vhea",
+    "vmtx"
+   ]
+  },
+  "maxp": {
+   "numGlyphs": 4,
+   "version": 65536
+  },
+  "path": "data/otf-dump/g6/g6.otf",
+  "sfnt": {
+   "entrySelector": 3,
+   "numTables": 14,
+   "order": [
+    "CFF ",
+    "GSUB",
+    "OS/2",
+    "VORG",
+    "cmap",
+    "head",
+    "hhea",
+    "hmtx",
+    "kern",
+    "maxp",
+    "name",
+    "post",
+    "vhea",
+    "vmtx"
+   ],
+   "rangeShift": 96,
+   "searchRange": 128,
+   "tables": {
+    "CFF ": {
+     "checksum": 974799828,
+     "length": 359,
+     "offset": 236,
+     "tag": "CFF "
+    },
+    "GSUB": {
+     "checksum": 3410867490,
+     "length": 232,
+     "offset": 596,
+     "tag": "GSUB"
+    },
+    "OS/2": {
+     "checksum": 1121409441,
+     "length": 100,
+     "offset": 828,
+     "tag": "OS/2"
+    },
+    "VORG": {
+     "checksum": 65536,
+     "length": 8,
+     "offset": 928,
+     "tag": "VORG"
+    },
+    "cmap": {
+     "checksum": 8585975,
+     "length": 128,
+     "offset": 936,
+     "tag": "cmap"
+    },
+    "head": {
+     "checksum": 1694123208,
+     "length": 54,
+     "offset": 1064,
+     "tag": "head"
+    },
+    "hhea": {
+     "checksum": 124715613,
+     "length": 36,
+     "offset": 1120,
+     "tag": "hhea"
+    },
+    "hmtx": {
+     "checksum": 150732800,
+     "length": 16,
+     "offset": 1156,
+     "tag": "hmtx"
+    },
+    "kern": {
+     "checksum": 1048592,
+     "length": 32,
+     "offset": 1172,
+     "tag": "kern"
+    },
+    "maxp": {
+     "checksum": 589824,
+     "length": 32,
+     "offset": 1204,
+     "tag": "maxp"
+    },
+    "name": {
+     "checksum": 12976330,
+     "length": 26,
+     "offset": 1236,
+     "tag": "name"
+    },
+    "post": {
+     "checksum": 196608,
+     "length": 32,
+     "offset": 1264,
+     "tag": "post"
+    },
+    "vhea": {
+     "checksum": 104992274,
+     "length": 36,
+     "offset": 1296,
+     "tag": "vhea"
+    },
+    "vmtx": {
+     "checksum": 65734608,
+     "length": 16,
+     "offset": 1332,
+     "tag": "vmtx"
+    }
+   },
+   "version": "OTTO"
+  },
+  "size": 1348
+ },
+ "data/otf-dump/n3/n3_01.bin": {
+  "GSUB": {
+   "lookupListOffset": 116,
+   "lookups": [
+    {
+     "flag": 0,
+     "index": 0,
+     "subtables": [
+      {
+       "coverage": {
+        "at": 5112210,
+        "format": 1,
+        "glyphCount": 0,
+        "glyphs": []
+       },
+       "coverageOffset": 6,
+       "format": 1,
+       "ligatureSetCount": 0,
+       "ligatureSets": [],
+       "offset": 5112204,
+       "offsetSlots": [],
+       "raw": "0001000600000001000000020006000000010000000200060000000100000002000600000001000000010006000000010000",
+       "type": 4
+      }
+     ],
+     "type": 4
+    },
+    {
+     "flag": 0,
+     "index": 1,
+     "subtables": [
+      {
+       "offset": 5112214,
+       "type": 1
+      }
+     ],
+     "type": 1
+    },
+    {
+     "flag": 0,
+     "index": 2,
+     "subtables": [
+      {
+       "offset": 5112224,
+       "type": 1
+      }
+     ],
+     "type": 1
+    },
+    {
+     "flag": 0,
+     "index": 3,
+     "subtables": [
+      {
+       "offset": 5112234,
+       "type": 1
+      }
+     ],
+     "type": 1
+    },
+    {
+     "flag": 0,
+     "index": 4,
+     "subtables": [
+      {
+       "offset": 5112244,
+       "type": 3
+      }
+     ],
+     "type": 3
+    }
+   ],
+   "version": "1.0"
+  },
+  "cmap": {
+   "numSubtables": 3,
+   "records": [
+    {
+     "encoding": 3,
+     "offset": 28,
+     "platform": 0
+    },
+    {
+     "encoding": 1,
+     "offset": 786464,
+     "platform": 3
+    },
+    {
+     "encoding": 10,
+     "offset": 28,
+     "platform": 3
+    }
+   ],
+   "subtables": [
+    {
+     "declaredLength": 786436,
+     "firstGroups": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       32,
+       32,
+       1
+      ],
+      [
+       33,
+       33,
+       2
+      ]
+     ],
+     "format": 12,
+     "language": 0,
+     "numGroups": 65535,
+     "offset": 28
+    },
+    {
+     "bytesLeftInCmapTable": 524064,
+     "declaredLength": 65535,
+     "endCodesHead": [
+      0,
+      32,
+      33,
+      34
+     ],
+     "entrySelector": 15,
+     "format": 4,
+     "language": 0,
+     "offset": 786464,
+     "rangeShift": 65477,
+     "searchRange": 65535,
+     "segCountX2": 65535
+    }
+   ],
+   "version": 0
+  },
+  "fontTools": {
+   "GSUB": "decompiled",
+   "GSUB_features": [
+    [
+     "liga",
+     [
+      0
+     ]
+    ],
+    [
+     "fina",
+     [
+      1
+     ]
+    ],
+    [
+     "medi",
+     [
+      2
+     ]
+    ],
+    [
+     "init",
+     [
+      3
+     ]
+    ],
+    [
+     "rlig",
+     [
+      4
+     ]
+    ]
+   ],
+   "GSUB_lookups": [
+    {
+     "subtables": [
+      {
+       "firstGlyphs": {}
+      }
+     ],
+     "type": 4
+    },
+    {
+     "subtables": [
+      "SingleSubst"
+     ],
+     "type": 1
+    },
+    {
+     "subtables": [
+      "SingleSubst"
+     ],
+     "type": 1
+    },
+    {
+     "subtables": [
+      "SingleSubst"
+     ],
+     "type": 1
+    },
+    {
+     "subtables": [
+      "AlternateSubst"
+     ],
+     "type": 3
+    }
+   ],
+   "cmap": "FAILED: ValueError: bytes length not a multiple of item size",
+   "loaded": true,
+   "tables": [
+    "CFF ",
+    "GSUB",
+    "OS/2",
+    "VORG",
+    "cmap",
+    "head",
+    "hhea",
+    "hmtx",
+    "kern",
+    "maxp",
+    "name",
+    "post",
+    "vhea",
+    "vmtx"
+   ]
+  },
+  "maxp": {
+   "numGlyphs": 65535,
+   "version": 65536
+  },
+  "path": "data/otf-dump/n3/n3_01.bin",
+  "sfnt": {
+   "entrySelector": 3,
+   "numTables": 14,
+   "order": [
+    "CFF ",
+    "GSUB",
+    "OS/2",
+    "VORG",
+    "cmap",
+    "head",
+    "hhea",
+    "hmtx",
+    "kern",
+    "maxp",
+    "name",
+    "post",
+    "vhea",
+    "vmtx"
+   ],
+   "rangeShift": 96,
+   "searchRange": 128,
+   "tables": {
+    "CFF ": {
+     "checksum": 1687645583,
+     "length": 5111799,
+     "offset": 236,
+     "tag": "CFF "
+    },
+    "GSUB": {
+     "checksum": 3410277584,
+     "length": 218,
+     "offset": 5112036,
+     "tag": "GSUB"
+    },
+    "OS/2": {
+     "checksum": 1121409441,
+     "length": 100,
+     "offset": 5112256,
+     "tag": "OS/2"
+    },
+    "VORG": {
+     "checksum": 65536,
+     "length": 8,
+     "offset": 5112356,
+     "tag": "VORG"
+    },
+    "cmap": {
+     "checksum": 2148433920,
+     "length": 1310528,
+     "offset": 5112364,
+     "tag": "cmap"
+    },
+    "head": {
+     "checksum": 1694123208,
+     "length": 54,
+     "offset": 6422892,
+     "tag": "head"
+    },
+    "hhea": {
+     "checksum": 124781244,
+     "length": 36,
+     "offset": 6422948,
+     "tag": "hhea"
+    },
+    "hmtx": {
+     "checksum": 3796893696,
+     "length": 262140,
+     "offset": 6422984,
+     "tag": "hmtx"
+    },
+    "kern": {
+     "checksum": 1048592,
+     "length": 32,
+     "offset": 6685124,
+     "tag": "kern"
+    },
+    "maxp": {
+     "checksum": 4294901760,
+     "length": 32,
+     "offset": 6685156,
+     "tag": "maxp"
+    },
+    "name": {
+     "checksum": 12779729,
+     "length": 26,
+     "offset": 6685188,
+     "tag": "name"
+    },
+    "post": {
+     "checksum": 196608,
+     "length": 32,
+     "offset": 6685216,
+     "tag": "post"
+    },
+    "vhea": {
+     "checksum": 105057805,
+     "length": 36,
+     "offset": 6685248,
+     "tag": "vhea"
+    },
+    "vmtx": {
+     "checksum": 85066128,
+     "length": 262140,
+     "offset": 6685284,
+     "tag": "vmtx"
+    }
+   },
+   "version": "OTTO"
+  },
+  "size": 6947424
+ }
+}

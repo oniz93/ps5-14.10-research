@@ -1,0 +1,2 @@
+/home/<user>/wk/WebKit/WebKitBuild/ASAN/bin/MiniBrowser: error while loading shared libraries: /home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0: file too short
+EXIT=127

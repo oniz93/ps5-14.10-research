@@ -1,0 +1,43 @@
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /corpus.html?kinds=d HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 13:57:16] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /ev?m=BOOT%20arms%3D41%20kinds%3Dd HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:16] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:16] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /ev?m=BEG%20D1-huge-segments%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:16] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /ev?m=RES%20D1-huge-segments%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20n%3D1%20st%3Dloaded%20ms%3D29 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:16] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /ev?m=BEG%20D2-mid-command%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:16] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /ev?m=RES%20D2-mid-command%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20n%3D1%20st%3Dunloaded%20ms%3D15 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:16] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /ev?m=BEG%20D3-hv%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:16] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /ev?m=RES%20D3-hv%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20n%3D1%20st%3Dloaded%20ms%3D6 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:16] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /ev?m=BEG%20D4-quad-arc%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:16] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:16] "GET /ev?m=RES%20D4-quad-arc%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20n%3D1%20st%3Dloaded%20ms%3D6 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=BEG%20D5-huge-coords%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=RES%20D5-huge-coords%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20n%3D1%20st%3Dloaded%20ms%3D6 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=BEG%20D6-nan%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=RES%20D6-nan%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20n%3D1%20st%3Dunloaded%20ms%3D12 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=BEG%20D7-many-movetos%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=RES%20D7-many-movetos%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20n%3D1%20st%3Dloaded%20ms%3D30 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=BEG%20D8-no-d%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=RES%20D8-no-d%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20n%3D1%20st%3Dloaded%20ms%3D6 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=BEG%20D9-empty-d%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=RES%20D9-empty-d%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20n%3D1%20st%3Dloaded%20ms%3D6 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:57:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:57:17] "GET /ev?m=DONE%20n%3D41 HTTP/1.1" 404 -

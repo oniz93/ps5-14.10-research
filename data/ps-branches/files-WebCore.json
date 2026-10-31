@@ -1,0 +1,986 @@
+[
+ {
+  "file": "page/playstation/CursorNavigation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/graphics/playstation/FontFamilySpecificationPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/graphics/playstation/PunchHole.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/network/playstation/CurlTMServiceRequest.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "editing/playstation/EditorPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "Editor::writeSelectionToPasteboard",
+    "also": [
+     "editing/cocoa/EditorCocoa.mm",
+     "editing/gtk/EditorGtk.cpp",
+     "editing/libwpe/EditorLibWPE.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Editor::writeImageToPasteboard",
+    "also": [
+     "editing/gtk/EditorGtk.cpp",
+     "editing/ios/EditorIOS.mm",
+     "editing/libwpe/EditorLibWPE.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Editor::pasteWithPasteboard",
+    "also": [
+     "editing/gtk/EditorGtk.cpp",
+     "editing/ios/EditorIOS.mm",
+     "editing/libwpe/EditorLibWPE.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Editor::confirmComposition",
+    "also": [
+     "editing/Editor.cpp"
+    ],
+    "from_shared": [
+     "editing/Editor.cpp"
+    ],
+    "displaces": true
+   },
+   {
+    "def": "Editor::platformCopyFont",
+    "also": [
+     "editing/gtk/EditorGtk.cpp",
+     "editing/ios/EditorIOS.mm",
+     "editing/libwpe/EditorLibWPE.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Editor::platformPasteFont",
+    "also": [
+     "editing/gtk/EditorGtk.cpp",
+     "editing/ios/EditorIOS.mm",
+     "editing/libwpe/EditorLibWPE.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 6
+ },
+ {
+  "file": "page/playstation/ChromePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 3
+ },
+ {
+  "file": "page/playstation/CursorNavigation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 3
+ },
+ {
+  "file": "page/playstation/EventHandlerPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "EventHandler::tabsToAllFormControls",
+    "also": [
+     "page/EventHandler.cpp",
+     "page/ios/EventHandlerIOS.mm",
+     "page/mac/EventHandlerMac.mm"
+    ],
+    "from_shared": [
+     "page/EventHandler.cpp"
+    ],
+    "displaces": true
+   }
+  ],
+  "defines": 1
+ },
+ {
+  "file": "page/playstation/FocusControllerPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 4
+ },
+ {
+  "file": "page/playstation/ResourceUsageOverlayPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "ResourceUsageOverlay::platformInitialize",
+    "also": [
+     "page/cocoa/ResourceUsageOverlayCocoa.mm",
+     "page/linux/ResourceUsageOverlayLinux.cpp",
+     "page/win/ResourceUsageOverlayWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "ResourceUsageOverlay::platformDestroy",
+    "also": [
+     "page/cocoa/ResourceUsageOverlayCocoa.mm",
+     "page/linux/ResourceUsageOverlayLinux.cpp",
+     "page/win/ResourceUsageOverlayWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 2
+ },
+ {
+  "file": "page/playstation/ResourceUsageThreadPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "ResourceUsageThread::platformSaveStateBeforeStarting",
+    "also": [
+     "page/cocoa/ResourceUsageThreadCocoa.mm",
+     "page/linux/ResourceUsageThreadLinux.cpp",
+     "page/win/ResourceUsageThreadWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "ResourceUsageThread::platformCollectCPUData",
+    "also": [
+     "page/cocoa/ResourceUsageThreadCocoa.mm",
+     "page/linux/ResourceUsageThreadLinux.cpp",
+     "page/win/ResourceUsageThreadWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "ResourceUsageThread::platformCollectMemoryData",
+    "also": [
+     "page/cocoa/ResourceUsageThreadCocoa.mm",
+     "page/linux/ResourceUsageThreadLinux.cpp",
+     "page/win/ResourceUsageThreadWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 3
+ },
+ {
+  "file": "page/scrolling/nicosia/ScrollingCoordinatorNicosia.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "page/scrolling/nicosia/ScrollingStateNodeNicosia.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "page/scrolling/nicosia/ScrollingTreeFixedNodeNicosia.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "page/scrolling/nicosia/ScrollingTreeFrameScrollingNodeNicosia.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "page/scrolling/nicosia/ScrollingTreeNicosia.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "page/scrolling/nicosia/ScrollingTreeOverflowScrollProxyNodeNicosia.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "page/scrolling/nicosia/ScrollingTreeOverflowScrollingNodeNicosia.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "page/scrolling/nicosia/ScrollingTreePositionedNodeNicosia.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "page/scrolling/nicosia/ScrollingTreeScrollingNodeDelegateNicosia.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "page/scrolling/nicosia/ScrollingTreeStickyNodeNicosia.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/ScrollAnimationKinetic.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/ScrollAnimationSmooth.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/generic/KeyedDecoderGeneric.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "KeyedDecoder::decoder",
+    "also": [
+     "platform/cf/KeyedDecoderCF.cpp",
+     "platform/glib/KeyedDecoderGlib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 18
+ },
+ {
+  "file": "platform/generic/KeyedEncoderGeneric.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "KeyedEncoder::encoder",
+    "also": [
+     "platform/cf/KeyedEncoderCF.cpp",
+     "platform/glib/KeyedEncoderGlib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 18
+ },
+ {
+  "file": "platform/graphics/PlatformDisplay.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/graphics/egl/GLContext.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/graphics/egl/GLContextLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/graphics/libwpe/PlatformDisplayLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/graphics/playstation/FontCachePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "FontCache::systemFallbackForCharacters",
+    "also": [
+     "platform/graphics/cocoa/FontCacheCoreText.cpp",
+     "platform/graphics/freetype/FontCacheFreeType.cpp",
+     "platform/graphics/win/FontCacheWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 1
+ },
+ {
+  "file": "platform/graphics/playstation/FontDescriptionPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "FontCascadeDescription::effectiveFamilyCount",
+    "also": [
+     "platform/graphics/cocoa/FontDescriptionCocoa.cpp",
+     "platform/graphics/harfbuzz/FontDescriptionHarfBuzz.cpp",
+     "platform/graphics/win/FontDescriptionWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "FontCascadeDescription::effectiveFamilyAt",
+    "also": [
+     "platform/graphics/cocoa/FontDescriptionCocoa.cpp",
+     "platform/graphics/harfbuzz/FontDescriptionHarfBuzz.cpp",
+     "platform/graphics/win/FontDescriptionWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 2
+ },
+ {
+  "file": "platform/graphics/playstation/FontFamilySpecificationPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 1
+ },
+ {
+  "file": "platform/graphics/playstation/SystemFontDatabasePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "SystemFontDatabase::singleton",
+    "also": [
+     "platform/graphics/cocoa/SystemFontDatabaseCoreText.cpp",
+     "platform/graphics/gtk/SystemFontDatabaseGTK.cpp",
+     "platform/graphics/win/SystemFontDatabaseWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "SystemFontDatabase::platformSystemFontShorthandInfo",
+    "also": [
+     "platform/graphics/cocoa/SystemFontDatabaseCoreText.cpp",
+     "platform/graphics/gtk/SystemFontDatabaseGTK.cpp",
+     "platform/graphics/win/SystemFontDatabaseWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "SystemFontDatabase::platformInvalidate",
+    "also": [
+     "platform/graphics/cocoa/SystemFontDatabaseCoreText.cpp",
+     "platform/graphics/gtk/SystemFontDatabaseGTK.cpp",
+     "platform/graphics/win/SystemFontDatabaseWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 6
+ },
+ {
+  "file": "platform/libwpe/PasteboardLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/libwpe/PlatformKeyboardEventLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/libwpe/PlatformPasteboardLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/network/playstation/CurlSSLHandlePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "CurlSSLHandle::platformInitialize",
+    "also": [
+     "platform/network/win/CurlSSLHandleWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 2
+ },
+ {
+  "file": "platform/network/playstation/CurlTMServiceRequest.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 9
+ },
+ {
+  "file": "platform/network/playstation/DNSResolveQueuePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 4
+ },
+ {
+  "file": "platform/network/playstation/NetworkStateNotifierPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "NetworkStateNotifier::updateStateWithoutNotifying",
+    "also": [
+     "platform/network/glib/NetworkStateNotifierGLib.cpp",
+     "platform/network/ios/NetworkStateNotifierIOS.mm",
+     "platform/network/mac/NetworkStateNotifierMac.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "NetworkStateNotifier::startObserving",
+    "also": [
+     "platform/network/glib/NetworkStateNotifierGLib.cpp",
+     "platform/network/ios/NetworkStateNotifierIOS.mm",
+     "platform/network/mac/NetworkStateNotifierMac.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 2
+ },
+ {
+  "file": "platform/network/playstation/ResourceErrorPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 1
+ },
+ {
+  "file": "platform/playstation/MIMETypeRegistryPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "MIMETypeRegistry::mimeTypeForExtension",
+    "also": [
+     "platform/cocoa/MIMETypeRegistryCocoa.mm",
+     "platform/win/MIMETypeRegistryWin.cpp",
+     "platform/xdg/MIMETypeRegistryXdg.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "MIMETypeRegistry::isApplicationPluginMIMEType",
+    "also": [
+     "platform/cocoa/MIMETypeRegistryCocoa.mm",
+     "platform/win/MIMETypeRegistryWin.cpp",
+     "platform/xdg/MIMETypeRegistryXdg.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "MIMETypeRegistry::preferredExtensionForMIMEType",
+    "also": [
+     "platform/cocoa/MIMETypeRegistryCocoa.mm",
+     "platform/win/MIMETypeRegistryWin.cpp",
+     "platform/xdg/MIMETypeRegistryXdg.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "MIMETypeRegistry::extensionsForMIMEType",
+    "also": [
+     "platform/cocoa/MIMETypeRegistryCocoa.mm",
+     "platform/win/MIMETypeRegistryWin.cpp",
+     "platform/xdg/MIMETypeRegistryXdg.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 4
+ },
+ {
+  "file": "platform/playstation/PlatformScreenPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/playstation/ScrollbarThemePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "ScrollbarTheme::nativeTheme",
+    "also": [
+     "platform/adwaita/ScrollbarThemeAdwaita.cpp",
+     "platform/gtk/ScrollbarThemeGtk.cpp",
+     "platform/ios/ScrollbarThemeIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 11
+ },
+ {
+  "file": "platform/playstation/UserAgentPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/playstation/WidgetPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "Widget::setFrameRect",
+    "also": [
+     "platform/Widget.cpp",
+     "platform/gtk/WidgetGtk.cpp",
+     "platform/ios/WidgetIOS.mm"
+    ],
+    "from_shared": [
+     "platform/Widget.cpp"
+    ],
+    "displaces": true
+   },
+   {
+    "def": "Widget::paint",
+    "also": [
+     "platform/Widget.cpp",
+     "platform/gtk/WidgetGtk.cpp",
+     "platform/ios/WidgetIOS.mm"
+    ],
+    "from_shared": [
+     "platform/Widget.cpp"
+    ],
+    "displaces": true
+   },
+   {
+    "def": "Widget::setFocus",
+    "also": [
+     "platform/Widget.cpp",
+     "platform/gtk/WidgetGtk.cpp",
+     "platform/ios/WidgetIOS.mm"
+    ],
+    "from_shared": [
+     "platform/Widget.cpp"
+    ],
+    "displaces": true
+   },
+   {
+    "def": "Widget::setCursor",
+    "also": [
+     "platform/Widget.cpp",
+     "platform/gtk/WidgetGtk.cpp",
+     "platform/ios/WidgetIOS.mm"
+    ],
+    "from_shared": [
+     "platform/Widget.cpp"
+    ],
+    "displaces": true
+   },
+   {
+    "def": "Widget::show",
+    "also": [
+     "platform/Widget.cpp",
+     "platform/gtk/WidgetGtk.cpp",
+     "platform/ios/WidgetIOS.mm"
+    ],
+    "from_shared": [
+     "platform/Widget.cpp"
+    ],
+    "displaces": true
+   },
+   {
+    "def": "Widget::hide",
+    "also": [
+     "platform/Widget.cpp",
+     "platform/gtk/WidgetGtk.cpp",
+     "platform/ios/WidgetIOS.mm"
+    ],
+    "from_shared": [
+     "platform/Widget.cpp"
+    ],
+    "displaces": true
+   },
+   {
+    "def": "Widget::setIsSelected",
+    "also": [
+     "platform/Widget.cpp",
+     "platform/gtk/WidgetGtk.cpp",
+     "platform/ios/WidgetIOS.mm"
+    ],
+    "from_shared": [
+     "platform/Widget.cpp"
+    ],
+    "displaces": true
+   }
+  ],
+  "defines": 7
+ },
+ {
+  "file": "platform/text/Hyphenation.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/text/LocaleICU.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/unix/LoggingUnix.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "rendering/RenderThemePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "RenderTheme::singleton",
+    "also": [
+     "rendering/RenderThemeAdwaita.cpp",
+     "rendering/RenderThemeIOS.mm",
+     "rendering/RenderThemeMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 34
+ },
+ {
+  "file": "accessibility/playstation/AXObjectCachePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "AXObjectCache::attachWrapper",
+    "also": [
+     "accessibility/atspi/AXObjectCacheAtspi.cpp",
+     "accessibility/ios/AXObjectCacheIOS.mm",
+     "accessibility/mac/AXObjectCacheMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AXObjectCache::detachWrapper",
+    "also": [
+     "accessibility/win/AXObjectCacheWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AXObjectCache::postPlatformNotification",
+    "also": [
+     "accessibility/atspi/AXObjectCacheAtspi.cpp",
+     "accessibility/ios/AXObjectCacheIOS.mm",
+     "accessibility/mac/AXObjectCacheMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AXObjectCache::nodeTextChangePlatformNotification",
+    "also": [
+     "accessibility/win/AXObjectCacheWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AXObjectCache::frameLoadingEventPlatformNotification",
+    "also": [
+     "accessibility/atspi/AXObjectCacheAtspi.cpp",
+     "accessibility/ios/AXObjectCacheIOS.mm",
+     "accessibility/mac/AXObjectCacheMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AXObjectCache::handleScrolledToAnchor",
+    "also": [
+     "accessibility/atspi/AXObjectCacheAtspi.cpp",
+     "accessibility/ios/AXObjectCacheIOS.mm",
+     "accessibility/mac/AXObjectCacheMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AXObjectCache::platformHandleFocusedUIElementChanged",
+    "also": [
+     "accessibility/atspi/AXObjectCacheAtspi.cpp",
+     "accessibility/ios/AXObjectCacheIOS.mm",
+     "accessibility/mac/AXObjectCacheMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AXObjectCache::platformPerformDeferredCacheUpdate",
+    "also": [
+     "accessibility/atspi/AXObjectCacheAtspi.cpp",
+     "accessibility/ios/AXObjectCacheIOS.mm",
+     "accessibility/mac/AXObjectCacheMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 8
+ },
+ {
+  "file": "accessibility/playstation/AccessibilityObjectPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "AccessibilityObject::detachPlatformWrapper",
+    "also": [
+     "accessibility/atspi/AccessibilityObjectAtspi.cpp",
+     "accessibility/ios/AccessibilityObjectIOS.mm",
+     "accessibility/mac/AccessibilityObjectMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AccessibilityObject::accessibilityIgnoreAttachment",
+    "also": [
+     "accessibility/atspi/AccessibilityObjectAtspi.cpp",
+     "accessibility/ios/AccessibilityObjectIOS.mm",
+     "accessibility/mac/AccessibilityObjectMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AccessibilityObject::accessibilityPlatformIncludesObject",
+    "also": [
+     "accessibility/atspi/AccessibilityObjectAtspi.cpp",
+     "accessibility/ios/AccessibilityObjectIOS.mm",
+     "accessibility/mac/AccessibilityObjectMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 3
+ },
+ {
+  "file": "platform/graphics/playstation/MediaPlayerPrivatePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 139
+ },
+ {
+  "file": "platform/graphics/playstation/mse/AudioTrackPrivatePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 2
+ },
+ {
+  "file": "platform/graphics/playstation/mse/InbandTextTrackPrivatePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 1
+ },
+ {
+  "file": "platform/graphics/playstation/mse/MediaDescriptionPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/graphics/playstation/mse/MediaSamplePrivatePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 13
+ },
+ {
+  "file": "platform/graphics/playstation/mse/MediaSourcePrivatePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 23
+ },
+ {
+  "file": "platform/graphics/playstation/mse/SourceBufferPrivatePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 33
+ },
+ {
+  "file": "platform/graphics/playstation/mse/VideoTrackPrivatePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 2
+ },
+ {
+  "file": "platform/graphics/playstation/eme/CDMFactoryPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "CDMFactory::platformRegisterFactories",
+    "also": [
+     "platform/encryptedmedia/CDMFactory.cpp",
+     "platform/graphics/avfoundation/CDMFairPlayStreaming.cpp",
+     "platform/graphics/gstreamer/eme/CDMFactoryGStreamer.cpp"
+    ],
+    "from_shared": [
+     "platform/encryptedmedia/CDMFactory.cpp"
+    ],
+    "displaces": true
+   }
+  ],
+  "defines": 4
+ },
+ {
+  "file": "platform/graphics/playstation/eme/CDMInstancePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 7
+ },
+ {
+  "file": "platform/graphics/playstation/eme/CDMInstanceSessionPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 14
+ },
+ {
+  "file": "platform/graphics/playstation/eme/CDMPrivatePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 16
+ },
+ {
+  "file": "platform/graphics/playstation/eme/CDMUtilPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/gamepad/libwpe/GamepadLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/gamepad/libwpe/GamepadProviderLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "platform/gamepad/libwpe/GamepadProviderLibWPE.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ }
+]

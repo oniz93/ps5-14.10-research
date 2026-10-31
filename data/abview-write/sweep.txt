@@ -1,0 +1,58 @@
+== abview write sweep ==
+PASS  S1.1 native ArrayBufferView::byteLength() keeps the inverted test                               ArrayBufferView.h:83 (byteOffset) and :105 (byteLength); 2 occurrences of the inverted form
+PASS  S1.2 the inverted test is spelled '!(' , i.e. a valid view returns 0 and an OOB view returns raw upstream has no '!'
+PASS  S1.3 JSArrayBufferView::byteLength()/length() are NOT inverted -- they use integerIndexedObject* JSArrayBufferView.h:238 length(), :311 byteLength() -- the JS-level view never calls the native test
+PASS  S1.4 isOutOfBounds() is the spec test (isArrayBufferViewOutOfBounds), not the native one        JSArrayBufferView.h:333
+PASS  S2.1 JSArrayBufferView::toWrapped refuses every resizable/growable-shared view                  JSArrayBufferViewInlines.h:94
+PASS  S2.2 JSArrayBufferView::toWrappedAllowShared refuses them too ([AllowShared] is not a bypass)   JSArrayBufferViewInlines.h:103
+PASS  S2.3 JSGenericTypedArrayView::toWrapped / toWrappedAllowShared refuse them as well              JSGenericTypedArrayViewInlines.h:930-941
+PASS  S2.4 Converter<IDLArrayBufferView> goes through toWrapped (Disallow) and [AllowShared] through toWrappedAllowShared -- so every IDL ArrayBufferView parameter is gated JSDOMConvertBufferSource.h:435 and :458
+PASS  S2.5 possiblySharedImpl() has 4 call sites and only IDBKey is outside a gate                    Source/JavaScriptCore/runtime/JSArrayBufferViewInlines.h:89; Source/JavaScriptCore/runtime/JSArrayBufferViewInlines.h:107; Source/WebCore/bindings/js/JSDOMConvertBufferSource.h:106; Source/WebCore/Modules/indexeddb/IDBKey.cpp:55
+PASS  S2.6 IDBKey::createBinary only READS the native view (copyData); no write sink in its body      sinks=[]
+PASS  S2.7 the serializer's raw producer is preceded by the isOutOfBounds() test                      SerializedScriptValue.cpp:1382
+PASS  S3.1 every IDL ArrayBufferView consumer is classified (no 'unclassified' rows)                  unclassified=[]
+PASS  S3.2 the write-consumer set is exactly the 5 known operations                                   writes=['copyTo', 'getBufferSubData', 'getRandomValues', 'read', 'readPixels']
+PASS  S3.3 WebGL is the write consumer that needs a build flag, and the flag is OFF on this port      OptionsPlayStation.cmake:272
+PASS  S3.4 WebCodecs is OFF by default in this drop (so copyTo does not exist)                        WebKitFeatures.cmake:260
+PASS  S4.1 set/fill/copyWithin/sort all call validateTypedArray() on the receiver first               validateTypedArray(globalObject, thisObject) x12 in the prototype functions
+PASS  S4.2 validateTypedArray throws on isIntegerIndexedObjectOutOfBounds                             JSArrayBufferViewInlines.h:153
+PASS  S4.3 the index write path (view[i]=v) checks inBounds(), which reads the LIVE buffer length     JSGenericTypedArrayViewInlines.h:788 setIndex, :736 inBounds
+PASS  S4.4 DataView.set* uses viewByteLength() and throws RangeError instead of writing               JSDataViewPrototype.cpp:178 setData
+PASS  S5.1 every .cpp function with a native ArrayBufferView&/* parameter was found                   20 sites
+PASS  S5.2 the only native ArrayBufferView&/* write consumer in the tree is Crypto::getRandomValues   writers=[('Crypto.cpp', 57)] (WebGL's readPixels/getBufferSubData hand the view to the driver, not to ArrayBufferView::set*)
+PASS  S5.3 the typed-view spelling of the same shape is TextEncoder::encodeInto: Ref<Uint8Array>&&, bound = array->byteLength(), write = U8_APPEND into array->baseAddress() TextEncoder.cpp:52/51/63
+PASS  S5.4 neither is reachable with a resizable view: the gate is the binding converter (S2.4), not anything inside the function no gate inside either body -- the refusal happens before the call
+
+-- native-view parameter sites: 20
+   JavaScriptCore/runtime/ArrayBufferView.cpp                :84    sinks=-                              gates=-
+   WebCore/page/Crypto.cpp                                   :57    sinks=random-fill                    gates=-
+   WebCore/html/canvas/WebGLRenderingContextBase.cpp         :1589  sinks=-                              gates=-
+   WebCore/html/canvas/WebGLRenderingContextBase.cpp         :1600  sinks=-                              gates=-
+   WebCore/html/canvas/WebGLRenderingContextBase.cpp         :4172  sinks=-                              gates=-
+   WebCore/html/canvas/WebGLRenderingContextBase.cpp         :4257  sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :457   sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :483   sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :555   sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :561   sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :1136  sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :1166  sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :1199  sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :1217  sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :1245  sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :1278  sinks=-                              gates=-
+   WebCore/html/canvas/WebGL2RenderingContext.cpp            :3410  sinks=-                              gates=-
+   WebCore/xml/XMLHttpRequest.cpp                            :574   sinks=-                              gates=-
+   WebCore/Modules/websockets/WebSocket.cpp                  :385   sinks=-                              gates=-
+   WebCore/Modules/mediastream/RTCDataChannel.cpp            :164   sinks=-                              gates=-
+
+-- IDL ArrayBufferView consumers: 36 rows, 7 write, 29 read, 0 unclassified
+   WRITE getRandomValues        page/Crypto.idl:35  allowshared=False
+   WRITE getBufferSubData       html/canvas/WebGL2RenderingContext.idl:350  allowshared=True
+   WRITE readPixels             html/canvas/WebGL2RenderingContext.idl:506  allowshared=True
+   WRITE readPixels             html/canvas/WebGLRenderingContextBase.idl:614  allowshared=True
+   WRITE read                   Modules/filesystemaccess/FileSystemSyncAccessHandle.idl:36  allowshared=True
+   WRITE copyTo                 Modules/webcodecs/WebCodecsVideoFrame.idl:63  allowshared=True
+   WRITE copyTo                 Modules/webcodecs/WebCodecsEncodedVideoChunk.idl:38  allowshared=True
+
+23/23 checks pass
+json: data/abview-write/sweep.json

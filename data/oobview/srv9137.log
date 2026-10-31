@@ -1,0 +1,11 @@
+127.0.0.1 - - [30/Oct/2026 12:19:22] "GET /caps15.html?arm=rc2 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 12:19:22] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:19:22] "GET /ev?m=caps15%20arm%3Drc2%20only%3D-%20resize%3Dfunction%20idbkr%3Dfunction%20onlyfn%3Dfunction%20sc%3Dfunction%20idb%3Dobject HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:19:22] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:19:22] "GET /ev?m=RC2%20collected%3Dfalse HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:19:22] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:19:22] "GET /ev?m=RC2%20THREW%3DRangeError%3ALength%20out%20of%20range%20of%20buffer HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:19:22] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:19:22] "GET /ev?m=done%20arm%3Drc2 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:19:22] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:19:22] "GET /favicon.ico HTTP/1.1" 404 -

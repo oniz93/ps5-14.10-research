@@ -1,0 +1,126 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>stack-depth — per-frame cost of the page-driven C++ recursions</title></head>
+<body>
+<script>
+/*
+  docs/108 probe.  GOAL action 1 after docs/107: turn the PS-only
+  `-DDEFAULT_THREAD_STACK_SIZE_IN_KB=64` (Source/WTF/wtf/PlatformPlayStation.cmake:44) into a predicted
+  console limit, by measuring on the oracle what a page-driven recursion actually costs in stack.
+
+  The page parks on /go.txt so that gdb is attached and its breakpoints are set before any arm runs.
+  One arm per process load; the harness (stkrun.sh) reads $rsp per breakpoint hit and the beacons below.
+
+  arms:
+    idb    &d=N   nested arrays of depth N -> IDBKeyRange.only()  (WebCore::createIDBKeyFromValue, recursive,
+                  source cap `maximumDepth = 2000`, IDBBindingUtilities.cpp:194)
+    widb   &d=N   the same inside a Blob worker  (WorkerThread -> Thread::create(..., ThreadType::JavaScript))
+    css    &d=N   N nested @media blocks, parsed by reading sheet.cssRules
+                  (CSSParserImpl::consumeRegularRuleList, source cap `maximumRuleListNestingLevel = 128`)
+    clone  &d=N   structuredClone() of a depth-N nested array (CloneSerializer::serialize — iterative state
+                  machine, cap `maximumFilterRecursion = 40000`)
+    json   &d=N   JSON.parse of a depth-N nested array (LiteralParser::parseRecursively — falls back to the
+                  iterative parser at vm.softStackLimit(), so it is thread-stack aware)
+*/
+(function () {
+  'use strict';
+  var Q = new URLSearchParams(location.search);
+  var ARM = Q.get('arm') || 'idb';
+  var D = parseInt(Q.get('d') || '1000', 10);
+  function B(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(m); }
+  function nest(d) { var o = 1; for (var i = 0; i < d; i++) o = [o]; return o; }
+  function msg(e) { return e.name + ':' + String(e.message).replace(/[^\x20-\x7e]/g, '?').slice(0, 70); }
+
+  function idb(tag) {
+    try {
+      var t0 = performance.now();
+      var k = IDBKeyRange.only(nest(D));
+      var lo = k.lower;
+      var ty = (lo && lo.constructor) ? lo.constructor.name : typeof lo;
+      B(tag + ' ok d=' + D + ' type=' + ty + ' ms=' + Math.round(performance.now() - t0));
+    } catch (e) { B(tag + ' err d=' + D + ' ' + msg(e)); }
+  }
+
+  function css() {
+    try {
+      var t0 = performance.now();
+      var s = document.createElement('style');
+      s.textContent = '@media all{'.repeat(D) + 'b{color:red}' + '}'.repeat(D);
+      document.head.appendChild(s);
+      var top = s.sheet ? s.sheet.cssRules.length : -1;
+      var deep = 0, r = s.sheet && s.sheet.cssRules ? s.sheet.cssRules[0] : null;
+      while (r && deep < 100000) { deep++; r = r.cssRules ? r.cssRules[0] : null; }
+      B('css ok d=' + D + ' top=' + top + ' deep=' + deep + ' ms=' + Math.round(performance.now() - t0));
+    } catch (e) { B('css err d=' + D + ' ' + msg(e)); }
+  }
+
+  function clone() {
+    try {
+      var t0 = performance.now();
+      var c = structuredClone(nest(D));
+      B('clone ok d=' + D + ' t=' + (c ? 1 : 0) + ' ms=' + Math.round(performance.now() - t0));
+    } catch (e) { B('clone err d=' + D + ' ' + msg(e)); }
+  }
+
+  function json() {
+    var s = '['.repeat(D) + '1' + ']'.repeat(D);
+    try {
+      var t0 = performance.now();
+      var v = JSON.parse(s);
+      B('json ok d=' + D + ' n=' + (v ? 1 : 0) + ' ms=' + Math.round(performance.now() - t0));
+    } catch (e) { B('json err d=' + D + ' ' + msg(e)); }
+  }
+
+  function mp() {
+    var ch = new MessageChannel();
+    ch.port1.onmessage = function (ev) {
+      B('mp recv d=' + D + ' ok=' + (ev.data ? 1 : 0));
+      B('done');
+    };
+    ch.port2.postMessage(nest(D));
+    B('mp posted d=' + D);
+  }
+
+  function widb() {
+    var code = "onmessage=function(ev){var d=ev.data;"
+      + "function nest(n){var o=1;for(var i=0;i<n;i++)o=[o];return o;}"
+      + "postMessage('wtype IDBKeyRange='+(typeof IDBKeyRange)+' indexedDB='+(typeof indexedDB)+' isWorker=1');"
+      + "try{var t0=Date.now();var k=IDBKeyRange.only(nest(d));var lo=k.lower;"
+      + "postMessage('widb ok d='+d+' type='+((lo&&lo.constructor)?lo.constructor.name:typeof lo)+' ms='+(Date.now()-t0));}"
+      + "catch(e){postMessage('widb err d='+d+' '+e.name+':'+String(e.message).slice(0,70));}};";
+    var w = new Worker(URL.createObjectURL(new Blob([code], {type: 'text/javascript'})));
+    w.onmessage = function (ev) { B(String(ev.data)); };
+    w.onerror = function (ev) { B('widb onerror ' + String(ev.message || ev).slice(0, 70)); };
+    w.postMessage(D);
+  }
+
+  async function waitGo() {
+    for (var i = 0; i < 900; i++) {
+      try {
+        var r = await fetch('/go.txt?i=' + i, {cache: 'no-store'});
+        if (r.ok) return true;
+      } catch (e) { /* server not ready yet */ }
+      await new Promise(function (res) { setTimeout(res, 100); });
+    }
+    return false;
+  }
+
+  (async function main() {
+    B('boot arm=' + ARM + ' d=' + D + ' ua=' + (navigator.userAgent || '').length);
+    var go = await waitGo();
+    B('go ' + (go ? 1 : 0));
+    setTimeout(function () {
+      try {
+        if (ARM === 'idb') idb('idb');
+        else if (ARM === 'widb') { widb(); setTimeout(function () { B('done'); }, 4000); return; }
+        else if (ARM === 'css') css();
+        else if (ARM === 'clone') clone();
+        else if (ARM === 'mp') { mp(); setTimeout(function () { B('done'); }, 6000); return; }
+        else if (ARM === 'json') json();
+        else B('unknown arm');
+      } catch (e) { B('top ' + msg(e)); }
+      B('done');
+    }, 300);
+  })();
+})();
+</script>
+</body></html>

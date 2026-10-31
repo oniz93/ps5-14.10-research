@@ -1,0 +1,38 @@
+pi answered on attempt 70 at 17:09:56
+=== uptime / boot ===
+ 00:09:58 up 1 day, 10:00,  0 users,  load average: 0.00, 0.02, 0.00
+         system boot  2026-10-27 06:00
+=== throttling / power ===
+throttled=0x0
+temp=34.7'C
+volt=1.3500V
+=== wlan iface + power save ===
+wlan0            UP             <lab-ip>/24 fe80::ba27:ebff:feb0:744f/64 
+Power save: off
+=== link quality ===
+Inter-| sta-|   Quality        |   Discarded packets               | Missed | WE
+ face | tus | link level noise |  nwid  crypt   frag  retry   misc | beacon | 22
+ wlan0: 0000   46.  -64.  -256        0      0      0      0      0        0
+=== wpa_supplicant (last 40) ===
+-- No entries --
+=== brcmfmac kernel messages ===
+[   26.179202] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[   27.234452] brcmfmac: F1 signature read @0x18000000=0x1541a9a6
+[   27.240022] brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac43430-sdio for chip BCM43430/1
+[   27.253679] usbcore: registered new interface driver brcmfmac
+[   27.606658] brcmfmac: brcmf_c_process_txcap_blob: no txcap_blob available (err=-2)
+[   27.608407] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM43430/1 wl0: Jul 19 2021 03:24:18 version 7.45.98 (TOB) (56df937 CY) FWID 01-8e14b897
+[   29.240051] brcmfmac: brcmf_cfg80211_set_power_mgmt: power save disabled
+=== dhcp / networkd ===
+-- No entries --
+=== gadget service ===
+active
+    Process: 188 ExecStart=/usr/local/sbin/pi_gadget_setup.sh (code=exited, status=0/SUCCESS)
+   Main PID: 188 (code=exited, status=0/SUCCESS)
+        CPU: 324ms
+
+Oct 27 06:00:27 ps5kbd systemd[1]: Starting ps5kbd-gadget.service - PS5 keyboard gadget (configfs HID keyboard)...
+Oct 27 06:00:29 ps5kbd pi_gadget_setup.sh[188]: ready: /dev/hidg0 bound to 20980000.usb
+Oct 27 06:00:29 ps5kbd pi_gadget_setup.sh[188]: verify with: lsusb  (expect 1d6b:0104) and then run pi_kbd_daemon.py
+Oct 27 06:00:29 ps5kbd systemd[1]: Finished ps5kbd-gadget.service - PS5 keyboard gadget (configfs HID keyboard).
+=== reboots today ===

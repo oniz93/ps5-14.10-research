@@ -1,0 +1,122 @@
+<!doctype html><html><head><meta charset="utf-8"><title>decode</title>
+<script>
+'use strict';
+/* docs/95 part 7: can a decoder/rasteriser hand heap bytes (in particular a pointer-shaped word)
+   to JS as pixels? Every probe draws its result into a fresh 64x64 canvas and scans the whole
+   ImageData, so an uninitialised region is as visible as a corrupt one. */
+var Q=[],PUMPING=false,SENT=0;
+function send(e){ return new Promise(function(res){ var im=new Image(),d=false;
+  function fin(){ if(d)return; d=true; res(); } im.onload=fin; im.onerror=fin;
+  im.src='/ev?m='+encodeURIComponent(e); setTimeout(fin,250); }); }
+function pump(){ if(PUMPING)return; PUMPING=true; (async function(){ while(Q.length){ await send(Q.shift()); SENT++; } PUMPING=false; })(); }
+function add(k,v){ Q.push(k+'='+String(v).replace(/[\t\r\n]+/g,' ').slice(0,240)); pump(); }
+function T(k,fn){ try{ add(k, fn()); }catch(e){ add(k,'THROW '+e.name+' '+e.message); } }
+window.onerror=function(m,s,l,c){ add('ONERROR',m+' @'+l); return false; };
+new Image().src='/ev?m=BOOT+decode';
+T('det_ctl', detctl);
+
+/* pointer-shaped word detector over arbitrary bytes, all 8 alignments */
+function ptrscan(b){
+  /* A pointer in this build is 0x0000_6xxx_xxxx_xxxx (ASAN heap) or 0x0000_7fxx_xxxx_xxxx
+     (libraries): little-endian bytes are b0 b1 b2 b3 00 6x/7f 00 00. Testing byte 3 instead of
+     byte 5 matches ordinary RGBA pixel words followed by transparent padding — the false positive
+     this control exists to rule out. */
+  var hits=[], nz=0, i, j;
+  for(i=0;i<b.length;i++){ if(b[i]) nz++; }
+  for(j=0;j<8;j++) for(i=j;i+8<=b.length;i+=8){
+    if(b[i+6]===0 && b[i+7]===0 && b[i+5]>=0x60 && b[i+5]<=0x7f &&
+       (b[i]|b[i+1]|b[i+2]|b[i+3]|b[i+4])!==0){
+      var hx='';
+      for(var k=7;k>=0;k--) hx += (b[i+k]<16?'0':'')+b[i+k].toString(16);
+      hits.push('@'+i+'=0x'+hx);
+    }
+  }
+  return 'nz='+nz+'/'+b.length+' ptr='+hits.length+(hits.length?('['+hits.slice(0,3).join(',')+']'):'');
+}
+function detctl(){
+  var a=new Uint8Array(16); a[0]=0x40; a[1]=0x05; a[2]=0x01; a[4]=0x00; a[5]=0x61;   /* 0x0000610000010540 */
+  var b=new Uint8Array(16); b[0]=0x40; b[1]=0x05; b[2]=0x01; b[4]=0x00; b[5]=0x41;   /* 0x0000410000010540 */
+  return 'pos='+ptrscan(a)+' neg='+ptrscan(b);
+}
+function dest(){ var c=document.createElement('canvas'); c.width=64; c.height=64; return c; }
+function paint(src,w,h){
+  var c=dest(), g=c.getContext('2d');
+  g.drawImage(src, 0, 0, w||64, h||64);
+  var d=g.getImageData(0,0,64,64).data;
+  return ptrscan(d);
+}
+function b64bytes(dataurl){
+  var b64=dataurl.split(',')[1], bin=atob(b64), u=new Uint8Array(bin.length), i;
+  for(i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i);
+  return u;
+}
+function mk(fmt,w,h){
+  var c=document.createElement('canvas'); c.width=w; c.height=h;
+  var g=c.getContext('2d');
+  var grd=g.createLinearGradient(0,0,w,h);
+  grd.addColorStop(0,'#f00'); grd.addColorStop(1,'#00f');
+  g.fillStyle=grd; g.fillRect(0,0,w,h);
+  g.fillStyle='#0f0'; g.fillRect(2,2,w/2,h/2);
+  return b64bytes(c.toDataURL(fmt||'image/png'));
+}
+function trunc(u,frac){ return u.slice(0, Math.max(16, Math.floor(u.length*frac))); }
+function flip(u,n,step){ var v=u.slice(); for(var i=0;i<n;i++){ var p=Math.floor(v.length*0.5)+i*step; if(p<v.length) v[p]^=0xff; } return v; }
+
+async function run(){
+  var png = mk('image/png',32,32), jpg = mk('image/jpeg',32,32);
+  add('src_png', 'len='+png.length+' sig='+Array.prototype.slice.call(png,0,4).join(','));
+  add('src_jpg', 'len='+jpg.length);
+
+  var cases = [
+    ['png50', trunc(png,0.5)], ['png75', trunc(png,0.75)], ['png90', trunc(png,0.90)],
+    ['png99', trunc(png,0.99)], ['pngflip', flip(png,6,7)],
+    ['jpg50', trunc(jpg,0.5)], ['jpg90', trunc(jpg,0.90)], ['jpgflip', flip(jpg,6,9)],
+    ['garbage', new Uint8Array([137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,32,0,0,0,32])]
+  ];
+  for(var i=0;i<cases.length;i++){
+    var name=cases[i][0], bytes=cases[i][1];
+    try{
+      var bm = await createImageBitmap(new Blob([bytes], {type: name.indexOf('jpg')===0?'image/jpeg':'image/png'}));
+      add('d_'+name, 'ok '+bm.width+'x'+bm.height+' '+paint(bm,bm.width,bm.height));
+      bm.close();
+    }catch(e){ add('d_'+name, 'FAIL '+e.name+': '+e.message); }
+  }
+
+  /* SVG filters: blur/turbulence over a transparent canvas is the classic uninitialised-region shape */
+  var svgs = [
+    ['blur', '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><defs><filter id="f"><feGaussianBlur stdDeviation="8"/></filter></defs><rect x="24" y="24" width="16" height="16" fill="red" filter="url(#f)"/></svg>'],
+    ['turb', '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><defs><filter id="f"><feTurbulence baseFrequency="0.05" numOctaves="3"/></filter></defs><rect width="64" height="64" filter="url(#f)"/></svg>'],
+    ['offset', '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><defs><filter id="f"><feOffset dx="8" dy="8"/></filter></defs><rect x="16" y="16" width="8" height="8" fill="blue" filter="url(#f)"/></svg>']
+  ];
+  for(var j=0;j<svgs.length;j++){
+    try{
+      var url='data:image/svg+xml;base64,'+btoa(svgs[j][1]);
+      var im=new Image();
+      await new Promise(function(res,rej){ im.onload=res; im.onerror=rej; im.src=url; setTimeout(res,1500); });
+      add('svg_'+svgs[j][0], (im.width?('ok '+im.width+'x'+im.height+' '+paint(im,im.width,im.height)):'NOIMAGE'));
+    }catch(e){ add('svg_'+svgs[j][0], 'FAIL '+e.name+': '+e.message); }
+  }
+
+  /* a bitmap drawn at 1:1 into a bigger canvas: the untouched border must be transparent black */
+  try{
+    var small = await createImageBitmap(new ImageData(8,8));
+    var c1=dest(), g1=c1.getContext('2d');
+    g1.drawImage(small, 0, 0);
+    add('draw_border', ptrscan(g1.getImageData(0,0,64,64).data));
+  }catch(e){ add('draw_border','FAIL '+e.name+': '+e.message); }
+
+  /* a <canvas> with a huge logical size but a tiny painted region */
+  try{
+    var c=dest(), g=c.getContext('2d');
+    g.drawImage(await createImageBitmap(new ImageData(1,1)), 63, 63, 1, 1);
+    add('draw_corner', ptrscan(g.getImageData(0,0,64,64).data));
+  }catch(e){ add('draw_corner','FAIL '+e.name+': '+e.message); }
+
+  await new Promise(function(r){ setTimeout(r,400); });
+  while(Q.length||PUMPING) await new Promise(function(r){ setTimeout(r,50); });
+  add('DONE','sent='+SENT);
+  await new Promise(function(r){ setTimeout(r,200); });
+  document.title='DONE';
+}
+run();
+</script></head><body><p>decode</p></body></html>

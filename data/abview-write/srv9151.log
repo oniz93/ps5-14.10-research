@@ -1,0 +1,23 @@
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /caps16.html?arm=ctl HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /ev?m=caps16%20arm%3Dctl%20only%3D-%20resize%3Dfunction%20grv%3Dfunction%20te%3Dfunction%20idbkr%3Dfunction%20sab%3Dundefined%20gpu%3Dundefined%20vf%3Dundefined%20glctx%3Dnull%20glc%3Dundefined HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /ev?m=C%20pre%20jsBL%3D8192%20len%3D8192%20bufBL%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /ev?m=C%20set%20at4128%3D65 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /ev?m=C%20fill%20at0%3D66 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /ev?m=C%20copyWithin%20at0%3D65%20at16%3D65 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /ev?m=C%20index%20at5000%3D68 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /ev?m=C%20dv%20at4128%3D69%20dvGet%3D69 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /ev?m=C%20encodeInto%20read%3D8%20written%3D8%20at0%3D65 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /ev?m=C%20grv%20nz%3D8162%20of%208192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /ev?m=done%20arm%3Dctl HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:28] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:28] "GET /favicon.ico HTTP/1.1" 404 -

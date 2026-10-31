@@ -1,0 +1,64 @@
+=== p1B port=12911 secs=20 q=part=1
+--- beacons (in order):
+BOOT+part=?part=1
+p_OffscreenCanvas=undefined
+p_WebGLRenderingContext=undefined
+p_WebGL2RenderingContext=undefined
+p_SharedArrayBuffer=undefined
+p_Atomics=object
+p_AudioContext=function
+p_VideoFrame=undefined
+p_WebCodecsVideoFrame=undefined
+p_WebAssembly=undefined
+p_indexedDB=object
+p_caches=object
+p_GPU=undefined
+p_GPUAdapter=undefined
+p_ShadowRealm=undefined
+p_PaintWorklet=undefined
+p_FileReader=function
+p_File=function
+p_Blob=function
+p_Worker=function
+p_SharedWorker=function
+p_MessageChannel=function
+p_WeakRef=function
+p_FinalizationRegistry=function
+p_TextDecoder=function
+p_TextEncoder=function
+p_Intl=object
+p_crypto=object
+p_performance=object
+p_structuredClone=function
+p_perfmem=undefined
+p_console_mem=undefined
+p_canvas2d=yes
+p_webglctx=no
+p_bitmaprenderer=yes
+n_win=[object Window] [object Window]
+n_doc=[object HTMLDocument]
+n_fonts=[object FontFaceSet] [object FontFaceSet]
+n_loc=http://127.0.0.1:12911/leakcorpus.html?part=1
+n_perf=[object Performance]
+n_nav=[object Navigator]
+n_screen=[object Screen]
+n_hist=[object History]
+n_crypto=[object Crypto]
+n_subtle=[object SubtleCrypto]
+n_idb=[object IDBFactory]
+n_caches=[object CacheStorage]
+n_sw=[object ServiceWorkerContainer]
+n_ls=[object Storage]
+n_ss=[object Storage]
+n_sheets=[object StyleSheetList]
+n_gcs=nobody
+n_port=[object MessagePort] false
+n_regexp=/a/g
+n_map=[object Map]
+n_date=Wed Dec 31 1969 16:00:00 GMT-0800 (Pacific Standard Time)
+n_msgch=[object MessageChannel]
+DONE=part=1 sent=56
+--- maps samples: 16
+--- crash/abort:
+  access: none
+EXIT=124

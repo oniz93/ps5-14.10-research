@@ -1,0 +1,54 @@
+=== f3 port=8896 secs=150 q=kinds=hhea,hmtx,cmap,name,post,woff&tmo=1200
+--- beacons (in order):
+MAN n=23/183 base=d7b4e92b03deb1865aa61328fd5ff400 tables=19
+BASE fallback_w=56.00
+BEG HM-hmetricsmax hhea
+RES HM-hmetricsmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG HM-hmetrics0 hhea
+RES HM-hmetrics0 st=loaded res=loaded w=-4.44 vh=0 vw=28 hh=28 vj=72 wj=35
+BEG HM-hmetricsplus1 hhea
+RES HM-hmetricsplus1 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG HM-hhea-len20 hhea
+RES HM-hhea-len20 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG HM-hhea-len34 hhea
+RES HM-hhea-len34 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG HM-hhea-len0 hhea
+RES HM-hhea-len0 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG HM-hmtx-len2 hmtx
+RES HM-hmtx-len2 st=loaded res=loaded w=-4.44 vh=0 vw=28 hh=28 vj=72 wj=35
+BEG HM-hmtx-len4 hmtx
+RES HM-hmtx-len4 st=loaded res=loaded w=-4.44 vh=0 vw=28 hh=28 vj=72 wj=35
+BEG HM-hmtx-len0 hmtx
+RES HM-hmtx-len0 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG CM-len4 cmap
+RES CM-len4 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG NM-countmax name
+RES NM-countmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG NM-len6 name
+BEG NM-strlenmax name
+RES NM-len6 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+RES NM-strlenmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG PO-ver2 post
+RES PO-ver2 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG PO-len32 post
+RES PO-len32 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG WO-ok woff
+RES WO-ok st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG WO-len-1 woff
+RES WO-len-1 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG WO-total12 woff
+RES WO-total12 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG WO-total64k woff
+RES WO-total64k st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG WO-origmax woff
+RES WO-origmax st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG WO-offmax woff
+RES WO-offmax st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG WO-compgtorig woff
+RES WO-compgtorig st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG WO-trunc20 woff
+RES WO-trunc20 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+DONE n=23 loaded=14 other=9
+--- crash/abort:
+  access: none
+EXIT=124

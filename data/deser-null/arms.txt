@@ -1,0 +1,36 @@
+# docs/91 arm index — caps12.html, quarantine off, one fresh port per arm, LEN=192
+# page builds: A = 876e1de96a53f9606c7d72273511e73c (arms up to port 12117)
+#              B = 2d721e09cecdbef698ce744d5e8e9cc5 (ckport, port 12118)
+#              C = 1d19801f33e75f07000abbd045601e4f (cknonext/ckec + the four final re-runs, 12119-12124)
+# sw12.js md5 20e217ce9debe8ba27023cbd61430dbd ; c12run.sh md5 1a8e167f746ca95796be9b8e9fb0c481
+# raw per-port beacons: data/deser-null/beacons.txt ; crash frames: /tmp/S_c12_<TAG>.log on the build box
+
+tag        port  query                  build  score
+---------  ----  ---------------------  -----  ------------------------------------------------------------
+SWOK       12101 mode=dvswok           A      received DataView, v=tn0,tyobject,vb192,bb192 ; access: none
+DVSW       12102 mode=dvsw             A      received null,    v=tn1,tyobject          ; access: none
+DVPORT     12103 mode=dvport           A      ABORT  MessagePort.cpp:295 (ABRT -> WTFCrashWithInfo)
+DVOK       12104 mode=dvportok         A      received DataView, vb192,bb192           ; access: none
+SWAUTO     12106 mode=dvswauto         A      messageerror=1 (no shrink needed)        ; access: none
+SWAUTOK    12107 mode=dvswautook       A      messageerror=1                           ; access: none
+POOLSW     12108 mode=poolsw           A      a,b,d,cc[0],cc[1] all null, ab1/ac01/ad1 ; access: none
+POOLSWOK   12109 mode=poolswok         A      four DataViews vb192, ab1/ac01/ad1       ; access: none
+TASW       12110 mode=tasw             A      received null,    v=tn1,tyobject          ; access: none
+TASWOK     12111 mode=taswok           A      Uint8Array vb192, w0=7                   ; access: none
+TAPORT     12112 mode=taport           A      Uint8Array vb0,bb0, write dropped w0=undef; access: none
+TAPORTOK   12113 mode=taportok         A      Uint8Array vb192, w0=7                   ; access: none
+DVAUTO     12114 mode=dvportauto       A      DataView vb0,bb0 (auto length, no abort) ; access: none
+DVPORT2    12115 mode=dvport           A      ABORT  MessagePort.cpp:295                (repeat)
+DVPORT3    12116 mode=dvport           A      ABORT  MessagePort.cpp:295                (repeat)
+DVSW2      12117 mode=dvsw             A      received null (repeat)
+CKPORT     12118 mode=ckport           B      CryptoKey type=secret alg=HMAC ext=true  ; access: none
+CKNONEXT   12119 mode=cknonext         C      CryptoKey type=secret ext=false          ; access: none
+CKEC       12120 mode=ckec             C      CryptoKey pair type=private/type2=public ; access: none
+F_DVSW     12121 mode=dvsw             C      received null            (final-build re-run)
+F_POOLSW   12122 mode=poolsw           C      four nulls, identical    (final-build re-run)
+F_TAPORT   12123 mode=taport           C      Uint8Array vb0, w0=undefined (final-build re-run)
+F_DVPORT   12124 mode=dvport           C      ABORT  MessagePort.cpp:295 (final-build re-run)
+
+# non-abort arms all end with a `done&mode=...&tag=A` beacon after their `rxA` line, i.e. the page
+# survived the message and kept running. EXIT=124 on every arm is the harness's timeout kill
+# (docs/65 "Attempt 11"), not a result.

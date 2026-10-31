@@ -1,0 +1,92 @@
+## port 12210
+  cap&arm=xferclose-mid&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+## port 12214
+  cap&arm=xferclose-mid&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+## port 12215
+## port 12216
+## port 12402
+  cap&arm=xferclose-mid&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+## port 12403
+  cap&arm=xferclose-mid&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+## port 12404
+  cap&arm=xferclose-mid&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+## port 12501
+  cap&arm=xferclose-win&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+  wpost&posted=1&name=&m=
+## port 12502
+  cap&arm=xferclose-win&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+  wpost&posted=1&name=&m=
+## port 12601
+  cap&arm=xferclose-wrk&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+  wkrpost&posted=1&name=&m=
+## port 12602
+  cap&arm=xferclose-wrk&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+  wkrpost&posted=1&name=&m=
+## port 12801
+  cap&arm=xferclose-mid&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+## port 12802
+  cap&arm=xferclose-mid&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  pre&srcw=8
+  getter&when=afterdump
+  closed&srcw=0
+## port 12211
+  cap&arm=xferclose-other&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  getter&when=other&b2w=8
+  closed2&b2w=0&bw=8
+  xother&ok=1&tag=msg&name=&m=
+  rx&w=8&h=8&px=255,0,0,255&d=ImageBitmap:w8h8
+  done&arm=xferclose-other
+## port 12207
+  cap&arm=copyclose-mid&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  getter&when=beforedump
+  closed&srcw=0
+  copyclosemid&ok=0&tag=threw&name=DataCloneError&m=The%20object%20can%20not%20be%20cloned.
+  done&arm=copyclose-mid
+## port 12206
+  cap&arm=xferclose-pre&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  xferpre&ok=0&tag=threw&name=DataCloneError&m=The%20object%20can%20not%20be%20cloned.&srcw=0
+  done&arm=xferclose-pre
+## port 12712
+## port 12730
+  cap&arm=res2x&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  img&nw=4&nh=4&dpr=1&bw=4&bh=4
+  res2x&clone=ok%3Aw4x4
+  done&arm=res2x
+## port 12731
+  cap&arm=big&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  big&w=512&h=512&px=0,255,0,255
+  done&arm=big
+## port 12201
+  cap&arm=presence&ua=Mozilla%2F5.0%20(X11%3B%20Linux%20x86_64)%20AppleWeb
+  presence&cib=function&stc=function&ib=function&close=function&oc=undefined&vf=undefined&mc=function&idb=object
+  done&arm=presence

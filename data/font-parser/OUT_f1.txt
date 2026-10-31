@@ -1,0 +1,190 @@
+=== f1 port=8894 secs=150 q=kinds=trunc-file,trunc-table&tmo=1200
+--- beacons (in order):
+MAN n=91/183 base=d7b4e92b03deb1865aa61328fd5ff400 tables=19
+BASE fallback_w=56.00
+BEG TR001 trunc-file
+RES TR001 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR002 trunc-file
+RES TR002 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR003 trunc-file
+RES TR003 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR004 trunc-file
+RES TR004 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR008 trunc-file
+RES TR008 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR011 trunc-file
+RES TR011 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR012 trunc-file
+RES TR012 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR013 trunc-file
+RES TR013 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR016 trunc-file
+RES TR016 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR017 trunc-file
+RES TR017 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR027 trunc-file
+RES TR027 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR028 trunc-file
+RES TR028 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR029 trunc-file
+RES TR029 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR044 trunc-file
+RES TR044 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR045 trunc-file
+RES TR045 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-FFTM-a trunc-table
+RES TR-FFTM-a st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-FFTM-b trunc-table
+RES TR-FFTM-b st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-FFTM-c trunc-table
+RES TR-FFTM-c st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-FFTM-d trunc-table
+RES TR-FFTM-d st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GDEF-a trunc-table
+RES TR-GDEF-a st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GDEF-b trunc-table
+RES TR-GDEF-b st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GDEF-c trunc-table
+RES TR-GDEF-c st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GDEF-d trunc-table
+RES TR-GDEF-d st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GPOS-a trunc-table
+RES TR-GPOS-a st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GPOS-b trunc-table
+RES TR-GPOS-b st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GPOS-c trunc-table
+RES TR-GPOS-c st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GPOS-d trunc-table
+RES TR-GPOS-d st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GSUB-a trunc-table
+RES TR-GSUB-a st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GSUB-b trunc-table
+RES TR-GSUB-b st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GSUB-c trunc-table
+RES TR-GSUB-c st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-GSUB-d trunc-table
+RES TR-GSUB-d st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-OS_2-a trunc-table
+RES TR-OS_2-a st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-OS_2-b trunc-table
+RES TR-OS_2-b st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-OS_2-c trunc-table
+RES TR-OS_2-c st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-OS_2-d trunc-table
+RES TR-OS_2-d st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-cmap-a trunc-table
+RES TR-cmap-a st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-cmap-b trunc-table
+RES TR-cmap-b st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-cmap-c trunc-table
+RES TR-cmap-c st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-cmap-d trunc-table
+RES TR-cmap-d st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-cvt-a trunc-table
+RES TR-cvt-a st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-cvt-b trunc-table
+RES TR-cvt-b st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-cvt-c trunc-table
+RES TR-cvt-c st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-cvt-d trunc-table
+RES TR-cvt-d st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-fpgm-a trunc-table
+RES TR-fpgm-a st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-fpgm-b trunc-table
+RES TR-fpgm-b st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-fpgm-c trunc-table
+RES TR-fpgm-c st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-fpgm-d trunc-table
+RES TR-fpgm-d st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-gasp-a trunc-table
+RES TR-gasp-a st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-gasp-b trunc-table
+RES TR-gasp-b st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-gasp-c trunc-table
+RES TR-gasp-c st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-gasp-d trunc-table
+RES TR-gasp-d st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-glyf-a trunc-table
+RES TR-glyf-a st=loaded res=loaded w=60.00 vh=87 vw=28 hh=28 vj=72 wj=35
+BEG TR-glyf-b trunc-table
+RES TR-glyf-b st=loaded res=loaded w=60.00 vh=87 vw=28 hh=28 vj=72 wj=35
+BEG TR-glyf-c trunc-table
+RES TR-glyf-c st=loaded res=loaded w=60.00 vh=87 vw=28 hh=28 vj=72 wj=35
+BEG TR-glyf-d trunc-table
+RES TR-glyf-d st=loaded res=loaded w=60.00 vh=87 vw=28 hh=28 vj=72 wj=35
+BEG TR-head-a trunc-table
+RES TR-head-a st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-head-b trunc-table
+RES TR-head-b st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-head-c trunc-table
+RES TR-head-c st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-head-d trunc-table
+RES TR-head-d st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-hhea-a trunc-table
+RES TR-hhea-a st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-hhea-b trunc-table
+RES TR-hhea-b st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-hhea-c trunc-table
+RES TR-hhea-c st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-hhea-d trunc-table
+RES TR-hhea-d st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-hmtx-a trunc-table
+RES TR-hmtx-a st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-hmtx-b trunc-table
+RES TR-hmtx-b st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-hmtx-c trunc-table
+RES TR-hmtx-c st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-hmtx-d trunc-table
+RES TR-hmtx-d st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-kern-a trunc-table
+RES TR-kern-a st=loaded res=loaded w=60.00 vh=87 vw=28 hh=28 vj=72 wj=35
+BEG TR-kern-b trunc-table
+RES TR-kern-b st=loaded res=loaded w=60.00 vh=87 vw=28 hh=28 vj=72 wj=35
+BEG TR-kern-c trunc-table
+RES TR-kern-c st=loaded res=loaded w=60.00 vh=87 vw=28 hh=28 vj=72 wj=35
+BEG TR-kern-d trunc-table
+RES TR-kern-d st=loaded res=loaded w=60.00 vh=87 vw=28 hh=28 vj=72 wj=35
+BEG TR-loca-a trunc-table
+RES TR-loca-a st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-loca-b trunc-table
+RES TR-loca-b st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-loca-c trunc-table
+RES TR-loca-c st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-loca-d trunc-table
+RES TR-loca-d st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-maxp-a trunc-table
+RES TR-maxp-a st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-maxp-b trunc-table
+RES TR-maxp-b st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-maxp-c trunc-table
+RES TR-maxp-c st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-maxp-d trunc-table
+RES TR-maxp-d st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-name-a trunc-table
+RES TR-name-a st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-name-b trunc-table
+RES TR-name-b st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-name-c trunc-table
+RES TR-name-c st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-name-d trunc-table
+RES TR-name-d st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-post-a trunc-table
+RES TR-post-a st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-post-b trunc-table
+RES TR-post-b st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-post-c trunc-table
+RES TR-post-c st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-post-d trunc-table
+RES TR-post-d st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG TR-prep-a trunc-table
+RES TR-prep-a st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-prep-b trunc-table
+RES TR-prep-b st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-prep-c trunc-table
+RES TR-prep-c st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG TR-prep-d trunc-table
+RES TR-prep-d st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+DONE n=91 loaded=36 other=55
+--- crash/abort:
+  access: none
+EXIT=124

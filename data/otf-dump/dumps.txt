@@ -1,0 +1,31 @@
+OTF dumps captured out of the engine for docs/104 (2026-10-30).
+
+`*.bin` is in .gitignore ("extracted data — never commit"), so the two small fonts are stored here
+as `.otf` (same bytes, correct extension) and the 6.9 MB one is left out of git with its hash.
+
+  g6/g6.otf   1348 bytes   G6-one-lig-ab      sha256 61f2b9ec9020fbd2b21c6570650aa3b7f0a6495583cf77b264a76f7b57d86ef9
+  g4/g4.otf   1536 bytes   G4-two-lig-ab      sha256 9f23a97416c8a3efba6e6f1e213ea648215135109be018bb9ca45267e29f956c
+  (not stored) 6947424 B   N3-65535           sha256 5e8500881e7b44d7cafe09d1de033482f0d3ace1975c58d2e5b7152d80b05bfa
+
+Regenerate any of them (about 90 s each, needs the ASAN oracle and gdb there):
+
+  bash research/svgfont/otfgdb.sh g6 8941 'only=G6-one-lig-ab' 25000 90
+  bash research/svgfont/otfgdb.sh g4 8942 'only=G4-two-lig-ab' 25000 90
+  bash research/svgfont/otfgdb.sh n3 8943 'only=N3-65535'      25000 120
+
+The script dumps `$rsi .. $rsi+$rdx` at `*FT_New_Memory_Face` inside the run's own WebKitWebProcess
+and copies the bytes back as data/otf-dump/<tag>/<tag>_01.bin. Logs of the three runs:
+data/otf-dump/logs/G_894{1,2,3}.log (0 AddressSanitizer lines, EXIT=124 on each).
+Scoring: python3 tools/otf-dump-parse.py <files…> -> data/otf-dump/report.json.
+
+docs/105 (2026-10-30) adds two, both stored whole because the pair is the argument:
+
+  g10/g10.otf  29036 bytes   G10-lig300-f         sha256 6c0c7e10329dffb7f8197563cec3c63689e4de4fe852b7f84598600cebc0dd6d
+  g11/g11.otf  56356 bytes   G11-lig300-distinct  sha256 87bbfb368baa736364640b6f0397043106fa36fa0c5ad200308bff7a699efcb2
+
+  bash research/svgfont/otfgdb.sh g10 8951 'only=G10-lig300-f'        25000 120
+  bash research/svgfont/otfgdb.sh g11 8954 'only=G11-lig300-distinct' 25000 100
+
+Both declared LigatureSetCount 300; g10 wrote one offset slot, g11 wrote 300. Logs: /tmp/G_895{1,4}.log on the
+oracle (0 AddressSanitizer lines, EXIT=124). Scoring: tools/gsub-trust-model.py -> data/gsub-300/trust-model*.json,
+tools/otf-dump-parse.py -> data/gsub-300/{report.json,parse.txt}.

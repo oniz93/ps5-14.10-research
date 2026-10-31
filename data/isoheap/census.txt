@@ -1,0 +1,123 @@
+# Binary census. Every line is a command that ran on teo@<lab-ip> (Bazzite BC-250)
+# and its output, in the order it ran. Compiles ran inside the distrobox `wk` (Fedora 39),
+# which is the only environment that has the build's system headers (systemd/sd-journal.h).
+
+## 0. The oracle's own build configuration
+
+$ grep -i "MALLOC" ~/wk/WebKit/WebKitBuild/ASAN/CMakeCache.txt
+//Toggle IsoMalloc support
+USE_ISO_MALLOC:BOOL=ON
+USE_SYSTEM_MALLOC:BOOL=ON
+//Have symbol _aligned_malloc
+HAVE_ALIGNED_MALLOC_value:INTERNAL=
+//Have symbol malloc_trim
+HAVE_MALLOC_TRIM_value:INTERNAL=1
+//ADVANCED property for variable: USE_ISO_MALLOC
+USE_ISO_MALLOC-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: USE_SYSTEM_MALLOC
+USE_SYSTEM_MALLOC-ADVANCED:INTERNAL=1
+
+$ grep -n "MALLOC" ~/wk/WebKit/WebKitBuild/ASAN/cmakeconfig.h
+150:#define HAVE_ALIGNED_MALLOC 0
+159:#define HAVE_MALLOC_TRIM 1
+200:#define USE_ISO_MALLOC 1
+211:#define USE_SYSTEM_MALLOC 1
+
+$ sha256sum ~/wk/WebKit/WebKitBuild/ASAN/cmakeconfig.h ; wc -c ...
+4d1cfe68ea75a9adccfc795e74971d0b87034b7af8dd54f6720aaba936f90b99  cmakeconfig.h
+6983 cmakeconfig.h
+
+  (cmakeconfig.h is what WebCore/config.h:22-23 includes under HAVE_CONFIG_H &&
+   BUILDING_WITH_CMAKE, so these are the values the whole WebCore target compiled with.
+   USE_ISO_MALLOC is ON in the cache - the ISO macro is turned off by the *other* arm,
+   USE(SYSTEM_MALLOC).)
+
+## 1. Object level: the real class, compiled with the build's own command line
+
+The build's DEFINES/INCLUDES/FLAGS were lifted verbatim from build.ninja's statement for
+Source/WebCore/CMakeFiles/WebCore.dir/page/UserMessageHandler.cpp.o (same target, same
+flags; the object for CSS/Canvas TUs is not on disk in this build dir, so the only way to
+get this TU is to compile it). Command actually run inside `distrobox enter wk`:
+
+  g++ <DEFINES> <INCLUDES> <FLAGS> -c .../Source/WebCore/html/canvas/CanvasRenderingContext2D.cpp \
+      -o /tmp/isoheap/ctx2d_real.o
+
+  DEFINES = -DBUILDING_GTK__=1 -DBUILDING_WEBKIT=1 -DBUILDING_WITH_CMAKE=1 -DBUILDING_WebCore
+            -DGETTEXT_PACKAGE=\"WebKitGTK-4.1\" -DHAVE_CONFIG_H=1 -DJSC_GLIB_API_ENABLED
+            -DPAS_BMALLOC=1 -DSTATICALLY_LINKED_WITH_PAL
+  FLAGS   = -fno-omit-frame-pointer -fno-optimize-sibling-calls -O1 -g -DNDEBUG -std=c++20
+            -fPIC -fvisibility=hidden -fsanitize=address -fno-exceptions -fno-rtti -pthread ...
+            (full 558-byte string in /tmp/isoheap/flags.txt on the oracle)
+
+$ ls -la ctx2d_real.o
+-rw-r--r--. 1 teo teo 12218040 Oct 30 19:55 ctx2d_real.o
+
+$ nm -C --defined-only ctx2d_real.o | grep -E "CanvasRenderingContext2D.*(operator new|operator delete|bisoHeap|freeAfterDestruction)"
+(no output)
+
+$ nm -u -C ctx2d_real.o | grep -E "fastMalloc|IsoHeap"
+                 U WTF::fastMalloc(unsigned long)
+
+$ nm ctx2d_real.o | grep -c "_ZN6bmalloc3api7IsoHeap"
+0
+
+  Read: the four symbols the ISO-ON branch would define *in this very object*
+  (IsoHeapInlines.h:159-190, from WTF_MAKE_ISO_ALLOCATED_IMPL at
+  CanvasRenderingContext2D.cpp:69) are absent, and the class's inline operator new
+  instead leaves an undefined `WTF::fastMalloc(unsigned long)` - the ISO-OFF shape.
+
+Positive-control attempt, same TU, same flags, with a patched cmakeconfig.h
+(USE_SYSTEM_MALLOC 0) placed first in the include path:
+
+  /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/WTFConfig.h:42:10:
+  fatal error: bmalloc/GigacageConfig.h: No such file or directory
+  compilation terminated.
+
+  `find ~/wk/WebKit/WebKitBuild/ASAN -name GigacageConfig.h` -> no output: that header is
+  generated only for a bmalloc build, so this build dir has never produced one and an
+  ISO-ON object cannot be built here without a second configure. Recorded as a limit:
+  the ISO-ON shape is quoted from source, not compiled.
+
+## 2. Library level
+
+$ readelf -S libwebkit2gtk-4.1.so.0.11.0 | grep -c "\.symtab"
+1                     (the oracle's library keeps its symbol table)
+$ stat -c%s libwebkit2gtk-4.1.so.0.11.0
+3695564176
+$ grep -a -o "_ZN6bmalloc3api7IsoHeap" libwebkit2gtk-4.1.so.0.11.0 | wc -l
+0
+$ grep -a -o "IsoHeap" libwebkit2gtk-4.1.so.0.11.0 | wc -l
+77
+$ grep -a -o -E "IsoHeap[A-Za-z]*" libwebkit2gtk-4.1.so.0.11.0 | sort | uniq -c | sort -rn
+     44 IsoHeapCellType
+     32 IsoHeapCellTypeC
+      1 IsoHeap
+       (all three are JSC's GC cell-type names - IsoHeapCellType is the JSCell
+        destructor dispatch - not WTF's per-class allocator)
+
+$ grep -a -o "IsoSubspace" libwebkit2gtk-4.1.so.0.11.0 | wc -l
+2928                  (pipeline control: the same scan does find heap-class symbol
+                       names in this very file, so the 0 above is an absence, not a
+                       broken search)
+$ grep -a -o "bisoHeap" libwebkit2gtk-4.1.so.0.11.0 | wc -l
+0
+
+$ nm -D -C --defined-only libwebkit2gtk-4.1.so.0.11.0 | grep -ci "IsoHeap"
+0                     (dynsym is uninformative: WebKit is built -fvisibility=hidden,
+                       so class allocators never appear there - the byte scan above
+                       covers .symtab, which is where they would be)
+
+## 3. The system library (attempted positive control)
+
+$ readelf -S /usr/lib64/libwebkit2gtk-4.1.so.0.21.5 | grep -c "\.symtab"
+0                     (stripped: no symbol table at all)
+$ stat -c%s /usr/lib64/libwebkit2gtk-4.1.so.0.21.5
+93020480
+$ grep -a -o "_ZN6bmalloc3api7IsoHeap" /usr/lib64/libwebkit2gtk-4.1.so.0.21.5 | wc -l
+0
+$ nm -D -C --defined-only /usr/lib64/libwebkit2gtk-4.1.so.0.21.5 | grep -ci "IsoHeap"
+0
+
+  Read: the distro library gives no verdict in either direction - it is stripped, and
+  hidden-visibility class allocators are not in .dynsym by construction. It is not a
+  usable positive control and nothing here is claimed about Fedora's build.

@@ -1,99 +1,69 @@
-<!doctype html><meta charset="utf-8"><title>campaign</title>
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>case runner</title>
 <style>body{background:#111;color:#ddd;font:13px/1.5 ui-monospace,monospace;margin:2em}
-.ok{color:#6ee7a0}.bad{color:#f08a8a}.run{color:#f5d76e}</style>
-<style>.subject:has(& + :nth-last-child(even)){background-color:green}</style>
-<body><h1 style="font-size:15px">campaign</h1><p id="s">starting…</p><ol id="log"></ol>
+.ok{color:#6ee7a0}.bad{color:#f08a8a}.run{color:#f5d76e}</style></head>
+<body>
+<h1 style="font-size:15px">case runner</h1>
+<p id="s">starting…</p>
+<ol id="log" style="padding-left:1.2em"></ol>
 <script>
 (function () {
-  // Self-resuming campaign runner.
-  //
-  // runner.html cannot resume after a WebProcess crash: the guide URL carries no ?i=, so a reload
-  // restarts at case 0 and the crashing case is re-run forever. This keeps its own cursor in
-  // localStorage, written BEFORE each case runs, so after a crash the next load resumes at the case
-  // that died - and an attempt counter skips a case after two tries, so one crasher cannot pin the
-  // campaign.
-  var KEY = 'campaign.cursor';
-
+  // Sequential case runner for the Guide WebView. Same beacon vocabulary as the
+  // 14.10 repo's fuzz runner: start:i / survived:i / threw:i / FUZZ-RUNNER-DONE.
+  // A case that beacons start and never survived/threw took the WebProcess down —
+  // that is the only crash signal available without a debugger.
+  // Resume after a crash with ?i=N, or hit /resume on the lab server.
+  function param(n, d) {
+    var m = new RegExp('[?&]' + n + '=([^&]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1]) : d;
+  }
   function beacon(kind, id) {
     var body = kind + (id === undefined ? '' : ':' + id);
     try { navigator.sendBeacon('/beacon', body); return; } catch (e) {}
     try { var x = new XMLHttpRequest(); x.open('POST', '/beacon', true);
-          x.setRequestHeader('Content-Type', 'text/plain'); x.send(body); } catch (e) {}
+          x.setRequestHeader('Content-Type','text/plain'); x.send(body); } catch (e) {}
   }
   function line(cls, txt) {
     var li = document.createElement('li');
     li.className = cls; li.textContent = txt;
     document.getElementById('log').appendChild(li);
   }
-  function cursor() {
-    try { return JSON.parse(localStorage.getItem(KEY) || '{"i":0,"a":0}'); }
-    catch (e) { return { i: 0, a: 0 }; }
-  }
-  function setCursor(c) { try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {} }
 
-  var SIG = KEY + '-sig';
+  var startAt = parseInt(param('i', '0'), 10) || 0;
+
   fetch('/cases/manifest.json', { cache: 'no-store' }).then(function (r) { return r.json(); })
   .then(function (cases) {
-    // A cursor is only meaningful for the corpus it was written against. Without this, editing the
-    // manifest leaves the cursor pointing at a different case - or past the end, so a fresh corpus
-    // never runs at all.
-    try {
-      var sig = cases.join('|');
-      if (localStorage.getItem(SIG) !== sig) {
-        localStorage.setItem(SIG, sig);
-        setCursor({ i: 0, a: 0 });
-      }
-    } catch (e) {}
-    var c = cursor();
-    beacon('BOOT', cases.length + '-from-' + c.i + '-a' + c.a);
-    if (c.a >= 2) { line('bad', c.i + ' skipped after 2 attempts'); c = { i: c.i + 1, a: 0 }; }
-    if (c.i >= cases.length) { c = { i: 0, a: 0 }; line('ok', 'wrapped'); }
     document.getElementById('s').textContent =
-      cases.length + ' case(s), at ' + c.i + ' (attempt ' + (c.a + 1) + ')';
-
-    var i = c.i;
+      cases.length + ' case(s), starting at ' + startAt;
+    beacon('BOOT', cases.length + '-from-' + startAt);
+    var i = startAt;
     (function next() {
       if (i >= cases.length) { line('ok', 'DONE'); beacon('FUZZ-RUNNER-DONE', cases.length); return; }
       var name = cases[i];
       beacon('start', i);
       line('run', i + ' ' + name);
-      // Before running, and with the attempt already counted: a crash or a hang leaves the cursor
-      // on this case, and the NEXT load sees a+1 and can skip it after two tries. Storing the
-      // same a every time is what let one hanging case pin the whole campaign.
-      setCursor({ i: i, a: c.a + 1 });
       var threw = false, why = '';
       try {
         var src = new XMLHttpRequest();
-        src.open('GET', '/cases/' + encodeURIComponent(name), false);
-        src.send(null);
-        if (src.status !== 200) { threw = true; why = 'HTTP ' + src.status; }
+        src.open('GET', '/cases/' + encodeURIComponent(name), false);   // sync on purpose:
+        src.send(null);                                                 // ordering must be exact
+        if (src.status !== 200) { why = 'HTTP ' + src.status; threw = true; }
         else { (0, eval)(src.responseText); }
-      } catch (e) { threw = true; why = String(e && e.message || e).slice(0, 80); }
+      } catch (e) {
+        threw = true; why = String(e && e.message || e).slice(0, 80);
+      }
       if (threw) { beacon('threw', i); line('bad', i + ' threw ' + why); }
       else { beacon('survived', i); line('ok', i + ' survived'); }
-      c = { i: i + 1, a: 0 };
-      setCursor(c);
-      i = c.i;
-      setTimeout(next, 20);
+      i++;
+      setTimeout(next, 20);      // hand the event loop back so beacons flush
     })();
   })
   .catch(function (e) {
     document.getElementById('s').textContent = 'manifest error: ' + e;
     beacon('MANIFEST-ERROR', String(e).slice(0, 80));
   });
-
-  // Hot reload. The guide URL carries no query string, so there is no way to navigate from script and a
-  // physical reload per experiment puts a person in the loop for nothing. Poll the manifest and reload
-  // when the corpus changes; the cursor signature logic above then starts the new corpus at case 0.
-  var lastSig = null;
-  setInterval(function () {
-    fetch('/cases/manifest.json', { cache: 'no-store' }).then(function (r) { return r.json(); })
-    .then(function (cs) {
-      var sig = cs.join('|');
-      if (lastSig === null) { lastSig = sig; return; }
-      if (sig !== lastSig) { lastSig = sig; beacon('HOTRELOAD', sig.slice(0, 60)); location.reload(); }
-    }).catch(function () {});
-  }, 3000);
 })();
 </script>
+</body>
 </html>

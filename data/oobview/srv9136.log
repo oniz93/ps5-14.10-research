@@ -1,0 +1,11 @@
+127.0.0.1 - - [30/Oct/2026 12:18:40] "GET /caps15.html?arm=rc HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 12:18:40] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:18:40] "GET /ev?m=caps15%20arm%3Drc%20only%3D-%20resize%3Dfunction%20idbkr%3Dfunction%20onlyfn%3Dfunction%20sc%3Dfunction%20idb%3Dobject HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:18:40] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:18:40] "GET /ev?m=RC%20wrote%3D65536%20a5 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:18:41] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:18:41] "GET /ev?m=RC%20bufs%3D16%20nzBufs%3D0%20a5%3D0%20firstnz%3D-1%20firsta5%3D-1%20fails%3D0 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:18:41] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:18:41] "GET /ev?m=done%20arm%3Drc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:18:41] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:18:41] "GET /favicon.ico HTTP/1.1" 404 -

@@ -1,0 +1,10 @@
+=== cjd1 port=8905 secs=45 q=only=CJ-gsub-desc&tmo=1200
+--- beacons (in order):
+MAN n=1/183 base=d7b4e92b03deb1865aa61328fd5ff400 tables=19
+BASE fallback_w=56.00
+BEG CJ-gsub-desc vertical
+--- crash/abort:
+==1365298==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x606000062e78 at pc 0x7f8b7a11ec4c bp 0x7ffe5751fda0 sp 0x7ffe5751fd98
+SUMMARY: AddressSanitizer: heap-buffer-overflow /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/opentype/OpenTypeTypes.h:44 in WebCore::OpenType::BigEndianUShort::operator unsigned short() const
+EXIT=124
+ 1365000

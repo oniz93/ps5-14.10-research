@@ -1,0 +1,44 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>pxshape — does a pointer-shaped byte survive the canvas pixel round-trip?</title>
+<body><p id="p">pxshape</p>
+<script>
+// docs/102.  docs/98 closed glyph rasterisation because a *canonical toy* word (byte 3 = 0) becomes an
+// alpha-0 pixel and premultiplication eats it.  A real 0x7f.. heap pointer has byte 3 non-zero in 255/256
+// cases, so "is canvas usable as a carrier for a leaked pointer" is still open.  One byte per pixel, in the
+// R channel with alpha 255, so the test is about byte preservation and not channel arithmetic.
+//   arm=real  a host-shaped pointer 0x00007f3a2b1c4d08 (byte 3 = 0x2b)
+//   arm=toy   docs/98's shape      0x0000004200410000 (byte 3 = 0)
+//   arm=sweep every value 0..255 in one row, then which values came back unchanged
+(function () {
+  'use strict';
+  function B(m, x) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {} }
+  var Q = new URLSearchParams(location.search);
+  var ARM = Q.get('arm') || 'real';
+  function hex(a) { return a.map(function (v) { return ('0' + v.toString(16)).slice(-2); }).join(''); }
+
+  function run() {
+    var w = ARM === 'toy' ? [0x00, 0x00, 0x41, 0x00, 0x42, 0x00, 0x00, 0x00]
+          : ARM === 'sweep' ? Array.from({ length: 256 }, function (_, i) { return i; })
+          : [0x08, 0x4d, 0x1c, 0x2b, 0x3a, 0x7f, 0x00, 0x00];
+    var cv = document.createElement('canvas'); cv.width = w.length; cv.height = 1;
+    var cx = cv.getContext('2d');
+    var id = cx.createImageData(w.length, 1);
+    for (var i = 0; i < w.length; i++) { id.data[i * 4] = w[i]; id.data[i * 4 + 3] = 0xff; }
+    cx.putImageData(id, 0, 0);
+    var back = cx.getImageData(0, 0, w.length, 1).data;
+    var got = [], same = 0;
+    for (var j = 0; j < w.length; j++) { got.push(back[j * 4]); if (back[j * 4] === w[j]) same++; }
+    B('canvas', 'arm=' + ARM + '&same=' + same + '/' + w.length + '&in=' + hex(w).slice(0, 96) + '&got=' + hex(got).slice(0, 96));
+    if (ARM === 'sweep') {
+      // which values are lossy
+      var bad = [];
+      for (var k = 0; k < 256; k++) if (got[k] !== k) bad.push(k);
+      B('lossy', 'n=' + bad.length + '&v=' + bad.slice(0, 24).join(','));
+    }
+    B('done', 'arm=' + ARM);
+  }
+  setTimeout(run, 120);
+})();
+</script>
+</body>

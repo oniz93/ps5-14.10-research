@@ -1,0 +1,23 @@
+127.0.0.1 - - [30/Oct/2026 14:00:56] "GET /corpus.html?kinds=gsub,kern HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 14:00:56] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:56] "GET /ev?m=BOOT%20arms%3D41%20kinds%3Dgsub%7Ckern HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:00:56] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:56] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:00:56] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:56] "GET /ev?m=BEG%20G1-lig3000%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:00:56] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:56] "GET /ev?m=RES%20G1-lig3000%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D0%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D128 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:00:56] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:56] "GET /ev?m=BEG%20G2-lig-dup%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:00:56] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:56] "GET /ev?m=RES%20G2-lig-dup%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D74 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:00:56] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:56] "GET /ev?m=BEG%20G3-lig12000%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:00:57] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:57] "GET /ev?m=RES%20G3-lig12000%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D0%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D249 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:00:57] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:57] "GET /ev?m=BEG%20K1-kern11000%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:00:57] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:57] "GET /ev?m=RES%20K1-kern11000%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20ink%3D1616%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D135 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:00:58] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:00:58] "GET /ev?m=DONE%20n%3D41 HTTP/1.1" 404 -

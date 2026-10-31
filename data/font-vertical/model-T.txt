@@ -1,0 +1,57 @@
+# base=base.ttf upem=256 glyphs=49382 g_from=7109 g_to=7064
+
+T1 fs=256 hmtx 256+id; GSUB well formed 7109->20000 (advance 20256)
+  numOfLongVerMetrics=1 vmtx=98766B vhea=36B
+  map[7109]=20000  shape uses glyph 20000  (no-sub advance 256 units)
+  hmtx[20000]=20256 units -> 20256.0 px if the advance is hmtx (h3=60768.0)
+  vmtx[20000]=256 units -> 256.0 px if the advance is m_advanceHeights (h3=768.0)
+  range 0: 7109..7109 -> 1 keys, last indexTo 1; table len 56, max substitute[] index read -1, byte end 44 (IN bounds)
+
+T2 fs=256 same ids; hmtx[20000] forced to 40000 (advance above 32767, id 20000)
+  numOfLongVerMetrics=1 vmtx=98766B vhea=36B
+  map[7109]=20000  shape uses glyph 20000  (no-sub advance 256 units)
+  hmtx[20000]=40000 units -> 40000.0 px if the advance is hmtx (h3=120000.0)
+  vmtx[20000]=256 units -> 256.0 px if the advance is m_advanceHeights (h3=768.0)
+  range 0: 7109..7109 -> 1 keys, last indexTo 1; table len 56, max substitute[] index read -1, byte end 44 (IN bounds)
+
+T3 fs=256 hmtx 256+id; GSUB well formed 7109->32000 (advance 32256)
+  numOfLongVerMetrics=1 vmtx=98766B vhea=36B
+  map[7109]=32000  shape uses glyph 32000  (no-sub advance 256 units)
+  hmtx[32000]=32256 units -> 32256.0 px if the advance is hmtx (h3=96768.0)
+  vmtx[32000]=256 units -> 256.0 px if the advance is m_advanceHeights (h3=768.0)
+  range 0: 7109..7109 -> 1 keys, last indexTo 1; table len 56, max substitute[] index read -1, byte end 44 (IN bounds)
+
+T4 fs=32 same ids; hmtx[20000]=40000 at font-size 32px (40000 units = 5000 px)
+  numOfLongVerMetrics=1 vmtx=98766B vhea=36B
+  map[7109]=20000  shape uses glyph 20000  (no-sub advance 256 units)
+  hmtx[20000]=40000 units -> 5000.0 px if the advance is hmtx (h3=15000.0)
+  vmtx[20000]=256 units -> 32.0 px if the advance is m_advanceHeights (h3=96.0)
+  range 0: 7109..7109 -> 1 keys, last indexTo 1; table len 56, max substitute[] index read -1, byte end 44 (IN bounds)
+
+T5 fs=32 same ids; hmtx[20000]=20256 at font-size 32px (2532 px) -- size control
+  numOfLongVerMetrics=1 vmtx=98766B vhea=36B
+  map[7109]=20000  shape uses glyph 20000  (no-sub advance 256 units)
+  hmtx[20000]=20256 units -> 2532.0 px if the advance is hmtx (h3=7596.0)
+  vmtx[20000]=256 units -> 32.0 px if the advance is m_advanceHeights (h3=96.0)
+  range 0: 7109..7109 -> 1 keys, last indexTo 1; table len 56, max substitute[] index read -1, byte end 44 (IN bounds)
+
+B1 fs=256 same ids; hmtx[20000]=32767 at font-size 256px (32767 px, the boundary probe)
+  numOfLongVerMetrics=1 vmtx=98766B vhea=36B
+  map[7109]=20000  shape uses glyph 20000  (no-sub advance 256 units)
+  hmtx[20000]=32767 units -> 32767.0 px if the advance is hmtx (h3=98301.0)
+  vmtx[20000]=256 units -> 256.0 px if the advance is m_advanceHeights (h3=768.0)
+  range 0: 7109..7109 -> 1 keys, last indexTo 1; table len 56, max substitute[] index read -1, byte end 44 (IN bounds)
+
+B2 fs=256 same ids; hmtx[20000]=32768 at font-size 256px (32768 px, the boundary probe)
+  numOfLongVerMetrics=1 vmtx=98766B vhea=36B
+  map[7109]=20000  shape uses glyph 20000  (no-sub advance 256 units)
+  hmtx[20000]=32768 units -> 32768.0 px if the advance is hmtx (h3=98304.0)
+  vmtx[20000]=256 units -> 256.0 px if the advance is m_advanceHeights (h3=768.0)
+  range 0: 7109..7109 -> 1 keys, last indexTo 1; table len 56, max substitute[] index read -1, byte end 44 (IN bounds)
+
+C1 fs=4 same vmtx/hmtx; GSUB coverage descending 10..5, NO pad -- reads past the table copy (docs/99 crash, expected)
+  numOfLongVerMetrics=49382 vmtx=197528B vhea=36B
+  map[7109]=absent  shape uses glyph 7109  (no-sub advance 7365 units)
+  hmtx[7109]=256 units -> 4.0 px if the advance is hmtx (h3=12.0)
+  vmtx[7109]=7365 units -> 115.078125 px if the advance is m_advanceHeights (h3=345.2344)
+  range 0: 10..5 -> 65532 keys, last indexTo 65532; table len 56, max substitute[] index read 65531, byte end 131108 (PAST bounds)

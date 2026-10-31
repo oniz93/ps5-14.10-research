@@ -1,0 +1,26 @@
+127.0.0.1 - - [30/Oct/2026 13:54:38] "GET /corpus.html?kinds=reach HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 13:54:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:38] "GET /ev?m=BOOT%20arms%3D33%20kinds%3Dreach HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:38] "GET /ev?m=BEG%20R1-indoc%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:38] "GET /ev?m=RES%20R1-indoc%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20n%3D1%20st%3Dloaded%20ms%3D13 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:38] "GET /ev?m=BEG%20R2-ext%20kind%3Dext HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:38] "GET /x_R2-ext.svg HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 13:54:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:38] "GET /ev?m=RES%20R2-ext%20w%3D71.00%20w40%3D28.00%20ctl%3D64.00%20cw%3D71.00%20n%3D1%20st%3Dloading%20ms%3D15 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:39] "GET /ev?m=BEG%20R3-none%20kind%3Dnone HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:39] "GET /ev?m=RES%20R3-none%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20n%3D0%20st%3D%20ms%3D13 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:39] "GET /ev?m=BEG%20R4-indoc-noface%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:39] "GET /ev?m=RES%20R4-indoc-noface%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20n%3D0%20st%3D%20ms%3D13 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:39] "GET /ev?m=BEG%20R5-indoc-js%20kind%3Dindocjs HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:39] "GET /ev?m=RES%20R5-indoc-js%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20n%3D1%20st%3Dloaded%20ms%3D6 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:54:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:54:39] "GET /ev?m=DONE%20n%3D33 HTTP/1.1" 404 -

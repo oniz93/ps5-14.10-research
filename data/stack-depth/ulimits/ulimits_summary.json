@@ -1,0 +1,561 @@
+[
+ {
+  "tag": "u512_188",
+  "ulimit": "u512",
+  "hits": 189,
+  "per_bp": {
+   "1": 189
+  },
+  "first": "0x7ff2869fc260",
+  "last": "0x7ff2869d24a0",
+  "bp_deltas": {
+   "1": {
+    "span": 171456,
+    "n": 189,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      188
+     ]
+    ]
+   }
+  },
+  "asan": "",
+  "asan_top": ""
+ },
+ {
+  "tag": "u512_2000",
+  "ulimit": "u512",
+  "hits": 557,
+  "per_bp": {
+   "1": 557
+  },
+  "first": "0x7fc5a61fc260",
+  "last": "0x7fc5a61805a0",
+  "bp_deltas": {
+   "1": {
+    "span": 507072,
+    "n": 557,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      556
+     ]
+    ]
+   }
+  },
+  "asan": "==1523810==ERROR: AddressSanitizer: stack-overflow on address 0x7fc5a617fd48 (pc 0x7fc5d9c75a48 ",
+  "asan_top": "#0 0x7fc5d9c75a48 in __sanitizer_annotate_contiguous_container (/lib64/libasan.so.8+0xdda48) (BuildId: a42b37c"
+ },
+ {
+  "tag": "u512_278",
+  "ulimit": "u512",
+  "hits": 279,
+  "per_bp": {
+   "1": 279
+  },
+  "first": "0x7f841572b260",
+  "last": "0x7f84156ed400",
+  "bp_deltas": {
+   "1": {
+    "span": 253536,
+    "n": 279,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      278
+     ]
+    ]
+   }
+  },
+  "asan": "",
+  "asan_top": ""
+ },
+ {
+  "tag": "u512_278js",
+  "ulimit": "u512",
+  "hits": 558,
+  "per_bp": {
+   "1": 279,
+   "2": 279
+  },
+  "first": "0x7f002869a260",
+  "last": "0x7f002863e3a0",
+  "bp_deltas": {
+   "1": {
+    "span": 253536,
+    "n": 279,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      278
+     ]
+    ]
+   },
+   "2": {
+    "span": 373632,
+    "n": 279,
+    "min": 1344,
+    "max": 1344,
+    "modes": [
+     [
+      1344,
+      278
+     ]
+    ]
+   }
+  },
+  "asan": "",
+  "asan_top": ""
+ },
+ {
+  "tag": "u512_370",
+  "ulimit": "u512",
+  "hits": 371,
+  "per_bp": {
+   "1": 371
+  },
+  "first": "0x7f9cfe964260",
+  "last": "0x7f9cfe911c40",
+  "bp_deltas": {
+   "1": {
+    "span": 337440,
+    "n": 371,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      370
+     ]
+    ]
+   }
+  },
+  "asan": "",
+  "asan_top": ""
+ },
+ {
+  "tag": "u512_373",
+  "ulimit": "u512",
+  "hits": 374,
+  "per_bp": {
+   "1": 374
+  },
+  "first": "0x7f6842764260",
+  "last": "0x7f6842711190",
+  "bp_deltas": {
+   "1": {
+    "span": 340176,
+    "n": 374,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      373
+     ]
+    ]
+   }
+  },
+  "asan": "",
+  "asan_top": ""
+ },
+ {
+  "tag": "u512_375",
+  "ulimit": "u512",
+  "hits": 376,
+  "per_bp": {
+   "1": 376
+  },
+  "first": "0x7f31cdbfc260",
+  "last": "0x7f31cdba8a70",
+  "bp_deltas": {
+   "1": {
+    "span": 342000,
+    "n": 376,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      375
+     ]
+    ]
+   }
+  },
+  "asan": "",
+  "asan_top": ""
+ },
+ {
+  "tag": "u512_376",
+  "ulimit": "u512",
+  "hits": 377,
+  "per_bp": {
+   "1": 377
+  },
+  "first": "0x7f68ea9fc260",
+  "last": "0x7f68ea9a86e0",
+  "bp_deltas": {
+   "1": {
+    "span": 342912,
+    "n": 377,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      376
+     ]
+    ]
+   }
+  },
+  "asan": "",
+  "asan_top": ""
+ },
+ {
+  "tag": "u512_376b",
+  "ulimit": "u512",
+  "hits": 377,
+  "per_bp": {
+   "1": 377
+  },
+  "first": "0x7feaf2564260",
+  "last": "0x7feaf25106e0",
+  "bp_deltas": {
+   "1": {
+    "span": 342912,
+    "n": 377,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      376
+     ]
+    ]
+   }
+  },
+  "asan": "",
+  "asan_top": ""
+ },
+ {
+  "tag": "u512_377",
+  "ulimit": "u512",
+  "hits": 378,
+  "per_bp": {
+   "1": 378
+  },
+  "first": "0x7f1133f06260",
+  "last": "0x7f1133eb2350",
+  "bp_deltas": {
+   "1": {
+    "span": 343824,
+    "n": 378,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      377
+     ]
+    ]
+   }
+  },
+  "asan": "==1533258==ERROR: AddressSanitizer: stack-overflow on address 0x7f1133e89d64 (pc 0x7f115f3300be ",
+  "asan_top": "#0 0x7f115f3300be in JSC::JSArray::tryCreate(JSC::VM&, JSC::Structure*, unsigned int, unsigned int) /home/<user>/"
+ },
+ {
+  "tag": "u512_379",
+  "ulimit": "u512",
+  "hits": 380,
+  "per_bp": {
+   "1": 380
+  },
+  "first": "0x7fe9c7be2260",
+  "last": "0x7fe9c7b8dc30",
+  "bp_deltas": {
+   "1": {
+    "span": 345648,
+    "n": 380,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      379
+     ]
+    ]
+   }
+  },
+  "asan": "==1533999==ERROR: AddressSanitizer: stack-overflow on address 0x7fe9c7b65d64 (pc 0x7fe9f31300be ",
+  "asan_top": "#0 0x7fe9f31300be in JSC::JSArray::tryCreate(JSC::VM&, JSC::Structure*, unsigned int, unsigned int) /home/<user>/"
+ },
+ {
+  "tag": "u512_380",
+  "ulimit": "u512",
+  "hits": 381,
+  "per_bp": {
+   "1": 381
+  },
+  "first": "0x7f1dbf93b260",
+  "last": "0x7f1dbf8e68a0",
+  "bp_deltas": {
+   "1": {
+    "span": 346560,
+    "n": 381,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      380
+     ]
+    ]
+   }
+  },
+  "asan": "==1531411==ERROR: AddressSanitizer: stack-overflow on address 0x7f1dbf8bed64 (pc 0x7f1dead300be ",
+  "asan_top": "#0 0x7f1dead300be in JSC::JSArray::tryCreate(JSC::VM&, JSC::Structure*, unsigned int, unsigned int) /home/<user>/"
+ },
+ {
+  "tag": "u512_550",
+  "ulimit": "u512",
+  "hits": 551,
+  "per_bp": {
+   "1": 551
+  },
+  "first": "0x7f65054f2260",
+  "last": "0x7f6505477b00",
+  "bp_deltas": {
+   "1": {
+    "span": 501600,
+    "n": 551,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      550
+     ]
+    ]
+   }
+  },
+  "asan": "==1528718==ERROR: AddressSanitizer: stack-overflow on address 0x7f6505475d64 (pc 0x7f65309300be ",
+  "asan_top": "#0 0x7f65309300be in JSC::JSArray::tryCreate(JSC::VM&, JSC::Structure*, unsigned int, unsigned int) /home/<user>/"
+ },
+ {
+  "tag": "u512_555",
+  "ulimit": "u512",
+  "hits": 556,
+  "per_bp": {
+   "1": 556
+  },
+  "first": "0x7f30e2764260",
+  "last": "0x7f30e26e8930",
+  "bp_deltas": {
+   "1": {
+    "span": 506160,
+    "n": 556,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      555
+     ]
+    ]
+   }
+  },
+  "asan": "==1527976==ERROR: AddressSanitizer: stack-overflow on address 0x7f30e26e7ff8 (pc 0x7f31161f9a10 ",
+  "asan_top": "#0 0x7f31161f9a10 in __sanitizer::StackDepotBase<__sanitizer::StackDepotNode, 1, 20>::Put(__sanitizer::StackTr"
+ },
+ {
+  "tag": "u512_556",
+  "ulimit": "u512",
+  "hits": 557,
+  "per_bp": {
+   "1": 557
+  },
+  "first": "0x7f0d07ffc260",
+  "last": "0x7f0d07f805a0",
+  "bp_deltas": {
+   "1": {
+    "span": 507072,
+    "n": 557,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      556
+     ]
+    ]
+   }
+  },
+  "asan": "==1526675==ERROR: AddressSanitizer: stack-overflow on address 0x7f0d07f7fd50 (pc 0x7f0d3ba69290 ",
+  "asan_top": "#0 0x7f0d3ba69290 in malloc (/lib64/libasan.so.8+0xd9290) (BuildId: a42b37cdd3e851809894c84b99bfdb7c8fa9e357)"
+ },
+ {
+  "tag": "u512_557",
+  "ulimit": "u512",
+  "hits": 557,
+  "per_bp": {
+   "1": 557
+  },
+  "first": "0x7f519c764260",
+  "last": "0x7f519c6e85a0",
+  "bp_deltas": {
+   "1": {
+    "span": 507072,
+    "n": 557,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      556
+     ]
+    ]
+   }
+  },
+  "asan": "==1524855==ERROR: AddressSanitizer: stack-overflow on address 0x7f519c6e7d48 (pc 0x7f51d01fea48 ",
+  "asan_top": "#0 0x7f51d01fea48 in __sanitizer_annotate_contiguous_container (/lib64/libasan.so.8+0xdda48) (BuildId: a42b37c"
+ },
+ {
+  "tag": "u512_558",
+  "ulimit": "u512",
+  "hits": 557,
+  "per_bp": {
+   "1": 557
+  },
+  "first": "0x7f8c40cc3260",
+  "last": "0x7f8c40c475a0",
+  "bp_deltas": {
+   "1": {
+    "span": 507072,
+    "n": 557,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      556
+     ]
+    ]
+   }
+  },
+  "asan": "==1525588==ERROR: AddressSanitizer: stack-overflow on address 0x7f8c40c46d48 (pc 0x7f8c746f2a48 ",
+  "asan_top": "#0 0x7f8c746f2a48 in __sanitizer_annotate_contiguous_container (/lib64/libasan.so.8+0xdda48) (BuildId: a42b37c"
+ },
+ {
+  "tag": "u512_8",
+  "ulimit": "u512",
+  "hits": 9,
+  "per_bp": {
+   "1": 9
+  },
+  "first": "0x7f44b5b64260",
+  "last": "0x7f44b5b625e0",
+  "bp_deltas": {
+   "1": {
+    "span": 7296,
+    "n": 9,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      8
+     ]
+    ]
+   }
+  },
+  "asan": "",
+  "asan_top": ""
+ },
+ {
+  "tag": "u1024_2000",
+  "ulimit": "u1024",
+  "hits": 1132,
+  "per_bp": {
+   "1": 1132
+  },
+  "first": "0x7f8110ffc260",
+  "last": "0x7f8110f00530",
+  "bp_deltas": {
+   "1": {
+    "span": 1031472,
+    "n": 1132,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      1131
+     ]
+    ]
+   }
+  },
+  "asan": "==1535817==ERROR: AddressSanitizer: stack-overflow on address 0x7f8110effcd8 (pc 0x7f8144ecea48 ",
+  "asan_top": "#0 0x7f8144ecea48 in __sanitizer_annotate_contiguous_container (/lib64/libasan.so.8+0xdda48) (BuildId: a42b37c"
+ },
+ {
+  "tag": "u1024_766",
+  "ulimit": "u1024",
+  "hits": 767,
+  "per_bp": {
+   "1": 767
+  },
+  "first": "0x7f813e164260",
+  "last": "0x7f813e0b9980",
+  "bp_deltas": {
+   "1": {
+    "span": 698592,
+    "n": 767,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      766
+     ]
+    ]
+   }
+  },
+  "asan": "",
+  "asan_top": ""
+ },
+ {
+  "tag": "u1024_767",
+  "ulimit": "u1024",
+  "hits": 768,
+  "per_bp": {
+   "1": 768
+  },
+  "first": "0x7f54a7d64260",
+  "last": "0x7f54a7cb95f0",
+  "bp_deltas": {
+   "1": {
+    "span": 699504,
+    "n": 768,
+    "min": 912,
+    "max": 912,
+    "modes": [
+     [
+      912,
+      767
+     ]
+    ]
+   }
+  },
+  "asan": "==1537172==ERROR: AddressSanitizer: stack-overflow on address 0x7f54a7c67de4 (pc 0x7f54d37300be ",
+  "asan_top": "#0 0x7f54d37300be in JSC::JSArray::tryCreate(JSC::VM&, JSC::Structure*, unsigned int, unsigned int) /home/<user>/"
+ }
+]

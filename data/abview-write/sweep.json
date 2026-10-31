@@ -1,0 +1,639 @@
+{
+ "idl": [
+  {
+   "idl": "Source/WebCore/page/Crypto.idl",
+   "line": 35,
+   "op": "getRandomValues",
+   "kind": "operation",
+   "class": "write",
+   "allow_shared": false,
+   "text": "ArrayBufferView getRandomValues([ReturnValue] ArrayBufferView array)"
+  },
+  {
+   "idl": "Source/WebCore/css/FontFace.idl",
+   "line": 20,
+   "op": "typedef",
+   "kind": "typedef",
+   "class": "read",
+   "allow_shared": false,
+   "text": "* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDI",
+   "inner": "INCLUDING NEGLIGENCE OR OTHERWISE"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 42,
+   "op": "typedef",
+   "kind": "typedef",
+   "class": "read",
+   "allow_shared": false,
+   "text": "typedef (ArrayBuffer or ArrayBufferView) BufferDataSource",
+   "inner": "ArrayBuffer or ArrayBufferView"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 344,
+   "op": "bufferData",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined bufferData(GLenum target, [AllowShared] ArrayBufferView data, GLenum usage, GLuint srcOffset, optional GLuint "
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 347,
+   "op": "bufferSubData",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined bufferSubData(GLenum target, GLintptr dstByteOffset, [AllowShared] ArrayBufferView srcData, GLuint srcOffset, "
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 350,
+   "op": "getBufferSubData",
+   "kind": "operation",
+   "class": "write",
+   "allow_shared": true,
+   "text": "undefined getBufferSubData(GLenum target, GLintptr srcByteOffset, [AllowShared] ArrayBufferView dstData, optional GLuint"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 369,
+   "op": "texImage3D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined texImage3D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLi"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 370,
+   "op": "texImage3D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined texImage3D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLi"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 374,
+   "op": "texSubImage3D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined texSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei "
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 379,
+   "op": "compressedTexImage3D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined compressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 381,
+   "op": "compressedTexSubImage3D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined compressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 479,
+   "op": "texImage2D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined texImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLen"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 483,
+   "op": "texSubImage2D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined texSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum "
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 486,
+   "op": "compressedTexImage2D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined compressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint b"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 489,
+   "op": "compressedTexSubImage2D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined compressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei heigh"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGL2RenderingContext.idl",
+   "line": 506,
+   "op": "readPixels",
+   "kind": "operation",
+   "class": "write",
+   "allow_shared": true,
+   "text": "undefined readPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, [AllowShared] ArrayBuf"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGLRenderingContextBase.idl",
+   "line": 40,
+   "op": "typedef",
+   "kind": "typedef",
+   "class": "read",
+   "allow_shared": false,
+   "text": "typedef (ArrayBuffer or ArrayBufferView) BufferDataSource",
+   "inner": "ArrayBuffer or ArrayBufferView"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGLRenderingContextBase.idl",
+   "line": 43,
+   "op": "typedef",
+   "kind": "typedef",
+   "class": "read",
+   "allow_shared": true,
+   "text": "typedef ([AllowShared] ArrayBuffer or [AllowShared] ArrayBufferView) AllowSharedBufferDataSource",
+   "inner": "[AllowShared] ArrayBuffer or [AllowShared] ArrayBufferView"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGLRenderingContextBase.idl",
+   "line": 511,
+   "op": "texImage2D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined texImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLe"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGLRenderingContextBase.idl",
+   "line": 514,
+   "op": "texSubImage2D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined texSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum "
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGLRenderingContextBase.idl",
+   "line": 517,
+   "op": "compressedTexImage2D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined compressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint b"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGLRenderingContextBase.idl",
+   "line": 519,
+   "op": "compressedTexSubImage2D",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined compressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei heigh"
+  },
+  {
+   "idl": "Source/WebCore/html/canvas/WebGLRenderingContextBase.idl",
+   "line": 614,
+   "op": "readPixels",
+   "kind": "operation",
+   "class": "write",
+   "allow_shared": true,
+   "text": "undefined readPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, [AllowShared] ArrayBuf"
+  },
+  {
+   "idl": "Source/WebCore/dom/TextDecoderStreamDecoder.idl",
+   "line": 34,
+   "op": "decode",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "[PrivateIdentifier] DOMString decode([AllowShared] (ArrayBufferView or ArrayBuffer) source)"
+  },
+  {
+   "idl": "Source/WebCore/dom/TextDecoder.idl",
+   "line": 43,
+   "op": "decode",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "USVString decode(optional [AllowShared] (ArrayBufferView or ArrayBuffer)? input, optional TextDecodeOptions options)"
+  },
+  {
+   "idl": "Source/WebCore/Modules/filesystemaccess/FileSystemSyncAccessHandle.idl",
+   "line": 36,
+   "op": "read",
+   "kind": "operation",
+   "class": "write",
+   "allow_shared": true,
+   "text": "unsigned long long read([AllowShared] (ArrayBufferView or ArrayBuffer) buffer, optional FilesystemReadWriteOptions optio"
+  },
+  {
+   "idl": "Source/WebCore/Modules/filesystemaccess/FileSystemSyncAccessHandle.idl",
+   "line": 37,
+   "op": "write",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "unsigned long long write([AllowShared] (ArrayBufferView or ArrayBuffer) buffer, optional FilesystemReadWriteOptions opti"
+  },
+  {
+   "idl": "Source/WebCore/Modules/WebGPU/GPUQueue.idl",
+   "line": 43,
+   "op": "writeBuffer",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined writeBuffer( GPUBuffer buffer, GPUSize64 bufferOffset, [AllowShared](ArrayBufferView or ArrayBuffer) data, opt"
+  },
+  {
+   "idl": "Source/WebCore/Modules/WebGPU/GPUQueue.idl",
+   "line": 51,
+   "op": "writeTexture",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "undefined writeTexture( GPUImageCopyTexture destination, [AllowShared](ArrayBufferView or ArrayBuffer) data, GPUImageDat"
+  },
+  {
+   "idl": "Source/WebCore/Modules/websockets/WebSocket.idl",
+   "line": 65,
+   "op": "send",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": false,
+   "text": "undefined send(ArrayBufferView data)"
+  },
+  {
+   "idl": "Source/WebCore/Modules/mediastream/RTCDataChannel.idl",
+   "line": 49,
+   "op": "send",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": false,
+   "text": "undefined send(ArrayBufferView data)"
+  },
+  {
+   "idl": "Source/WebCore/Modules/webcodecs/WebCodecsVideoFrame.idl",
+   "line": 49,
+   "op": "constructor",
+   "kind": "operation",
+   "class": "read",
+   "allow_shared": true,
+   "text": "[CallWith=CurrentScriptExecutionContext] constructor([AllowShared] (ArrayBufferView or ArrayBuffer) data, VideoFrameBuff"
+  },
+  {
+   "idl": "Source/WebCore/Modules/webcodecs/WebCodecsVideoFrame.idl",
+   "line": 63,
+   "op": "copyTo",
+   "kind": "operation",
+   "class": "write",
+   "allow_shared": true,
+   "text": "Promise<sequence<PlaneLayout>> copyTo([AllowShared] (ArrayBufferView or ArrayBuffer) destination, optional VideoFrameCop"
+  },
+  {
+   "idl": "Source/WebCore/Modules/webcodecs/WebCodecsEncodedVideoChunk.idl",
+   "line": 38,
+   "op": "copyTo",
+   "kind": "operation",
+   "class": "write",
+   "allow_shared": true,
+   "text": "undefined copyTo([AllowShared] (ArrayBufferView or ArrayBuffer) destination)"
+  },
+  {
+   "idl": "Source/WebCore/Modules/webcodecs/WebCodecsEncodedVideoChunk.idl",
+   "line": 51,
+   "op": "member",
+   "kind": "dictionary-member",
+   "class": "read",
+   "allow_shared": true,
+   "text": "required [AllowShared] (ArrayBufferView or ArrayBuffer) data"
+  },
+  {
+   "idl": "Source/WebCore/Modules/webcodecs/WebCodecsVideoDecoderConfig.idl",
+   "line": 34,
+   "op": "member",
+   "kind": "dictionary-member",
+   "class": "read",
+   "allow_shared": true,
+   "text": "[AllowShared] (ArrayBufferView or ArrayBuffer) description"
+  }
+ ],
+ "native_param_sites": [
+  {
+   "file": "Source/JavaScriptCore/runtime/ArrayBufferView.cpp",
+   "line": 84,
+   "sig": "void ArrayBufferView::operator delete(ArrayBufferView* value, std::destroying_delete_t) { value->visitDerived([](auto& value) {",
+   "sinks": [],
+   "gates": [],
+   "len": 176
+  },
+  {
+   "file": "Source/WebCore/page/Crypto.cpp",
+   "line": 57,
+   "sig": "ExceptionOr<void> Crypto::getRandomValues(ArrayBufferView& array) { if (!isInt(array.getType()) && !isBigInt(array.getType()))",
+   "sinks": [
+    {
+     "pattern": "cryptographicallyRandomValues(",
+     "kind": "random-fill"
+    },
+    {
+     "pattern": "CCRandomGenerateBytes(",
+     "kind": "random-fill"
+    }
+   ],
+   "gates": [],
+   "len": 435
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp",
+   "line": 1589,
+   "sig": "void WebGLRenderingContextBase::compressedTexImage2D(GCGLenum target, GCGLint level, GCGLenum internalformat, GCGLsizei width, GCGLsizei height, GCGLint border,",
+   "sinks": [],
+   "gates": [],
+   "len": 410
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp",
+   "line": 1600,
+   "sig": "void WebGLRenderingContextBase::compressedTexSubImage2D(GCGLenum target, GCGLint level, GCGLint xoffset, GCGLint yoffset, GCGLsizei width, GCGLsizei height, GCG",
+   "sinks": [],
+   "gates": [],
+   "len": 413
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp",
+   "line": 4172,
+   "sig": "bool WebGLRenderingContextBase::validateTypeAndArrayBufferType(const char* functionName, ArrayBufferViewFunctionType functionType, GCGLenum type, ArrayBufferVie",
+   "sinks": [],
+   "gates": [],
+   "len": 2851
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGLRenderingContextBase.cpp",
+   "line": 4257,
+   "sig": "std::optional<std::span<const uint8_t>> WebGLRenderingContextBase::validateTexFuncData(const char* functionName, TexImageDimension texDimension, GCGLsizei width",
+   "sinks": [],
+   "gates": [],
+   "len": 2108
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 457,
+   "sig": "RefPtr<ArrayBufferView> WebGL2RenderingContext::arrayBufferViewSliceFactory(const char* const functionName, const ArrayBufferView& data, unsigned startByte,  un",
+   "sinks": [],
+   "gates": [],
+   "len": 695
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 483,
+   "sig": "RefPtr<ArrayBufferView> WebGL2RenderingContext::sliceArrayBufferView(const char* const functionName, const ArrayBufferView& data, GCGLuint srcOffset, GCGLuint l",
+   "sinks": [],
+   "gates": [],
+   "len": 1379
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 555,
+   "sig": "void WebGL2RenderingContext::bufferData(GCGLenum target, const ArrayBufferView& data, GCGLenum usage, GCGLuint srcOffset, GCGLuint length) { if (auto slice = sl",
+   "sinks": [],
+   "gates": [],
+   "len": 178
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 561,
+   "sig": "void WebGL2RenderingContext::bufferSubData(GCGLenum target, long long offset, const ArrayBufferView& data, GCGLuint srcOffset, GCGLuint length) { if (auto slice",
+   "sinks": [],
+   "gates": [],
+   "len": 185
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 1136,
+   "sig": "void WebGL2RenderingContext::compressedTexImage2D(GCGLenum target, GCGLint level, GCGLenum internalformat, GCGLsizei width, GCGLsizei height, GCGLint border, Ar",
+   "sinks": [],
+   "gates": [],
+   "len": 376
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 1166,
+   "sig": "void WebGL2RenderingContext::compressedTexImage2D(GCGLenum target, GCGLint level, GCGLenum internalformat, GCGLsizei width, GCGLsizei height, GCGLint border, Ar",
+   "sinks": [],
+   "gates": [],
+   "len": 672
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 1199,
+   "sig": "void WebGL2RenderingContext::compressedTexImage3D(GCGLenum target, GCGLint level, GCGLenum internalformat, GCGLsizei width, GCGLsizei height, GCGLsizei depth, G",
+   "sinks": [],
+   "gates": [],
+   "len": 679
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 1217,
+   "sig": "void WebGL2RenderingContext::compressedTexSubImage2D(GCGLenum target, GCGLint level, GCGLint xoffset, GCGLint yoffset, GCGLsizei width, GCGLsizei height, GCGLen",
+   "sinks": [],
+   "gates": [],
+   "len": 384
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 1245,
+   "sig": "void WebGL2RenderingContext::compressedTexSubImage2D(GCGLenum target, GCGLint level, GCGLint xoffset, GCGLint yoffset, GCGLsizei width, GCGLsizei height, GCGLen",
+   "sinks": [],
+   "gates": [],
+   "len": 686
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 1278,
+   "sig": "void WebGL2RenderingContext::compressedTexSubImage3D(GCGLenum target, GCGLint level, GCGLint xoffset, GCGLint yoffset, GCGLint zoffset, GCGLsizei width, GCGLsiz",
+   "sinks": [],
+   "gates": [],
+   "len": 702
+  },
+  {
+   "file": "Source/WebCore/html/canvas/WebGL2RenderingContext.cpp",
+   "line": 3410,
+   "sig": "void WebGL2RenderingContext::readPixels(GCGLint x, GCGLint y, GCGLsizei width, GCGLsizei height, GCGLenum format, GCGLenum type, ArrayBufferView& dstData, GCGLu",
+   "sinks": [],
+   "gates": [],
+   "len": 448
+  },
+  {
+   "file": "Source/WebCore/xml/XMLHttpRequest.cpp",
+   "line": 574,
+   "sig": "ExceptionOr<void> XMLHttpRequest::send(ArrayBufferView& body) { return sendBytesData(body.baseAddress(), body.byteLength());",
+   "sinks": [],
+   "gates": [],
+   "len": 68
+  },
+  {
+   "file": "Source/WebCore/Modules/websockets/WebSocket.cpp",
+   "line": 385,
+   "sig": "ExceptionOr<void> WebSocket::send(ArrayBufferView& arrayBufferView) { LOG(Network, \"WebSocket %p send() Sending ArrayBufferView %p\", this, &arrayBufferView);",
+   "sinks": [],
+   "gates": [],
+   "len": 754
+  },
+  {
+   "file": "Source/WebCore/Modules/mediastream/RTCDataChannel.cpp",
+   "line": 164,
+   "sig": "ExceptionOr<void> RTCDataChannel::send(ArrayBufferView& data) { if (m_readyState != RTCDataChannelState::Open)",
+   "sinks": [],
+   "gates": [],
+   "len": 252
+  }
+ ],
+ "native_writers": [
+  {
+   "file": "Source/WebCore/page/Crypto.cpp",
+   "line": 57,
+   "sig": "ExceptionOr<void> Crypto::getRandomValues(ArrayBufferView& array) { if (!isInt(array.getType()) && !isBigInt(array.getType()))",
+   "sinks": [
+    {
+     "pattern": "cryptographicallyRandomValues(",
+     "kind": "random-fill"
+    },
+    {
+     "pattern": "CCRandomGenerateBytes(",
+     "kind": "random-fill"
+    }
+   ],
+   "gates": [],
+   "len": 435
+  }
+ ],
+ "checks": [
+  {
+   "check": "S1.1 native ArrayBufferView::byteLength() keeps the inverted test",
+   "ok": true,
+   "detail": "ArrayBufferView.h:83 (byteOffset) and :105 (byteLength); 2 occurrences of the inverted form"
+  },
+  {
+   "check": "S1.2 the inverted test is spelled '!(' , i.e. a valid view returns 0 and an OOB view returns raw",
+   "ok": true,
+   "detail": "upstream has no '!'"
+  },
+  {
+   "check": "S1.3 JSArrayBufferView::byteLength()/length() are NOT inverted -- they use integerIndexedObject*",
+   "ok": true,
+   "detail": "JSArrayBufferView.h:238 length(), :311 byteLength() -- the JS-level view never calls the native test"
+  },
+  {
+   "check": "S1.4 isOutOfBounds() is the spec test (isArrayBufferViewOutOfBounds), not the native one",
+   "ok": true,
+   "detail": "JSArrayBufferView.h:333"
+  },
+  {
+   "check": "S2.1 JSArrayBufferView::toWrapped refuses every resizable/growable-shared view",
+   "ok": true,
+   "detail": "JSArrayBufferViewInlines.h:94"
+  },
+  {
+   "check": "S2.2 JSArrayBufferView::toWrappedAllowShared refuses them too ([AllowShared] is not a bypass)",
+   "ok": true,
+   "detail": "JSArrayBufferViewInlines.h:103"
+  },
+  {
+   "check": "S2.3 JSGenericTypedArrayView::toWrapped / toWrappedAllowShared refuse them as well",
+   "ok": true,
+   "detail": "JSGenericTypedArrayViewInlines.h:930-941"
+  },
+  {
+   "check": "S2.4 Converter<IDLArrayBufferView> goes through toWrapped (Disallow) and [AllowShared] through toWrappedAllowShared -- so every IDL ArrayBufferView parameter is gated",
+   "ok": true,
+   "detail": "JSDOMConvertBufferSource.h:435 and :458"
+  },
+  {
+   "check": "S2.5 possiblySharedImpl() has 4 call sites and only IDBKey is outside a gate",
+   "ok": true,
+   "detail": "Source/JavaScriptCore/runtime/JSArrayBufferViewInlines.h:89; Source/JavaScriptCore/runtime/JSArrayBufferViewInlines.h:107; Source/WebCore/bindings/js/JSDOMConvertBufferSource.h:106; Source/WebCore/Modules/indexeddb/IDBKey.cpp:55"
+  },
+  {
+   "check": "S2.6 IDBKey::createBinary only READS the native view (copyData); no write sink in its body",
+   "ok": true,
+   "detail": "sinks=[]"
+  },
+  {
+   "check": "S2.7 the serializer's raw producer is preceded by the isOutOfBounds() test",
+   "ok": true,
+   "detail": "SerializedScriptValue.cpp:1382"
+  },
+  {
+   "check": "S3.1 every IDL ArrayBufferView consumer is classified (no 'unclassified' rows)",
+   "ok": true,
+   "detail": "unclassified=[]"
+  },
+  {
+   "check": "S3.2 the write-consumer set is exactly the 5 known operations",
+   "ok": true,
+   "detail": "writes=['copyTo', 'getBufferSubData', 'getRandomValues', 'read', 'readPixels']"
+  },
+  {
+   "check": "S3.3 WebGL is the write consumer that needs a build flag, and the flag is OFF on this port",
+   "ok": true,
+   "detail": "OptionsPlayStation.cmake:272"
+  },
+  {
+   "check": "S3.4 WebCodecs is OFF by default in this drop (so copyTo does not exist)",
+   "ok": true,
+   "detail": "WebKitFeatures.cmake:260"
+  },
+  {
+   "check": "S4.1 set/fill/copyWithin/sort all call validateTypedArray() on the receiver first",
+   "ok": true,
+   "detail": "validateTypedArray(globalObject, thisObject) x12 in the prototype functions"
+  },
+  {
+   "check": "S4.2 validateTypedArray throws on isIntegerIndexedObjectOutOfBounds",
+   "ok": true,
+   "detail": "JSArrayBufferViewInlines.h:153"
+  },
+  {
+   "check": "S4.3 the index write path (view[i]=v) checks inBounds(), which reads the LIVE buffer length",
+   "ok": true,
+   "detail": "JSGenericTypedArrayViewInlines.h:788 setIndex, :736 inBounds"
+  },
+  {
+   "check": "S4.4 DataView.set* uses viewByteLength() and throws RangeError instead of writing",
+   "ok": true,
+   "detail": "JSDataViewPrototype.cpp:178 setData"
+  },
+  {
+   "check": "S5.1 every .cpp function with a native ArrayBufferView&/* parameter was found",
+   "ok": true,
+   "detail": "20 sites"
+  },
+  {
+   "check": "S5.2 the only native ArrayBufferView&/* write consumer in the tree is Crypto::getRandomValues",
+   "ok": true,
+   "detail": "writers=[('Crypto.cpp', 57)] (WebGL's readPixels/getBufferSubData hand the view to the driver, not to ArrayBufferView::set*)"
+  },
+  {
+   "check": "S5.3 the typed-view spelling of the same shape is TextEncoder::encodeInto: Ref<Uint8Array>&&, bound = array->byteLength(), write = U8_APPEND into array->baseAddress()",
+   "ok": true,
+   "detail": "TextEncoder.cpp:52/51/63"
+  },
+  {
+   "check": "S5.4 neither is reachable with a resizable view: the gate is the binding converter (S2.4), not anything inside the function",
+   "ok": true,
+   "detail": "no gate inside either body -- the refusal happens before the call"
+  }
+ ]
+}

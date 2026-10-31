@@ -1,0 +1,11 @@
+=== f4 port=8897 secs=120 q=kinds=gsub,vertical,real&tmo=1200
+--- beacons (in order):
+MAN n=14/183 base=d7b4e92b03deb1865aa61328fd5ff400 tables=19
+BASE fallback_w=56.00
+BEG GS-ctl gsub
+RES GS-ctl st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG GS-wrap gsub
+--- crash/abort:
+==1359275==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x606000064df8 at pc 0x7f185b71ec4c bp 0x7ffeea84e140 sp 0x7ffeea84e138
+SUMMARY: AddressSanitizer: heap-buffer-overflow /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/opentype/OpenTypeTypes.h:44 in WebCore::OpenType::BigEndianUShort::operator unsigned short() const
+EXIT=124

@@ -1,0 +1,95 @@
+[New LWP 1511448]
+[New LWP 1511447]
+[New LWP 1511446]
+[New LWP 1511445]
+[New LWP 1511444]
+[New LWP 1511434]
+[New LWP 1511433]
+[New LWP 1511432]
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <ima:enforcing>
+  <https://debuginfod.fedoraproject.org/>
+  <ima:ignore>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+
+warning: Can't read data for section '.debug_info' in file 'target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0'
+
+warning: Expected absolute pathname for libpthread in the inferior, but got target:/lib64/libc.so.6.
+
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+
+warning: Section .debug_aranges in target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0 entry at offset 0 debug_info_offset 0 does not exists, ignoring .debug_aranges.
+0x00007f68698c7ebd in poll () from target:/lib64/libc.so.6
+Breakpoint 1 at 0x7f68776ae4ae
+H 1 t=1 bp=1 rsp=0x7ffdf06eac80
+H 2 t=1 bp=1 rsp=0x7ffdf06ea690
+H 3 t=1 bp=1 rsp=0x7ffdf06ea0a0
+H 4 t=1 bp=1 rsp=0x7ffdf06e9ab0
+H 5 t=1 bp=1 rsp=0x7ffdf06e94c0
+H 6 t=1 bp=1 rsp=0x7ffdf06e8ed0
+H 7 t=1 bp=1 rsp=0x7ffdf06e88e0
+H 8 t=1 bp=1 rsp=0x7ffdf06e82f0
+H 9 t=1 bp=1 rsp=0x7ffdf06e7d00
+H 10 t=1 bp=1 rsp=0x7ffdf06e7710
+H 11 t=1 bp=1 rsp=0x7ffdf06e7120
+H 12 t=1 bp=1 rsp=0x7ffdf06e6b30
+H 13 t=1 bp=1 rsp=0x7ffdf06e6540
+H 14 t=1 bp=1 rsp=0x7ffdf06e5f50
+H 15 t=1 bp=1 rsp=0x7ffdf06e5960
+H 16 t=1 bp=1 rsp=0x7ffdf06e5370
+H 17 t=1 bp=1 rsp=0x7ffdf06e4d80
+H 18 t=1 bp=1 rsp=0x7ffdf06e4790
+H 19 t=1 bp=1 rsp=0x7ffdf06e41a0
+H 20 t=1 bp=1 rsp=0x7ffdf06e3bb0
+H 21 t=1 bp=1 rsp=0x7ffdf06e35c0
+H 22 t=1 bp=1 rsp=0x7ffdf06e2fd0
+H 23 t=1 bp=1 rsp=0x7ffdf06e29e0
+H 24 t=1 bp=1 rsp=0x7ffdf06e23f0
+H 25 t=1 bp=1 rsp=0x7ffdf06e1e00
+H 26 t=1 bp=1 rsp=0x7ffdf06e1810
+H 27 t=1 bp=1 rsp=0x7ffdf06e1220
+H 28 t=1 bp=1 rsp=0x7ffdf06e0c30
+H 29 t=1 bp=1 rsp=0x7ffdf06e0640
+H 30 t=1 bp=1 rsp=0x7ffdf06e0050
+H 31 t=1 bp=1 rsp=0x7ffdf06dfa60
+H 32 t=1 bp=1 rsp=0x7ffdf06df470
+H 33 t=1 bp=1 rsp=0x7ffdf06dee80
+H 34 t=1 bp=1 rsp=0x7ffdf06de890
+H 35 t=1 bp=1 rsp=0x7ffdf06de2a0
+H 36 t=1 bp=1 rsp=0x7ffdf06ddcb0
+H 37 t=1 bp=1 rsp=0x7ffdf06dd6c0
+H 38 t=1 bp=1 rsp=0x7ffdf06dd0d0
+H 39 t=1 bp=1 rsp=0x7ffdf06dcae0
+H 40 t=1 bp=1 rsp=0x7ffdf06dc4f0
+H 41 t=1 bp=1 rsp=0x7ffdf06dbf00
+H 42 t=1 bp=1 rsp=0x7ffdf06db910
+H 43 t=1 bp=1 rsp=0x7ffdf06db320
+H 44 t=1 bp=1 rsp=0x7ffdf06dad30
+H 45 t=1 bp=1 rsp=0x7ffdf06da740
+H 46 t=1 bp=1 rsp=0x7ffdf06da150
+H 47 t=1 bp=1 rsp=0x7ffdf06d9b60
+H 48 t=1 bp=1 rsp=0x7ffdf06d9570
+H 49 t=1 bp=1 rsp=0x7ffdf06d8f80
+H 50 t=1 bp=1 rsp=0x7ffdf06d8990
+H 51 t=1 bp=1 rsp=0x7ffdf06d83a0
+H 52 t=1 bp=1 rsp=0x7ffdf06d7db0
+H 53 t=1 bp=1 rsp=0x7ffdf06d77c0
+H 54 t=1 bp=1 rsp=0x7ffdf06d71d0
+H 55 t=1 bp=1 rsp=0x7ffdf06d6be0
+H 56 t=1 bp=1 rsp=0x7ffdf06d65f0
+H 57 t=1 bp=1 rsp=0x7ffdf06d6000
+H 58 t=1 bp=1 rsp=0x7ffdf06d5a10
+H 59 t=1 bp=1 rsp=0x7ffdf06d5420
+H 60 t=1 bp=1 rsp=0x7ffdf06d4e30
+H 61 t=1 bp=1 rsp=0x7ffdf06d4840
+H 62 t=1 bp=1 rsp=0x7ffdf06d4250
+H 63 t=1 bp=1 rsp=0x7ffdf06d3c60
+H 64 t=1 bp=1 rsp=0x7ffdf06d3670
+[LWP 1511447 exited]
+
+Thread 1 "WebKitWebProces" received signal SIGTERM, Terminated.
+0x00007f68698c7ebd in poll () from target:/lib64/libc.so.6
+[Inferior 1 (process 1511424) detached]

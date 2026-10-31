@@ -1,0 +1,71 @@
+### A1_dvport
+==832597==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000cb455 (pc 0x7f89b8c758a4 bp 0x7ffee6694ac0 sp 0x7ffee6694a80 T0)
+    #3 0x7f89c725d1c2 in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7f89c725d1c2 in operator() /home/<user>/wk/WebKit/Source/WebCore/dom/MessagePort.cpp:295
+    #6 0x7f89c24e71a1 in WTF::Function<void (WTF::Vector<WebCore::MessageWithMessagePorts, 0ul, WTF::CrashOnOverflow, 16
+### A4_dvwin
+==833813==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000cb915 (pc 0x7fe68b6fd8a4 bp 0x7ffc35a2b210 sp 0x7ffc35a2b1d0 T0)
+    #3 0x7fe69b69f81b in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7fe69b69f81b in operator() /home/<user>/wk/WebKit/Source/WebCore/page/LocalDOMWindow.cpp:947
+    #6 0x7fe699ba4cff in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf
+### A5_dvwinopt
+==834148==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000cba64 (pc 0x7f52a2a758a4 bp 0x7ffe25e148f0 sp 0x7ffe25e148b0 T0)
+    #3 0x7f52b2a9f81b in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7f52b2a9f81b in operator() /home/<user>/wk/WebKit/Source/WebCore/page/LocalDOMWindow.cpp:947
+    #6 0x7f52b0fa4cff in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf
+### B2_dvwksend
+==835059==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000cbdf3 (pc 0x7f1adc0a78a4 bp 0x7ffe9f85ec80 sp 0x7ffe9f85ec40 T0)
+    #3 0x7f1aee9082be in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7f1aee9082be in operator() /home/<user>/wk/WebKit/Source/WebCore/workers/WorkerMessagingProxy.cpp:199
+    #6 0x7f1aee916cd1 in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf
+### B3_dvwkrecv
+==835402==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000cbf4a (pc 0x7f564a0758a4 bp 0x7f56278e0e70 sp 0x7f56278e0e30 T9)
+    #3 0x7f565c9090ad in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7f565c9090ad in operator()<WebCore::ScriptExecutionContext> /home/<user>/wk/WebKit/Source/WebCore/workers/WorkerMessagingProxy.cpp:245
+    #6 0x7f565c932f13 in WTF::Function<void (WebCore::ScriptExecutionContext&)>::operator()(WebCore::ScriptExecutionCont
+### R1_dvwin
+==861634==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000d25c2 (pc 0x7fc03b2f18a4 bp 0x7ffc457b84f0 sp 0x7ffc457b84b0 T0)
+    #3 0x7fc04b29f81b in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7fc04b29f81b in operator() /home/<user>/wk/WebKit/Source/WebCore/page/LocalDOMWindow.cpp:947
+    #6 0x7fc0497a4cff in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf
+### R2_dvwin
+==861965==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000d270d (pc 0x7f425ac758a4 bp 0x7ffd45dbde80 sp 0x7ffd45dbde40 T0)
+    #3 0x7f426ac9f81b in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7f426ac9f81b in operator() /home/<user>/wk/WebKit/Source/WebCore/page/LocalDOMWindow.cpp:947
+    #6 0x7f42691a4cff in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf
+### R3_dvwksend
+==862300==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000d285c (pc 0x7f72748758a4 bp 0x7fffd630d2f0 sp 0x7fffd630d2b0 T0)
+    #3 0x7f72871082be in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7f72871082be in operator() /home/<user>/wk/WebKit/Source/WebCore/workers/WorkerMessagingProxy.cpp:199
+    #6 0x7f7287116cd1 in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf
+### R5_dvport
+==864563==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000d3133 (pc 0x7feda8f228a4 bp 0x7ffcc8d02770 sp 0x7ffcc8d02730 T0)
+    #3 0x7fedb745d1c2 in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7fedb745d1c2 in operator() /home/<user>/wk/WebKit/Source/WebCore/dom/MessagePort.cpp:295
+    #6 0x7fedb26e71a1 in WTF::Function<void (WTF::Vector<WebCore::MessageWithMessagePorts, 0ul, WTF::CrashOnOverflow, 16
+
+########## second set (this run) ##########
+### dvport
+==857164==ERROR: AddressSanitizer: ABRT on unknown address 0x03e8000d144c (pc 0x7f17134a78a4 bp 0x7ffd21a4abe0 sp 0x7ffd21a4aba0 T0)
+    #0 0x7f17134a78a4 in __pthread_kill_implementation (/lib64/libc.so.6+0x908a4) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851)
+    #1 0x7f17134558ed in __GI_raise (/lib64/libc.so.6+0x3e8ed) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851)
+    #2 0x7f171343d8fe in __GI_abort (/lib64/libc.so.6+0x268fe) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851)
+    #3 0x7f1721a5d1c2 in WTFCrashWithInfo(int, char const*, char const*, int) /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Assertions.h:762
+    #4 0x7f1721a5d1c2 in operator() /home/<user>/wk/WebKit/Source/WebCore/dom/MessagePort.cpp:295
+    #5 0x7f1721a5d1c2 in call /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Function.h:53
+### bmptrans
+==846027==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7fc6a62bbcf4 bp 0x7ffeb037a940 sp 0x7ffeb037a930 T0)
+==846027==The signal is caused by a READ memory access.
+==846027==Hint: this fault was caused by a dereference of a high value address (see register values below).  Disassemble the provided pc to learn which register was used.
+    #0 0x7fc6a62bbcf4 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>/wk/WebKit/Source/WebCore/platf
+    #1 0x7fc6a567ac05 in WebCore::ChromeClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>/wk/WebKit/Source/WebCore/page/ChromeCli
+    #2 0x7fc6a567a8c7 in WebCore::Chrome::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>/wk/WebKit/Source/WebCore/page/Chrome.cpp:554
+    #3 0x7fc6a4873437 in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:91
+### ibt3
+==920168==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7f8adacbbf18 bp 0x7ffc27e6d910 sp 0x7ffc27e6d900 T0)
+==920168==The signal is caused by a READ memory access.
+==920168==Hint: this fault was caused by a dereference of a high value address (see register values below).  Disassemble the provided pc to learn which register was used.
+    #0 0x7f8adacbbf18 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>/wk/WebKit/Source/WebCore/platf
+    #1 0x7f8ada07ae29 in WebCore::ChromeClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>/wk/WebKit/Source/WebCore/page/ChromeCli
+    #2 0x7f8ada07aaeb in WebCore::Chrome::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>/wk/WebKit/Source/WebCore/page/Chrome.cpp:554
+    #3 0x7f8ad927365b in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:91

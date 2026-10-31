@@ -1,0 +1,186 @@
+[New LWP 1606118]
+[New LWP 1606117]
+[New LWP 1606116]
+[New LWP 1606115]
+[New LWP 1606105]
+[New LWP 1606093]
+[New LWP 1606092]
+[New LWP 1606091]
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <ima:enforcing>
+  <https://debuginfod.fedoraproject.org/>
+  <ima:ignore>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+
+warning: Can't read data for section '.debug_info' in file 'target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0'
+
+warning: Expected absolute pathname for libpthread in the inferior, but got target:/lib64/libc.so.6.
+
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+
+warning: Section .debug_aranges in target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0 entry at offset 0 debug_info_offset 0 does not exists, ignoring .debug_aranges.
+0x00007f182531eebd in poll () from target:/lib64/libc.so.6
+Breakpoint 1 at 0x7f18343eaa5e (2 locations)
+Breakpoint 2 at 0x7f182a4b831b: file /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp, line 266.
+Breakpoint 3 at 0x7f182a4b8202: file /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp, line 237.
+SIZES CanvasRenderingContext2D=? CachedImage=? CachedResource=? StringImpl=24
+slotwatch armed: dtor=1 free=2 alloc=3
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   <MULTIPLE>         
+1.1                         y   0x00007f18343eaa5e <WebCore::CanvasRenderingContext::~CanvasRenderingContext()+20>
+1.2                         y   0x00007f18343eb5cf <WebCore::CanvasRenderingContext::~CanvasRenderingContext()+9>
+2       breakpoint     keep n   0x00007f182a4b831b in WTF::fastFree(void*) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:266
+3       breakpoint     keep n   0x00007f182a4b8202 in WTF::fastMalloc(unsigned long) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:237
+CTXDTOR A=0x617000021800
+#0  0x00007f18343eaa5e in WebCore::CanvasRenderingContext::~CanvasRenderingContext() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007f18343ec5c8 in WebCore::CanvasRenderingContext2DBase::~CanvasRenderingContext2DBase() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f18343ec70c in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f18343ec733 in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f1833fba82d in WebCore::HTMLCanvasElement::createContextBitmapRenderer(WTF::String const&, WebCore::ImageBitmapRenderingContextSettings&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#5  0x00007f1833fbd12d in WebCore::HTMLCanvasElement::getContext(JSC::JSGlobalObject&, WTF::String const&, WTF::FixedVector<JSC::Strong<JSC::Unknown, (JSC::ShouldStrongDestructorGrabLock)0> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FREED-A ptr=0x617000021800
+#0  WTF::fastFree (p=0x617000021800) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:266
+#1  0x00007f18343ec73b in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f1833fba82d in WebCore::HTMLCanvasElement::createContextBitmapRenderer(WTF::String const&, WebCore::ImageBitmapRenderingContextSettings&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f1833fbd12d in WebCore::HTMLCanvasElement::getContext(JSC::JSGlobalObject&, WTF::String const&, WTF::FixedVector<JSC::Strong<JSC::Unknown, (JSC::ShouldStrongDestructorGrabLock)0> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f183009ff8f in WebCore::jsHTMLCanvasElementPrototypeFunction_getContext(JSC::JSGlobalObject*, JSC::CallFrame*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FREE-RETURNED
+Hardware watchpoint 4: *(unsigned long*)0x617000021800
+WATCH installed on 0x617000021800
+ALLOC req=704 ret=0x617000021800 n=1  <== A
+#0  0x00007f1834fcf5ce in WebCore::createResource(WebCore::CachedResource::Type, WebCore::CachedResourceRequest&&, PAL::SessionID, WebCore::CookieJar const*, WebCore::Settings const&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007f1834fcf762 in WebCore::CachedResourceLoader::loadResource(WebCore::CachedResource::Type, PAL::SessionID, WebCore::CachedResourceRequest&&, WebCore::CookieJar const&, WebCore::Settings const&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f1834ff96b4 in WebCore::CachedResourceLoader::requestResource(WebCore::CachedResource::Type, WebCore::CachedResourceRequest&&, WebCore::CachedResourceLoader::ForPreload, WebCore::ImageLoading) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f1835002ff7 in WebCore::CachedResourceLoader::requestBeaconResource(WebCore::CachedResourceRequest&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f18318b684d in WebCore::NavigatorBeacon::sendBeacon(WebCore::Document&, WTF::String const&, std::optional<std::variant<WTF::RefPtr<WebCore::Blob, WTF::RawPtrTraits<WebCore::Blob>, WTF::DefaultRefDerefTraits<WebCore::Blob> >, WTF::RefPtr<JSC::ArrayBufferView, WTF::RawPtrTraits<JSC::ArrayBufferView>, WTF::DefaultRefDerefTraits<JSC::ArrayBufferView> >, WTF::RefPtr<JSC::ArrayBuffer, WTF::RawPtrTraits<JSC::ArrayBuffer>, WTF::DefaultRefDerefTraits<JSC::ArrayBuffer> >, WTF::RefPtr<WebCore::DOMFormData, WTF::RawPtrTraits<WebCore::DOMFormData>, WTF::DefaultRefDerefTraits<WebCore::DOMFormData> >, WTF::RefPtr<WebCore::URLSearchParams, WTF::RawPtrTraits<WebCore::URLSearchParams>, WTF::DefaultRefDerefTraits<WebCore::URLSearchParams> >, WTF::RefPtr<WebCore::ReadableStream, WTF::RawPtrTraits<WebCore::ReadableStream>, WTF::DefaultRefDerefTraits<WebCore::ReadableStream> >, WTF::String> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#5  0x00007f18318b7b24 in WebCore::NavigatorBeacon::sendBeacon(WebCore::Navigator&, WebCore::Document&, WTF::String const&, std::optional<std::variant<WTF::RefPtr<WebCore::Blob, WTF::RawPtrTraits<WebCore::Blob>, WTF::DefaultRefDerefTraits<WebCore::Blob> >, WTF::RefPtr<JSC::ArrayBufferView, WTF::RawPtrTraits<JSC::ArrayBufferView>, WTF::DefaultRefDerefTraits<JSC::ArrayBufferView> >, WTF::RefPtr<JSC::ArrayBuffer, WTF::RawPtrTraits<JSC::ArrayBuffer>, WTF::DefaultRefDerefTraits<JSC::ArrayBuffer> >, WTF::RefPtr<WebCore::DOMFormData, WTF::RawPtrTraits<WebCore::DOMFormData>, WTF::DefaultRefDerefTraits<WebCore::DOMFormData> >, WTF::RefPtr<WebCore::URLSearchParams, WTF::RawPtrTraits<WebCore::URLSearchParams>, WTF::DefaultRefDerefTraits<WebCore::URLSearchParams> >, WTF::RefPtr<WebCore::ReadableStream, WTF::RawPtrTraits<WebCore::ReadableStream>, WTF::DefaultRefDerefTraits<WebCore::ReadableStream> >, WTF::String> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#6  0x00007f18309353c1 in WebCore::jsNavigatorPrototypeFunction_sendBeacon(JSC::JSGlobalObject*, JSC::CallFrame*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#7  0x00007f182a6cd701 in llint_native_call_trampoline () at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LowLevelInterpreter64.asm:2780
+WROTE-A addr=0x617000021800 val=0x7f1839b4bd90
+#0  0x00007f1834fc0d6b in WebCore::CachedResource::CachedResource(WebCore::CachedResourceRequest&&, WebCore::CachedResource::Type, PAL::SessionID, WebCore::CookieJar const*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007f1834fc32f3 in WebCore::CachedRawResource::CachedRawResource(WebCore::CachedResourceRequest&&, WebCore::CachedResource::Type, PAL::SessionID, WebCore::CookieJar const*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f1834fcf5e6 in WebCore::createResource(WebCore::CachedResource::Type, WebCore::CachedResourceRequest&&, PAL::SessionID, WebCore::CookieJar const*, WebCore::Settings const&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f1834fcf762 in WebCore::CachedResourceLoader::loadResource(WebCore::CachedResource::Type, PAL::SessionID, WebCore::CachedResourceRequest&&, WebCore::CookieJar const&, WebCore::Settings const&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f1834ff96b4 in WebCore::CachedResourceLoader::requestResource(WebCore::CachedResource::Type, WebCore::CachedResourceRequest&&, WebCore::CachedResourceLoader::ForPreload, WebCore::ImageLoading) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#5  0x00007f1835002ff7 in WebCore::CachedResourceLoader::requestBeaconResource(WebCore::CachedResourceRequest&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#6  0x00007f18318b684d in WebCore::NavigatorBeacon::sendBeacon(WebCore::Document&, WTF::String const&, std::optional<std::variant<WTF::RefPtr<WebCore::Blob, WTF::RawPtrTraits<WebCore::Blob>, WTF::DefaultRefDerefTraits<WebCore::Blob> >, WTF::RefPtr<JSC::ArrayBufferView, WTF::RawPtrTraits<JSC::ArrayBufferView>, WTF::DefaultRefDerefTraits<JSC::ArrayBufferView> >, WTF::RefPtr<JSC::ArrayBuffer, WTF::RawPtrTraits<JSC::ArrayBuffer>, WTF::DefaultRefDerefTraits<JSC::ArrayBuffer> >, WTF::RefPtr<WebCore::DOMFormData, WTF::RawPtrTraits<WebCore::DOMFormData>, WTF::DefaultRefDerefTraits<WebCore::DOMFormData> >, WTF::RefPtr<WebCore::URLSearchParams, WTF::RawPtrTraits<WebCore::URLSearchParams>, WTF::DefaultRefDerefTraits<WebCore::URLSearchParams> >, WTF::RefPtr<WebCore::ReadableStream, WTF::RawPtrTraits<WebCore::ReadableStream>, WTF::DefaultRefDerefTraits<WebCore::ReadableStream> >, WTF::String> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#7  0x00007f18318b7b24 in WebCore::NavigatorBeacon::sendBeacon(WebCore::Navigator&, WebCore::Document&, WTF::String const&, std::optional<std::variant<WTF::RefPtr<WebCore::Blob, WTF::RawPtrTraits<WebCore::Blob>, WTF::DefaultRefDerefTraits<WebCore::Blob> >, WTF::RefPtr<JSC::ArrayBufferView, WTF::RawPtrTraits<JSC::ArrayBufferView>, WTF::DefaultRefDerefTraits<JSC::ArrayBufferView> >, WTF::RefPtr<JSC::ArrayBuffer, WTF::RawPtrTraits<JSC::ArrayBuffer>, WTF::DefaultRefDerefTraits<JSC::ArrayBuffer> >, WTF::RefPtr<WebCore::DOMFormData, WTF::RawPtrTraits<WebCore::DOMFormData>, WTF::DefaultRefDerefTraits<WebCore::DOMFormData> >, WTF::RefPtr<WebCore::URLSearchParams, WTF::RawPtrTraits<WebCore::URLSearchParams>, WTF::DefaultRefDerefTraits<WebCore::URLSearchParams> >, WTF::RefPtr<WebCore::ReadableStream, WTF::RawPtrTraits<WebCore::ReadableStream>, WTF::DefaultRefDerefTraits<WebCore::ReadableStream> >, WTF::String> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#8  0x00007f18309353c1 in WebCore::jsNavigatorPrototypeFunction_sendBeacon(JSC::JSGlobalObject*, JSC::CallFrame*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#9  0x00007f182a6cd701 in llint_native_call_trampoline () at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LowLevelInterpreter64.asm:2780
+ALLOC req=744 ret=0x617000021b80 n=2
+ALLOC req=712 ret=0x617000021b80 n=3
+ALLOC req=712 ret=0x617000021f00 n=4
+ALLOC req=712 ret=0x617000022280 n=5
+ALLOC req=712 ret=0x617000022600 n=6
+ALLOC req=712 ret=0x617000022980 n=7
+ALLOC req=712 ret=0x617000022d00 n=8
+ALLOC req=712 ret=0x617000023080 n=9
+ALLOC req=712 ret=0x617000023400 n=10
+ALLOC req=712 ret=0x617000023780 n=11
+ALLOC req=712 ret=0x617000023b00 n=12
+ALLOC req=712 ret=0x617000023e80 n=13
+ALLOC req=712 ret=0x617000024200 n=14
+ALLOC req=712 ret=0x617000024580 n=15
+ALLOC req=712 ret=0x617000024900 n=16
+ALLOC req=712 ret=0x617000024c80 n=17
+ALLOC req=712 ret=0x617000025000 n=18
+ALLOC req=712 ret=0x617000025380 n=19
+ALLOC req=712 ret=0x617000025700 n=20
+ALLOC req=712 ret=0x617000025a80 n=21
+ALLOC req=712 ret=0x617000025e00 n=22
+ALLOC req=712 ret=0x617000026180 n=23
+ALLOC req=712 ret=0x617000026500 n=24
+ALLOC req=712 ret=0x617000026880 n=25
+ALLOC req=712 ret=0x617000026c00 n=26
+ALLOC req=712 ret=0x617000026f80 n=27
+ALLOC req=712 ret=0x617000027300 n=28
+ALLOC req=712 ret=0x617000027680 n=29
+ALLOC req=712 ret=0x617000027a00 n=30
+ALLOC req=712 ret=0x617000027d80 n=31
+ALLOC req=712 ret=0x617000028100 n=32
+ALLOC req=712 ret=0x617000028480 n=33
+ALLOC req=712 ret=0x617000028800 n=34
+ALLOC req=712 ret=0x617000028b80 n=35
+ALLOC req=712 ret=0x617000028f00 n=36
+ALLOC req=712 ret=0x617000029280 n=37
+ALLOC req=712 ret=0x617000029600 n=38
+ALLOC req=712 ret=0x617000029980 n=39
+ALLOC req=712 ret=0x617000029d00 n=40
+ALLOC req=712 ret=0x61700002a080 n=41
+ALLOC req=712 ret=0x61700002a400 n=42
+ALLOC req=712 ret=0x61700002a780 n=43
+ALLOC req=712 ret=0x61700002ab00 n=44
+ALLOC req=712 ret=0x61700002ae80 n=45
+ALLOC req=712 ret=0x61700002b200 n=46
+ALLOC req=712 ret=0x61700002b580 n=47
+ALLOC req=712 ret=0x61700002b900 n=48
+ALLOC req=712 ret=0x61700002bc80 n=49
+ALLOC req=712 ret=0x61700002c000 n=50
+ALLOC req=712 ret=0x61700002c380 n=51
+ALLOC req=712 ret=0x61700002c700 n=52
+ALLOC req=712 ret=0x61700002ca80 n=53
+ALLOC req=712 ret=0x61700002ce00 n=54
+ALLOC req=712 ret=0x61700002d180 n=55
+ALLOC req=712 ret=0x61700002d500 n=56
+ALLOC req=712 ret=0x61700002d880 n=57
+ALLOC req=712 ret=0x61700002dc00 n=58
+ALLOC req=712 ret=0x61700002df80 n=59
+ALLOC req=712 ret=0x61700002e300 n=60
+ALLOC req=712 ret=0x61700002e680 n=61
+ALLOC req=712 ret=0x61700002ea00 n=62
+ALLOC req=712 ret=0x61700002ed80 n=63
+ALLOC req=712 ret=0x61700002f100 n=64
+ALLOC req=712 ret=0x61700002f480 n=65
+ALLOC req=712 ret=0x61700002f800 n=66
+ALLOC req=712 ret=0x61700002fb80 n=67
+ALLOC req=712 ret=0x61700002ff00 n=68
+ALLOC req=712 ret=0x617000030280 n=69
+ALLOC req=712 ret=0x617000030600 n=70
+ALLOC req=712 ret=0x617000030980 n=71
+ALLOC req=712 ret=0x617000030d00 n=72
+ALLOC req=712 ret=0x617000031080 n=73
+ALLOC req=712 ret=0x617000031400 n=74
+ALLOC req=712 ret=0x617000031780 n=75
+ALLOC req=712 ret=0x617000031b00 n=76
+ALLOC req=712 ret=0x617000031e80 n=77
+ALLOC req=712 ret=0x617000032200 n=78
+ALLOC req=712 ret=0x617000032580 n=79
+ALLOC req=712 ret=0x617000032900 n=80
+ALLOC req=712 ret=0x617000032c80 n=81
+ALLOC req=712 ret=0x617000033000 n=82
+ALLOC req=704 ret=0x617000033380 n=83
+ALLOC req=744 ret=0x617000033700 n=84
+
+Thread 1 "WebKitWebProces" received signal SIGSEGV, Segmentation fault.
+0x00007f18343bf3fa in WebCore::parseColor(WTF::String const&, WebCore::CanvasBase&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FAULT si_addr=$1 = 0x0
+SLOT A=0x617000021800
+SLOT shadow=0xc2e7fffc300:	0x00
+SLOT first32:
+0x617000021800:	0x00007f1839b4bcb0	0x0000602000028c90
+0x617000021810:	0x0001070003020200	0x0000000000000000
+REGS
+rip            0x7f18343bf3fa      0x7f18343bf3fa <WebCore::parseColor(WTF::String const&, WebCore::CanvasBase&)+280>
+rax            0x128dd041bb317a4f  1336953645130938959
+rbx            0x7ffc09858de0      140720468233696
+rdi            0x7ffc09858cf0      140720468233456
+rsi            0x7ffc098593c0      140720468235200
+FAULT_BT
+#0  0x00007f18343bf3fa in WebCore::parseColor(WTF::String const&, WebCore::CanvasBase&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007f18343c296f in WebCore::CanvasStyle::createFromString(WTF::String const&, WebCore::CanvasBase&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f18343f455a in WebCore::CanvasRenderingContext2DBase::setFillColor(WTF::String const&, std::optional<float>) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f18343f4af3 in WebCore::CanvasRenderingContext2DBase::setFillStyle(std::variant<WTF::String, WTF::RefPtr<WebCore::CanvasGradient, WTF::RawPtrTraits<WebCore::CanvasGradient>, WTF::DefaultRefDerefTraits<WebCore::CanvasGradient> >, WTF::RefPtr<WebCore::CanvasPattern, WTF::RawPtrTraits<WebCore::CanvasPattern>, WTF::DefaultRefDerefTraits<WebCore::CanvasPattern> > >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f182f5a7a3a in WebCore::setJSCanvasRenderingContext2D_fillStyle(JSC::JSGlobalObject*, long, long, JSC::PropertyName) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#5  0x00007f1829a9b136 in WTF::FunctionPtr<(WTF::PtrTag)30177, bool(JSC::JSGlobalObject*, long, long, JSC::PropertyName), (WTF::FunctionAttributes)1>::operator() (in#3=..., in#2=108645492749120, in#1=<optimized out>, in#0=<optimized out>, this=0x7ffc09859670) at /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/FunctionPtr.h:104
+#6  JSC::JSObject::putInlineSlow (this=this@entry=0x60d000040a28, globalObject=globalObject@entry=0x61f0000038e8, propertyName=..., value=..., slot=...) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSObject.cpp:837
+#7  0x00007f1828ec87d9 in JSC::JSObject::putInlineForJSObject (cell=0x60d000040a28, globalObject=globalObject@entry=0x61f0000038e8, propertyName=..., value=..., value@entry=..., slot=...) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSObjectInlines.h:299
+#8  0x00007f1828e7ae9d in JSC::JSCell::putInline (slot=..., value=..., propertyName=..., globalObject=0x61f0000038e8, this=<optimized out>) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSCellInlines.h:475
+#9  JSC::JSValue::putInline (slot=..., value=..., propertyName=..., globalObject=0x61f0000038e8, this=0x7ffc09859d30) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSCJSValueInlines.h:1160
+#10 JSC::LLInt::llint_slow_path_put_by_id (callFrame=<optimized out>, pc=<optimized out>) at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LLIntSlowPaths.cpp:963
+#11 0x00007f182a6b8bdb in llint_op_put_by_id () at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LowLevelInterpreter64.asm:118
+SLOT occupant:
+vtable for WebCore::CachedRawResource + 16 in section .data.rel.ro of target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+[Inferior 1 (process 1606087) detached]

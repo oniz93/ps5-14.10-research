@@ -1,0 +1,74 @@
+{
+ "checks": [
+  {
+   "check": "ArrayBufferView::byteOffset has the inverted test",
+   "detail": "two accessors (byteOffset, byteLength) carry `!(`; upstream main has no `!`",
+   "ok": true
+  },
+  {
+   "check": "toWrapped refuses resizable/growable-shared views",
+   "detail": "JSGenericTypedArrayViewInlines.h toWrapped and toWrappedAllowShared both return nullptr for such views",
+   "ok": true
+  },
+  {
+   "check": "GenericTypedArrayView::wrappedAs skips verifySubRangeLength for resizable buffers",
+   "detail": "GenericTypedArrayViewInlines.h:107-118",
+   "ok": true
+  },
+  {
+   "check": "DataView::wrappedAs skips verifySubRangeLength for resizable buffers",
+   "detail": "DataView.cpp:59",
+   "ok": true
+  },
+  {
+   "check": "wrappedAs() call sites are exactly 12 + 2 + 2",
+   "detail": "{\"JavaScriptCore/runtime/JSArrayBufferView.cpp\": 2, \"WebCore/bindings/js/SerializedScriptValue.cpp\": 12, \"WebCore/bindings/js/StructuredClone.cpp\": 2}",
+   "ok": true
+  },
+  {
+   "check": "possiblySharedImpl() has exactly two WebCore callers",
+   "detail": "[\"WebCore/bindings/js/JSDOMConvertBufferSource.h:106\", \"WebCore/Modules/indexeddb/IDBKey.cpp:55\"]",
+   "ok": true
+  },
+  {
+   "check": "the serializer's producer is preceded by an isOutOfBounds() guard",
+   "detail": "SerializedScriptValue.cpp:1382",
+   "ok": true
+  },
+  {
+   "check": "IDBKey::createBinary(view) has no resizable/OOB gate",
+   "detail": "IDBKey.cpp:53-: copyData(bufferView->data(), bufferView->byteLength())",
+   "ok": true
+  },
+  {
+   "check": "IDBKey::createBinary(view) copies byteLength() bytes",
+   "detail": "ThreadSafeDataBuffer::copyData(const void*, unsigned) -> memcpy",
+   "ok": true
+  },
+  {
+   "check": "PageCount::pageSize is 64 KiB (the mprotect granularity of resize)",
+   "detail": "PageCount.h:111",
+   "ok": true
+  },
+  {
+   "check": "the growable-bounds-checking reservation is allocated zeroed",
+   "detail": "Gigacage::tryAllocateZeroedVirtualPages (SYSTEM_MALLOC: reserveAndCommit, else bmalloc zeroed)",
+   "ok": true
+  },
+  {
+   "check": "resize mprotects [roundUp(newLength), oldSize) PROT_NONE",
+   "detail": "ArrayBuffer::resize, shrink branch",
+   "ok": true
+  }
+ ],
+ "drop": "out/sony/full/WebKit-1400/WebKit-1400/Source",
+ "md5": {
+  "JavaScriptCore/runtime/ArrayBufferView.h": "2ab1ec03dfe87bfc9d0e0020985d127d",
+  "JavaScriptCore/runtime/DataView.cpp": "10dd36ba0fbf62715c1f7b43bc18b78a",
+  "JavaScriptCore/runtime/GenericTypedArrayViewInlines.h": "934e23488f248565b5b19285d0f9e4b8",
+  "JavaScriptCore/runtime/JSArrayBufferView.cpp": "e91ffd02a9d3292dad357c0305782f07",
+  "JavaScriptCore/runtime/JSGenericTypedArrayViewInlines.h": "5443f5b423b5a07079b82609b34e0836"
+ },
+ "passed": 12,
+ "total": 12
+}

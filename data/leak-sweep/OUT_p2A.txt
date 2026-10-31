@@ -1,0 +1,27 @@
+=== p2A port=12920 secs=20 q=part=2
+--- beacons (in order):
+BOOT+part=?part=2
+c_fn=THROW DataCloneError The object can not be cloned.
+c_fn2=THROW DataCloneError The object can not be cloned.
+c_sym=THROW DataCloneError The object can not be cloned.
+c_proxy=THROW DataCloneError The object can not be cloned.
+c_promise=THROW DataCloneError The object can not be cloned.
+c_gen=THROW DataCloneError The object can not be cloned.
+c_cyc=ok same=true
+c_getterthrow=THROW Error GT
+c_sab=noSAB
+c_bigint=10
+c_domexception=DataCloneError:boom
+c_error=Error:boom:stacklen=293
+c_dup=DataCloneError: Duplicate transferable for structured clone
+c_port=DataCloneError: The object can not be cloned.
+c_port_sym=DataCloneError: The object can not be cloned.
+c_detached=len=0
+c_node=null
+c_win=DataCloneError: The object can not be cloned.
+c_doc=DataCloneError: The object can not be cloned.
+DONE=part=2 sent=19
+--- maps samples: 16
+--- crash/abort:
+  access: none
+EXIT=124

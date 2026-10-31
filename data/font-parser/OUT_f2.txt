@@ -1,0 +1,116 @@
+=== f2 port=8895 secs=150 q=kinds=dir,head,maxp,loca,glyf&tmo=1200
+--- beacons (in order):
+MAN n=54/183 base=d7b4e92b03deb1865aa61328fd5ff400 tables=19
+BASE fallback_w=56.00
+BEG DR-numt0 dir
+RES DR-numt0 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG DR-numt1 dir
+RES DR-numt1 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG DR-numt4095 dir
+RES DR-numt4095 st=loaded res=loaded w=60.00 vh=87 vw=28 hh=28 vj=72 wj=35
+BEG DR-numt4096 dir
+RES DR-numt4096 st=loaded res=loaded w=60.00 vh=87 vw=28 hh=28 vj=72 wj=35
+BEG DR-glyf-lenmax dir
+RES DR-glyf-lenmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-glyf-len0 dir
+RES DR-glyf-len0 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-glyf-offmax dir
+RES DR-glyf-offmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-glyf-offend dir
+RES DR-glyf-offend st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-cmap-lenmax dir
+RES DR-cmap-lenmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-cmap-len0 dir
+RES DR-cmap-len0 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-cmap-offmax dir
+RES DR-cmap-offmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-cmap-offend dir
+RES DR-cmap-offend st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-name-lenmax dir
+RES DR-name-lenmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-name-len0 dir
+RES DR-name-len0 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-name-offmax dir
+RES DR-name-offmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-name-offend dir
+RES DR-name-offend st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-GSUB-lenmax dir
+RES DR-GSUB-lenmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-GSUB-len0 dir
+RES DR-GSUB-len0 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-GSUB-offmax dir
+RES DR-GSUB-offmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-GSUB-offend dir
+RES DR-GSUB-offend st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-ver-otto dir
+RES DR-ver-otto st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG DR-ver-zero dir
+RES DR-ver-zero st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG DR-ver-true dir
+RES DR-ver-true st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-ver-ffff dir
+RES DR-ver-ffff st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG DR-csum-all dir
+RES DR-csum-all st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG DR-dup-head dir
+RES DR-dup-head st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG HD-loc2 head
+RES HD-loc2 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG HD-loc3 head
+RES HD-loc3 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG HD-locswap head
+RES HD-locswap st=loaded res=loaded w=24.56 vh=66 vw=28 hh=28 vj=72 wj=35
+BEG HD-upem0 head
+RES HD-upem0 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG HD-upem1 head
+RES HD-upem1 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG HD-upemmax head
+RES HD-upemmax st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG HD-magic head
+RES HD-magic st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG HD-len53 head
+RES HD-len53 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG HD-len40 head
+RES HD-len40 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG HD-len0 head
+RES HD-len0 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG MX-numg0 maxp
+RES MX-numg0 st=loaded res=loaded w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG MX-numg1 maxp
+RES MX-numg1 st=loaded res=loaded w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG MX-numgmax maxp
+RES MX-numgmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG MX-numgplus1 maxp
+RES MX-numgplus1 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG MX-ver05 maxp
+RES MX-ver05 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG MX-len6 maxp
+RES MX-len6 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG LC-allff loca
+RES LC-allff st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG LC-desc loca
+RES LC-desc st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG LC-zero loca
+RES LC-zero st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG LC-len4 loca
+RES LC-len4 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG LC-len2 loca
+RES LC-len2 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG LC-len0 loca
+RES LC-len0 st=error res=rejected:NetworkError w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG GL-contoursmax glyf
+RES GL-contoursmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG GL-endptmax glyf
+RES GL-endptmax st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG GL-comp-self glyf
+RES GL-comp-self st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG GL-len1 glyf
+RES GL-len1 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG GL-len4 glyf
+RES GL-len4 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG GL-len12 glyf
+RES GL-len12 st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+DONE n=54 loaded=41 other=13
+--- crash/abort:
+  access: none
+EXIT=124

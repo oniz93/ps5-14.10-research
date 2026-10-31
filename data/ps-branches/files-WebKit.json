@@ -1,0 +1,2829 @@
+[
+ {
+  "file": "WebProcess/EntryPoint/playstation/WebProcessMain.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "NetworkProcess/EntryPoint/playstation/NetworkProcessMain.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "GPUProcess/EntryPoint/playstation/GPUProcessMain.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "GPUProcess/media/playstation/RemoteMediaPlayerProxyPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "RemoteMediaPlayerProxy::mediaPlayerFirstVideoFrameAvailable",
+    "also": [
+     "GPUProcess/media/cocoa/RemoteMediaPlayerProxyCocoa.mm",
+     "GPUProcess/media/gstreamer/RemoteMediaPlayerProxyGStreamer.cpp",
+     "GPUProcess/media/win/RemoteMediaPlayerProxyWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "RemoteMediaPlayerProxy::enterFullscreen",
+    "also": [
+     "GPUProcess/media/win/RemoteMediaPlayerProxyWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "RemoteMediaPlayerProxy::exitFullscreen",
+    "also": [
+     "GPUProcess/media/win/RemoteMediaPlayerProxyWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 3
+ },
+ {
+  "file": "GPUProcess/playstation/GPUProcessMainPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "GPUProcess/playstation/GPUProcessPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "GPUProcess::initializeProcess",
+    "also": [
+     "GPUProcess/glib/GPUProcessGLib.cpp",
+     "GPUProcess/ios/GPUProcessIOS.mm",
+     "GPUProcess/mac/GPUProcessMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "GPUProcess::initializeProcessName",
+    "also": [
+     "GPUProcess/glib/GPUProcessGLib.cpp",
+     "GPUProcess/ios/GPUProcessIOS.mm",
+     "GPUProcess/mac/GPUProcessMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "GPUProcess::initializeSandbox",
+    "also": [
+     "GPUProcess/glib/GPUProcessGLib.cpp",
+     "GPUProcess/ios/GPUProcessIOS.mm",
+     "GPUProcess/mac/GPUProcessMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 3
+ },
+ {
+  "file": "NetworkProcess/NetworkDataTaskDataURL.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "NetworkProcess/Classifier/WebResourceLoadStatisticsStore.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "NetworkProcess/Cookies/curl/WebCookieManagerCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebCookieManager::platformSetHTTPCookieAcceptPolicy",
+    "also": [
+     "NetworkProcess/Cookies/mac/WebCookieManagerMac.mm",
+     "NetworkProcess/Cookies/soup/WebCookieManagerSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 1
+ },
+ {
+  "file": "NetworkProcess/Cookies/playstation/WebCookieManagerPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 1
+ },
+ {
+  "file": "NetworkProcess/cache/NetworkCacheDataCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "Data::empty",
+    "also": [
+     "NetworkProcess/cache/NetworkCacheDataCocoa.mm",
+     "NetworkProcess/cache/NetworkCacheDataGLib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Data::data",
+    "also": [
+     "NetworkProcess/cache/NetworkCacheDataCocoa.mm",
+     "NetworkProcess/cache/NetworkCacheDataGLib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Data::isNull",
+    "also": [
+     "NetworkProcess/cache/NetworkCacheDataCocoa.mm",
+     "NetworkProcess/cache/NetworkCacheDataGLib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Data::apply",
+    "also": [
+     "NetworkProcess/cache/NetworkCacheDataCocoa.mm",
+     "NetworkProcess/cache/NetworkCacheDataGLib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Data::subrange",
+    "also": [
+     "NetworkProcess/cache/NetworkCacheDataCocoa.mm",
+     "NetworkProcess/cache/NetworkCacheDataGLib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Data::adoptMap",
+    "also": [
+     "NetworkProcess/cache/NetworkCacheDataCocoa.mm",
+     "NetworkProcess/cache/NetworkCacheDataGLib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Data::tryCreateSharedMemory",
+    "also": [
+     "NetworkProcess/cache/NetworkCacheDataCocoa.mm",
+     "NetworkProcess/cache/NetworkCacheDataGLib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 7
+ },
+ {
+  "file": "NetworkProcess/cache/NetworkCacheIOChannelCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "IOChannel::read",
+    "also": [
+     "NetworkProcess/cache/NetworkCacheIOChannelCocoa.mm",
+     "NetworkProcess/cache/NetworkCacheIOChannelGLib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "IOChannel::write",
+    "also": [
+     "NetworkProcess/cache/NetworkCacheIOChannelCocoa.mm",
+     "NetworkProcess/cache/NetworkCacheIOChannelGLib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 2
+ },
+ {
+  "file": "NetworkProcess/curl/NetworkDataTaskCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 27
+ },
+ {
+  "file": "NetworkProcess/curl/NetworkProcessCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "NetworkProcess::platformInitializeNetworkProcess",
+    "also": [
+     "NetworkProcess/ios/NetworkProcessIOS.mm",
+     "NetworkProcess/mac/NetworkProcessMac.mm",
+     "NetworkProcess/soup/NetworkProcessSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "NetworkProcess::allowSpecificHTTPSCertificateForHost",
+    "also": [
+     "NetworkProcess/cocoa/NetworkProcessCocoa.mm",
+     "NetworkProcess/soup/NetworkProcessSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "NetworkProcess::clearDiskCache",
+    "also": [
+     "NetworkProcess/cocoa/NetworkProcessCocoa.mm",
+     "NetworkProcess/soup/NetworkProcessSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "NetworkProcess::platformTerminate",
+    "also": [
+     "NetworkProcess/ios/NetworkProcessIOS.mm",
+     "NetworkProcess/mac/NetworkProcessMac.mm",
+     "NetworkProcess/soup/NetworkProcessSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "NetworkProcess::setNetworkProxySettings",
+    "also": [
+     "NetworkProcess/soup/NetworkProcessSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 9
+ },
+ {
+  "file": "NetworkProcess/curl/NetworkProcessMainCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "NetworkProcess/curl/NetworkSessionCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 6
+ },
+ {
+  "file": "NetworkProcess/curl/WebSocketTaskCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebSocketTask::sendString",
+    "also": [
+     "NetworkProcess/cocoa/WebSocketTaskCocoa.mm",
+     "NetworkProcess/soup/WebSocketTaskSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebSocketTask::sendData",
+    "also": [
+     "NetworkProcess/cocoa/WebSocketTaskCocoa.mm",
+     "NetworkProcess/soup/WebSocketTaskSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebSocketTask::close",
+    "also": [
+     "NetworkProcess/cocoa/WebSocketTaskCocoa.mm",
+     "NetworkProcess/soup/WebSocketTaskSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebSocketTask::cancel",
+    "also": [
+     "NetworkProcess/cocoa/WebSocketTaskCocoa.mm",
+     "NetworkProcess/soup/WebSocketTaskSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebSocketTask::resume",
+    "also": [
+     "NetworkProcess/cocoa/WebSocketTaskCocoa.mm",
+     "NetworkProcess/soup/WebSocketTaskSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebSocketTask::networkSession",
+    "also": [
+     "NetworkProcess/cocoa/WebSocketTaskCocoa.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebSocketTask::didFail",
+    "also": [
+     "NetworkProcess/soup/WebSocketTaskSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebSocketTask::didFail",
+    "also": [
+     "NetworkProcess/soup/WebSocketTaskSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebSocketTask::didClose",
+    "also": [
+     "NetworkProcess/cocoa/WebSocketTaskCocoa.mm",
+     "NetworkProcess/soup/WebSocketTaskSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 19
+ },
+ {
+  "file": "Platform/IPC/unix/ArgumentCodersUnix.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Platform/IPC/unix/ConnectionUnix.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Platform/IPC/unix/IPCSemaphoreUnix.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Platform/classifier/ResourceLoadStatisticsClassifier.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Platform/unix/LoggingUnix.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Platform/unix/ModuleUnix.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "Module::load",
+    "also": [
+     "Platform/cf/ModuleCF.cpp",
+     "Platform/glib/ModuleGlib.cpp",
+     "Platform/win/ModuleWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Module::unload",
+    "also": [
+     "Platform/cf/ModuleCF.cpp",
+     "Platform/glib/ModuleGlib.cpp",
+     "Platform/win/ModuleWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "Module::platformFunctionPointer",
+    "also": [
+     "Platform/cf/ModuleCF.cpp",
+     "Platform/glib/ModuleGlib.cpp",
+     "Platform/win/ModuleWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 3
+ },
+ {
+  "file": "Platform/unix/SharedMemoryUnix.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/API/c/cairo/WKImageCairo.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/API/c/curl/WKCertificateInfoCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/API/c/neko/WKEventPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/API/c/neko/WKRegistrableDomainPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/Plugins/Netscape/NetscapePluginModuleNone.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 2
+ },
+ {
+  "file": "Shared/cairo/ShareableBitmapCairo.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/freetype/WebCoreArgumentCodersFreeType.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/curl/WebCoreArgumentCodersCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/libwpe/NativeWebMouseEventLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/libwpe/NativeWebTouchEventLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/libwpe/NativeWebWheelEventLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/neko/AssertReportPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 3
+ },
+ {
+  "file": "Shared/neko/AuxiliaryProcessMain.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "AuxiliaryProcessMainCommon::parseCommandLine",
+    "also": [
+     "Shared/unix/AuxiliaryProcessMain.cpp",
+     "Shared/win/AuxiliaryProcessMainWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AuxiliaryProcess::platformInitialize",
+    "also": [
+     "Shared/AuxiliaryProcess.cpp",
+     "Shared/Cocoa/AuxiliaryProcessCocoa.mm",
+     "Shared/unix/AuxiliaryProcessMain.cpp"
+    ],
+    "from_shared": [
+     "Shared/AuxiliaryProcess.cpp"
+    ],
+    "displaces": true
+   }
+  ],
+  "defines": 2
+ },
+ {
+  "file": "Shared/neko/EnvVarUtils.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/neko/NativeWebKeyboardEventPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/neko/WebAccessibilityObject.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 15
+ },
+ {
+  "file": "Shared/neko/WebAccessibilityObjectData.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 15
+ },
+ {
+  "file": "Shared/neko/WebEventFactory.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebEventFactory::createWebKeyboardEvent",
+    "also": [
+     "Shared/gtk/WebEventFactory.cpp",
+     "Shared/libwpe/WebEventFactory.cpp",
+     "Shared/mac/WebEventFactory.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebEventFactory::createWebMouseEvent",
+    "also": [
+     "Shared/gtk/WebEventFactory.cpp",
+     "Shared/libwpe/WebEventFactory.cpp",
+     "Shared/mac/WebEventFactory.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebEventFactory::createWebWheelEvent",
+    "also": [
+     "Shared/gtk/WebEventFactory.cpp",
+     "Shared/libwpe/WebEventFactory.cpp",
+     "Shared/mac/WebEventFactory.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 4
+ },
+ {
+  "file": "Shared/neko/WebPunchHole.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 2
+ },
+ {
+  "file": "UIProcess/BackingStore.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/DefaultUndoController.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/LegacySessionStateCodingNone.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/WebGrammarDetail.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/WebMemoryPressureHandler.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/WebViewportAttributes.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/WKViewportAttributes.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/WKUserScriptRef.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/curl/WKProtectionSpaceCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/curl/WKWebsiteDataStoreRefCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKAuthenticationChallengePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKAXObject.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKContextConfigurationPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKContextPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKHTTPCookieStoreRefPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKImeEvent.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKNavigationActionRefPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKNavigationResponseRefPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKPagePrivatePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKPopupMenuItem.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKPreferencesPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKRunLoop.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKView.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/neko/WKWebsiteDataStoreRefPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/neko/APIHTTPCookieStorePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 1
+ },
+ {
+  "file": "UIProcess/API/neko/WebPopupMenuItem.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/neko/WebPopupMenuProxyPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 4
+ },
+ {
+  "file": "UIProcess/Automation/cairo/WebAutomationSessionCairo.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/Automation/playstation/WebAutomationSessionPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebAutomationSession::platformSimulateMouseInteraction",
+    "also": [
+     "UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp",
+     "UIProcess/Automation/libwpe/WebAutomationSessionLibWPE.cpp",
+     "UIProcess/Automation/mac/WebAutomationSessionMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebAutomationSession::platformSimulateKeyboardInteraction",
+    "also": [
+     "UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp",
+     "UIProcess/Automation/ios/WebAutomationSessionIOS.mm",
+     "UIProcess/Automation/libwpe/WebAutomationSessionLibWPE.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebAutomationSession::platformWebModifiersFromRaw",
+    "also": [
+     "UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp",
+     "UIProcess/Automation/libwpe/WebAutomationSessionLibWPE.cpp",
+     "UIProcess/Automation/mac/WebAutomationSessionMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebAutomationSession::platformSimulateKeySequence",
+    "also": [
+     "UIProcess/Automation/gtk/WebAutomationSessionGtk.cpp",
+     "UIProcess/Automation/ios/WebAutomationSessionIOS.mm",
+     "UIProcess/Automation/libwpe/WebAutomationSessionLibWPE.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 4
+ },
+ {
+  "file": "UIProcess/CoordinatedGraphics/DrawingAreaProxyCoordinatedGraphics.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/Launcher/playstation/ProcessLauncherPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "ProcessLauncher::launchProcess",
+    "also": [
+     "UIProcess/Launcher/cocoa/ProcessLauncherCocoa.mm",
+     "UIProcess/Launcher/glib/ProcessLauncherGLib.cpp",
+     "UIProcess/Launcher/win/ProcessLauncherWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "ProcessLauncher::terminateProcess",
+    "also": [
+     "UIProcess/Launcher/cocoa/ProcessLauncherCocoa.mm",
+     "UIProcess/Launcher/glib/ProcessLauncherGLib.cpp",
+     "UIProcess/Launcher/win/ProcessLauncherWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "ProcessLauncher::platformInvalidate",
+    "also": [
+     "UIProcess/Launcher/cocoa/ProcessLauncherCocoa.mm",
+     "UIProcess/Launcher/glib/ProcessLauncherGLib.cpp",
+     "UIProcess/Launcher/win/ProcessLauncherWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 3
+ },
+ {
+  "file": "UIProcess/TextChecker.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/WebsiteData/curl/WebsiteDataStoreCurl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebsiteDataStore::platformSetNetworkParameters",
+    "also": [
+     "UIProcess/WebsiteData/Cocoa/WebsiteDataStoreCocoa.mm",
+     "UIProcess/WebsiteData/soup/WebsiteDataStoreSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebsiteDataStore::setNetworkProxySettings",
+    "also": [
+     "UIProcess/WebsiteData/soup/WebsiteDataStoreSoup.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 6
+ },
+ {
+  "file": "UIProcess/WebsiteData/playstation/WebsiteDataStorePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebsiteDataStore::platformInitialize",
+    "also": [
+     "UIProcess/WebsiteData/Cocoa/WebsiteDataStoreCocoa.mm",
+     "UIProcess/WebsiteData/glib/WebsiteDataStoreGLib.cpp",
+     "UIProcess/WebsiteData/win/WebsiteDataStoreWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebsiteDataStore::platformDestroy",
+    "also": [
+     "UIProcess/WebsiteData/Cocoa/WebsiteDataStoreCocoa.mm",
+     "UIProcess/WebsiteData/glib/WebsiteDataStoreGLib.cpp",
+     "UIProcess/WebsiteData/win/WebsiteDataStoreWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebsiteDataStore::cacheDirectoryFileSystemRepresentation",
+    "also": [
+     "UIProcess/WebsiteData/Cocoa/WebsiteDataStoreCocoa.mm",
+     "UIProcess/WebsiteData/glib/WebsiteDataStoreGLib.cpp",
+     "UIProcess/WebsiteData/win/WebsiteDataStoreWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebsiteDataStore::websiteDataDirectoryFileSystemRepresentation",
+    "also": [
+     "UIProcess/WebsiteData/Cocoa/WebsiteDataStoreCocoa.mm",
+     "UIProcess/WebsiteData/glib/WebsiteDataStoreGLib.cpp",
+     "UIProcess/WebsiteData/win/WebsiteDataStoreWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebsiteDataStore::defaultUnifiedOriginStorageLevel",
+    "also": [
+     "UIProcess/WebsiteData/Cocoa/WebsiteDataStoreCocoa.mm",
+     "UIProcess/WebsiteData/glib/WebsiteDataStoreGLib.cpp",
+     "UIProcess/WebsiteData/win/WebsiteDataStoreWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 5
+ },
+ {
+  "file": "UIProcess/cairo/BackingStoreCairo.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/neko/AssertReportProxy.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 3
+ },
+ {
+  "file": "UIProcess/neko/AutomationClientPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "AutomationSessionClient::requestNewPageWithOptions",
+    "also": [
+     "UIProcess/Cocoa/AutomationSessionClient.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AutomationSessionClient::didDisconnectFromRemote",
+    "also": [
+     "UIProcess/Cocoa/AutomationSessionClient.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "AutomationClient::requestAutomationSession",
+    "also": [
+     "UIProcess/Cocoa/AutomationClient.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 4
+ },
+ {
+  "file": "UIProcess/neko/PageClientImpl.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "PageClientImpl::createDrawingAreaProxy",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::setViewNeedsDisplay",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::requestScroll",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::viewScrollPosition",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::viewSize",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::isViewWindowActive",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::isViewFocused",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::isViewVisible",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::isViewInWindow",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::processDidExit",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didRelaunchProcess",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::pageClosed",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/mac/PageClientImplMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::preferencesDidChange",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::toolTipChanged",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didCommitLoadForMainFrame",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didChangeContentSize",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::setCursor",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::setCursorHiddenUntilMouseMoves",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didChangeViewportProperties",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::registerEditCommand",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::clearAllEditCommands",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::canUndoRedo",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::executeUndoRedo",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::wheelEventWasNotHandledByWebCore",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::convertToDeviceSpace",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::convertToUserSpace",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::screenToRootView",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::rootViewToScreen",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::accessibilityScreenToRootView",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::rootViewToAccessibilityScreen",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::doneWithKeyEvent",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::createPopupMenuProxy",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::enterAcceleratedCompositingMode",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::exitAcceleratedCompositingMode",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::updateAcceleratedCompositingMode",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::fullScreenManagerProxyClient",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::closeFullScreenManager",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::isFullScreen",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::enterFullScreen",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::exitFullScreen",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::beganEnterFullScreen",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::beganExitFullScreen",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didFinishLoadingDataForCustomContentProvider",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::navigationGestureDidBegin",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::navigationGestureWillEnd",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::navigationGestureDidEnd",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::navigationGestureDidEnd",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::willRecordNavigationSnapshot",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didRemoveNavigationGestureSnapshot",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didFirstVisuallyNonEmptyLayoutForMainFrame",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didFinishNavigation",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didFailNavigation",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didSameDocumentNavigationForMainFrame",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didChangeBackgroundColor",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::isPlayingAudioWillChange",
+    "also": [
+     "UIProcess/win/PageClientImpl.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::isPlayingAudioDidChange",
+    "also": [
+     "UIProcess/win/PageClientImpl.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::refView",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::derefView",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::didRestoreScrollPosition",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::userInterfaceLayoutDirection",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::requestDOMPasteAccess",
+    "also": [
+     "UIProcess/API/gtk/PageClientImpl.cpp",
+     "UIProcess/API/wpe/PageClientImpl.cpp",
+     "UIProcess/ios/PageClientImplIOS.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "PageClientImpl::usesOffscreenRendering",
+    "also": [
+     "UIProcess/win/PageClientImpl.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 74
+ },
+ {
+  "file": "UIProcess/neko/PlayStationWebView.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 44
+ },
+ {
+  "file": "UIProcess/neko/WebPageProxyPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebPageProxy::platformInitialize",
+    "also": [
+     "UIProcess/gtk/WebPageProxyGtk.cpp",
+     "UIProcess/ios/WebPageProxyIOS.mm",
+     "UIProcess/mac/WebPageProxyMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPageProxy::userAgentForURL",
+    "also": [
+     "UIProcess/glib/WebPageProxyGLib.cpp",
+     "UIProcess/ios/WebPageProxyIOS.mm",
+     "UIProcess/mac/WebPageProxyMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPageProxy::standardUserAgent",
+    "also": [
+     "UIProcess/glib/WebPageProxyGLib.cpp",
+     "UIProcess/ios/WebPageProxyIOS.mm",
+     "UIProcess/mac/WebPageProxyMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPageProxy::saveRecentSearches",
+    "also": [
+     "UIProcess/Cocoa/WebPageProxyCocoa.mm",
+     "UIProcess/glib/WebPageProxyGLib.cpp",
+     "UIProcess/win/WebPageProxyWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPageProxy::loadRecentSearches",
+    "also": [
+     "UIProcess/Cocoa/WebPageProxyCocoa.mm",
+     "UIProcess/glib/WebPageProxyGLib.cpp",
+     "UIProcess/win/WebPageProxyWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPageProxy::didUpdateEditorState",
+    "also": [
+     "UIProcess/gtk/WebPageProxyGtk.cpp",
+     "UIProcess/ios/WebPageProxyIOS.mm",
+     "UIProcess/mac/WebPageProxyMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 23
+ },
+ {
+  "file": "UIProcess/neko/WebPasteboardProxyPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebPasteboardProxy::getPasteboardTypes",
+    "also": [
+     "UIProcess/Cocoa/WebPasteboardProxyCocoa.mm",
+     "UIProcess/libwpe/WebPasteboardProxyLibWPE.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPasteboardProxy::readStringFromPasteboard",
+    "also": [
+     "UIProcess/Cocoa/WebPasteboardProxyCocoa.mm",
+     "UIProcess/WebPasteboardProxy.cpp",
+     "UIProcess/libwpe/WebPasteboardProxyLibWPE.cpp"
+    ],
+    "from_shared": [
+     "UIProcess/WebPasteboardProxy.cpp"
+    ],
+    "displaces": true
+   },
+   {
+    "def": "WebPasteboardProxy::writeWebContentToPasteboard",
+    "also": [
+     "UIProcess/Cocoa/WebPasteboardProxyCocoa.mm",
+     "UIProcess/libwpe/WebPasteboardProxyLibWPE.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPasteboardProxy::writeStringToPasteboard",
+    "also": [
+     "UIProcess/Cocoa/WebPasteboardProxyCocoa.mm",
+     "UIProcess/libwpe/WebPasteboardProxyLibWPE.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 4
+ },
+ {
+  "file": "UIProcess/neko/WebPreferencesPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebPreferences::platformInitializeStore",
+    "also": [
+     "UIProcess/Cocoa/WebPreferencesCocoa.mm",
+     "UIProcess/WebPreferences.cpp",
+     "UIProcess/gtk/WebPreferencesGtk.cpp"
+    ],
+    "from_shared": [
+     "UIProcess/WebPreferences.cpp"
+    ],
+    "displaces": true
+   }
+  ],
+  "defines": 1
+ },
+ {
+  "file": "UIProcess/neko/WebProcessPoolPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebProcessPool::platformInitialize",
+    "also": [
+     "UIProcess/Cocoa/WebProcessPoolCocoa.mm",
+     "UIProcess/glib/WebProcessPoolGLib.cpp",
+     "UIProcess/win/WebProcessPoolWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcessPool::platformInitializeNetworkProcess",
+    "also": [
+     "UIProcess/Cocoa/WebProcessPoolCocoa.mm",
+     "UIProcess/soup/WebProcessPoolSoup.cpp",
+     "UIProcess/win/WebProcessPoolWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcessPool::platformInitializeWebProcess",
+    "also": [
+     "UIProcess/Cocoa/WebProcessPoolCocoa.mm",
+     "UIProcess/glib/WebProcessPoolGLib.cpp",
+     "UIProcess/win/WebProcessPoolWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcessPool::platformInvalidateContext",
+    "also": [
+     "UIProcess/Cocoa/WebProcessPoolCocoa.mm",
+     "UIProcess/glib/WebProcessPoolGLib.cpp",
+     "UIProcess/win/WebProcessPoolWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcessPool::platformResolvePathsForSandboxExtensions",
+    "also": [
+     "UIProcess/Cocoa/WebProcessPoolCocoa.mm",
+     "UIProcess/glib/WebProcessPoolGLib.cpp",
+     "UIProcess/win/WebProcessPoolWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 10
+ },
+ {
+  "file": "UIProcess/neko/WebViewAccessibilityClient.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 6
+ },
+ {
+  "file": "WebProcess/GPU/media/playstation/VideoLayerRemotePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "WebProcess/InjectedBundle/playstation/InjectedBundlePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "InjectedBundle::initialize",
+    "also": [
+     "WebProcess/InjectedBundle/glib/InjectedBundleGlib.cpp",
+     "WebProcess/InjectedBundle/mac/InjectedBundleMac.mm",
+     "WebProcess/InjectedBundle/win/InjectedBundleWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "InjectedBundle::setBundleParameter",
+    "also": [
+     "WebProcess/InjectedBundle/glib/InjectedBundleGlib.cpp",
+     "WebProcess/InjectedBundle/mac/InjectedBundleMac.mm",
+     "WebProcess/InjectedBundle/win/InjectedBundleWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "InjectedBundle::setBundleParameters",
+    "also": [
+     "WebProcess/InjectedBundle/glib/InjectedBundleGlib.cpp",
+     "WebProcess/InjectedBundle/mac/InjectedBundleMac.mm",
+     "WebProcess/InjectedBundle/win/InjectedBundleWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 3
+ },
+ {
+  "file": "WebProcess/MediaCache/WebMediaKeyStorageManager.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "WebProcess/WebCoreSupport/curl/WebFrameNetworkingContext.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebFrameNetworkingContext::ensureWebsiteDataStoreSession",
+    "also": [
+     "WebProcess/WebCoreSupport/soup/WebFrameNetworkingContext.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebFrameNetworkingContext::webFrameLoaderClient",
+    "also": [
+     "WebProcess/WebCoreSupport/mac/WebFrameNetworkingContext.mm",
+     "WebProcess/WebCoreSupport/soup/WebFrameNetworkingContext.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebFrameNetworkingContext::blockedError",
+    "also": [
+     "WebProcess/WebCoreSupport/mac/WebFrameNetworkingContext.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 3
+ },
+ {
+  "file": "WebProcess/WebCoreSupport/WebContextMenuClient.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "WebProcess/WebCoreSupport/WebPopupMenu.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "WebProcess/WebPage/AcceleratedSurface.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "WebProcess/WebPage/CoordinatedGraphics/CompositingCoordinator.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "WebProcess/WebPage/CoordinatedGraphics/DrawingAreaCoordinatedGraphics.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "WebProcess/WebPage/neko/AcceleratedSurfacePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 11
+ },
+ {
+  "file": "WebProcess/WebPage/neko/WebPagePlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebPage::platformInitialize",
+    "also": [
+     "WebProcess/WebPage/Cocoa/WebPageCocoa.mm",
+     "WebProcess/WebPage/glib/WebPageGLib.cpp",
+     "WebProcess/WebPage/win/WebPageWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::platformReinitialize",
+    "also": [
+     "WebProcess/WebPage/gtk/WebPageGtk.cpp",
+     "WebProcess/WebPage/ios/WebPageIOS.mm",
+     "WebProcess/WebPage/mac/WebPageMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::platformDetach",
+    "also": [
+     "WebProcess/WebPage/glib/WebPageGLib.cpp",
+     "WebProcess/WebPage/ios/WebPageIOS.mm",
+     "WebProcess/WebPage/mac/WebPageMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::getPlatformEditorState",
+    "also": [
+     "WebProcess/WebPage/glib/WebPageGLib.cpp",
+     "WebProcess/WebPage/ios/WebPageIOS.mm",
+     "WebProcess/WebPage/mac/WebPageMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::interpretKeyEvent",
+    "also": [
+     "WebProcess/WebPage/win/WebPageWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::platformCanHandleRequest",
+    "also": [
+     "WebProcess/WebPage/gtk/WebPageGtk.cpp",
+     "WebProcess/WebPage/ios/WebPageIOS.mm",
+     "WebProcess/WebPage/mac/WebPageMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::platformUserAgent",
+    "also": [
+     "WebProcess/WebPage/glib/WebPageGLib.cpp",
+     "WebProcess/WebPage/ios/WebPageIOS.mm",
+     "WebProcess/WebPage/mac/WebPageMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::hoverSupportedByPrimaryPointingDevice",
+    "also": [
+     "WebProcess/WebPage/gtk/WebPageGtk.cpp",
+     "WebProcess/WebPage/ios/WebPageIOS.mm",
+     "WebProcess/WebPage/mac/WebPageMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::hoverSupportedByAnyAvailablePointingDevice",
+    "also": [
+     "WebProcess/WebPage/gtk/WebPageGtk.cpp",
+     "WebProcess/WebPage/ios/WebPageIOS.mm",
+     "WebProcess/WebPage/mac/WebPageMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::pointerCharacteristicsOfPrimaryPointingDevice",
+    "also": [
+     "WebProcess/WebPage/gtk/WebPageGtk.cpp",
+     "WebProcess/WebPage/ios/WebPageIOS.mm",
+     "WebProcess/WebPage/mac/WebPageMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::pointerCharacteristicsOfAllAvailablePointingDevices",
+    "also": [
+     "WebProcess/WebPage/gtk/WebPageGtk.cpp",
+     "WebProcess/WebPage/ios/WebPageIOS.mm",
+     "WebProcess/WebPage/mac/WebPageMac.mm"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebPage::handleEditingKeyboardEvent",
+    "also": [
+     "WebProcess/WebPage/ios/WebPageIOS.mm",
+     "WebProcess/WebPage/mac/WebPageMac.mm",
+     "WebProcess/WebPage/win/WebPageWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 23
+ },
+ {
+  "file": "WebProcess/playstation/WebProcessMainPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "WebProcess/playstation/WebProcessPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "WebProcess::platformInitializeWebProcess",
+    "also": [
+     "WebProcess/cocoa/WebProcessCocoa.mm",
+     "WebProcess/glib/WebProcessGLib.cpp",
+     "WebProcess/win/WebProcessWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcess::platformInitializeProcess",
+    "also": [
+     "WebProcess/cocoa/WebProcessCocoa.mm",
+     "WebProcess/glib/WebProcessGLib.cpp",
+     "WebProcess/win/WebProcessWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcess::platformSetWebsiteDataStoreParameters",
+    "also": [
+     "WebProcess/cocoa/WebProcessCocoa.mm",
+     "WebProcess/glib/WebProcessGLib.cpp",
+     "WebProcess/win/WebProcessWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcess::platformTerminate",
+    "also": [
+     "WebProcess/cocoa/WebProcessCocoa.mm",
+     "WebProcess/glib/WebProcessGLib.cpp",
+     "WebProcess/win/WebProcessWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcess::platformSetCacheModel",
+    "also": [
+     "WebProcess/cocoa/WebProcessCocoa.mm",
+     "WebProcess/glib/WebProcessGLib.cpp",
+     "WebProcess/win/WebProcessWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcess::grantAccessToAssetServices",
+    "also": [
+     "WebProcess/cocoa/WebProcessCocoa.mm",
+     "WebProcess/glib/WebProcessGLib.cpp",
+     "WebProcess/win/WebProcessWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcess::revokeAccessToAssetServices",
+    "also": [
+     "WebProcess/cocoa/WebProcessCocoa.mm",
+     "WebProcess/glib/WebProcessGLib.cpp",
+     "WebProcess/win/WebProcessWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "WebProcess::switchFromStaticFontRegistryToUserFontRegistry",
+    "also": [
+     "WebProcess/cocoa/WebProcessCocoa.mm",
+     "WebProcess/glib/WebProcessGLib.cpp",
+     "WebProcess/win/WebProcessWin.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 9
+ },
+ {
+  "file": "/WebKitVersion.h",
+  "exists": false,
+  "kind": "missing",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/Gamepad/libwpe/UIGamepadProviderLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/Automation/libwpe/WebAutomationSessionLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/CoordinatedGraphics/CoordinatedGraphicsScene.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/CoordinatedGraphics/SimpleViewportController.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/CoordinatedGraphics/threadedcompositor/CompositingRunLoop.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/CoordinatedGraphics/threadedcompositor/ThreadedCompositor.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/CoordinatedGraphics/threadedcompositor/ThreadedDisplayRefreshMonitor.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "GPUProcess/graphics/RemoteGraphicsContextGLWC.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "RemoteGraphicsContextGL::create",
+    "also": [
+     "GPUProcess/graphics/RemoteGraphicsContextGL.cpp",
+     "GPUProcess/graphics/RemoteGraphicsContextGLCocoa.cpp",
+     "GPUProcess/graphics/RemoteGraphicsContextGLGBM.cpp"
+    ],
+    "from_shared": [
+     "GPUProcess/graphics/RemoteGraphicsContextGL.cpp"
+    ],
+    "displaces": true
+   }
+  ],
+  "defines": 3
+ },
+ {
+  "file": "GPUProcess/graphics/wc/RemoteWCLayerTreeHost.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 4
+ },
+ {
+  "file": "GPUProcess/graphics/wc/WCContentBufferManager.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 5
+ },
+ {
+  "file": "GPUProcess/graphics/wc/WCRemoteFrameHostLayerManager.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 5
+ },
+ {
+  "file": "GPUProcess/graphics/wc/WCScene.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 2
+ },
+ {
+  "file": "GPUProcess/graphics/wc/WCSceneContext.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 3
+ },
+ {
+  "file": "UIProcess/wc/DrawingAreaProxyWC.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 7
+ },
+ {
+  "file": "WebProcess/GPU/graphics/wc/RemoteGraphicsContextGLProxyWC.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "RemoteGraphicsContextGLProxy::platformCreate",
+    "also": [
+     "WebProcess/GPU/graphics/cocoa/RemoteGraphicsContextGLProxyCocoa.mm",
+     "WebProcess/GPU/graphics/gbm/RemoteGraphicsContextGLProxyGBM.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 2
+ },
+ {
+  "file": "WebProcess/GPU/graphics/wc/RemoteWCLayerTreeHostProxy.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 6
+ },
+ {
+  "file": "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHostTextureMapper.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "LayerTreeHost::layerFlushTimerFired",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::setLayerFlushSchedulingEnabled",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::setShouldNotifyAfterNextScheduledLayerFlush",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::scheduleLayerFlush",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::cancelPendingLayerFlush",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::setRootCompositingLayer",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::setViewOverlayRootLayer",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::scrollNonCompositedContents",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::forceRepaint",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::forceRepaintAsync",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::sizeDidChange",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::pauseRendering",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::resumeRendering",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::graphicsLayerFactory",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::contentsSizeChanged",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::didChangeViewportAttributes",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::setIsDiscardable",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::deviceOrPageScaleFactorChanged",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   },
+   {
+    "def": "LayerTreeHost::createDisplayRefreshMonitor",
+    "also": [
+     "WebProcess/WebPage/CoordinatedGraphics/LayerTreeHost.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 29
+ },
+ {
+  "file": "WebProcess/WebPage/wc/DrawingAreaWC.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 25
+ },
+ {
+  "file": "WebProcess/WebPage/wc/GraphicsLayerWC.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 50
+ },
+ {
+  "file": "WebProcess/WebPage/wc/WCLayerFactory.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 1
+ },
+ {
+  "file": "WebProcess/WebPage/wc/WCTileGrid.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [],
+  "defines": 12
+ },
+ {
+  "file": "UIProcess/API/libwpe/TouchGestureController.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/Launcher/libwpe/ProcessProviderLibWPE.cpp",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/Launcher/playstation/ProcessProviderPlayStation.cpp",
+  "exists": true,
+  "kind": "ps-only",
+  "replaces": [
+   {
+    "def": "ProcessProviderLibWPE::launchProcess",
+    "also": [
+     "UIProcess/Launcher/glib/ProcessProviderGLib.cpp"
+    ],
+    "from_shared": [],
+    "displaces": false
+   }
+  ],
+  "defines": 1
+ },
+ {
+  "file": "Shared/API/c/cairo/WKImageCairo.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/API/c/curl/WKCertificateInfoCurl.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/API/c/neko/WKBasePlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/API/c/neko/WKErrorRefPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/API/c/neko/WKEventPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "Shared/API/c/neko/WKRegistrableDomainPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/WKKeyValueStorageManager.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/curl/WKProtectionSpaceCurl.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/C/curl/WKWebsiteDataStoreRefCurl.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKAPICastPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKAuthenticationChallengePlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKAXObject.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKContextConfigurationPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKContextPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKHTTPCookieStoreRefPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKImeEvent.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKNavigationActionRefPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKNavigationResponseRefPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKPagePrivatePlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKPopupMenuItem.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKPreferencesPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKRunLoop.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKView.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKViewAccessibilityClient.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKViewClient.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKViewPopupMenuClient.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/c/neko/WKWebsiteDataStoreRefPlayStation.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ },
+ {
+  "file": "UIProcess/API/cpp/WKRetainPtr.h",
+  "exists": true,
+  "kind": "shared",
+  "replaces": [],
+  "defines": 0
+ }
+]

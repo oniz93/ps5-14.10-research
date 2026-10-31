@@ -1,0 +1,72 @@
+===== S_c13_xmid.log
+==899675==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7fca5e4bbcf4 bp 0x7fff95a34bb0 sp 0x7fff95a34ba0 T0)
+SUMMARY: AddressSanitizer: SEGV /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >)
+    #0  in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffe
+    #1  in WebCore::ChromeClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /ho
+    #2  in WebCore::Chrome::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>
+    #3  in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:91
+===== S_c13_xmid1.log
+==901729==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7fd2f7abbcf4 bp 0x7ffdfa24dda0 sp 0x7ffdfa24dd90 T0)
+SUMMARY: AddressSanitizer: SEGV /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >)
+    #0  in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffe
+    #1  in WebCore::ChromeClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /ho
+    #2  in WebCore::Chrome::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>
+    #3  in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:91
+===== S_c13_xferclose-mid_r3.log
+==906744==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7f54d40bbcf4 bp 0x7ffff19f4c40 sp 0x7ffff19f4c30 T0)
+SUMMARY: AddressSanitizer: SEGV /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >)
+    #0  in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffe
+    #1  in WebCore::ChromeClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /ho
+    #2  in WebCore::Chrome::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>
+    #3  in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:91
+===== S_c13_xferclose-mid_r4.log
+==908370==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7f04c28bbcf4 bp 0x7ffc1221b830 sp 0x7ffc1221b820 T0)
+SUMMARY: AddressSanitizer: SEGV /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >)
+    #0  in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffe
+    #1  in WebCore::ChromeClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /ho
+    #2  in WebCore::Chrome::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>
+    #3  in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:91
+===== S_c13_xferclose-win_r1.log
+==909058==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7f57e40bbcf4 bp 0x7ffef5fc35b0 sp 0x7ffef5fc35a0 T0)
+SUMMARY: AddressSanitizer: SEGV /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >)
+    #0  in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffe
+    #1  in WebCore::ChromeClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /ho
+    #2  in WebCore::Chrome::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>
+    #3  in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:91
+===== S_c13_xferclose-win_r2.log
+==909405==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7f21846bbcf4 bp 0x7ffd5c624d80 sp 0x7ffd5c624d70 T0)
+SUMMARY: AddressSanitizer: SEGV /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >)
+    #0  in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffe
+    #1  in WebCore::ChromeClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /ho
+    #2  in WebCore::Chrome::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>
+    #3  in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:91
+===== S_c13_xferclose-wrk_r1.log
+==909712==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7f4f4babbcf4 bp 0x7f4f18bfb2b0 sp 0x7f4f18bfb2a0 T9)
+SUMMARY: AddressSanitizer: SEGV /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >)
+    #0  in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffe
+    #1  in WebKit::WebWorkerClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /
+    #2  in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:88
+    #3  in WebCore::CloneDeserializer::readTransferredImageBitmap() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4034
+===== S_c13_xferclose-wrk_r2.log
+==910442==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7f632e2bbcf4 bp 0x7f62fb3632b0 sp 0x7f62fb3632a0 T9)
+SUMMARY: AddressSanitizer: SEGV /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >)
+    #0  in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffe
+    #1  in WebKit::WebWorkerClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /
+    #2  in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:88
+    #3  in WebCore::CloneDeserializer::readTransferredImageBitmap() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4034
+===== S_c13_xferclose-mid_r1.log
+==915322==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x6030000b69a0 at pc 0x7f0c3194f8d9 bp 0x7ffd6f40c920 sp 0x7ffd6f40c918
+SUMMARY: AddressSanitizer: heap-buffer-overflow /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4038 in WebCore::CloneDeserializer::readTransferredImageBitmap()
+    #0  in WebCore::CloneDeserializer::readTransferredImageBitmap() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4038
+    #1  in WebCore::CloneDeserializer::readTerminal() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4740
+    #2  in WebCore::CloneDeserializer::deserialize() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4920
+    #3  in WebCore::CloneDeserializer::deserialize(JSC::JSGlobalObject*, JSC::JSGlobalObject*, WTF::Vector<WTF::RefPtr<WebCore::MessagePort, WTF::RawPtrTraits<W
+[IBT] sizeof=32 size=1 cap=1 idx=0 elem=0x6030000b6980 bytes=bebebebebebebebebebebebebebebebebebebebebebebebe00bebebebebebebe=================================================================
+===== S_c13_xferclose-mid_r2.log
+==916256==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x6030000b6a30 at pc 0x7f23a434f8d9 bp 0x7ffd4ad18580 sp 0x7ffd4ad18578
+SUMMARY: AddressSanitizer: heap-buffer-overflow /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4038 in WebCore::CloneDeserializer::readTransferredImageBitmap()
+    #0  in WebCore::CloneDeserializer::readTransferredImageBitmap() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4038
+    #1  in WebCore::CloneDeserializer::readTerminal() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4740
+    #2  in WebCore::CloneDeserializer::deserialize() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4920
+    #3  in WebCore::CloneDeserializer::deserialize(JSC::JSGlobalObject*, JSC::JSGlobalObject*, WTF::Vector<WTF::RefPtr<WebCore::MessagePort, WTF::RawPtrTraits<W
+[IBT] sizeof=32 size=1 cap=1 idx=0 elem=0x6030000b6a10 bytes=bebebebebebebebebebebebebebebebebebebebebebebebe00bebebebebebebe=================================================================

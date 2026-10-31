@@ -1,0 +1,43 @@
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /caps15.html?arm=read HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=caps15%20arm%3Dread%20only%3D-%20resize%3Dfunction%20idbkr%3Dfunction%20onlyfn%3Dfunction%20sc%3Dfunction%20idb%3Dobject HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=N1%20jsBL%3D8192%20jsLen%3D8192%20off%3D0%20bufBL%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=N1%20ok%20type%3DArrayBuffer%20bl%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=N1%20head%3D5a5b58595e5f5c5d%20at4128%3D7a7b78797e7f7c7d%20tail%3Da2a3a0a1a6a7a4a5 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=N2%20jsBL%3D4096%20jsLen%3D4096%20off%3D4096%20bufBL%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=N2%20ok%20type%3DArrayBuffer%20bl%3D4096 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=N2%20head%3D3031323334353637%20at4128%3D%20tail%3Dc8c9cacbcccdcecf HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=R0%20jsBL%3D8192%20jsLen%3D8192%20off%3D0%20bufBL%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=R0%20ok%20type%3DArrayBuffer%20bl%3D0 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=R1%20jsBL%3D0%20jsLen%3D0%20off%3D0%20bufBL%3D4112 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=R1%20ok%20type%3DArrayBuffer%20bl%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=R1%20head%3D5a5b58595e5f5c5d%20at4128%3D7a7b78797e7f7c7d%20tail%3Da2a3a0a1a6a7a4a5 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=D1%20ctor%3Dok HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=D1%20getter%3DTypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=D1%20ok%20type%3DArrayBuffer%20bl%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=D1%20head%3D1110131215141716%20at4128%3D3130333235343736%20tail%3De9e8ebeaedecefee HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=S1%20pre%20jsBL%3D0%20bufBL%3D4112 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=S1%20err%3DDataCloneError%3AThe%20object%20can%20not%20be%20cloned. HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=B1%20err%3DTypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /ev?m=done%20arm%3Dread HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:15:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:15:38] "GET /favicon.ico HTTP/1.1" 404 -

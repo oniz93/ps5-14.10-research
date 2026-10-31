@@ -1,0 +1,35 @@
+127.0.0.1 - - [30/Oct/2026 14:10:12] "GET /corpus.html?kinds=kern2,num HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 14:10:12] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:12] "GET /ev?m=BOOT%20arms%3D45%20kinds%3Dkern2%7Cnum HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:12] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:12] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:12] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:12] "GET /ev?m=BEG%20N1-1000%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:12] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:12] "GET /ev?m=RES%20N1-1000%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20wp%3D41.00%20ink%3D1616%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D110 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:12] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:12] "GET /ev?m=BEG%20N2-33000%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:14] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:14] "GET /ev?m=RES%20N2-33000%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20wp%3D41.00%20ink%3D1616%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D550 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:14] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:14] "GET /ev?m=BEG%20N3-65535%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:17] "GET /ev?m=RES%20N3-65535%20w%3D43.00%20w40%3D17.00%20ctl%3D64.00%20cw%3D43.00%20wp%3D-%20ink%3D3500%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D1006 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:17] "GET /ev?m=BEG%20K2-named100%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:17] "GET /ev?m=RES%20K2-named100%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20wp%3D100.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D191 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:17] "GET /ev?m=BEG%20K3-kern100%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:17] "GET /ev?m=RES%20K3-kern100%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20wp%3D100.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D79 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:17] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:17] "GET /ev?m=BEG%20K4-kern10000%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:18] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:18] "GET /ev?m=RES%20K4-kern10000%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20wp%3D100.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D263 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:18] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:18] "GET /ev?m=BEG%20K5-10000-nokern%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:19] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:19] "GET /ev?m=RES%20K5-10000-nokern%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20wp%3D100.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D219 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:10:19] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:10:19] "GET /ev?m=DONE%20n%3D45 HTTP/1.1" 404 -

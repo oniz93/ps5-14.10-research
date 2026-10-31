@@ -1,0 +1,40 @@
+127.0.0.1 - - [30/Oct/2026 14:12:58] "GET /corpus.html?kinds=ext2,num&only=N3-65535,N4-65536,X1-huge,X2-many,X3-noface,X4-badxml,X5-dup HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 14:12:58] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:12:58] "GET /ev?m=BOOT%20arms%3D46%20kinds%3Dext2%7Cnum HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:12:58] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:12:58] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:12:58] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:12:58] "GET /ev?m=BEG%20N3-65535%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:01] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:01] "GET /ev?m=RES%20N3-65535%20w%3D43.00%20w40%3D17.00%20ctl%3D64.00%20cw%3D43.00%20wp%3D-%20ink%3D3500%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D1021 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:01] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:01] "GET /ev?m=BEG%20N4-65536%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:04] "GET /ev?m=RES%20N4-65536%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20wp%3D-%20ink%3D1616%20inkctl%3D1616%20n%3D1%20st%3Dunloaded%20ms%3D619 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:04] "GET /ev?m=BEG%20X1-huge%20kind%3Dext HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:06] "GET /x_X1-huge.svg HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 14:13:06] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:06] "GET /ev?m=RES%20X1-huge%20w%3D71.00%20w40%3D28.00%20ctl%3D64.00%20cw%3D71.00%20wp%3D-%20ink%3D1629%20inkctl%3D1616%20n%3D1%20st%3Dloading%20ms%3D91 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:06] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:06] "GET /ev?m=BEG%20X2-many%20kind%3Dext HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:07] "GET /x_X2-many.svg HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 14:13:07] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:07] "GET /ev?m=RES%20X2-many%20w%3D71.00%20w40%3D28.00%20ctl%3D64.00%20cw%3D71.00%20wp%3D-%20ink%3D1629%20inkctl%3D1616%20n%3D1%20st%3Dloading%20ms%3D80 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:08] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:08] "GET /ev?m=BEG%20X3-noface%20kind%3Dext HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:10] "GET /x_X3-noface.svg HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 14:13:10] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:10] "GET /ev?m=RES%20X3-noface%20w%3D71.00%20w40%3D28.00%20ctl%3D64.00%20cw%3D71.00%20wp%3D-%20ink%3D1629%20inkctl%3D1616%20n%3D1%20st%3Dloading%20ms%3D84 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:10] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:10] "GET /ev?m=BEG%20X4-badxml%20kind%3Dext HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:11] "GET /x_X4-badxml.svg HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 14:13:11] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:11] "GET /ev?m=RES%20X4-badxml%20w%3D71.00%20w40%3D28.00%20ctl%3D64.00%20cw%3D71.00%20wp%3D-%20ink%3D1629%20inkctl%3D1616%20n%3D1%20st%3Dloading%20ms%3D79 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:11] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:11] "GET /ev?m=BEG%20X5-dup%20kind%3Dext HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:13] "GET /x_X5-dup.svg HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 14:13:13] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:13] "GET /ev?m=RES%20X5-dup%20w%3D71.00%20w40%3D28.00%20ctl%3D64.00%20cw%3D71.00%20wp%3D-%20ink%3D1629%20inkctl%3D1616%20n%3D1%20st%3Dloading%20ms%3D83 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:13:13] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:13:13] "GET /ev?m=DONE%20n%3D46 HTTP/1.1" 404 -

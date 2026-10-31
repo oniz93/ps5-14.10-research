@@ -1,0 +1,248 @@
+<!doctype html><html><head><meta charset="utf-8"><title>leakcorpus</title>
+<script>
+'use strict';
+/* docs/95 leak corpus. One beacon per probe, emitted as soon as the probe returns, so a probe
+   that kills the WebProcess is identifiable as the last beacon. Parts are selected with ?part=N
+   so each run changes exactly one variable (the probed surface). */
+var Q = [], PUMPING = false, SENT = 0, FAILED = 0;
+function send(e){ return new Promise(function(res){
+  var im = new Image(), done = false;
+  function fin(ok){ if(done) return; done = true; res(ok); }
+  im.onload = function(){ fin(true); };
+  im.onerror = function(){ fin(true); };   /* a 404 still proves arrival */
+  im.src = '/ev?m=' + encodeURIComponent(e);
+  setTimeout(function(){ fin(false); }, 250);
+});}
+function pump(){
+  if(PUMPING) return; PUMPING = true;
+  (async function(){
+    while(Q.length){ var e=Q.shift(); var ok=await send(e); SENT++; if(!ok) FAILED++; }
+    PUMPING = false;
+  })();
+}
+function S(x){ try { return String(x); } catch(e){ return '<strfail>'; } }
+var ONLY = null;
+(function(){ var m = location.search.match(/only=([^&]+)/); if (m) ONLY = m[1].split(',').map(decodeURIComponent); })();
+function wanted(k){ return !ONLY || ONLY.indexOf(k) >= 0; }
+function add(k,v){ if(!wanted(k)) return; var s; try { s=S(v); } catch(e){ s='<fail>'; } Q.push(k+'='+s.replace(/[\t\r\n]+/g,' ').slice(0,220)); pump(); }
+function T(k,fn){ if(!wanted(k)) return; try { add(k, fn()); } catch(e){ add(k, 'THROW '+(e&&e.name)+' '+(e&&e.message)); } }
+function drain(){ return new Promise(function(res){ (function poll(){ if(!Q.length && !PUMPING) res(); else setTimeout(poll,20); })(); }); }
+function scan(a,n){
+  var b;
+  try { b = (a instanceof ArrayBuffer) ? new Uint8Array(a) : new Uint8Array(a.buffer, a.byteOffset||0, a.byteLength); }
+  catch(e){ return 'scanfail:'+e.name; }
+  n = Math.min(n||64, b.length);
+  var nz=0, h='', i;
+  for(i=0;i<n;i++){ if(b[i]) nz++; }
+  for(i=0;i<Math.min(16,n);i++){ h += (b[i]<16?'0':'')+b[i].toString(16); }
+  return 'nz='+nz+'/'+n+' h='+h;
+}
+window.onerror = function(m,s,l,c){ add('ONERROR', m+' @'+l+':'+c); return false; };
+window.addEventListener('unhandledrejection', function(e){ add('UNHANDLED', S(e.reason)); });
+new Image().src='/ev?m=BOOT+part='+encodeURIComponent(location.search);
+
+var PART = parseInt((location.search.match(/part=(\d+)/)||[0,'0'])[1],10);
+
+var NAMES=['OffscreenCanvas','WebGLRenderingContext','WebGL2RenderingContext','SharedArrayBuffer','Atomics',
+  'AudioContext','VideoFrame','WebCodecsVideoFrame','WebAssembly','indexedDB','caches','GPU','GPUAdapter',
+  'ShadowRealm','PaintWorklet','FileReader','File','Blob','Worker','SharedWorker','MessageChannel',
+  'WeakRef','FinalizationRegistry','TextDecoder','TextEncoder','Intl','crypto','performance','structuredClone'];
+
+function part1(){
+  var i;
+  for(i=0;i<NAMES.length;i++){ (function(nm){ T('p_'+nm, function(){ return typeof globalThis[nm]; }); })(NAMES[i]); }
+  T('p_perfmem', function(){ return performance.memory ? ('used='+performance.memory.usedJSHeapSize+' total='+performance.memory.totalJSHeapSize+' limit='+performance.memory.jsHeapSizeLimit) : 'undefined'; });
+  T('p_console_mem', function(){ return typeof console.memory; });
+  T('p_canvas2d', function(){ var c=document.createElement('canvas'); return c.getContext('2d') ? 'yes' : 'no'; });
+  T('p_webglctx', function(){ var c=document.createElement('canvas'); var g=c.getContext('webgl'); return g ? ('yes '+g.getParameter(g.VERSION)) : 'no'; });
+  T('p_bitmaprenderer', function(){ var c=document.createElement('canvas'); return c.getContext('bitmaprenderer') ? 'yes':'no'; });
+  T('n_win', function(){ return Object.prototype.toString.call(window)+' '+String(window); });
+  T('n_doc', function(){ return String(document); });
+  T('n_fonts', function(){ return Object.prototype.toString.call(document.fonts)+' '+String(document.fonts); });
+  T('n_loc', function(){ return String(location); });
+  T('n_perf', function(){ return String(performance); });
+  T('n_nav', function(){ return String(navigator); });
+  T('n_screen', function(){ return String(screen); });
+  T('n_hist', function(){ return String(history); });
+  T('n_crypto', function(){ return String(crypto); });
+  T('n_subtle', function(){ return typeof crypto.subtle==='object' ? String(crypto.subtle) : 'no'; });
+  T('n_idb', function(){ return String(indexedDB); });
+  T('n_caches', function(){ return String(caches); });
+  T('n_sw', function(){ return String(navigator.serviceWorker); });
+  T('n_ls', function(){ return String(localStorage); });
+  T('n_ss', function(){ return String(sessionStorage); });
+  T('n_sheets', function(){ return String(document.styleSheets); });
+  T('n_gcs', function(){ return document.body ? String(getComputedStyle(document.body)) : 'nobody'; });
+  T('n_port', function(){ var ch=new MessageChannel(); return String(ch.port1)+' '+(ch.port1===ch.port2); });
+  T('n_regexp', function(){ return String(/a/g); });
+  T('n_map', function(){ return String(new Map([[1,2]])); });
+  T('n_date', function(){ return String(new Date(0)); });
+  T('n_msgch', function(){ return String(new MessageChannel()); });
+}
+
+function part2(){
+  T('c_fn',   function(){ return structuredClone(function f(){}); });
+  T('c_fn2',  function(){ return structuredClone({a:function g(){}}); });
+  T('c_sym',  function(){ return structuredClone(Symbol('s')); });
+  T('c_proxy',function(){ return structuredClone(new Proxy({},{})); });
+  T('c_promise', function(){ return structuredClone(Promise.resolve(1)); });
+  T('c_gen',  function(){ function* g(){ yield 1; } return structuredClone(g()); });
+  T('c_cyc',  function(){ var o={}; o.o=o; var c=structuredClone(o); return 'ok same='+(c.o===c); });
+  T('c_getterthrow', function(){ var o={}; Object.defineProperty(o,'x',{get:function(){ throw new Error('GT'); },enumerable:true}); return structuredClone(o); });
+  T('c_sab',  function(){ return typeof SharedArrayBuffer==='function' ? structuredClone(new SharedArrayBuffer(8)) : 'noSAB'; });
+  T('c_bigint', function(){ return String(structuredClone(10n)); });
+  T('c_domexception', function(){ var e=new DOMException('boom','DataCloneError'); var c=structuredClone(e); return c.name+':'+c.message; });
+  T('c_error', function(){ var e=new Error('boom'); var c=structuredClone(e); return c.name+':'+c.message+':stacklen='+String(c.stack).length; });
+  T('c_dup',  function(){ var ch=new MessageChannel(); try { window.postMessage('x','*',[ch.port1,ch.port1]); return 'nosync'; } catch(e){ return e.name+': '+e.message; } });
+  T('c_port', function(){ var ch=new MessageChannel(); try { ch.port1.postMessage(function f(){}); return 'nosync'; } catch(e){ return e.name+': '+e.message; } });
+  T('c_port_sym', function(){ var ch=new MessageChannel(); try { ch.port1.postMessage(Symbol('s')); return 'nosync'; } catch(e){ return e.name+': '+e.message; } });
+  T('c_detached', function(){ var ab=new ArrayBuffer(8); try { window.postMessage('y','*',[ab]); } catch(e){ return 'firstthrow:'+e.name; } return 'len='+ab.byteLength; });
+  T('c_node', function(){ try { return structuredClone(document.body); } catch(e){ return e.name+': '+e.message; } });
+  T('c_win',  function(){ try { return structuredClone(window); } catch(e){ return e.name+': '+e.message; } });
+  T('c_doc',  function(){ try { return structuredClone(document); } catch(e){ return e.name+': '+e.message; } });
+}
+
+function part3(){
+  T('s1', function(){ return new Error('a').stack; });
+  T('s2', function(){ return (function g(){ return new Error('b').stack; })(); });
+  T('s3', function(){ try { document.fonts.load(1); } catch(e){ return e.name+': '+e.message+' ST='+String(e.stack).slice(0,120); } return 'nosync'; });
+  T('s5', function(){ try { new (function Bad(){ throw new TypeError('ctor'); })(); } catch(e){ return e.stack; } });
+  T('s6', function(){ var e; try { null.x; } catch(x){ e=x; } return e.stack; });
+  T('s7', function(){ return String(Error.stackTraceLimit); });
+  T('u_href', function(){ return location.href; });
+  T('u_base', function(){ return document.baseURI; });
+  T('u_url', function(){ return new URL('x?y=1#z', location).href; });
+  T('u_origin', function(){ return location.origin; });
+  T('u_timeOrigin', function(){ return performance.timeOrigin; });
+  T('u_now', function(){ return performance.now(); });
+  T('u_dt', function(){ return JSON.stringify(Intl.DateTimeFormat().resolvedOptions()); });
+  T('u_nf', function(){ return JSON.stringify(Intl.NumberFormat('en-US').resolvedOptions()); });
+  T('u_coll', function(){ return JSON.stringify(Intl.Collator().resolvedOptions()); });
+  T('u_ua', function(){ return navigator.userAgent; });
+  T('u_plat', function(){ return navigator.platform; });
+  T('u_hc', function(){ return navigator.hardwareConcurrency; });
+  T('u_langs', function(){ return String(navigator.languages); });
+  T('u_screen', function(){ return screen.width+'x'+screen.height+' '+screen.colorDepth; });
+  T('u_tz', function(){ return Intl.DateTimeFormat().resolvedOptions().timeZone; });
+  T('u_doc', function(){ return document.URL+' | '+document.documentURI+' | '+document.referrer+' | '+document.domain; });
+}
+
+function part4(){
+  T('z_ab',    function(){ return scan(new ArrayBuffer(256)); });
+  T('z_u8',    function(){ return scan(new Uint8Array(256)); });
+  T('z_f64',   function(){ return scan(new Float64Array(32)); });
+  T('z_u8c',   function(){ return scan(new Uint8ClampedArray(256)); });
+  T('z_big',   function(){ return scan(new BigInt64Array(32)); });
+  T('z_rabmax',function(){ var ab=new ArrayBuffer(0,{maxByteLength:4096}); ab.resize(4096); return scan(ab); });
+  T('z_rabgrow',function(){ var ab=new ArrayBuffer(64,{maxByteLength:4096}); ab.resize(4096); return scan(ab); });
+  T('z_cloneab',function(){ return scan(structuredClone(new ArrayBuffer(256))); });
+  T('z_canvas',function(){ var c=document.createElement('canvas'); c.width=64; c.height=64; var g=c.getContext('2d'); return scan(g.getImageData(0,0,64,64).data); });
+  T('z_canvas_fill_resize',function(){ var c=document.createElement('canvas'); c.width=64; c.height=64; var g=c.getContext('2d'); g.fillRect(0,0,64,64); c.width=65; return scan(g.getImageData(0,0,64,64).data); });
+  T('z_creatid',function(){ var c=document.createElement('canvas'); c.width=64; c.height=64; var g=c.getContext('2d'); return scan(g.createImageData(64,64).data); });
+  T('z_newid', function(){ return scan(new ImageData(64,64).data); });
+  T('z_dataview', function(){ var ab=new ArrayBuffer(256); return scan(new DataView(ab)); });
+  T('z_ab_big', function(){ return scan(new ArrayBuffer(65536), 64); });
+  T('z_float32', function(){ return scan(new Float32Array(64)); });
+}
+
+/* ---- part 6: probes that are expected to kill the process (kept out of the sweep) ---- */
+function part6(){
+  T('s4', function(){ function r(n){ return r(n+1); } try { r(0); } catch(e){ return e.name+': '+e.message+' ST='+String(e.stack).slice(0,140); } });
+}
+
+/* ---- part 5: async surfaces ---- */
+var EVENTS = [];
+window.addEventListener('message', function(e){
+  EVENTS.push('origin='+(e.origin)+' srcwin='+(e.source===window)+' srcnull='+(e.source===null)+' ports='+(e.ports?e.ports.length:'-')+' type='+Object.prototype.toString.call(e.source));
+}, true);
+function waitEv(n, ms){ return new Promise(function(res){ var t0=Date.now(); (function poll(){ if(EVENTS.length>=n || Date.now()-t0>ms) res(EVENTS.slice()); else setTimeout(poll,10); })(); }); }
+function img(w,h){ var c=document.createElement('canvas'); c.width=w; c.height=h; var g=c.getContext('2d'); g.fillStyle='#f00'; g.fillRect(0,0,w,h); return c; }
+var WSRC = [
+  "onmessage=function(e){var d=e.data||{};",
+  " if(d.k==='bm'){ try{ postMessage({k:'bm',w:d.bm.width,h:d.bm.height,t:Object.prototype.toString.call(d.bm)}); }catch(err){ postMessage({k:'bm',err:err.name+':'+err.message}); } }",
+  " else if(d.k==='loc'){ postMessage({k:'loc',href:location.href,origin:self.origin,ua:navigator.userAgent}); }",
+  " else if(d.k==='clonefail'){ try{ postMessage({k:'cf',ok:1,v:d.o}); }catch(err){ postMessage({k:'cf',ok:0,n:err.name,m:err.message}); } }",
+  " else if(d.k==='stack'){ try{ null.x; }catch(err){ postMessage({k:'stack',s:String(err.stack)}); } }",
+  " else if(d.k==='boom'){ try{ JSON.parse('{'); }catch(err){ postMessage({k:'boom',n:err.name,m:err.message,s:String(err.stack)}); } }",
+  "};",
+  "onmessageerror=function(e){ postMessage({k:'msgerr'}); };"
+].join('\n');
+
+async function part5(){
+  var bm = await createImageBitmap(img(2,2));
+  add('b_created', bm.width+'x'+bm.height+' '+Object.prototype.toString.call(bm));
+  var bm2 = await createImageBitmap(img(3,5));
+  try { window.postMessage('x','*',[bm2,bm2]); add('b_dup','nosync'); } catch(e){ add('b_dup', e.name+': '+e.message); }
+  try { window.postMessage(bm2,'*'); add('b_notransfer','nosync'); } catch(e){ add('b_notransfer', e.name+': '+e.message); }
+  bm.close();
+  add('b_after_close', bm.width+'x'+bm.height);
+  try { window.postMessage(bm,'*',[bm]); add('b_closed_transfer','nosync'); } catch(e){ add('b_closed_transfer', e.name+': '+e.message); }
+  try { var bm3 = await createImageBitmap(new Blob([])); add('b_emptyblob','ok '+bm3.width+'x'+bm3.height); } catch(e){ add('b_emptyblob', e.name+': '+e.message); }
+  try { var bm5 = await createImageBitmap(new ImageData(4,4)); add('b_fromid', bm5.width+'x'+bm5.height); } catch(e){ add('b_fromid', e.name+': '+e.message); }
+  await drain();
+
+  window.postMessage('selftest','*');
+  var ev1 = await waitEv(1, 800);
+  add('m_self', ev1.length ? ev1[ev1.length-1] : 'none');
+  var ch = new MessageChannel(), got = [];
+  ch.port1.onmessage = function(e){ got.push('origin='+e.origin+' srcnull='+(e.source===null)+' ports='+(e.ports?e.ports.length:'-')+' type='+Object.prototype.toString.call(e.source)); };
+  ch.port2.postMessage('x');
+  await new Promise(function(r){ setTimeout(r,200); });
+  add('m_port', got.length?got[0]:'none');
+
+  var f = document.createElement('iframe');
+  f.src = 'data:text/html,<script>parent.postMessage("co","*")<\/script>';
+  document.body.appendChild(f);
+  await new Promise(function(r){ setTimeout(r,500); });
+  add('m_iframe_n', EVENTS.length);
+  add('m_iframe_last', EVENTS.length?EVENTS[EVENTS.length-1]:'none');
+  f.remove();
+
+  var wurl = URL.createObjectURL(new Blob([WSRC], {type:'text/javascript'}));
+  var w = new Worker(wurl);
+  function once(){ return new Promise(function(r){ w.onmessage=function(e){ r(e.data); }; setTimeout(function(){ r({k:'timeout'}); },1500); }); }
+  var bm6 = await createImageBitmap(img(7,9));
+  var p = once(); w.postMessage({k:'bm', bm:bm6}, [bm6]);
+  add('w_bm', JSON.stringify(await p)+' mainw='+bm6.width);
+  p = once(); w.postMessage({k:'loc'}); add('w_loc', JSON.stringify(await p));
+  p = once(); try { w.postMessage({k:'clonefail', o:function(){}}); add('w_clonefail_main','nosync'); } catch(e){ add('w_clonefail_main', e.name+': '+e.message); }
+  p = once(); w.postMessage({k:'stack'}); add('w_stack', JSON.stringify(await p));
+  p = once(); w.postMessage({k:'boom'}); add('w_boom', JSON.stringify(await p));
+  w.terminate();
+
+  /* a bitmap posted with no transfer list: delivered, messageerror, or dropped? */
+  var got2 = [];
+  window.addEventListener('messageerror', function(){ got2.push('messageerror'); });
+  window.addEventListener('message', function(e){ try { got2.push('msg:'+Object.prototype.toString.call(e.data)); } catch(x){ got2.push('msg:?'); } });
+  var bm7 = await createImageBitmap(img(1,1));
+  try { window.postMessage(bm7, '*'); add('b_notransfer2','nosync'); } catch(e){ add('b_notransfer2', e.name+': '+e.message); }
+  await new Promise(function(r){ setTimeout(r,600); });
+  add('b_notransfer_arrival', got2.join('|') || 'none');
+
+  try { var buf = await new Blob([new Uint8Array(64)]).arrayBuffer(); add('z_blob', scan(buf)); } catch(e){ add('z_blob', e.name+': '+e.message); }
+  try { var ab2 = new ArrayBuffer(64); var cl = await new Response(ab2).arrayBuffer(); add('z_response', scan(cl)); } catch(e){ add('z_response', e.name+': '+e.message); }
+  add('r_rand', Math.random());
+  add('r_now', Date.now());
+  add('r_blob', URL.createObjectURL(new Blob(['x'])));
+  add('r_uuid', (crypto.randomUUID ? crypto.randomUUID() : 'none'));
+  var rb=new Uint8Array(16); crypto.getRandomValues(rb); add('r_rand16', Array.prototype.join.call(rb,''));
+  add('r_const', String(1+1));
+}
+
+(async function(){
+  try {
+    if (PART===1) part1();
+    else if (PART===2) part2();
+    else if (PART===3) part3();
+    else if (PART===4) part4();
+    else if (PART===5) await part5();
+    else if (PART===6) part6();
+    else { add('NOPART', PART); }
+  } catch(e){ add('PARTFAIL', e.name+': '+e.message); }
+  await drain();
+  add('DONE', 'part='+PART+' sent='+SENT);
+  await drain();
+  document.title='DONE';
+})();
+</script>
+</head><body><p>leak corpus</p></body></html>

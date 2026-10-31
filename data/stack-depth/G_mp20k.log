@@ -1,0 +1,35 @@
+[New LWP 1517859]
+[New LWP 1517858]
+[New LWP 1517857]
+[New LWP 1517856]
+[New LWP 1517853]
+[New LWP 1517842]
+[New LWP 1517841]
+[New LWP 1517840]
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <ima:enforcing>
+  <https://debuginfod.fedoraproject.org/>
+  <ima:ignore>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+
+warning: Can't read data for section '.debug_info' in file 'target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0'
+
+warning: Expected absolute pathname for libpthread in the inferior, but got target:/lib64/libc.so.6.
+
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+
+warning: Section .debug_aranges in target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0 entry at offset 0 debug_info_offset 0 does not exists, ignoring .debug_aranges.
+0x00007f586ff1eebd in poll () from target:/lib64/libc.so.6
+Breakpoint 1 at 0x7f587d328d1e
+H 1 t=1 bp=1 rsp=0x7fff348f8dd0
+[New LWP 1517977]
+[New LWP 1517978]
+[New LWP 1517979]
+[New LWP 1517980]
+[New LWP 1517981]
+[New LWP 1517982]
+[New LWP 1517983]
+[LWP 1517858 exited]

@@ -1,0 +1,34 @@
+=== p5A port=12950 secs=30 q=part=5
+--- beacons (in order):
+BOOT+part=?part=5
+b_created=2x2 [object ImageBitmap]
+b_dup=DataCloneError: Duplicate transferable for structured clone
+b_notransfer=nosync
+b_after_close=0x0
+b_closed_transfer=DataCloneError: The object can not be cloned.
+b_emptyblob=InvalidStateError: Cannot create an ImageBitmap from an empty buffer
+b_fromid=4x4
+m_self=origin=http://127.0.0.1:12950 srcwin=true srcnull=false ports=0 type=[object Window]
+m_port=origin= srcnull=true ports=0 type=[object Null]
+m_iframe_n=3
+m_iframe_last=origin=null srcwin=false srcnull=false ports=0 type=[object Object]
+w_bm={"k":"bm","w":7,"h":9,"t":"[object ImageBitmap]"} mainw=0
+w_loc={"k":"loc","href":"blob:http://127.0.0.1:12950/89ecfe54-c6d8-47ba-8eda-1b3295e2cc34","origin":"http://127.0.0.1:12950","ua":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/60
+w_clonefail_main=DataCloneError: The object can not be cloned.
+w_stack={"k":"stack","s":"onmessage@blob:http://127.0.0.1:12950/89ecfe54-c6d8-47ba-8eda-1b3295e2cc34:5:35"}
+w_boom={"k":"boom","n":"SyntaxError","m":"JSON Parse error: Expected '}'","s":"parse@[native code]\nonmessage@blob:http://127.0.0.1:12950/89ecfe54-c6d8-47ba-8eda-1b3295e2cc34:6:40"}
+b_notransfer2=nosync
+b_notransfer_arrival=msg:[object ImageBitmap]
+z_blob=nz=0/64 h=00000000000000000000000000000000
+z_response=nz=0/64 h=00000000000000000000000000000000
+r_rand=0.6741125983917756
+r_now=1793384837715
+r_blob=blob:http://127.0.0.1:12950/707200ab-53ef-4345-bea5-98debce7e42c
+r_uuid=3a2fac66-49bc-489e-b3f1-4c3a15a139e8
+r_rand16=1962351454266112185572442311711724062223
+r_const=2
+DONE=part=5 sent=26
+--- maps samples: 21
+--- crash/abort:
+  access: none
+EXIT=124

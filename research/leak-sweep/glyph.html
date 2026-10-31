@@ -1,0 +1,421 @@
+<!doctype html><html><head><meta charset="utf-8"><title>glyph</title>
+<style>
+/* docs/98: font/glyph rasterisation — the last un-swept JS-visible byte source (docs/95 §8).
+   Faces chosen to force different rasteriser paths: a system face by name, the same face split by
+   unicode-range (per-codepoint fallback), a CJK face with huge glyphs, a real webfont over HTTP,
+   a truncated font and a garbage font (the OpenType parse failure path), and a name that does not
+   exist (last-resort fallback). */
+@font-face{font-family:gA;src:local("DejaVu Sans")}
+@font-face{font-family:gB;src:local("Liberation Sans");unicode-range:U+41-5A,U+61-7A}
+@font-face{font-family:gC;src:local("Noto Sans CJK JP");unicode-range:U+4E00-9FFF}
+@font-face{font-family:gD;src:url(f.ttf)}
+@font-face{font-family:gE;src:url(ftrunc.ttf)}
+@font-face{font-family:gF;src:url(fgarb.ttf)}
+@font-face{font-family:gG;src:local("NoSuchFontNameXYZ")}
+body{font-family:gA;margin:8px}
+#dom1{font:13.37px gA;letter-spacing:0.37px;word-spacing:1.13px;
+      font-feature-settings:"liga" 1,"kern" 1,"smcp" 1,"onum" 1,"dlig" 1}
+#dom2{font:15.5px gB;text-rendering:geometricPrecision;-webkit-font-smoothing:antialiased}
+#dom3{font:16px gC}
+</style>
+<script>
+'use strict';
+var Q=[],PUMPING=false,SENT=0;
+function send(e){ return new Promise(function(res){ var im=new Image(),d=false;
+ function fin(){ if(d)return; d=true; res(); } im.onload=fin; im.onerror=fin;
+ im.src='/ev?m='+encodeURIComponent(e); setTimeout(fin,250); }); }
+function pump(){ if(PUMPING)return; PUMPING=true; (async function(){ while(Q.length){ await send(Q.shift()); SENT++; } PUMPING=false; })(); }
+function add(k,v){ Q.push(k+'='+String(v).replace(/[\t\r\n]+/g,' ').slice(0,300)); pump(); }
+function T(k,fn){ try{ add(k, fn()); }catch(e){ add(k,'THROW '+e.name+' '+e.message); } }
+window.onerror=function(m,s,l,c){ add('ONERROR',m+' @'+l); return false; };
+new Image().src='/ev?m=BOOT+glyph';
+
+/* --- detector: a real pointer in this build is 0x0000_6xxx_xxxx_xxxx (ASAN heap) or
+   0x0000_7fxx_xxxx_xxxx (libraries/stack). Little-endian that is FIVE pinned bytes:
+   b3=0, b4=0, b5 in 0x60..0x7f, b6=0, b7=0, with b0..b2 not all zero.
+   docs/95 pinned b5..b7 only; on antialiased white text that fires on a *premultiplied grey*
+   pixel (R=G=B=A=0x68) followed by a transparent one — bytes 68 68 68 68 00 00 00 00 — where
+   b5 is the green channel. b4=0 is what separates the two: an address has bits 32..39 clear.
+   `grey` counts the windows the loose test would have reported, so the correction is measured. */
+function ptrscan(b){
+  var hits=[], nz=0, grey=0, i, j;
+  for(i=0;i<b.length;i++){ if(b[i]) nz++; }
+  for(j=0;j<8;j++) for(i=j;i+8<=b.length;i+=8){
+    if(b[i+6]||b[i+7]||b[i+5]<0x60||b[i+5]>0x7f) continue;
+    if((b[i]|b[i+1]|b[i+2])===0) continue;
+    if(b[i+3]!==0||b[i+4]!==0){ grey++; continue; }
+    var hx='';
+    for(var k=7;k>=0;k--) hx += (b[i+k]<16?'0':'')+b[i+k].toString(16);
+    hits.push('@'+i+'=0x'+hx);
+  }
+  return 'nz='+nz+'/'+b.length+' ptr='+hits.length+' grey='+grey+(hits.length?('['+hits.slice(0,3).join(',')+']'):'');
+}
+/* control that must fire */
+function detctl(){
+  var a=new Uint8Array(16); a[0]=0x40; a[1]=0x05; a[2]=0x01; a[4]=0x00; a[5]=0x61;
+  var b=new Uint8Array(16); b[0]=0x40; b[1]=0x05; b[2]=0x01; b[4]=0x00; b[5]=0x41;
+  var out='pos='+ptrscan(a)+' neg='+ptrscan(b);
+  /* the same word at all eight byte offsets: the detector must fire at every alignment */
+  var al=''; for(var off=0;off<8;off++){ var c=new Uint8Array(24); c[off]=0x40; c[off+1]=0x05; c[off+2]=0x01; c[off+5]=0x61;
+    al += (ptrscan(c).indexOf('ptr=1')>=0?'1':'0'); }
+  return out+' align='+al;
+}
+/* ink census: how many pixels are non-transparent, and how many distinct alpha values —
+   the sensitivity check for "the rasteriser really painted glyphs into this canvas". */
+function ink(imgd){
+  var d=imgd.data, px=0, amax=0, i;
+  for(i=3;i<d.length;i+=4){ if(d[i]){ px++; if(d[i]>amax) amax=d[i]; } }
+  return 'px='+px+'/amax='+amax;
+}
+function C(w,h){ var c=document.createElement('canvas'); c.width=w||96; c.height=h||64; return c; }
+function md5ish(s){ var h1=0x811c9dc5,h2=0; for(var i=0;i<s.length;i++){ h1=(h1^s.charCodeAt(i))*16777619>>>0; h2=(h2*31+s.charCodeAt(i))>>>0; } return h1.toString(16)+h2.toString(16); }
+
+var LAT='Hamburgefonstiv 0123', KERN='AVWaTo fi ffl 1/2', COMB='a\u0301e\u0308o\u0308',
+    CJK='\u4e2d\u6587\u6f22\u5b57\u6f22', AR='\u0627\u0644\u0639\u0631\u0628\u064a\u0629',
+    DEV='\u0915\u0930\u094d\u092e', EMO='\ud83d\ude00\ud83d\udc4d';
+
+async function run(){
+  T('det_ctl', detctl);
+
+  /* 0. capability census of the text stack */
+  var probe=C(8,8).getContext('2d');
+  add('cap', ['letterSpacing','wordSpacing','fontKerning','fontStretch','fontVariantCaps',
+              'textRendering','direction','font','filter'].map(function(p){
+                return p+'='+(p in probe ? String(probe[p]).slice(0,12) : 'absent'); }).join(' '));
+  add('cap2', 'OffscreenCanvas='+typeof OffscreenCanvas+' Path2D='+typeof Path2D+
+      ' FontFace='+typeof FontFace+' fonts='+(document.fonts?'yes':'no')+
+      ' measure='+typeof probe.measureText);
+  /* every TextMetrics field this build reports (WebIDL attributes are enumerable and live on the
+     prototype, so for..in is the right walk and an own-property filter would drop all of them) */
+  T('tm_fields', function(){ var m=probe.measureText('Hg'); var o=[];
+    for(var k in m){ if(k!=='constructor') o.push(k); } return 'n='+o.length+' '+o.join(','); });
+
+  /* 1. load the faces; the webfont arms are the OpenType/FreeType parse path */
+  var names=['gA','gB','gC','gD','gE','gF','gG'];
+  function timeout(p, ms){ return Promise.race([p, new Promise(function(res){ setTimeout(function(){ res('TIMEOUT'); }, ms); })]); }
+  try{ await timeout(document.fonts.ready, 4000); }catch(e){ add('fonts_ready','THROW '+e.message); }
+  async function stat(nm){
+    try{
+      var r = await timeout(document.fonts.load('16px '+nm, 'H\u4e2d').then(function(){ return 'loaded'; },
+                                                  function(e){ return 'rejected:'+e.name; }), 4000);
+      var s=[]; document.fonts.forEach(function(f){ if(f.family.replace(/"/g,'')===nm) s.push(f.status); });
+      return 'st='+(s.join('/')||'none')+' load='+r+' chk='+document.fonts.check('16px '+nm,'H');
+    }catch(e){ return 'THROW '+e.name; }
+  }
+  for(var n2=0;n2<names.length;n2++) add('face_'+names[n2], await stat(names[n2]));
+
+  /* width of the same string under each face: proves the webfont either replaced the fallback
+     (different width) or did not load (same width as a nonexistent family) */
+  var wref=null;
+  for(var n3=0;n3<names.length;n3++){
+    var g=C(8,8).getContext('2d'); g.font='16px '+names[n3];
+    var w=g.measureText(LAT).width;
+    if(names[n3]==='gG') wref=w;
+    add('w_'+names[n3], 'w='+w.toFixed(4)+' ff='+g.font);
+  }
+
+  /* 2. the rasterisation matrix: font x string x placement, each read back as bytes */
+  var fonts=['10px gA','13.37px gA','15.5px gA','bold 21px gA','italic 19px gA',
+             '10px gB','16px gC','14px gD','13px gG'];
+  var strs=[['lat',LAT],['kern',KERN],['comb',COMB],['cjk',CJK],['ar',AR],['dev',DEV],['emo',EMO]];
+  var i,f,s,c,g,img;
+  for(i=0;i<fonts.length;i++){
+    for(s=0;s<strs.length;s++){
+      (function(fn,sk,sv,idx){
+        T('r'+idx, function(){
+          var c=C(120,64), g=c.getContext('2d');
+          g.font=fn; g.fillStyle='#fff'; g.textBaseline='alphabetic';
+          g.fillText(sv, 0.37, 41.83);
+          var d=g.getImageData(0,0,120,64);
+          /* split the scan: the painted band and the never-painted right margin */
+          var band=g.getImageData(0,24,120,32), marg=g.getImageData(0,0,120,18);
+          return 'ink['+ink(d)+'] all['+ptrscan(d.data)+'] band['+ptrscan(band.data)+'] marg['+ptrscan(marg.data)+']';
+        });
+      })(fonts[i], strs[s][0], strs[s][1], i*10+s);
+    }
+  }
+
+  /* 3. the same text under the config knobs the action names, one variable each */
+  function knob(k, setup, txt, xpos){
+    T(k, function(){
+      var c=C(160,64), g=c.getContext('2d');
+      g.font='15.5px gA'; g.fillStyle='#fff';
+      try{ setup(g); }catch(e){ return 'SETUP-THROW '+e.name+' '+e.message; }
+      g.fillText(txt||KERN, (xpos===undefined?0.5:xpos), 40.37);
+      var d=g.getImageData(0,0,160,64);
+      return 'ink['+ink(d)+'] '+ptrscan(d.data);
+    });
+  }
+  knob('k_feat',   function(g){ g.font='15.5px gA'; g.fontKerning='normal';
+                                 if('fontFeatureSettings' in g) g.fontFeatureSettings='"liga" 1,"dlig" 1,"smcp" 1,"onum" 1'; });
+  knob('k_liga',   function(g){ if('fontVariantCaps' in g) g.fontVariantCaps='small-caps'; });
+  knob('k_stretch',function(g){ if('fontStretch' in g) g.fontStretch='condensed'; });
+  knob('k_track',  function(g){ if('letterSpacing' in g) g.letterSpacing='1.37px';
+                                if('wordSpacing' in g) g.wordSpacing='3.13px'; });
+  knob('k_tr',     function(g){ if('textRendering' in g) g.textRendering='geometricPrecision'; });
+  knob('k_dir',    function(g){ g.direction='rtl'; g.textAlign='right'; }, AR, 158.37);
+  knob('k_base',   function(g){ g.textBaseline='middle'; });
+  knob('k_scale',  function(g){ g.scale(1.37,1.37); g.font='11.37px gA'; });
+  knob('k_rotate', function(g){ g.translate(80,32); g.rotate(0.31); g.font='13.37px gA'; g.fillText(KERN,-78,-26); });
+  knob('k_stroke', function(g){ g.lineWidth=0.7; g.strokeStyle='#fff'; g.strokeText(LAT,0.37,40.37); });
+  knob('k_shadow', function(g){ g.shadowBlur=7.7; g.shadowOffsetX=1.3; g.shadowColor='#ff0'; });
+  knob('k_smooth', function(g){ g.font='13.37px gA'; if('filter' in g) g.filter='none'; });
+
+  /* 4. glyph-cache pressure: 4096 glyphs in one call, then a huge size, then back */
+  T('big_run', function(){
+    var c=C(512,96), g=c.getContext('2d'); g.font='11px gA'; g.fillStyle='#fff';
+    var s=''; for(var j=0;j<4096;j++) s+=String.fromCharCode(33+((j*7)%90));
+    g.fillText(s.slice(0,256), 0.37, 30.37);
+    var d=g.getImageData(0,0,512,96);
+    return 'chars='+s.length+' '+ink(d)+' '+ptrscan(d.data);
+  });
+  T('huge_size', function(){
+    var c=C(512,256), g=c.getContext('2d'); g.font='231.7px gA'; g.fillStyle='#fff';
+    g.fillText('Wg', 0.37, 200.37);
+    var d=g.getImageData(0,0,512,256);
+    return ink(d)+' '+ptrscan(d.data);
+  });
+  T('tiny_size', function(){
+    var c=C(256,64), g=c.getContext('2d'); g.font='0.7px gA'; g.fillStyle='#fff';
+    g.fillText(LAT.repeat(8), 0.37, 30.37);
+    var d=g.getImageData(0,0,256,64);
+    return ink(d)+' '+ptrscan(d.data);
+  });
+
+  /* 5. odd widths: any stride padding in the backing store would land in the next row's pixels.
+     cairo_format_stride_for_width(ARGB32,w) is 4*w, and getPixelBuffer writes 4*width bytes per
+     row into a dense destination — this measures both claims from the JS side. */
+  var widths=[1,2,3,5,7,13,33,37,101,257,509];
+  for(i=0;i<widths.length;i++){
+    (function(W,idx){
+      T('odd'+W, function(){
+        var c=C(W,3), g=c.getContext('2d');
+        g.fillStyle='#fff'; g.fillRect(0,0,W,3);
+        var d=g.getImageData(0,0,W,3);
+        var ok=1; for(var j=0;j<d.data.length;j++){ if(d.data[j]!==0xff && (j%4)!==3){ ok=0; break; } }
+        return 'w='+W+' solid='+ok+' '+ptrscan(d.data);
+      });
+    })(widths[i], i);
+  }
+
+  /* 6. readback edge cases: a rect that clips, a 1x1 of an unpainted corner, and the DC alias */
+  T('clip_rect', function(){
+    var c=C(64,64), g=c.getContext('2d'); g.font='13px gA'; g.fillStyle='#fff'; g.fillText('Wg',2,30);
+    var d=g.getImageData(-8,-8,40,40);
+    return 'len='+d.data.length+' w='+d.width+' '+ptrscan(d.data);
+  });
+  T('corner1', function(){
+    var c=C(64,64), g=c.getContext('2d'); g.font='13px gA'; g.fillStyle='#fff'; g.fillText('Wg',2,30);
+    return ptrscan(g.getImageData(62,60,1,1).data);
+  });
+
+  /* 7. SVG text -> image -> canvas: a second rasteriser entry point (SVG text layout) */
+  try{
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" width="160" height="64">'+
+      '<text x="0.37" y="40.37" font-family="gA" font-size="15.5" fill="#fff">'+LAT+'</text>'+
+      '<text x="1.37" y="56.37" font-family="gC" font-size="11.7" fill="#0f0" letter-spacing="0.7">'+
+      '\u4e2d\u6587</text></svg>';
+    var im=new Image();
+    await new Promise(function(res,rej){ im.onload=res; im.onerror=rej;
+      im.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(svg))); setTimeout(res,2000); });
+    var c7=C(160,64), g7=c7.getContext('2d'); g7.drawImage(im,0,0);
+    var d7=g7.getImageData(0,0,160,64);
+    add('svg_text','nat='+im.naturalWidth+'x'+im.naturalHeight+' ink['+ink(d7)+'] '+ptrscan(d7.data));
+  }catch(e){ add('svg_text','FAIL '+e.name+': '+e.message); }
+
+  /* 8. DOM text metrics (layout side of the same stack) */
+  T('dom_rect', function(){
+    var e=document.getElementById('dom1'); var r=e.getBoundingClientRect();
+    var rg=document.createRange(); rg.selectNodeContents(e);
+    var outs=[].map.call(e.getClientRects(), function(x){ return x.width.toFixed(3); }).join(',');
+    return 'w='+r.width.toFixed(3)+' h='+r.height.toFixed(3)+' rects='+outs+
+           ' rw='+rg.getBoundingClientRect().width.toFixed(3);
+  });
+  T('dom_tm', function(){
+    var g=C(8,8).getContext('2d');
+    var fs=['9px gA','13.37px gA','16px gB','16px gC','14px gD'];
+    return fs.map(function(f){ var m=(function(){ g.font=f; return g.measureText(KERN); })();
+      return f.replace(' px','')+':w'+m.width.toFixed(3)+
+        '/a'+m.actualBoundingBoxAscent.toFixed(2)+'/d'+m.actualBoundingBoxDescent.toFixed(2)+
+        '/fa'+(m.fontBoundingBoxAscent||0).toFixed(2); }).join(' ');
+  });
+
+  /* all twelve TextMetrics fields, one beacon per face: the local face and the webfont that
+     measured identical widths must also agree field by field */
+  ['gA','gD'].forEach(function(fam){
+    T('tm_'+fam, function(){
+      var g=C(8,8).getContext('2d'); g.font='15.5px '+fam;
+      var m=g.measureText(KERN), o=[];
+      for(var k in m){ if(k==='constructor') continue;
+        o.push(k.replace('actualBoundingBox','aBB').replace('fontBoundingBox','fBB')
+                .replace('Baseline','BL')+':'+(typeof m[k]==='number'?m[k].toFixed(2):String(m[k]))); }
+      return 'n='+o.length+' '+o.join(',');
+    });
+  });
+
+
+  /* 9. PNG/JPEG encode of text pixels: a deterministic function of the pixels */
+  T('png', function(){
+    var c=C(120,64), g=c.getContext('2d'); g.font='15.5px gA'; g.fillStyle='#fff';
+    g.fillText(KERN,0.37,41.83);
+    var u=c.toDataURL('image/png');
+    return 'len='+u.length+' h='+md5ish(u)+' head='+u.slice(0,22);
+  });
+  T('jpeg', function(){
+    var c=C(120,64), g=c.getContext('2d'); g.font='15.5px gA'; g.fillStyle='#fff';
+    g.fillText(KERN,0.37,41.83);
+    var u=c.toDataURL('image/jpeg',0.9);
+    return 'len='+u.length+' h='+md5ish(u)+' head='+u.slice(0,22);
+  });
+
+  /* 10. ghosting: does a discarded canvas leave its glyphs for the next one?  Bit-exact compare
+     between a canvas that only ever saw "H" and one that saw "W" first, was reset by the
+     width setter (which frees and reallocates the backing store), then saw "H". */
+  T('ghost', function(){
+    var res=[], sizes=[[33,17],[37,19],[101,23],[257,29]];
+    for(var j=0;j<sizes.length;j++){
+      var W=sizes[j][0], H=sizes[j][1];
+      var a=C(W,H), ga=a.getContext('2d'); ga.font='13.37px gA'; ga.fillStyle='#fff'; ga.fillText('H',0.37,H-3.37);
+      var b=C(W,H), gb=b.getContext('2d'); gb.font='13.37px gA'; gb.fillStyle='#fff';
+      gb.fillText('WWWWWWWW',0.37,H-3.37); gb.fillStyle='#f00'; gb.fillRect(0,0,W,H);
+      b.width=b.width;                       /* discard + reallocate */
+      gb=b.getContext('2d'); gb.font='13.37px gA'; gb.fillStyle='#fff'; gb.fillText('H',0.37,H-3.37);
+      var da=ga.getImageData(0,0,W,H).data, db=gb.getImageData(0,0,W,H).data;
+      var diff=0; for(var q=0;q<da.length;q++){ if(da[q]!==db[q]) diff++; }
+      res.push(W+'x'+H+':d'+diff);
+      /* the reset must have cleared: no red pixel may survive the width setter */
+      var red=0; for(var q2=0;q2<db.length;q2+=4){ if(db[q2]>200&&db[q2+1]<60&&db[q2+2]<60) red++; }
+      res.push('red'+red);
+    }
+    return res.join(' ');
+  });
+
+  /* 11. the recycling canary: paint a distinctive opaque pattern, throw the canvas away, then
+     allocate many fresh canvases at the same size classes and look for those exact pixels.
+     Opaque (alpha 255) so premultiplication is the identity and the pattern survives the store. */
+  T('canary', function(){
+    var pat=[]; for(var j=0;j<16;j++) pat.push([0x40+j,0x05+j,0x01+j,0xff]);
+    var W=41,H=13, c=C(W,H), g=c.getContext('2d');
+    var id=g.createImageData(W,H);
+    for(var j2=0;j2<W*H;j2++){ var p=pat[j2%16];
+      id.data[j2*4]=p[0]; id.data[j2*4+1]=p[1]; id.data[j2*4+2]=p[2]; id.data[j2*4+3]=p[3]; }
+    g.putImageData(id,0,0);
+    var back=g.getImageData(0,0,W,H).data, same=0;
+    for(var j3=0;j3<back.length;j3+=4){ if(back[j3]===id.data[j3]&&back[j3+1]===id.data[j3+1]&&back[j3+2]===id.data[j3+2]) same++; }
+    c.width=c.width; c=null; g=null;                /* free the surface */
+    var found=0, nzc=0, fresh=0;
+    for(var t=0;t<64;t++){
+      var cc=C(W,H), gg=cc.getContext('2d');
+      if(t%2){ gg.font='13.37px gA'; gg.fillStyle='#fff'; gg.fillText('Hg',0.37,9.37); } /* half get text */
+      var dd=gg.getImageData(0,0,W,H).data;
+      for(var j4=0;j4<dd.length;j4+=4){ if(dd[j4]||dd[j4+1]||dd[j4+2]||dd[j4+3]) nzc++; }
+      if(t%2===0){ fresh++;
+        for(var j5=0;j5<dd.length;j5+=4){
+          if(dd[j5]===pat[0][0]&&dd[j5+1]===pat[0][1]&&dd[j5+2]===pat[0][2]) { found++; break; } } }
+    }
+    return 'painted_ok='+same+'/'+(W*H)+' fresh='+fresh+' nz_bytes='+nzc+' canary_found='+found;
+  });
+
+  /* 11b. opaque contexts: with alpha:false the surface is ARGB32 with A=255 everywhere, so the
+     unpremultiply on readback is the identity — the one canvas spelling where stale pointer bytes
+     would survive getImageData. Fresh surfaces must be black; the canary must not survive a reset. */
+  T('opaque_fresh', function(){
+    var res=[];
+    for(var j=0;j<8;j++){
+      var W=[7,33,37,101,257][j%5], H=[3,17,19,23,29][j%5];
+      var c=C(W,H), g=c.getContext('2d',{alpha:false});
+      if(!g) { res.push('noctx'); continue; }
+      var d=g.getImageData(0,0,W,H), s=ptrscan(d.data);
+      res.push(W+'x'+H+':'+s.replace(/^nz=/,'').replace(/ ptr=/,'/p').replace(/ grey=/,'/g'));
+    }
+    return res.join(' ');
+  });
+  T('opaque_canary', function(){
+    var W=41,H=13, c=C(W,H), g=c.getContext('2d',{alpha:false});
+    if(!g) return 'noctx';
+    g.fillStyle='rgb(64,5,1)'; g.fillRect(0,0,W,H);
+    var same=0, d0=g.getImageData(0,0,W,H).data;
+    for(var j2=0;j2<d0.length;j2+=4) if(d0[j2]===64&&d0[j2+1]===5&&d0[j2+2]===1) same++;
+    c.width=c.width; c=null; g=null;
+    var found=0, nz=0;
+    for(var t=0;t<32;t++){
+      var cc=C(W,H), gg=cc.getContext('2d',{alpha:false});
+      if(t%2){ gg.font='13.37px gA'; gg.fillStyle='#fff'; gg.fillText('Hg',0.37,9.37); }
+      var dd=gg.getImageData(0,0,W,H).data;
+      for(var j3=0;j3<dd.length;j3+=4){ if(dd[j3]||dd[j3+1]||dd[j3+2]) nz++; }
+      if(!(t%2)) for(var j4=0;j4<dd.length;j4+=4){ if(dd[j4]===64&&dd[j4+1]===5&&dd[j4+2]===1){ found++; break; } }
+      cc.width=0;
+    }
+    return 'painted='+same+'/'+(W*H)+' nz_px='+nz+' canary_found='+found;
+  });
+
+  /* 11c. SVG text with the CSS knobs the canvas context does not expose (letter-spacing,
+     font-feature-settings, text-rendering) — the DOM/SVG rasteriser's own configuration surface */
+  try{
+    var svg2='<svg xmlns="http://www.w3.org/2000/svg" width="200" height="64">'+
+      '<text x="0.37" y="40.37" font-family="gA" font-size="15.5" fill="#fff" '+
+      'letter-spacing="1.37" style="font-feature-settings:\'liga\' 1,\'dlig\' 1,\'smcp\' 1,\'onum\' 1;'+
+      'text-rendering:geometricPrecision">'+KERN+'</text>'+
+      '<text x="0.37" y="56.37" font-family="gB" font-size="11.37" fill="#0ff" '+
+      'style="font-variant-caps:small-caps;font-stretch:condensed">'+LAT+'</text></svg>';
+    var im2=new Image();
+    await new Promise(function(res,rej){ im2.onload=res; im2.onerror=rej;
+      im2.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(svg2))); setTimeout(res,2000); });
+    var c8=C(200,64), g8=c8.getContext('2d'); g8.drawImage(im2,0,0);
+    var d8=g8.getImageData(0,0,200,64);
+    add('svg_knobs','nat='+im2.naturalWidth+'x'+im2.naturalHeight+' ink['+ink(d8)+'] '+ptrscan(d8.data));
+  }catch(e){ add('svg_knobs','FAIL '+e.name+': '+e.message); }
+
+  /* 11d. why a canvas readback cannot carry an address, measured rather than argued: the store is
+     premultiplied ARGB32, and a canonical 48-bit pointer word has byte 3 = 0 (bits 24..31 clear),
+     i.e. it must sit in a pixel whose alpha is 0 — where premultiplication zeroes RGB and the
+     unpremultiply on read returns 0. The control is the same word with alpha forced to 0xff: the
+     RGB survives the round trip, and the detector must refuse it because bytes 3 and 7 are now 0xff. */
+  T('premult_proof', function(){
+    function rt(bytes){
+      var c=C(2,1), g=c.getContext('2d'), id=g.createImageData(2,1);
+      for(var j=0;j<8;j++) id.data[j]=bytes[j];
+      g.putImageData(id,0,0);
+      var back=g.getImageData(0,0,2,1).data, hx='';
+      for(var j2=0;j2<8;j2++) hx+=(back[j2]<16?'0':'')+back[j2].toString(16);
+      return hx+' p'+ptrscan(back).split('ptr=')[1].split(' ')[0];
+    }
+    var alpha0=[0x40,0x05,0x01,0x00,0x00,0x61,0x00,0x00];          /* the canonical word */
+    var alphaF=[0x40,0x05,0x01,0xff,0x00,0x61,0x00,0xff];          /* same RGB, A=0xff */
+    return 'a0='+rt(alpha0)+' aF='+rt(alphaF);
+  });
+  /* the same word through a byte pipeline that is NOT premultiplied (Blob -> arrayBuffer):
+     proves the detector would see an address if one arrived in a raw buffer. */
+  try{
+    var ru=new Uint8Array(32); ru[0]=0x40; ru[1]=0x05; ru[2]=0x01; ru[4]=0x00; ru[5]=0x61;
+    var rbuf=await new Blob([ru]).arrayBuffer();
+    add('raw_chain','len='+rbuf.byteLength+' '+ptrscan(new Uint8Array(rbuf)));
+  }catch(e){ add('raw_chain','FAIL '+e.name+': '+e.message); }
+
+  /* 12. many small text canvases in a row: the allocation-churn arm */
+  T('churn', function(){
+    var hits=0, painted=0, total=0;
+    for(var t=0;t<48;t++){
+      var c12=C(64+ (t%7), 24+(t%5)), g12=c12.getContext('2d');
+      g12.font=(9+(t%9))+'.37px gA'; g12.fillStyle='#fff';
+      g12.fillText(KERN.slice(0,4+(t%9)), 0.37, 18.37);
+      var d12=g12.getImageData(0,0,c12.width,c12.height);
+      var r=ptrscan(d12.data); total++;
+      if(r.indexOf('ptr=0')<0) hits++;
+      if(r.indexOf('nz=0/')<0) painted++;
+    }
+    return 'n='+total+' painted='+painted+' with_ptr='+hits;
+  });
+
+  await new Promise(function(r){ setTimeout(r,300); });
+  while(Q.length||PUMPING) await new Promise(function(r){ setTimeout(r,50); });
+  add('DONE','sent='+SENT);
+  await new Promise(function(r){ setTimeout(r,200); });
+  document.title='DONE';
+}
+run();
+</script></head><body>
+<p id="dom1">Hamburgefonstiv AVWaTo fi ffl 1/2 0123</p>
+<p id="dom2">Hamburgefonstiv AVWaTo fi ffl 1/2</p>
+<p id="dom3">&#20013;&#25991;&#28450;&#23383;</p>
+</body></html>

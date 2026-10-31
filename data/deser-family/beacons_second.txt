@@ -1,0 +1,93 @@
+### transcript of the second set's beacon lines (docs/93).  Beacons are NOT the score for the abort
+### arms (the harness is); they are kept so each arm's variable is on the record.  Same shape as doc.
+### A1..: arm tag, port, query — then the beacons the page emitted.
+
+### cap  port=10301  mode=cap        (fell through to the default DataView arm: build bug, kept)
+cap&mode=cap&resize=function&mc=function&wk=function&swk=function&sw=object&wasm=undefined&wasmmod=-&bmp=function&ac=function&aw=function&offc=undefined&ovc=undefined&tcos=undefined&sc=function&pm3=1
+wxR0&mode=cap&len=192&gx=192&gx2=0&gn=1&ms=1&post=1&tx=0
+
+### cap2 port=10302  mode=cap
+cap&mode=cap&resize=function&mc=function&wk=function&swk=function&sw=object&wasm=undefined&wasmmod=-&bmp=function&ac=function&aw=function&offc=undefined&ovc=undefined&tcos=undefined&sc=function&pm3=1
+done&n=0&mode=cap
+
+### dvport port=10312  mode=dvport
+wxR0&mode=dvport&len=192&gx=192&gx2=0&gn=1&ms=1&post=1&tx=0
+
+### dvportok port=10313  mode=dvportok
+wxR0&mode=dvportok&len=192&gx=192&gx2=-1&gn=1&ms=1&post=1&tx=0
+rxR0&mode=dvportok&len=192&gx=192&gx2=-1&gn=1&rxv=1&vb=192&bb=192
+done&n=1&mode=dvportok
+
+### arrmax port=10305  mode=arrmax&n=268435457
+wxR0&mode=arrmax&n=268435457&ms=21781&post=1
+rxR0&mode=arrmax&n=268435457&al=268435457&t=arr
+done&n=1&mode=arrmax
+
+### arrbig port=10306  mode=arrbig
+wxR0&mode=arrbig&n=1000&ms=0&post=1
+rxR0&mode=arrbig&n=1000&al=1000&t=arr
+done&n=1&mode=arrbig
+
+### swobj port=10307  mode=swobj
+swready&mode=swobj
+wxR0&mode=swobj&stage=post&ms=0&post=1
+rx&mode=swobj&from=sw&n=0&t=[object Object]&w=0&vl=8&vb=8
+done&n=1&mode=swobj
+
+### swu8 port=10336  mode=swu8
+swready&mode=swu8
+rx&mode=swu8&from=sw&n=undefined&t=[object Uint8Array]&w=0&vl=undefined&vb=undefined
+
+### swwasm port=10309  mode=swwasm
+nowasm&mode=swwasm
+done&n=1&mode=swwasm
+
+### ifrobj port=10308  mode=ifrobj
+stomp&at=iframe&origin=http://localhost:10308
+wxR0&mode=ifrobj&load=1&origin=http://127.0.0.1:10308&host=localhost
+wxR0&mode=ifrobj&post=1
+ifrx&got=1&t=[object Object]&wasm=0&origin=http://localhost:10308
+
+### ifrwasm port=10310  mode=ifrwasm
+nowasm&mode=ifrwasm
+done&n=1&mode=ifrwasm
+
+### awblob port=10311 / awblob2 port=10315  mode=awblob
+wxR0&mode=awblob&node=1
+wxR0&mode=awblob&post=1
+toR0&mode=awblob
+# awblob2 (node connected, ac.resume()):
+wxR0&mode=awblob&state=suspended&posting=1
+wxR0&mode=awblob&post=1
+toR0&mode=awblob
+
+### tlreject port=10314  mode=tlreject
+wxR0&mode=tlreject&dup=DataCloneError&detached=DataCloneError&plain=DataCloneError
+
+### bmptrans port=10303 (+13 more)  mode=bmptrans
+wxR0&mode=bmptrans&ms=0&post=1
+
+### bmptransok port=10304, bmpok2 port=10337  mode=bmptransok
+wxR0&mode=bmptransok&ms=0&post=1
+rxR0&mode=bmptransok&got=1&t=undefined&det=0&g=1
+done&n=1&mode=bmptransok
+
+### shaped arms (docs/93): the [IBT] line is the measurement, the beacon only reports the groom
+### bmpfill0 port=10317  mode=bmptrans   (max_malloc_fill_size=0)
+[IBT] sizeof=32 size=1 cap=1 idx=0 elem=0x6030000b4700 bytes=97e601000000000080622b000000000100008067077f0000 flag=0
+### ibt3 port=10333  mode=bmptrans&groom=2&glen=12&gch=X
+wxR0&mode=bmptrans&g=2&gch=X&glen=12&rulelen=71&faces=0&faces0=64&ms=0&post=1
+[IBT] sizeof=32 size=1 cap=1 idx=0 elem=0x6030000b46d0 bytes=13ea01000000000080622b000000000100008067077f0000 flag=0
+### bmpgz2/3/4/5 (gch=Z, zero bytes — a landed chunk must give the :83 return and a delivery)
+groomR0&mode=bmptrans&g=2&gch=Z&faces=64&rulelen=551&h=22&rules=64
+groom2R0&mode=bmptrans&faces2=0&rules2=0
+wxR0&mode=bmptrans&ms=1&post=1        # no rx → no early return
+### bmplen2000/1000/240  (classes 2048/1024/256)
+groomR0&mode=bmptrans&g=2&gch=A&faces=64&glen=2000&rulelen=2059&h=22&rules=64
+groom2R0&mode=bmptrans&faces2=0&rules2=0
+wxR0&mode=bmptrans&ms=1&post=1
+
+### wtest port=10335  mode=wtest&k={obj,str,holder}  (WeakRef witness is dead 3/3)
+wtest&k=obj&rounds=18&dead=0&junk=900000
+wtest&k=str&rounds=18&dead=0&junk=900000
+wtest&k=holder&rounds=18&dead=0&junk=900000

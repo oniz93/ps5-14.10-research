@@ -14,6 +14,7 @@ Wire protocol (line-oriented ASCII, so a human can drive it with a serial termin
     RELEASE <btn>        -> OK
     SEQUENCE <b1,b2,..> [gap]  -> OK      one press per button, gap ms apart
     Keys: enter escape tab space backspace delete up down left right f1..f4 home end
+    Macros (client-side aliases): tesc -> SEQUENCE escape,escape,escape 10
 
     On the Guide: arrows move, Enter is OK, Escape backs out, F3 is the Options button (closes it).
 
@@ -35,6 +36,13 @@ BUTTONS = {
     "enter", "escape", "tab", "space", "backspace", "delete",
     "up", "down", "left", "right",
     "f1", "f2", "f3", "f4", "home", "end",
+}
+
+# Named multi-press macros: button -> (keys, gap_ms). They are sent as a single SEQUENCE so the gap
+# is real time on the Pi's side, not SSH round-trips. `tesc` = three Escapes 10 ms apart, which the
+# firmware's own test path uses to reach states a single Escape cannot.
+MACROS = {
+    "tesc": (("escape", "escape", "escape"), 10),
 }
 
 
@@ -185,7 +193,8 @@ def main() -> int:
     sub.add_parser("ping")
     sub.add_parser("status")
     sub.add_parser("allup")
-    p = sub.add_parser("press"); p.add_argument("button"); p.add_argument("ms", nargs="?", type=int, default=120)
+    p = sub.add_parser("press"); p.add_argument("button")
+    p.add_argument("ms", nargs="?", type=int, default=120, help="hold duration in ms (ignored for macros)")
     p = sub.add_parser("hold"); p.add_argument("button")
     p = sub.add_parser("release"); p.add_argument("button")
     p = sub.add_parser("sequence"); p.add_argument("buttons"); p.add_argument("gap", nargs="?", type=int, default=150)
@@ -198,8 +207,14 @@ def main() -> int:
         ap.print_help()
         return 2
 
-    if args.cmd in ("press", "hold", "release") and args.button not in BUTTONS:
-        sys.stderr.write(f"unknown button {args.button!r}; known: {', '.join(sorted(BUTTONS))}\n")
+    if args.cmd in ("press", "hold", "release") and args.button not in BUTTONS and args.button not in MACROS:
+        sys.stderr.write(
+            f"unknown button {args.button!r}; known: {', '.join(sorted(BUTTONS))}"
+            f"; macros: {', '.join(sorted(MACROS))}\n")
+        return 2
+
+    if args.cmd in ("hold", "release") and args.button in MACROS:
+        sys.stderr.write(f"{args.button!r} is a macro; use press {args.button}\n")
         return 2
 
     if args.cmd == "ping":
@@ -209,7 +224,11 @@ def main() -> int:
     elif args.cmd == "allup":
         line = "ALLUP"
     elif args.cmd == "press":
-        line = f"PRESS {args.button} {args.ms}"
+        if args.button in MACROS:
+            keys, gap = MACROS[args.button]
+            line = f"SEQUENCE {','.join(keys)} {gap}"
+        else:
+            line = f"PRESS {args.button} {args.ms}"
     elif args.cmd == "hold":
         line = f"HOLD {args.button}"
     elif args.cmd == "release":

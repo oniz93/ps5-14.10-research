@@ -1,0 +1,132 @@
+=== glyphB port=8860 secs=45 q=
+--- beacons (in order):
+BOOT+glyph
+det_ctl=pos=nz=4/16 ptr=1 grey=0[@0=0x0000610000010540] neg=nz=4/16 ptr=0 grey=0 align=11111111
+cap=letterSpacing=absent wordSpacing=absent fontKerning=absent fontStretch=absent fontVariantCaps=absent textRendering=absent direction=ltr font=10px sans-se filter=absent
+cap2=OffscreenCanvas=undefined Path2D=function FontFace=function fonts=yes measure=function
+tm_fields=n=12 width,actualBoundingBoxLeft,actualBoundingBoxRight,fontBoundingBoxAscent,fontBoundingBoxDescent,actualBoundingBoxAscent,actualBoundingBoxDescent,emHeightAscent,emHeightDescent,hangingBaseline,alphabeticBaseline,ideographicBaseline
+face_gA=st=loaded load=loaded chk=true
+face_gB=st=loaded load=loaded chk=true
+face_gC=st=loaded load=loaded chk=true
+face_gD=st=loaded load=loaded chk=true
+face_gE=st=error load=rejected:NetworkError chk=true
+face_gF=st=error load=rejected:NetworkError chk=true
+face_gG=st=error load=rejected:NetworkError chk=true
+w_gA=w=182.7188 ff=16px gA
+w_gB=w=161.0000 ff=16px gB
+w_gC=w=173.8400 ff=16px gC
+w_gD=w=182.7188 ff=16px gD
+w_gE=w=173.8400 ff=16px gE
+w_gF=w=173.8400 ff=16px gF
+w_gG=w=173.8400 ff=16px gG
+r0=ink[px=559/amax=248] all[nz=2236/30720 ptr=0 grey=14] band[nz=2236/15360 ptr=0 grey=14] marg[nz=0/8640 ptr=0 grey=0]
+r1=ink[px=372/amax=255] all[nz=1488/30720 ptr=0 grey=10] band[nz=1488/15360 ptr=0 grey=10] marg[nz=0/8640 ptr=0 grey=0]
+r2=ink[px=118/amax=233] all[nz=472/30720 ptr=0 grey=3] band[nz=472/15360 ptr=0 grey=3] marg[nz=0/8640 ptr=0 grey=0]
+r3=ink[px=361/amax=228] all[nz=1444/30720 ptr=0 grey=4] band[nz=1444/15360 ptr=0 grey=4] marg[nz=0/8640 ptr=0 grey=0]
+r4=ink[px=114/amax=255] all[nz=456/30720 ptr=0 grey=3] band[nz=456/15360 ptr=0 grey=3] marg[nz=0/8640 ptr=0 grey=0]
+r5=ink[px=89/amax=255] all[nz=356/30720 ptr=0 grey=0] band[nz=356/15360 ptr=0 grey=0] marg[nz=0/8640 ptr=0 grey=0]
+r6=ink[px=183/amax=255] all[nz=729/30720 ptr=0 grey=2] band[nz=729/15360 ptr=0 grey=2] marg[nz=0/8640 ptr=0 grey=0]
+r10=ink[px=671/amax=255] all[nz=2684/30720 ptr=0 grey=17] band[nz=2684/15360 ptr=0 grey=17] marg[nz=0/8640 ptr=0 grey=0]
+r11=ink[px=599/amax=255] all[nz=2396/30720 ptr=0 grey=13] band[nz=2396/15360 ptr=0 grey=13] marg[nz=0/8640 ptr=0 grey=0]
+r12=ink[px=181/amax=255] all[nz=724/30720 ptr=0 grey=7] band[nz=724/15360 ptr=0 grey=7] marg[nz=0/8640 ptr=0 grey=0]
+r13=ink[px=563/amax=255] all[nz=2252/30720 ptr=0 grey=21] band[nz=2252/15360 ptr=0 grey=21] marg[nz=0/8640 ptr=0 grey=0]
+r14=ink[px=177/amax=255] all[nz=708/30720 ptr=0 grey=4] band[nz=708/15360 ptr=0 grey=4] marg[nz=0/8640 ptr=0 grey=0]
+r15=ink[px=134/amax=255] all[nz=536/30720 ptr=0 grey=3] band[nz=536/15360 ptr=0 grey=3] marg[nz=0/8640 ptr=0 grey=0]
+r16=ink[px=314/amax=255] all[nz=1251/30720 ptr=0 grey=5] band[nz=1251/15360 ptr=0 grey=5] marg[nz=0/8640 ptr=0 grey=0]
+r20=ink[px=781/amax=255] all[nz=3124/30720 ptr=0 grey=33] band[nz=3124/15360 ptr=0 grey=33] marg[nz=0/8640 ptr=0 grey=0]
+r21=ink[px=689/amax=255] all[nz=2756/30720 ptr=0 grey=16] band[nz=2756/15360 ptr=0 grey=16] marg[nz=0/8640 ptr=0 grey=0]
+r22=ink[px=230/amax=255] all[nz=920/30720 ptr=0 grey=3] band[nz=920/15360 ptr=0 grey=3] marg[nz=0/8640 ptr=0 grey=0]
+r23=ink[px=688/amax=255] all[nz=2752/30720 ptr=0 grey=6] band[nz=2752/15360 ptr=0 grey=6] marg[nz=0/8640 ptr=0 grey=0]
+r24=ink[px=214/amax=255] all[nz=856/30720 ptr=0 grey=3] band[nz=856/15360 ptr=0 grey=3] marg[nz=0/8640 ptr=0 grey=0]
+r25=ink[px=166/amax=255] all[nz=664/30720 ptr=0 grey=7] band[nz=664/15360 ptr=0 grey=7] marg[nz=0/8640 ptr=0 grey=0]
+r26=ink[px=413/amax=255] all[nz=1644/30720 ptr=0 grey=4] band[nz=1644/15360 ptr=0 grey=4] marg[nz=0/8640 ptr=0 grey=0]
+r30=ink[px=1152/amax=255] all[nz=4608/30720 ptr=0 grey=24] band[nz=4608/15360 ptr=0 grey=24] marg[nz=0/8640 ptr=0 grey=0]
+r31=ink[px=1130/amax=255] all[nz=4520/30720 ptr=0 grey=36] band[nz=4520/15360 ptr=0 grey=36] marg[nz=0/8640 ptr=0 grey=0]
+r32=ink[px=463/amax=255] all[nz=1852/30720 ptr=0 grey=2] band[nz=1852/15360 ptr=0 grey=2] marg[nz=0/8640 ptr=0 grey=0]
+r33=ink[px=1330/amax=255] all[nz=5320/30720 ptr=0 grey=25] band[nz=5296/15360 ptr=0 grey=25] marg[nz=0/8640 ptr=0 grey=0]
+r34=ink[px=522/amax=255] all[nz=2088/30720 ptr=0 grey=22] band[nz=2088/15360 ptr=0 grey=22] marg[nz=0/8640 ptr=0 grey=0]
+r35=ink[px=364/amax=255] all[nz=1456/30720 ptr=0 grey=1] band[nz=1428/15360 ptr=0 grey=1] marg[nz=0/8640 ptr=0 grey=0]
+r36=ink[px=774/amax=255] all[nz=3079/30720 ptr=0 grey=3] band[nz=3061/15360 ptr=0 grey=3] marg[nz=0/8640 ptr=0 grey=0]
+r40=ink[px=865/amax=255] all[nz=3460/30720 ptr=0 grey=18] band[nz=3460/15360 ptr=0 grey=18] marg[nz=0/8640 ptr=0 grey=0]
+r41=ink[px=846/amax=255] all[nz=3384/30720 ptr=0 grey=17] band[nz=3384/15360 ptr=0 grey=17] marg[nz=0/8640 ptr=0 grey=0]
+r42=ink[px=297/amax=255] all[nz=1188/30720 ptr=0 grey=6] band[nz=1188/15360 ptr=0 grey=6] marg[nz=0/8640 ptr=0 grey=0]
+r43=ink[px=914/amax=255] all[nz=3656/30720 ptr=0 grey=15] band[nz=3656/15360 ptr=0 grey=15] marg[nz=0/8640 ptr=0 grey=0]
+r44=ink[px=306/amax=255] all[nz=1224/30720 ptr=0 grey=9] band[nz=1224/15360 ptr=0 grey=9] marg[nz=0/8640 ptr=0 grey=0]
+r45=ink[px=244/amax=255] all[nz=976/30720 ptr=0 grey=2] band[nz=976/15360 ptr=0 grey=2] marg[nz=0/8640 ptr=0 grey=0]
+r46=ink[px=605/amax=255] all[nz=2408/30720 ptr=0 grey=6] band[nz=2408/15360 ptr=0 grey=6] marg[nz=0/8640 ptr=0 grey=0]
+r50=ink[px=561/amax=248] all[nz=2244/30720 ptr=0 grey=5] band[nz=2244/15360 ptr=0 grey=5] marg[nz=0/8640 ptr=0 grey=0]
+r51=ink[px=377/amax=255] all[nz=1508/30720 ptr=0 grey=10] band[nz=1508/15360 ptr=0 grey=10] marg[nz=0/8640 ptr=0 grey=0]
+r52=ink[px=114/amax=251] all[nz=456/30720 ptr=0 grey=2] band[nz=456/15360 ptr=0 grey=2] marg[nz=0/8640 ptr=0 grey=0]
+r53=ink[px=361/amax=228] all[nz=1444/30720 ptr=0 grey=4] band[nz=1444/15360 ptr=0 grey=4] marg[nz=0/8640 ptr=0 grey=0]
+r54=ink[px=114/amax=255] all[nz=456/30720 ptr=0 grey=3] band[nz=456/15360 ptr=0 grey=3] marg[nz=0/8640 ptr=0 grey=0]
+r55=ink[px=89/amax=255] all[nz=356/30720 ptr=0 grey=0] band[nz=356/15360 ptr=0 grey=0] marg[nz=0/8640 ptr=0 grey=0]
+r56=ink[px=183/amax=255] all[nz=729/30720 ptr=0 grey=2] band[nz=729/15360 ptr=0 grey=2] marg[nz=0/8640 ptr=0 grey=0]
+r60=ink[px=745/amax=255] all[nz=2980/30720 ptr=0 grey=21] band[nz=2980/15360 ptr=0 grey=21] marg[nz=0/8640 ptr=0 grey=0]
+r61=ink[px=665/amax=255] all[nz=2660/30720 ptr=0 grey=28] band[nz=2660/15360 ptr=0 grey=28] marg[nz=0/8640 ptr=0 grey=0]
+r62=ink[px=208/amax=255] all[nz=832/30720 ptr=0 grey=5] band[nz=832/15360 ptr=0 grey=5] marg[nz=0/8640 ptr=0 grey=0]
+r63=ink[px=691/amax=255] all[nz=2764/30720 ptr=0 grey=18] band[nz=2764/15360 ptr=0 grey=18] marg[nz=0/8640 ptr=0 grey=0]
+r64=ink[px=222/amax=255] all[nz=888/30720 ptr=0 grey=3] band[nz=888/15360 ptr=0 grey=3] marg[nz=0/8640 ptr=0 grey=0]
+r65=ink[px=160/amax=255] all[nz=640/30720 ptr=0 grey=9] band[nz=640/15360 ptr=0 grey=9] marg[nz=0/8640 ptr=0 grey=0]
+r66=ink[px=436/amax=255] all[nz=1738/30720 ptr=0 grey=5] band[nz=1738/15360 ptr=0 grey=5] marg[nz=0/8640 ptr=0 grey=0]
+r70=ink[px=668/amax=255] all[nz=2672/30720 ptr=0 grey=23] band[nz=2672/15360 ptr=0 grey=23] marg[nz=0/8640 ptr=0 grey=0]
+r71=ink[px=607/amax=255] all[nz=2428/30720 ptr=0 grey=34] band[nz=2428/15360 ptr=0 grey=34] marg[nz=0/8640 ptr=0 grey=0]
+r72=ink[px=184/amax=255] all[nz=736/30720 ptr=0 grey=8] band[nz=736/15360 ptr=0 grey=8] marg[nz=0/8640 ptr=0 grey=0]
+r73=ink[px=582/amax=255] all[nz=2328/30720 ptr=0 grey=10] band[nz=2328/15360 ptr=0 grey=10] marg[nz=0/8640 ptr=0 grey=0]
+r74=ink[px=195/amax=255] all[nz=780/30720 ptr=0 grey=1] band[nz=780/15360 ptr=0 grey=1] marg[nz=0/8640 ptr=0 grey=0]
+r75=ink[px=144/amax=255] all[nz=576/30720 ptr=0 grey=8] band[nz=576/15360 ptr=0 grey=8] marg[nz=0/8640 ptr=0 grey=0]
+r76=ink[px=338/amax=255] all[nz=1346/30720 ptr=0 grey=5] band[nz=1346/15360 ptr=0 grey=5] marg[nz=0/8640 ptr=0 grey=0]
+r80=ink[px=648/amax=255] all[nz=2592/30720 ptr=0 grey=23] band[nz=2592/15360 ptr=0 grey=23] marg[nz=0/8640 ptr=0 grey=0]
+r81=ink[px=496/amax=255] all[nz=1984/30720 ptr=0 grey=21] band[nz=1984/15360 ptr=0 grey=21] marg[nz=0/8640 ptr=0 grey=0]
+r82=ink[px=145/amax=254] all[nz=580/30720 ptr=0 grey=5] band[nz=580/15360 ptr=0 grey=5] marg[nz=0/8640 ptr=0 grey=0]
+r83=ink[px=524/amax=255] all[nz=2096/30720 ptr=0 grey=8] band[nz=2096/15360 ptr=0 grey=8] marg[nz=0/8640 ptr=0 grey=0]
+r84=ink[px=169/amax=255] all[nz=676/30720 ptr=0 grey=6] band[nz=676/15360 ptr=0 grey=6] marg[nz=0/8640 ptr=0 grey=0]
+r85=ink[px=125/amax=255] all[nz=500/30720 ptr=0 grey=0] band[nz=500/15360 ptr=0 grey=0] marg[nz=0/8640 ptr=0 grey=0]
+r86=ink[px=301/amax=255] all[nz=1190/30720 ptr=0 grey=3] band[nz=1190/15360 ptr=0 grey=3] marg[nz=0/8640 ptr=0 grey=0]
+k_feat=ink[px=777/amax=255] nz=3108/40960 ptr=0 grey=13
+k_liga=ink[px=777/amax=255] nz=3108/40960 ptr=0 grey=13
+k_stretch=ink[px=777/amax=255] nz=3108/40960 ptr=0 grey=13
+k_track=ink[px=777/amax=255] nz=3108/40960 ptr=0 grey=13
+k_tr=ink[px=777/amax=255] nz=3108/40960 ptr=0 grey=13
+k_dir=ink[px=229/amax=255] nz=916/40960 ptr=0 grey=7
+k_base=ink[px=777/amax=255] nz=3108/40960 ptr=0 grey=13
+k_scale=ink[px=759/amax=255] nz=3036/40960 ptr=0 grey=18
+k_rotate=ink[px=176/amax=255] nz=704/40960 ptr=0 grey=7
+k_stroke=ink[px=1535/amax=255] nz=6140/40960 ptr=0 grey=22
+k_shadow=ink[px=2851/amax=255] nz=9330/40960 ptr=0 grey=0
+k_smooth=ink[px=615/amax=255] nz=2460/40960 ptr=0 grey=13
+big_run=chars=4096 px=2582/amax=255 nz=10328/196608 ptr=0 grey=82
+huge_size=px=24329/amax=255 nz=97316/524288 ptr=0 grey=86
+tiny_size=px=84/amax=44 nz=336/65536 ptr=0 grey=0
+odd1=w=1 solid=1 nz=12/12 ptr=0 grey=0
+odd2=w=2 solid=1 nz=24/24 ptr=0 grey=0
+odd3=w=3 solid=1 nz=36/36 ptr=0 grey=0
+odd5=w=5 solid=1 nz=60/60 ptr=0 grey=0
+odd7=w=7 solid=1 nz=84/84 ptr=0 grey=0
+odd13=w=13 solid=1 nz=156/156 ptr=0 grey=0
+odd33=w=33 solid=1 nz=396/396 ptr=0 grey=0
+odd37=w=37 solid=1 nz=444/444 ptr=0 grey=0
+odd101=w=101 solid=1 nz=1212/1212 ptr=0 grey=0
+odd257=w=257 solid=1 nz=3084/3084 ptr=0 grey=0
+odd509=w=509 solid=1 nz=6108/6108 ptr=0 grey=0
+clip_rect=len=6400 w=40 nz=504/6400 ptr=0 grey=3
+corner1=nz=0/4 ptr=0 grey=0
+svg_text=nat=160x64 ink[px=1220/amax=255] nz=4602/40960 ptr=0 grey=51
+dom_rect=w=1008.000 h=15.000 rects=1008.000 rw=283.013
+dom_tm=9px gA:w75.319/a7.00/d1.00/fa8.00 13.37px gA:w107.018/a11.00/d2.00/fa12.00 16px gB:w117.156/a12.00/d1.00/fa14.00 16px gC:w121.920/a12.00/d1.00/fa19.00 14px gD:w114.830/a11.00/d2.00/fa13.00
+tm_gA=n=12 width:125.38,aBBLeft:0.00,aBBRight:125.38,fBBAscent:14.00,fBBDescent:4.00,aBBAscent:12.00,aBBDescent:1.00,emHeightAscent:14.00,emHeightDescent:4.00,hangingBL:14.00,alphabeticBL:0.00,ideographicBL:-4.00
+tm_gD=n=12 width:125.38,aBBLeft:0.00,aBBRight:125.38,fBBAscent:14.00,fBBDescent:4.00,aBBAscent:12.00,aBBDescent:1.00,emHeightAscent:14.00,emHeightDescent:4.00,hangingBL:14.00,alphabeticBL:0.00,ideographicBL:-4.00
+png=len=2042 h=110399503498536e head=data:image/png;base64,
+jpeg=len=3471 h=acb89e6c70766cd2 head=data:image/jpeg;base64
+ghost=33x17:d0 red0 37x19:d0 red0 101x23:d0 red0 257x29:d0 red0
+canary=painted_ok=533/533 fresh=32 nz_bytes=3424 canary_found=0
+opaque_fresh=7x3:0/84/p0/g0 33x17:0/2244/p0/g0 37x19:0/2812/p0/g0 101x23:0/9292/p0/g0 257x29:0/29812/p0/g0 7x3:0/84/p0/g0 33x17:0/2244/p0/g0 37x19:0/2812/p0/g0
+opaque_canary=painted=533/533 nz_px=1712 canary_found=0
+svg_knobs=nat=200x64 ink[px=1238/amax=255] nz=4471/51200 ptr=0 grey=43
+premult_proof=a0=0000000000000000 p0 aF=400501ff006100ff p0
+raw_chain=len=32 nz=4/32 ptr=1 grey=0[@0=0x0000610000010540]
+churn=n=48 painted=48 with_ptr=0
+DONE=sent=124
+--- maps samples: 26
+--- crash/abort:
+  access: none
+EXIT=124

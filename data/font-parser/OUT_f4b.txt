@@ -1,0 +1,29 @@
+=== f4b port=8899 secs=120 q=only=GS-ctl,CJ-ctl,CJ-rebuild,CJ-witness,CJ-vmtx0,CJ-gsub-ctl,CO-twemoji,CO-colrv1,CO-notoemoji,CO-opensans&tmo=1200
+--- beacons (in order):
+MAN n=10/183 base=d7b4e92b03deb1865aa61328fd5ff400 tables=19
+BASE fallback_w=56.00
+BEG GS-ctl gsub
+RES GS-ctl st=loaded res=loaded w=55.56 vh=82 vw=28 hh=28 vj=72 wj=35
+BEG CJ-ctl vertical
+RES CJ-ctl st=loaded res=loaded w=56.00 vh=70 vw=33 hh=33 vj=72 wj=31
+BEG CJ-rebuild vertical
+RES CJ-rebuild st=loaded res=loaded w=56.00 vh=70 vw=33 hh=33 vj=72 wj=31
+BEG CJ-witness vertical
+RES CJ-witness st=loaded res=loaded w=56.00 vh=70 vw=33 hh=33 vj=72 wj=31
+BEG CJ-vmtx0 vertical
+RES CJ-vmtx0 st=loaded res=loaded w=56.00 vh=70 vw=33 hh=33 vj=72 wj=31
+BEG CJ-gsub-ctl vertical
+RES CJ-gsub-ctl st=loaded res=loaded w=56.00 vh=70 vw=33 hh=33 vj=72 wj=31
+BEG CO-twemoji real
+RES CO-twemoji st=loaded res=loaded w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG CO-colrv1 real
+RES CO-colrv1 st=loaded res=loaded w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG CO-notoemoji real
+RES CO-notoemoji st=loaded res=loaded w=56.00 vh=70 vw=33 hh=33 vj=72 wj=35
+BEG CO-opensans real
+RES CO-opensans st=loaded res=loaded w=54.36 vh=77 vw=33 hh=33 vj=72 wj=35
+DONE n=10 loaded=10 other=0
+--- crash/abort:
+  access: none
+EXIT=124
+ 1361237

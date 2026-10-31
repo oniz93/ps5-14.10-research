@@ -1,0 +1,72 @@
+{
+  "question": "Does USE_ISO_MALLOC=OFF (the drop's PlayStation port default) put the 834 WTF_MAKE_ISO_ALLOCATED classes in the general heap, and does the oracle's build have IsoHeap?",
+  "gate": {
+    "condition": "Source/WTF/wtf/IsoMalloc.h:31  #if USE(SYSTEM_MALLOC) || !USE(ISO_MALLOC)",
+    "macro_when_off": "WTF_MAKE_ISO_ALLOCATED(name) -> WTF_MAKE_FAST_ALLOCATED -> operator new -> ::WTF::fastMalloc(size)  (FastMalloc.h:312-330)",
+    "macro_when_on": "WTF_MAKE_ISO_ALLOCATED(name) -> MAKE_BISO_MALLOCED -> bisoHeap() -> bmalloc::api::IsoHeap<isoType>::allocate()  (IsoHeap.h:136-149, IsoHeapInlines.h:155-162)",
+    "use_macro": "Source/WTF/wtf/PlatformUse.h:36  #define USE(F) (defined USE_##F && USE_##F)",
+    "option_defaults": {
+      "generic": "Source/cmake/WebKitFeatures.cmake:267 PRIVATE ON",
+      "playstation": "Source/cmake/OptionsPlayStation.cmake:211 PRIVATE OFF",
+      "other_sites_in_drop": 0
+    }
+  },
+  "verdicts": [
+    {
+      "build": "console 14.10 (per the drop)",
+      "iso_heap": "off",
+      "reason": "USE_ISO_MALLOC 0 from the port default; the ISO macro is WTF_MAKE_FAST_ALLOCATED and the 834 classes are in the general bmalloc heap",
+      "confidence": "source-level, single-site; a Sony build script could still pass -DUSE_ISO_MALLOC=ON and the drop contains no other reference, so the shipped binary's value is not readable from the drop",
+      "measured": false
+    },
+    {
+      "build": "oracle: ASAN, libwebkit2gtk-4.1.so.0.11.0 (GTK)",
+      "iso_heap": "off",
+      "reason": "cmakeconfig.h:211 USE_SYSTEM_MALLOC 1 takes the first arm even though the cache says USE_ISO_MALLOC ON; fastMalloc is void* fastMalloc(size_t){... malloc(n) ...} (FastMalloc.cpp:156,236; fastFree -> free at :265)",
+      "confidence": "measured at object level and library level",
+      "measured": true
+    },
+    {
+      "build": "system Fedora libwebkit2gtk-4.1.so.0.21.5",
+      "iso_heap": "undetermined",
+      "reason": "stripped (0 .symtab sections); hidden-visibility class allocators are absent from .dynsym by construction, so neither symbol table can answer",
+      "confidence": "none - not a usable control",
+      "measured": false
+    }
+  ],
+  "measurements": {
+    "oracle_object": {
+      "file": "/tmp/isoheap/ctx2d_real.o",
+      "bytes": 12218040,
+      "source": "Source/WebCore/html/canvas/CanvasRenderingContext2D.cpp",
+      "flags_source": "build.ninja, Source/WebCore/CMakeFiles/WebCore.dir/page/UserMessageHandler.cpp.o statement (same target)",
+      "undefined_operator_new_target": "U WTF::fastMalloc(unsigned long)",
+      "defined_iso_symbols": 0,
+      "mangled_isohheap_symbols": 0,
+      "iso_on_control": "not built - with USE_SYSTEM_MALLOC 0 the TU needs bmalloc/GigacageConfig.h, which this build dir has never generated"
+    },
+    "oracle_library": {
+      "file": "~/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0.11.0",
+      "bytes": 3695564176,
+      "symtab_sections": 1,
+      "mangled_isohheap_instantiations": 0,
+      "bisoHeap_strings": 0,
+      "IsoHeap_string_hits": 77,
+      "IsoHeap_string_breakdown": {"IsoHeapCellType": 44, "IsoHeapCellTypeC": 32, "IsoHeap": 1},
+      "pipeline_control": {"IsoSubspace_hits": 2928}
+    },
+    "cmakeconfig": {
+      "file": "~/wk/WebKit/WebKitBuild/ASAN/cmakeconfig.h",
+      "bytes": 6983,
+      "sha256": "4d1cfe68ea75a9adccfc795e74971d0b87034b7af8dd54f6720aaba936f90b99",
+      "USE_ISO_MALLOC": 1,
+      "USE_SYSTEM_MALLOC": 1
+    }
+  },
+  "scope_corrections": [
+    "Source/WebCore/css/CSSFontFace.h:61 is WTF_MAKE_FAST_ALLOCATED_WITH_HEAP_IDENTIFIER, not WTF_MAKE_ISO_ALLOCATED: docs/65's object was never an ISO class, so none of its verdicts depended on this gate.",
+    "Source/WebCore/html/canvas/CanvasRenderingContext2D.h:37 and CanvasRenderingContext2DBase.h:93 are WTF_MAKE_ISO_ALLOCATED, so the class in the console case c043b is governed by the gate.",
+    "Source/JavaScriptCore contains no reference to USE(ISO_MALLOC); JSC's IsoSubspace (docs/76's stringSpace) is its own cell space and docs/76 stands either way.",
+    "c043b (alias at spray index 2 of 80) cannot discriminate IsoHeap from a type-agnostic bmalloc size-class free list: both reuse a freed slot for the same class. The discriminating input is a cross-type allocation of the same size class, which only the console can run."
+  ]
+}

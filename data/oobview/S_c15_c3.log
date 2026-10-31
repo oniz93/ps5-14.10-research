@@ -1,0 +1,39 @@
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+MESA: error: ZINK: vkEnumeratePhysicalDevices failed (VK_ERROR_INITIALIZATION_FAILED)
+MESA: error: ZINK: failed to choose pdev
+glx: failed to create drisw screen
+failed to load driver: zink
+Gtk-Message: 12:17:18.073: Failed to load module "colorreload-gtk-module"
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+MESA: error: ZINK: vkEnumeratePhysicalDevices failed (VK_ERROR_INITIALIZATION_FAILED)
+MESA: error: ZINK: failed to choose pdev
+libEGL warning: egl: failed to create dri2 screen
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+libEGL warning: egl: failed to create dri2 screen
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+libEGL warning: egl: failed to create dri2 screen
+Gtk-Message: 12:17:18.417: Failed to load module "colorreload-gtk-module"
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==1322731==ERROR: AddressSanitizer: SEGV on unknown address 0x7f24034fbfe0 (pc 0x7f24259f0eeb bp 0x7fff6810b410 sp 0x7fff6810b2f8 T0)
+==1322731==The signal is caused by a READ memory access.
+    #0 0x7f24259f0eeb in __memcpy_avx_unaligned_erms (/lib64/libc.so.6+0x15eeeb) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851)
+    #1 0x7f2432019a59 in WebCore::ThreadSafeDataBufferImpl::ThreadSafeDataBufferImpl(void const*, unsigned int) /home/<user>/wk/WebKit/Source/WebCore/platform/ThreadSafeDataBuffer.h:52
+    #2 0x7f2432019a59 in WebCore::ThreadSafeDataBuffer::ThreadSafeDataBuffer(void const*, unsigned int) /home/<user>/wk/WebKit/Source/WebCore/platform/ThreadSafeDataBuffer.h:112
+    #3 0x7f2432019a59 in WebCore::ThreadSafeDataBuffer::copyData(void const*, unsigned int) /home/<user>/wk/WebKit/Source/WebCore/platform/ThreadSafeDataBuffer.h:72
+    #4 0x7f2432019a59 in WebCore::IDBKey::createBinary(JSC::JSArrayBufferView&) /home/<user>/wk/WebKit/Source/WebCore/Modules/indexeddb/IDBKey.cpp:58
+    #5 0x7f2432b14aee in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:250
+    #6 0x7f2432b14dee in createIDBKeyFromValue /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:258
+    #7 0x7f2432b16585 in WebCore::scriptValueToIDBKey(JSC::JSGlobalObject&, JSC::JSValue) /home/<user>/wk/WebKit/Source/WebCore/bindings/js/IDBBindingUtilities.cpp:428
+    #8 0x7f2432024d6a in WebCore::IDBKeyRange::only(JSC::JSGlobalObject&, JSC::JSValue) /home/<user>/wk/WebKit/Source/WebCore/Modules/indexeddb/IDBKeyRange.cpp:75
+    #9 0x7f2430a70bd2 in jsIDBKeyRangeConstructorFunction_onlyBody /home/<user>/wk/WebKit/WebKitBuild/ASAN/WebCore/DerivedSources/JSIDBKeyRange.cpp:260
+    #10 0x7f2430a70bd2 in callStatic<WebCore::jsIDBKeyRangeConstructorFunction_onlyBody> /home/<user>/wk/WebKit/Source/WebCore/bindings/js/JSDOMOperation.h:70
+    #11 0x7f2430a70bd2 in jsIDBKeyRangeConstructorFunction_only /home/<user>/wk/WebKit/WebKitBuild/ASAN/WebCore/DerivedSources/JSIDBKeyRange.cpp:265
+    #12 0x7f242aecd700 in llint_native_call_trampoline (/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libjavascriptcoregtk-4.1.so.0+0x28cd700) (BuildId: fa459058c05f247aeabcaa112b096128aeefb02e)
+
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV (/lib64/libc.so.6+0x15eeeb) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851) in __memcpy_avx_unaligned_erms
+==1322731==ABORTING
+
+** (MiniBrowser:1322716): WARNING **: 12:17:19.786: WebProcess CRASHED
+EXIT=124

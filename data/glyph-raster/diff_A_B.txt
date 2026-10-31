@@ -1,0 +1,17 @@
+entries: A=125 B=125 shared=125
+identical across runs: 125
+changed across runs:   0
+
+--- values that changed (classified) ---
+
+--- full-width hex tokens (>=10 digits) in values that are identical (constants) ---
+det_ctl                    0x0000610000010540  0x610000000000-0x610000020000 rw-p [anon]
+png                        110399503498536e  outside all mappings
+jpeg                       acb89e6c70766cd2  outside all mappings
+premult_proof              0000000000000000  outside all mappings
+premult_proof              400501ff006100ff  outside all mappings
+raw_chain                  0x0000610000010540  0x610000000000-0x610000020000 rw-p [anon]
+
+--- keys only in one run ---
+
+VERDICT: no value both changes between runs and lands in a mapping

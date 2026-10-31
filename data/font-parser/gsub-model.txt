@@ -1,0 +1,48 @@
+--- f/GS-ctl.ttf: GSUB 60 B
+  featureCount=1
+  FeatureTable at 20: lookupCount=1 lookupListIndex[0]=0
+  lookupCount=1
+  LookupTable at 30: type=1 subTableCount=1
+  subtable 0: countTo=3 coverage fmt=2 at 50
+  range 0: start=10 end=12 fromEnd=13 diff=3 check indexTo+diff>3 -> False
+  reads=3, no read leaves the table buffer
+--- f/GS-wrap.ttf: GSUB 56 B
+  featureCount=1
+  FeatureTable at 20: lookupCount=1 lookupListIndex[0]=0
+  lookupCount=1
+  LookupTable at 30: type=1 subTableCount=1
+  subtable 0: countTo=1 coverage fmt=2 at 46
+  range 0: start=32768 end=65535 fromEnd=0 diff=-32768 check indexTo+diff>1 -> False
+  reads=32768 first read past the table buffer: indexTo=6 (2 B past end)
+--- f/GS-desc.ttf: GSUB 56 B
+  featureCount=1
+  FeatureTable at 20: lookupCount=1 lookupListIndex[0]=0
+  lookupCount=1
+  LookupTable at 30: type=1 subTableCount=1
+  subtable 0: countTo=1 coverage fmt=2 at 46
+  range 0: start=10 end=5 fromEnd=6 diff=-4 check indexTo+diff>1 -> False
+  reads=65532 first read past the table buffer: indexTo=6 (2 B past end)
+--- f/CJ-gsub-ctl.ttf: GSUB 60 B
+  featureCount=1
+  FeatureTable at 20: lookupCount=1 lookupListIndex[0]=0
+  lookupCount=1
+  LookupTable at 30: type=1 subTableCount=1
+  subtable 0: countTo=3 coverage fmt=2 at 50
+  range 0: start=10 end=12 fromEnd=13 diff=3 check indexTo+diff>3 -> False
+  reads=3, no read leaves the table buffer
+--- f/CJ-gsub-wrap.ttf: GSUB 56 B
+  featureCount=1
+  FeatureTable at 20: lookupCount=1 lookupListIndex[0]=0
+  lookupCount=1
+  LookupTable at 30: type=1 subTableCount=1
+  subtable 0: countTo=1 coverage fmt=2 at 46
+  range 0: start=32768 end=65535 fromEnd=0 diff=-32768 check indexTo+diff>1 -> False
+  reads=32768 first read past the table buffer: indexTo=6 (2 B past end)
+--- f/CJ-gsub-desc.ttf: GSUB 56 B
+  featureCount=1
+  FeatureTable at 20: lookupCount=1 lookupListIndex[0]=0
+  lookupCount=1
+  LookupTable at 30: type=1 subTableCount=1
+  subtable 0: countTo=1 coverage fmt=2 at 46
+  range 0: start=10 end=5 fromEnd=6 diff=-4 check indexTo+diff>1 -> False
+  reads=65532 first read past the table buffer: indexTo=6 (2 B past end)

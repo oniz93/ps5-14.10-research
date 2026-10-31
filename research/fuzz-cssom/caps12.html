@@ -1,0 +1,204 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps12 — a failed wrapper creation: is the null stored, and is it inert?</title>
+<body><p id="p">caps12</p>
+<script>
+// docs/91.  docs/90 opened one structural shape and closed the abort family around it:
+//    readArrayBufferViewImpl (bindings/js/SerializedScriptValue.cpp:3279-3355) assigns
+//        arrayBufferView = toJS(m_lexicalGlobalObject, m_globalObject, DataView::wrappedAs(...).get())
+//    and then `return true` — it never looks at the result.  Two different failures land there:
+//      (a) wrappedAs returns nullptr      -> toJS(..., (DataView*)nullptr) returns jsNull, NO exception
+//      (b) wrappedAs returns a DataView but JSDataView::create throws (JSDataView.cpp:52/:59)
+//                                          -> toJS returns jsNull with the exception pending
+//    (b) is what the four RELEASE_ASSERT sites abort on.  This page asks the question the abort hides:
+//    when the message *does* complete (a), is the null STORED, is it reachable through an object-pool
+//    reference, and can page script use the slot without an engine-level throw?
+//
+// One variable per arm.  ARMS below is the whole design; every arm differs from its twin in exactly
+// one field (shrink, kind, pool or via), and the twin is named next to it.
+//
+//   dvport       MessagePort   DataView explicit len, buffer shrunk in the walk   (docs/89 repro -> abort)
+//   dvportok     MessagePort   ... the same, no shrink                             (control for shrink)
+//   dvportauto   MessagePort   auto-length DataView, shrunk                        (auto-length does NOT throw)
+//   dvsw         SW->client    DataView explicit len, shrunk                       (null, no exception)
+//   dvswok       SW->client    ... the same, no shrink                             (control for shrink)
+//   dvswauto     SW->client    auto-length DataView, shrunk                        (clean fail: readArrayBufferViewImpl
+//   dvswautook   SW->client    ... the same, no shrink                              returns false before the switch)
+//   poolsw       SW->client    the same view 4x (1 dump + 3 ObjectReferenceTags), shrunk
+//   poolswok     SW->client    ... the same, no shrink                             (control for shrink)
+//   tasw         SW->client    Uint8Array explicit len, shrunk                     (null too?)
+//   taswok       SW->client    ... the same, no shrink
+//   taport       MessagePort   Uint8Array explicit len, shrunk                     (docs/89: OOB view, vl=0)
+//   taportok     MessagePort   ... the same, no shrink
+(function () {
+  'use strict';
+  function B(m, x) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {} }
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+
+  var MODE  = K('mode', 'dvport');
+  var LEN   = Math.max(8, parseInt(K('len', '192'), 10));
+  var DELAY = Math.max(0, parseInt(K('delay', '250'), 10));
+  var SWNAME = K('swname', 'sw12.js');
+
+  var ARMS = {
+    dvport:      { via: 'port', kind: 'dv',     shrink: 1, pool: 0 },
+    dvportok:    { via: 'port', kind: 'dv',     shrink: 0, pool: 0 },
+    dvportauto:  { via: 'port', kind: 'dvauto', shrink: 1, pool: 0 },
+    dvsw:        { via: 'sw',   kind: 'dv',     shrink: 1, pool: 0 },
+    dvswok:      { via: 'sw',   kind: 'dv',     shrink: 0, pool: 0 },
+    dvswauto:    { via: 'sw',   kind: 'dvauto', shrink: 1, pool: 0 },
+    dvswautook:  { via: 'sw',   kind: 'dvauto', shrink: 0, pool: 0 },
+    poolsw:      { via: 'sw',   kind: 'dv',     shrink: 1, pool: 1 },
+    poolswok:    { via: 'sw',   kind: 'dv',     shrink: 0, pool: 1 },
+    tasw:        { via: 'sw',   kind: 'u8',     shrink: 1, pool: 0 },
+    taswok:      { via: 'sw',   kind: 'u8',     shrink: 0, pool: 0 },
+    taport:      { via: 'port', kind: 'u8',     shrink: 1, pool: 0 },
+    taportok:    { via: 'port', kind: 'u8',     shrink: 0, pool: 0 },
+    ckport:      { via: 'ck',   kind: 'ck',     shrink: 0, pool: 0 },
+    cknonext:    { via: 'ck',   kind: 'ck',     shrink: 0, pool: 0 },
+    ckec:        { via: 'ck',   kind: 'ck',     shrink: 0, pool: 0 }
+  };
+  var A = ARMS[MODE] || ARMS.dvport;
+
+  B('cap', 'mode=' + MODE + '&via=' + A.via + '&kind=' + A.kind + '&shrink=' + A.shrink + '&pool=' + A.pool +
+    '&len=' + LEN + '&rs=' + (typeof ArrayBuffer.prototype.resize) + '&sw=' + (typeof navigator.serviceWorker) +
+    '&mc=' + (typeof MessageChannel) + '&stc=' + (typeof structuredClone));
+
+  // ---------------------------------------------------------------- receiver report
+  // Every slot is reported by identity, typeof and === null, and the pool arm additionally *uses* the
+  // slot from page script (a property read, a Map key, JSON) so "inert" is measured, not assumed.
+  function slot(name, d) {
+    var s = '&' + name;
+    try {
+      var v = d[name];
+      s += '=tn' + (v === null ? 1 : 0) + ',ty' + (typeof v);
+      if (v && typeof v === 'object') { s += ',vb' + v.byteLength + ',bb' + (v.buffer ? v.buffer.byteLength : -1); }
+      if (v === undefined) s += ',tu1';
+    } catch (e) { s += '=terr' + e.name; }
+    return s;
+  }
+  function report(tag, d, extra) {
+    var out = 'mode=' + MODE + '&' + (extra || '');
+    out += slot('v', d) + slot('a', d) + slot('b', d) + slot('d', d);
+    try { out += '&c0tn' + (d.cc[0] === null ? 1 : 0); } catch (e) { out += '&c0err' + e.name; }
+    try { out += '&c1tn' + (d.cc[1] === null ? 1 : 0); } catch (e) { out += '&c1err' + e.name; }
+    try { out += '&ab' + (d.a === d.b ? 1 : 0) + '&ac0' + (d.a === d.cc[0] ? 1 : 0) + '&ad' + (d.a === d.d ? 1 : 0); } catch (e) {}
+    try { out += '&keys=' + Object.keys(d).join('.'); } catch (e) {}
+    // use the slot from page script: a property read must throw a *page* TypeError, nothing worse
+    try { var x = d.a.byteLength; out += '&use=ok:' + x; } catch (e) { out += '&use=threw:' + e.name; }
+    try { out += '&mapsz=' + new Map([[d.a, 1]]).size; } catch (e) { out += '&maperr=' + e.name; }
+    try { out += '&json=' + encodeURIComponent(JSON.stringify(d).slice(0, 40)); } catch (e) { out += '&jerr=' + e.name; }
+    // and the typed-array arms: is an element write dropped (docs/89) or does it fault?
+    try { if (d.v && typeof d.v === 'object' && d.v.length !== undefined) { d.v[0] = 7; out += '&w0=' + d.v[0]; } } catch (e) { out += '&werr=' + e.name; }
+    B('rx' + tag, out);
+    B('done', 'mode=' + MODE + '&tag=' + tag);
+  }
+
+  // ---------------------------------------------------------------- transports
+  var got = false;
+
+  function viaPort(tag, build) {
+    var ch = new MessageChannel();
+    ch.port2.onmessage = function (ev) {
+      if (got) return; got = true;
+      report(tag, ev.data || {}, 'via=port');
+    };
+    ch.port2.onmessageerror = function () { if (got) return; got = true; B('rxerr' + tag, 'mode=' + MODE + '&messageerror=1'); B('done', 'mode=' + MODE + '&tag=' + tag); };
+    var msg = build();
+    try { ch.port1.postMessage(msg, [msg.__buf]); B('wx' + tag, 'mode=' + MODE + '&via=port&post=1&tx=' + msg.__buf.byteLength); }
+    catch (e) { B('wx' + tag, 'mode=' + MODE + '&via=port&posterr=' + e.name); B('done', 'mode=' + MODE + '&tag=' + tag); return; }
+    setTimeout(function () { if (!got) { B('wx' + tag, 'mode=' + MODE + '&timeout=1'); } }, 4000);
+  }
+
+  function viaSW(tag) {
+    var sw = navigator.serviceWorker;
+    if (!sw) { B('wx' + tag, 'mode=' + MODE + '&nosw=1'); B('done', 'mode=' + MODE + '&tag=' + tag); return; }
+    navigator.serviceWorker.onmessage = function (ev) {
+      if (got) return; got = true;
+      report(tag, ev.data || {}, 'via=sw');
+    };
+    navigator.serviceWorker.onmessageerror = function () {
+      if (got) return; got = true;
+      B('rxerr' + tag, 'mode=' + MODE + '&via=sw&messageerror=1');
+      B('done', 'mode=' + MODE + '&tag=' + tag);
+    };
+    sw.register(SWNAME, { scope: './' }).then(function (r) {
+      B('wx' + tag, 'mode=' + MODE + '&reg=' + (r ? (r.active ? 'active' : 'pending') : 'null'));
+      return sw.ready;
+    }).then(function (rr) {
+      B('wx' + tag, 'mode=' + MODE + '&ready=1&act=' + (rr && rr.active ? 1 : 0));
+      if (!rr || !rr.active) { B('done', 'mode=' + MODE + '&tag=' + tag); return; }
+      try { rr.active.postMessage({ go: 1, len: LEN, kind: A.kind, shrink: A.shrink, pool: A.pool }); B('wx' + tag, 'mode=' + MODE + '&asked=1'); }
+      catch (e) { B('wx' + tag, 'mode=' + MODE + '&querr=' + e.name); }
+    }, function (e) { B('wx' + tag, 'mode=' + MODE + '&regerr=' + (e && e.name)); B('done', 'mode=' + MODE + '&tag=' + tag); });
+    setTimeout(function () { if (!got) { B('wx' + tag, 'mode=' + MODE + '&timeout=1'); } }, 8000);
+  }
+
+  // ---------------------------------------------------------------- the message
+  // Built in one place for both transports; the getter is defined *after* the view properties so the
+  // serializer walk dumps the view first and shrinks second (the docs/89 ordering).
+  function build(tag) {
+    var n = LEN;
+    var buf, view;
+    if (A.kind === 'dvauto') { buf = new ArrayBuffer(n, { maxByteLength: n }); view = new DataView(buf); }
+    else if (A.kind === 'dv') { buf = new ArrayBuffer(n, { maxByteLength: n }); view = new DataView(buf, 0, n); }
+    else { buf = new ArrayBuffer(n, { maxByteLength: n }); view = new Uint8Array(buf, 0, n); }
+    B('mk' + tag, 'mode=' + MODE + '&mx0=' + buf.maxByteLength + '&bl0=' + buf.byteLength + '&vl=' + view.byteLength);
+    var msg;
+    if (A.pool) { msg = { c: 1, a: view, b: view, cc: [view, view], d: view }; }
+    else { msg = { c: 1, v: view }; }
+    Object.defineProperty(msg, 'g', { enumerable: true, configurable: true, get: function () {
+      B('getter' + tag, 'mode=' + MODE + '&pre=' + buf.byteLength);
+      if (A.shrink) { try { buf.resize(0); } catch (e) { B('resizeerr' + tag, 'e=' + e.name); } }
+      B('getter2' + tag, 'mode=' + MODE + '&post=' + buf.byteLength + '&mx=' + buf.maxByteLength);
+      return 1;
+    } });
+    Object.defineProperty(msg, '__buf', { value: buf, enumerable: false });
+    return msg;
+  }
+
+  setTimeout(function () {
+    var tag = 'A';
+    // ckport: the *second* unchecked wrapper-creation result in the deserializer
+    // (SerializedScriptValue.cpp:3848 `cryptoKey = getJSValue(result.get())`), whose native is a
+    // re-import that can be null.  Reachability question first: can a page serialize a CryptoKey at all?
+    if (MODE === 'ckport' || MODE === 'cknonext' || MODE === 'ckec') {
+      // three inputs: extractable HMAC, non-extractable HMAC (does the wrap step refuse it?),
+      // and an asymmetric pair (the import path with the most preconditions).
+      var CKARGS = {
+        ckport:   { alg: { name: 'HMAC', hash: 'SHA-256' }, ext: true,  us: ['sign', 'verify'] },
+        cknonext: { alg: { name: 'HMAC', hash: 'SHA-256' }, ext: false, us: ['sign', 'verify'] },
+        ckec:     { alg: { name: 'ECDSA', namedCurve: 'P-256' }, ext: true, us: ['sign', 'verify'] }
+      };
+      var CA = CKARGS[MODE];
+      var seen = false, ch = new MessageChannel();
+      ch.port2.onmessage = function (ev) {
+        if (seen) return; seen = true;
+        var d = ev.data || {}, k = d.k, k2 = d.k2;
+        var out = 'mode=' + MODE + '&tk=' + (typeof k) + '&nullk=' + (k === null ? 1 : 0) + '&undk=' + (k === undefined ? 1 : 0);
+        try { out += '&inst=' + (k instanceof CryptoKey) + '&type=' + (k && k.type) + '&alg=' + (k && k.algorithm && k.algorithm.name) +
+                     '&ext=' + (k && k.extractable) + '&us=' + (k && k.usages ? k.usages.join('.') : '-'); } catch (e) { out += '&kerr=' + e.name; }
+        try { out += '&tk2=' + (typeof k2) + '&nullk2=' + (k2 === null ? 1 : 0) + '&type2=' + (k2 && k2.type); } catch (e) { out += '&k2err=' + e.name; }
+        try { out += '&keys=' + Object.keys(d).join('.'); } catch (e) {}
+        B('rx' + tag, out); B('done', 'mode=' + MODE + '&tag=' + tag);
+      };
+      ch.port2.onmessageerror = function () { if (seen) return; seen = true; B('rxerr' + tag, 'mode=' + MODE + '&messageerror=1'); B('done', 'mode=' + MODE + '&tag=' + tag); };
+      try {
+        crypto.subtle.generateKey(CA.alg, CA.ext, CA.us).then(function (k) {
+          var pair = !!(k && k.privateKey);
+          B('gen' + tag, 'mode=' + MODE + '&tk=' + (typeof k) + '&pair=' + pair + '&type=' + (k && k.type));
+          var msg = pair ? { k: k.privateKey, k2: k.publicKey } : { k: k };
+          try { ch.port1.postMessage(msg); B('wx' + tag, 'mode=' + MODE + '&post=1'); }
+          catch (e) { B('wx' + tag, 'mode=' + MODE + '&posterr=' + e.name + '&m=' + encodeURIComponent(String(e.message || '').slice(0, 60))); B('done', 'mode=' + MODE + '&tag=' + tag); }
+        }, function (e) { B('gen' + tag, 'mode=' + MODE + '&generr=' + (e && e.name)); B('done', 'mode=' + MODE + '&tag=' + tag); });
+      } catch (e) { B('gen' + tag, 'mode=' + MODE + '&cerr=' + e.name + '&st=' + (typeof crypto)); B('done', 'mode=' + MODE + '&tag=' + tag); }
+      setTimeout(function () { if (!seen) { B('wx' + tag, 'mode=' + MODE + '&timeout=1'); } }, 4000);
+      return;
+    }
+    if (A.via === 'port') viaPort(tag, function () { return build(tag); });
+    else viaSW(tag);
+  }, DELAY);
+})();
+</script>
+</body>

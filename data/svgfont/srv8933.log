@@ -1,0 +1,103 @@
+127.0.0.1 - - [30/Oct/2026 13:58:36] "GET /corpus.html?kinds=d,attr,uni,len HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=BOOT%20arms%3D41%20kinds%3Dd%7Cattr%7Cuni%7Clen HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=BEG%20D1-huge-segments%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=RES%20D1-huge-segments%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D6097%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D109 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=BEG%20D2-mid-command%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=RES%20D2-mid-command%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20ink%3D1616%20inkctl%3D1616%20n%3D1%20st%3Dunloaded%20ms%3D81 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=BEG%20D3-hv%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=RES%20D3-hv%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D6400%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D74 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=BEG%20D4-quad-arc%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=RES%20D4-quad-arc%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D1103%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D82 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=BEG%20D5-huge-coords%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=RES%20D5-huge-coords%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D110%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D91 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=BEG%20D6-nan%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=RES%20D6-nan%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20ink%3D1616%20inkctl%3D1616%20n%3D1%20st%3Dunloaded%20ms%3D80 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:37] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:37] "GET /ev?m=BEG%20D7-many-movetos%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=RES%20D7-many-movetos%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D0%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D101 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=BEG%20D8-no-d%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=RES%20D8-no-d%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D0%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D77 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=BEG%20D9-empty-d%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=RES%20D9-empty-d%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D0%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D76 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=BEG%20A1-hgx0%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=RES%20A1-hgx0%20w%3D0.00%20w40%3D0.00%20ctl%3D64.00%20cw%3D0.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D76 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=BEG%20A2-hgx65535%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=RES%20A2-hgx65535%20w%3D6554.00%20w40%3D2621.00%20ctl%3D64.00%20cw%3D6554.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D74 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=BEG%20A3-hgx1e9%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=RES%20A3-hgx1e9%20w%3D6554.00%20w40%3D2621.00%20ctl%3D64.00%20cw%3D6554.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D76 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=BEG%20A4-upm0%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=RES%20A4-upm0%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D75 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=BEG%20A5-upm-neg%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:38] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:38] "GET /ev?m=RES%20A5-upm-neg%20w%3D0.00%20w40%3D0.00%20ctl%3D64.00%20cw%3D0.00%20ink%3D0%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D76 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=BEG%20A6-upm1%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=RES%20A6-upm1%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D10000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D77 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=BEG%20A7-upm1e10%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=RES%20A7-upm1e10%20w%3D709.00%20w40%3D284.00%20ctl%3D64.00%20cw%3D709.00%20ink%3D15647%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D76 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=BEG%20A8-asc-huge%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=RES%20A8-asc-huge%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D75 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=BEG%20U1-dup%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=RES%20U1-dup%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D74 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=BEG%20U2-ligature%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=RES%20U2-ligature%20w%3D100.00%20w40%3D40.00%20ctl%3D60.00%20cw%3D100.00%20ink%3D2485%20inkctl%3D1681%20n%3D1%20st%3Dloaded%20ms%3D75 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=BEG%20U3-astral%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=RES%20U3-astral%20w%3D125.00%20w40%3D50.00%20ctl%3D125.00%20cw%3D125.00%20ink%3D8917%20inkctl%3D8917%20n%3D1%20st%3Dloaded%20ms%3D98 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=BEG%20U4-long-lig%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=RES%20U4-long-lig%20w%3D100.00%20w40%3D40.00%20ctl%3D56.00%20cw%3D100.00%20ink%3D0%20inkctl%3D1346%20n%3D1%20st%3Dloaded%20ms%3D75 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:39] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:39] "GET /ev?m=BEG%20U5-space%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:40] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:40] "GET /ev?m=RES%20U5-space%20w%3D60.00%20w40%3D24.00%20ctl%3D26.00%20cw%3D60.00%20ink%3D0%20inkctl%3D0%20n%3D1%20st%3Dloaded%20ms%3D74 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:40] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:40] "GET /ev?m=BEG%20F1-longfamily%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:40] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:40] "GET /ev?m=RES%20F1-longfamily%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D84 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:40] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:40] "GET /ev?m=BEG%20P1-panose%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:40] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:40] "GET /ev?m=RES%20P1-panose%20w%3D100.00%20w40%3D40.00%20ctl%3D64.00%20cw%3D100.00%20ink%3D8000%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D76 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 13:58:40] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 13:58:40] "GET /ev?m=DONE%20n%3D41 HTTP/1.1" 404 -

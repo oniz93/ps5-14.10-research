@@ -1,0 +1,479 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>svg font corpus</title>
+<!--
+  SVG font writer corpus.  Two halves of the same page-reachable path:
+
+    indoc : <svg><defs><font id=f horiz-adv-x=..><font-face font-family=.. units-per-em=.. />
+            <missing-glyph/><glyph unicode="A" d=".."/></font></defs></svg> in the page itself.
+            SVGFontFaceElement::rebuildFontFace() turns it into a CSSFontFaceSrcLocalValue bound to
+            the element (SVGFontFaceElement.cpp:294) and Resolver::addCurrentSVGFontFaceRules()
+            (StyleResolver.cpp:205) adds the rule to the document's font selector, so a plain
+            font-family: <name> reaches CSSFontFaceSource::load() -> convertSVGToOTFFont().
+
+    ext   : @font-face { src: url(x_<id>.svg#f1) format(svg) } -> CachedSVGFont ->
+            SVGDocument parse -> convertSVGToOTFFont() (loader/cache/CachedSVGFont.cpp:101).
+
+  One BEG per arm and one RES per arm, so an abort names its own input.
+  Query: ?kinds=a,b,c  ?only=id1,id2  ?gap=ms  ?tmo=ms  ?delay=ms  (delay parks the driver
+  before the first arm, so a debugger can attach; 0 is the default and keeps earlier results valid)
+-->
+<style>body{margin:0;font-size:0}#log{font:12px monospace}#log div{font:12px monospace}</style>
+<script>
+var Q = new URLSearchParams(location.search);
+var KINDS = (Q.get('kinds') || '').split(',').filter(Boolean);
+var ONLY = (Q.get('only') || '').split(',').filter(Boolean);
+var GAP = +(Q.get('gap') || 40);
+var TMO = +(Q.get('tmo') || 1500);
+var DELAY = +(Q.get('delay') || 0);
+var SILENT = 0;
+
+function ev(m) { if (!SILENT) new Image().src = '/ev?m=' + encodeURIComponent(m); }
+function log(m) {
+    var d = document.createElement('div');
+    d.textContent = m;
+    document.getElementById('log').appendChild(d);
+}
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+function attrs(o) {
+    var s = '';
+    if (!o) return s;
+    for (var k in o) if (o[k] !== null && o[k] !== undefined) s += ' ' + k + '="' + esc(o[k]) + '"';
+    return s;
+}
+
+// ---------------------------------------------------------------- arm markup
+function glyphMarkup(g) {
+    return '<glyph' + attrs(g) + '/>';
+}
+function fontMarkup(arm) {
+    var s = '<font' + attrs(arm['font'] || { id: 'f1' }) + '>';
+    if (arm['face'] !== null)
+        s += '<font-face' + attrs(arm['face'] || { 'font-family': arm.family }) + '/>';
+    if (arm['missing']) s += '<missing-glyph' + attrs(arm['missing']) + '/>';
+    var g = arm.glyphs || [];
+    if (arm.gen) {
+        var n = arm.gen.n, kind = arm.gen.kind || 'square';
+        var start = arm.gen.start || 0x41;
+        for (var i = 0; i < n; i++) {
+            var cp = start + i;
+            var u = cp <= 0x10FFFF ? String.fromCodePoint(cp) : '';
+            if (arm.gen.kind === 'square')
+                s += '<glyph unicode="' + esc(u) + '" horiz-adv-x="' + (400 + (i % 601)) + '" d="M0 0 L500 0 L500 700 L0 700 Z"/>';
+            else if (arm.gen.kind === 'empty')
+                s += '<glyph unicode="' + esc(u) + '"/>';
+            else if (arm.gen.kind === 'named')
+                s += '<glyph glyph-name="g' + i + '" unicode="' + esc(u) + '" d="M0 0 L500 0 L500 700 Z"/>';
+            else if (arm.gen.kind === 'ligf') {
+                // N ligatures that all start with the same character: one distinct first glyph, so the
+                // writer declares N LigatureSet offsets (:771) but grows a slot per *distinct* first glyph
+                // (:772).  Two letters of room after the 'f' gives 676 distinct strings.
+                var d1 = 0x61 + (i % 26), d2 = 0x61 + (Math.floor(i / 26) % 26);
+                s += '<glyph unicode="f' + esc(String.fromCodePoint(d1) + String.fromCodePoint(d2))
+                    + '" d="M0 0 L400 0 L400 600 Z"/>';
+            }
+            else if (arm.gen.kind === 'ligd') {
+                // N ligatures with N *distinct* first glyphs: declared count == offset slots, the
+                // well-formed twin of 'ligf' at the same N.  First glyph U+0100+i, ligature that + 'a'.
+                var u1 = String.fromCodePoint(0x100 + i);
+                s += '<glyph unicode="' + esc(u1) + '" horiz-adv-x="200" d="M0 0 L200 0 L200 600 Z"/>'
+                    + '<glyph unicode="' + esc(u1 + 'a') + '" d="M0 0 L400 0 L400 600 Z"/>';
+            }
+            else if (arm.gen.kind === 'lig') {
+                // distinct 3-character strings, base 26: up to 17576 distinct ligatures
+                var a1 = 0x41 + (i % 26), a2 = 0x61 + (Math.floor(i / 26) % 26), a3 = 0x30 + (Math.floor(i / 676) % 10);
+                s += '<glyph unicode="' + esc(String.fromCodePoint(a1) + String.fromCodePoint(a2) + String.fromCodePoint(a3))
+                    + '" d="M0 0 L400 0 L400 600 Z"/>';
+            }
+        }
+    }
+    for (var j = 0; j < g.length; j++) s += glyphMarkup(g[j]);
+    if (arm.extra) s += arm.extra;
+    s += '</font>';
+    return s;
+}
+function svgMarkup(arm) {
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;left:-300px;top:0">'
+        + '<defs>' + fontMarkup(arm) + '</defs></svg>';
+}
+
+// ---------------------------------------------------------------- measuring
+function width(family, text, size) {
+    var s = document.createElement('span');
+    s.style.cssText = 'position:absolute;left:-3000px;top:0;white-space:pre;font-size:' + (size || 100) + 'px;font-family:"' + family + '"';
+    s.textContent = text;
+    document.body.appendChild(s);
+    var w = s.getBoundingClientRect().width;
+    s.remove();
+    return w;
+}
+function cwidth(family, text, size) {
+    var c = document.createElement('canvas');
+    var ctx = c.getContext('2d');
+    ctx.font = (size || 100) + 'px "' + family + '"';
+    return ctx.measureText(text).width;
+}
+function faceStatus(family) {
+    try {
+        var n = 0, st = [];
+        document.fonts.forEach(function (f) { if (f.family === family) { n++; st.push(f.status); } });
+        return 'n=' + n + ' st=' + st.join('|');
+    } catch (e) { return 'err=' + e.name; }
+}
+
+function ink(family, text, size) {
+    var c = document.createElement('canvas');
+    c.width = 220; c.height = 220;
+    var ctx = c.getContext('2d');
+    ctx.font = size + 'px "' + family + '"';
+    ctx.fillStyle = '#000';
+    ctx.fillText(text, 10, size + 10);
+    var d = ctx.getImageData(0, 0, 220, 220).data;
+    var n = 0;
+    for (var i = 3; i < d.length; i += 4) if (d[i]) n++;
+    return n;
+}
+// ---------------------------------------------------------------- run one arm
+function measureArm(arm, host, styleEl) {
+    var text = arm.text || 'A';
+    var t0 = performance.now();
+    var w = width(arm.family, text);
+    var w2 = width(arm.family, text, 40);
+    var wc = width('ZzNoSuchFamily', text);
+    var cw = cwidth(arm.family, text);
+    // "loaded" only proves the OTF was written and FreeType accepted it; ink proves the page's
+    // path data reached the CFF charstring (CFFBuilder's H/V/Q/A handlers are ASSERT_NOT_REACHED).
+    var wp = arm.probe ? width(arm.family, arm.probe) : -1;
+    var ik = ink(arm.family, text, 100);
+    var ikc = ink('ZzNoSuchFamily', text, 100);
+    var dt = Math.round(performance.now() - t0);
+    ev('RES ' + arm.id + ' w=' + w.toFixed(2) + ' w40=' + w2.toFixed(2) + ' ctl=' + wc.toFixed(2)
+        + ' cw=' + cw.toFixed(2) + ' wp=' + (wp < 0 ? '-' : wp.toFixed(2)) + ' ink=' + ik + ' inkctl=' + ikc + ' ' + faceStatus(arm.family) + ' ms=' + dt);
+    if (styleEl) styleEl.remove();
+    host.remove();
+    document.body.offsetHeight;
+}
+function runArm(arm) {
+    ev('BEG ' + arm.id + ' kind=' + arm.kind);
+    var host = document.createElement('div');
+    document.body.appendChild(host);
+    var styleEl = null;
+    try {
+        if (arm.kind === 'indoc') {
+            host.innerHTML = svgMarkup(arm);
+        } else if (arm.kind === 'indocjs') {
+            // Same font built with createElementNS, to separate "the HTML parser did not make an
+            // SVGFontElement" from "the converter did not run".
+            var NS = 'http://www.w3.org/2000/svg';
+            var svg = document.createElementNS(NS, 'svg');
+            svg.setAttribute('width', '0'); svg.setAttribute('height', '0');
+            svg.style.cssText = 'position:absolute;left:-300px;top:0';
+            var defs = document.createElementNS(NS, 'defs');
+            var font = document.createElementNS(NS, 'font');
+            font.setAttribute('id', 'f1'); font.setAttribute('horiz-adv-x', '1000');
+            var ff = document.createElementNS(NS, 'font-face');
+            ff.setAttribute('font-family', arm.family);
+            ff.setAttribute('units-per-em', '1000');
+            ff.setAttribute('ascent', '800'); ff.setAttribute('descent', '200');
+            var gl = document.createElementNS(NS, 'glyph');
+            gl.setAttribute('unicode', 'A'); gl.setAttribute('d', SQUARE);
+            font.appendChild(ff); font.appendChild(gl);
+            defs.appendChild(font); svg.appendChild(defs); host.appendChild(svg);
+        } else if (arm.kind === 'ext') {
+            styleEl = document.createElement('style');
+            styleEl.textContent = '@font-face{font-family:"' + arm.family + '";src:url(' + (arm.url || ('x_' + arm.id + '.svg#f1')) + ') format(svg);}';
+            document.head.appendChild(styleEl);
+        }
+        // Force a style rebuild so the SVG font-face rule reaches the font selector, then measure.
+        host.offsetHeight;
+        if (arm.kind === 'ext') {
+            // The fetch + CachedSVGFont conversion is asynchronous.  Merely inserting the rule does
+            // not start it: the face is loaded on first *use*, so warm it with a laid-out span
+            // before waiting, otherwise the "wait" only measures the fallback and then the span is
+            // removed and the load is cancelled.
+            var warm = document.createElement('span');
+            warm.style.cssText = 'position:absolute;left:-3000px;top:0;white-space:pre;font:100px "' + arm.family + '"';
+            warm.textContent = arm.text || 'A';
+            host.appendChild(warm);
+            host.offsetHeight;
+            ev('WARM ' + arm.id + ' ' + faceStatus(arm.family));
+            return new Promise(function (resolve) {
+                setTimeout(function () {
+                    ev('PRE ' + arm.id + ' ' + faceStatus(arm.family));
+                    try { measureArm(arm, host, styleEl); }
+                    catch (e) { ev('ERR ' + arm.id + ' ' + e.name + ':' + String(e.message).slice(0, 80)); }
+                    resolve();
+                }, arm.wait || TMO);
+            });
+        }
+        measureArm(arm, host, styleEl);
+    } catch (e) {
+        ev('ERR ' + arm.id + ' ' + e.name + ':' + String(e.message).slice(0, 80));
+        if (styleEl) styleEl.remove();
+        host.remove();
+    }
+    return null;
+}
+
+// ---------------------------------------------------------------- arm list
+var SQUARE = 'M0 0 L1000 0 L1000 800 L0 800 Z';
+var LONGFAM = 'Zz' + repeat('a', 40000);   // 40002 chars: appendNAMETable's `m_fontFamily.length() * 2`
+var ARMS = [
+    // --- reachability -------------------------------------------------------
+    { id: 'R1-indoc', kind: 'indoc', group: 'reach', family: 'Zzsvg1',
+      font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzsvg1', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      missing: { 'horiz-adv-x': 500, d: 'M0 0 L500 0 L500 500 Z' },
+      glyphs: [ { unicode: 'A', 'horiz-adv-x': 1000, d: SQUARE } ] },
+    { id: 'R2-ext', kind: 'ext', group: 'reach', family: 'Zzext2', url: 'x_R2-ext.svg#f1' },
+    { id: 'R3-none', kind: 'none', group: 'reach', family: 'Zznone3' },
+    { id: 'R4-indoc-noface', kind: 'indoc', group: 'reach', family: 'Zzsvg4',
+      font: { id: 'f1', 'horiz-adv-x': 1000 }, face: null,
+      glyphs: [ { unicode: 'A', 'horiz-adv-x': 1000, d: SQUARE } ] },
+    { id: 'R5-indoc-js', kind: 'indocjs', group: 'reach', family: 'Zzsvg5' },
+
+    // --- d attribute --------------------------------------------------------
+    { id: 'D1-huge-segments', kind: 'indoc', group: 'd', family: 'Zzd1', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzd1', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: bigPath(20000) } ] },
+    { id: 'D2-mid-command', kind: 'indoc', group: 'd', family: 'Zzd2', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzd2', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: 'M0 0 L100' } ] },
+    { id: 'D3-hv', kind: 'indoc', group: 'd', family: 'Zzd3', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzd3', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: 'M0 0 H800 V800 H0 Z' } ] },
+    { id: 'D4-quad-arc', kind: 'indoc', group: 'd', family: 'Zzd4', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzd4', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: 'M0 0 Q500 900 1000 0 A300 300 0 0 1 0 0 Z' } ] },
+    { id: 'D5-huge-coords', kind: 'indoc', group: 'd', family: 'Zzd5', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzd5', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: 'M1e30 1e30 L-1e30 -1e30 L3.4e38 3.4e38 Z' } ] },
+    { id: 'D6-nan', kind: 'indoc', group: 'd', family: 'Zzd6', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzd6', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: 'MNaN NaN LNaN 100 L100 NaN Z' } ] },
+    { id: 'D7-many-movetos', kind: 'indoc', group: 'd', family: 'Zzd7', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzd7', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: repeat('M0 0 ', 30000) } ] },
+    { id: 'D8-no-d', kind: 'indoc', group: 'd', family: 'Zzd8', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzd8', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A' } ] },
+    { id: 'D9-empty-d', kind: 'indoc', group: 'd', family: 'Zzd9', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzd9', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: '' } ] },
+
+    // --- numeric attributes -------------------------------------------------
+    { id: 'A1-hgx0', kind: 'indoc', group: 'attr', family: 'Zza1', font: { id: 'f1', 'horiz-adv-x': 0 },
+      face: { 'font-family': 'Zza1', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ] },
+    { id: 'A2-hgx65535', kind: 'indoc', group: 'attr', family: 'Zza2', font: { id: 'f1', 'horiz-adv-x': 65535 },
+      face: { 'font-family': 'Zza2', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ] },
+    { id: 'A3-hgx1e9', kind: 'indoc', group: 'attr', family: 'Zza3', font: { id: 'f1', 'horiz-adv-x': 1e9 },
+      face: { 'font-family': 'Zza3', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ] },
+    { id: 'A4-upm0', kind: 'indoc', group: 'attr', family: 'Zza4', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zza4', 'units-per-em': 0, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ] },
+    { id: 'A5-upm-neg', kind: 'indoc', group: 'attr', family: 'Zza5', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zza5', 'units-per-em': -1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ] },
+    { id: 'A6-upm1', kind: 'indoc', group: 'attr', family: 'Zza6', font: { id: 'f1', 'horiz-adv-x': 1 },
+      face: { 'font-family': 'Zza6', 'units-per-em': 1, ascent: 1, descent: 0 },
+      glyphs: [ { unicode: 'A', d: 'M0 0 L1 0 L1 1 L0 1 Z' } ] },
+    { id: 'A7-upm1e10', kind: 'indoc', group: 'attr', family: 'Zza7', font: { id: 'f1', 'horiz-adv-x': 1e10 },
+      face: { 'font-family': 'Zza7', 'units-per-em': 1e10, ascent: 8e9, descent: 2e9 },
+      glyphs: [ { unicode: 'A', d: 'M0 0 L1e10 0 L1e10 8e9 Z' } ] },
+    { id: 'A8-asc-huge', kind: 'indoc', group: 'attr', family: 'Zza8', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zza8', 'units-per-em': 1000, ascent: 1e9, descent: -1e9, 'x-height': 1e9, 'cap-height': -1e9 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ] },
+
+    // --- unicode -------------------------------------------------------------
+    { id: 'U1-dup', kind: 'indoc', group: 'uni', family: 'Zzu1', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzu1', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE }, { unicode: 'A', 'horiz-adv-x': 300, d: 'M0 0 L300 0 L300 300 Z' },
+                { unicode: 'A', 'horiz-adv-x': 700, d: 'M0 0 L700 0 L700 700 Z' } ] },
+    { id: 'U2-ligature', kind: 'indoc', group: 'uni', family: 'Zzu2', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzu2', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'f', d: 'M0 0 L400 0 L400 700 Z' }, { unicode: 'i', d: 'M0 0 L300 0 L300 700 Z' },
+                { unicode: 'fi', d: 'M0 0 L700 0 L700 700 Z' } ], text: 'fi' },
+    { id: 'U3-astral', kind: 'indoc', group: 'uni', family: 'Zzu3', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzu3', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: '\u{1F600}', d: SQUARE } ], text: '\u{1F600}' },
+    { id: 'U4-long-lig', kind: 'indoc', group: 'uni', family: 'Zzu4', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzu4', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: repeat('a', 200), d: SQUARE } ], text: 'a' },
+    { id: 'U5-space', kind: 'indoc', group: 'uni', family: 'Zzu5', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzu5', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: ' ', 'horiz-adv-x': 600, d: '' } ], text: ' ' },
+
+    // --- glyph count ---------------------------------------------------------
+    { id: 'N1-1000', kind: 'indoc', group: 'num', family: 'Zzn1', probe: '\u0105', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzn1', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      gen: { n: 1000, kind: 'square', start: 0x100 } },
+    { id: 'N2-33000', kind: 'indoc', group: 'num', family: 'Zzn2', probe: '\u0105', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzn2', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      gen: { n: 33000, kind: 'square', start: 0x100 } },
+    // 65534 distinct BMP codepoints + the empty glyph 0 = 65535 glyphs, the largest size the
+    // converter accepts (m_glyphs.size() > 0xFFFF clears it).  At this size
+    // appendFormat4CMAPTable's `uint16_t segCount = bmpMappings.size() + 1` is 65536 -> 0.
+    { id: 'N3-65535', kind: 'indoc', group: 'num', family: 'Zzn3', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzn3', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      gen: { n: 65534, kind: 'square', start: 0x20 } },
+
+    // 65535 glyph elements + the implicit glyph 0 = 65536 > uint16 max -> m_glyphs.clear(), no font.
+    { id: 'N4-65536', kind: 'indoc', group: 'num', family: 'Zzn4', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzn4', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      gen: { n: 65535, kind: 'square', start: 0x20 } },
+
+    // --- GSUB / kern size ----------------------------------------------------
+    { id: 'G1-lig3000', kind: 'indoc', group: 'gsub', family: 'Zzg1', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg1', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ], gen: { n: 3000, kind: 'lig' } },
+    { id: 'G2-lig-dup', kind: 'indoc', group: 'gsub', family: 'Zzg2', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg2', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE }, { unicode: 'ab', d: SQUARE }, { unicode: 'ab', d: SQUARE },
+                { unicode: 'ab', d: SQUARE }, { unicode: 'ac', d: SQUARE }, { unicode: 'ac', d: SQUARE } ] },
+    // ~12000 distinct ligatures: the ligature subtable passes 64 KiB, where every GSUB offset in
+    // this writer is a uint16 (appendLigatureSubtable :751, Placeholder::populate assert).
+    { id: 'G3-lig12000', kind: 'indoc', group: 'gsub', family: 'Zzg3', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg3', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ], gen: { n: 12000, kind: 'lig' } },
+    { id: 'K1-kern10000', kind: 'indoc', group: 'kern', family: 'Zzk1', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzk1', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      gen: { n: 10000, kind: 'named', start: 0x100 }, extra: bigKern(10000) },
+
+    // --- two ligatures sharing a first glyph: appendLigatureSubtable writes the *pair* count into
+    // "Number of LigatureSet tables" (SVGToOTFFontConversion.cpp:751) but only one offset per
+    // segment, and `previousFirstGlyph = ligaturePairs[0].first[0]` (:757) resets the comparator to
+    // the smallest first glyph after every transition.  Does the substituted width still arrive?
+    { id: 'G4-two-lig-ab', kind: 'indoc', group: 'gsub2', family: 'Zzg4', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg4', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'a', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'b', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'c', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'ab', 'horiz-adv-x': 900, d: SQUARE },
+                { unicode: 'ac', 'horiz-adv-x': 700, d: SQUARE } ], text: 'ab' },
+    { id: 'G5-two-lig-ac', kind: 'indoc', group: 'gsub2', family: 'Zzg5', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg5', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'a', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'b', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'c', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'ab', 'horiz-adv-x': 900, d: SQUARE },
+                { unicode: 'ac', 'horiz-adv-x': 700, d: SQUARE } ], text: 'ac' },
+    { id: 'G6-one-lig-ab', kind: 'indoc', group: 'gsub2', family: 'Zzg6', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg6', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'a', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'b', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'ab', 'horiz-adv-x': 900, d: SQUARE } ], text: 'ab' },
+
+    // three ligatures sharing 'a', and two ligatures with *different* first glyphs: the pair that
+    // separates "more than one ligature breaks it" from "ligatures sharing a first glyph break it".
+    { id: 'G7-three-lig-ab', kind: 'indoc', group: 'gsub3', family: 'Zzg7', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg7', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'a', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'b', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'c', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'd', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'ab', 'horiz-adv-x': 900, d: SQUARE },
+                { unicode: 'ac', 'horiz-adv-x': 800, d: SQUARE },
+                { unicode: 'ad', 'horiz-adv-x': 700, d: SQUARE } ], text: 'ab' },
+    { id: 'G8-two-difffirst-ab', kind: 'indoc', group: 'gsub3', family: 'Zzg8', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg8', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'a', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'b', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'c', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'd', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'ab', 'horiz-adv-x': 900, d: SQUARE },
+                { unicode: 'cd', 'horiz-adv-x': 700, d: SQUARE } ], text: 'ab' },
+    { id: 'G9-two-difffirst-cd', kind: 'indoc', group: 'gsub3', family: 'Zzg9', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg9', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'a', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'b', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'c', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'd', 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' },
+                { unicode: 'ab', 'horiz-adv-x': 900, d: SQUARE },
+                { unicode: 'cd', 'horiz-adv-x': 700, d: SQUARE } ], text: 'cd' },
+
+    // --- ligature count vs offset slots at N=300 (docs/105) -------------------
+    // 300 ligatures, every one starting with 'f': one distinct first glyph, so :771 declares 300
+    // LigatureSet offsets while :772 grows one slot.  A working ligature measures 100.00 (the font's
+    // default advance); three unligated glyphs measure 60.00.
+    { id: 'G10-lig300-f', kind: 'indoc', group: 'gsub4', family: 'Zzg10', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg10', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: letters(26), gen: { n: 300, kind: 'ligf' }, text: 'faa' },
+    // The well-formed twin: 300 ligatures with 300 *distinct* first glyphs — same N, same table size,
+    // declared count == written offsets.  A working ligature measures 100.00, two single glyphs 40.00.
+    { id: 'G11-lig300-distinct', kind: 'indoc', group: 'gsub4', family: 'Zzg11', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzg11', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: letters(1), gen: { n: 300, kind: 'ligd' }, text: '\u0100a' },
+
+    // --- kern isolation: is K1's fallback the glyph count, the glyph-name map, or the kern table?
+    { id: 'K2-named100', kind: 'indoc', group: 'kern2', family: 'Zzk2', probe: '\u0105', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzk2', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ], gen: { n: 100, kind: 'named', start: 0x100 } },
+    { id: 'K3-kern100', kind: 'indoc', group: 'kern2', family: 'Zzk3', probe: '\u0105', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzk3', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ], gen: { n: 100, kind: 'named', start: 0x100 }, extra: bigKern(100) },
+    { id: 'K4-kern10000', kind: 'indoc', group: 'kern2', family: 'Zzk4', probe: '\u0105', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzk4', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ], gen: { n: 10000, kind: 'named', start: 0x100 }, extra: bigKern(10000) },
+    { id: 'K5-10000-nokern', kind: 'indoc', group: 'kern2', family: 'Zzk5', probe: '\u0105', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzk5', 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ], gen: { n: 10000, kind: 'named', start: 0x100 } },
+
+    // --- length arithmetic in the writer -------------------------------------
+    { id: 'F1-longfamily', kind: 'indoc', group: 'len', family: LONGFAM, font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': LONGFAM, 'units-per-em': 1000, ascent: 800, descent: 200 },
+      glyphs: [ { unicode: 'A', d: SQUARE } ] },
+    { id: 'P1-panose', kind: 'indoc', group: 'len', family: 'Zzp1', font: { id: 'f1', 'horiz-adv-x': 1000 },
+      face: { 'font-family': 'Zzp1', 'units-per-em': 1000, ascent: 800, descent: 200,
+              'panose-1': '1 2 3 4 5 6 7 8 9 10 11 12 13 14' },
+      glyphs: [ { unicode: 'A', d: SQUARE } ] },
+
+    // --- external (CachedSVGFont) --------------------------------------------
+    { id: 'X1-huge', kind: 'ext', group: 'ext2', family: 'Zzx1', url: 'x_X1-huge.svg#f1' },
+    { id: 'X2-many', kind: 'ext', group: 'ext2', family: 'Zzx2', probe: '\u0105', url: 'x_X2-many.svg#f1' },
+    { id: 'X3-noface', kind: 'ext', group: 'ext2', family: 'Zzx3', url: 'x_X3-noface.svg#f1' },
+    { id: 'X4-badxml', kind: 'ext', group: 'ext2', family: 'Zzx4', url: 'x_X4-badxml.svg#f1' },
+    { id: 'X5-dup', kind: 'ext', group: 'ext2', family: 'Zzx5', probe: '\u0105', url: 'x_X5-dup.svg#f1' }
+];
+
+function bigPath(n) {
+    var s = 'M0 0';
+    for (var i = 0; i < n; i++) s += ' L' + (i % 1000) + ' ' + ((i * 7) % 800);
+    return s + ' Z';
+}
+function repeat(s, n) { var r = ''; for (var i = 0; i < n; i++) r += s; return r; }
+function letters(n) {
+    var a = [];
+    for (var i = 0; i < n; i++)
+        a.push({ unicode: String.fromCodePoint(0x61 + i), 'horiz-adv-x': 200, d: 'M0 0 L200 0 L200 600 Z' });
+    return a;
+}
+function bigKern(n) {
+    var s = '';
+    for (var i = 0; i < n; i++)
+        s += '<hkern g1="g' + i + '" g2="g' + ((i + 1) % n) + '" k="' + (-(i % 300)) + '"/>';
+    return s;
+}
+
+// ---------------------------------------------------------------- driver
+function next(i) {
+    if (i >= ARMS.length) { ev('DONE n=' + ARMS.length); log('DONE'); return; }
+    var arm = ARMS[i];
+    if (KINDS.length && KINDS.indexOf(arm.group) < 0) return next(i + 1);
+    if (ONLY.length && ONLY.indexOf(arm.id) < 0) return next(i + 1);
+    var p = null;
+    try { p = runArm(arm); } catch (e) { ev('FATAL ' + arm.id + ' ' + e.name); }
+    Promise.resolve(p).then(function () {
+        setTimeout(function () { next(i + 1); }, GAP);
+    });
+}
+
+window.addEventListener('load', function () {
+    ev('BOOT arms=' + ARMS.length + ' kinds=' + (KINDS.join('|') || '*'));
+    log('arms=' + ARMS.length);
+    setTimeout(function () { next(0); }, 60 + DELAY);
+});
+</script>
+<div id=log></div>

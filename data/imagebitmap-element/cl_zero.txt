@@ -1,0 +1,9 @@
+== arm cl_zero (port 12431)
+-- beacons:
+  cap%26arm%3Dclone%26ua%3DMozilla%252F5.0%2520(X11%253B%2520Linux%2520x86_64)%2520AppleWeb
+  clone%26units%3D8%26hex%3D00000000000000000000000000000100%26eight%3D0
+  xmid%26ok%3D1%26tag%3Dmsg%26name%3D%26m%3D
+  rx%26d%3DImageBitmap%3Aw0h0%26w%3D0%26h%3D0%26g%3D%5Bobject%20Object%5D
+  done%26arm%3Dclone
+-- asan:
+  EXIT=124

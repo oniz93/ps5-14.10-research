@@ -1,0 +1,7 @@
+16:19:27 page /arm=a referer=<none>
+16:19:27 res /res.png?arm=warm referer=<none>
+16:19:31 page /arm=a referer=<none>
+16:19:31 res /res.png?arm=a referer=http://localhost:8971/
+16:19:31 res /res.png?arm=b referer=http://localhost:8971/arm=a
+16:19:31 res /res.png?arm=c referer=<none>
+16:19:31 page /favicon.ico referer=http://localhost:8971/arm=a

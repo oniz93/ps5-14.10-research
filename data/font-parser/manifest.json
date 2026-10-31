@@ -1,0 +1,1168 @@
+{
+ "base": "LiberationSans-Regular.ttf",
+ "base_md5": "d7b4e92b03deb1865aa61328fd5ff400",
+ "base_size": 410712,
+ "tables": [
+  "FFTM",
+  "GDEF",
+  "GPOS",
+  "GSUB",
+  "OS/2",
+  "cmap",
+  "cvt ",
+  "fpgm",
+  "gasp",
+  "glyf",
+  "head",
+  "hhea",
+  "hmtx",
+  "kern",
+  "loca",
+  "maxp",
+  "name",
+  "post",
+  "prep"
+ ],
+ "arms": [
+  {
+   "id": "ctl",
+   "file": "ctl.ttf",
+   "kind": "control",
+   "desc": "unmodified Liberation Sans"
+  },
+  {
+   "id": "TR001",
+   "file": "TR001.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 1 bytes (directory)"
+  },
+  {
+   "id": "TR002",
+   "file": "TR002.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 2 bytes (directory)"
+  },
+  {
+   "id": "TR003",
+   "file": "TR003.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 3 bytes (directory)"
+  },
+  {
+   "id": "TR004",
+   "file": "TR004.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 4 bytes (directory)"
+  },
+  {
+   "id": "TR008",
+   "file": "TR008.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 8 bytes (directory)"
+  },
+  {
+   "id": "TR011",
+   "file": "TR011.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 11 bytes (directory)"
+  },
+  {
+   "id": "TR012",
+   "file": "TR012.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 12 bytes (directory)"
+  },
+  {
+   "id": "TR013",
+   "file": "TR013.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 13 bytes (directory)"
+  },
+  {
+   "id": "TR016",
+   "file": "TR016.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 16 bytes (directory)"
+  },
+  {
+   "id": "TR017",
+   "file": "TR017.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 17 bytes (directory)"
+  },
+  {
+   "id": "TR027",
+   "file": "TR027.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 27 bytes (directory)"
+  },
+  {
+   "id": "TR028",
+   "file": "TR028.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 28 bytes (directory)"
+  },
+  {
+   "id": "TR029",
+   "file": "TR029.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 29 bytes (directory)"
+  },
+  {
+   "id": "TR044",
+   "file": "TR044.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 44 bytes (directory)"
+  },
+  {
+   "id": "TR045",
+   "file": "TR045.ttf",
+   "kind": "trunc-file",
+   "desc": "file cut to 45 bytes (directory)"
+  },
+  {
+   "id": "TR-FFTM-a",
+   "file": "TR-FFTM-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside FFTM at table start (410684 B)"
+  },
+  {
+   "id": "TR-FFTM-b",
+   "file": "TR-FFTM-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside FFTM at +1 byte (410685 B)"
+  },
+  {
+   "id": "TR-FFTM-c",
+   "file": "TR-FFTM-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside FFTM at half (410698 B)"
+  },
+  {
+   "id": "TR-FFTM-d",
+   "file": "TR-FFTM-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside FFTM at last byte (410711 B)"
+  },
+  {
+   "id": "TR-GDEF-a",
+   "file": "TR-GDEF-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GDEF at table start (331348 B)"
+  },
+  {
+   "id": "TR-GDEF-b",
+   "file": "TR-GDEF-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GDEF at +1 byte (331349 B)"
+  },
+  {
+   "id": "TR-GDEF-c",
+   "file": "TR-GDEF-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GDEF at half (331497 B)"
+  },
+  {
+   "id": "TR-GDEF-d",
+   "file": "TR-GDEF-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GDEF at last byte (331645 B)"
+  },
+  {
+   "id": "TR-GPOS-a",
+   "file": "TR-GPOS-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GPOS at table start (334020 B)"
+  },
+  {
+   "id": "TR-GPOS-b",
+   "file": "TR-GPOS-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GPOS at +1 byte (334021 B)"
+  },
+  {
+   "id": "TR-GPOS-c",
+   "file": "TR-GPOS-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GPOS at half (372352 B)"
+  },
+  {
+   "id": "TR-GPOS-d",
+   "file": "TR-GPOS-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GPOS at last byte (410683 B)"
+  },
+  {
+   "id": "TR-GSUB-a",
+   "file": "TR-GSUB-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GSUB at table start (331648 B)"
+  },
+  {
+   "id": "TR-GSUB-b",
+   "file": "TR-GSUB-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GSUB at +1 byte (331649 B)"
+  },
+  {
+   "id": "TR-GSUB-c",
+   "file": "TR-GSUB-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GSUB at half (332834 B)"
+  },
+  {
+   "id": "TR-GSUB-d",
+   "file": "TR-GSUB-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside GSUB at last byte (334019 B)"
+  },
+  {
+   "id": "TR-OS_2-a",
+   "file": "TR-OS_2-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside OS/2 at table start (440 B)"
+  },
+  {
+   "id": "TR-OS_2-b",
+   "file": "TR-OS_2-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside OS/2 at +1 byte (441 B)"
+  },
+  {
+   "id": "TR-OS_2-c",
+   "file": "TR-OS_2-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside OS/2 at half (488 B)"
+  },
+  {
+   "id": "TR-OS_2-d",
+   "file": "TR-OS_2-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside OS/2 at last byte (535 B)"
+  },
+  {
+   "id": "TR-cmap-a",
+   "file": "TR-cmap-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside cmap at table start (11016 B)"
+  },
+  {
+   "id": "TR-cmap-b",
+   "file": "TR-cmap-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside cmap at +1 byte (11017 B)"
+  },
+  {
+   "id": "TR-cmap-c",
+   "file": "TR-cmap-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside cmap at half (11803 B)"
+  },
+  {
+   "id": "TR-cmap-d",
+   "file": "TR-cmap-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside cmap at last byte (12589 B)"
+  },
+  {
+   "id": "TR-cvt-a",
+   "file": "TR-cvt-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside cvt  at table start (15400 B)"
+  },
+  {
+   "id": "TR-cvt-b",
+   "file": "TR-cvt-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside cvt  at +1 byte (15401 B)"
+  },
+  {
+   "id": "TR-cvt-c",
+   "file": "TR-cvt-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside cvt  at half (15724 B)"
+  },
+  {
+   "id": "TR-cvt-d",
+   "file": "TR-cvt-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside cvt  at last byte (16047 B)"
+  },
+  {
+   "id": "TR-fpgm-a",
+   "file": "TR-fpgm-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside fpgm at table start (12592 B)"
+  },
+  {
+   "id": "TR-fpgm-b",
+   "file": "TR-fpgm-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside fpgm at +1 byte (12593 B)"
+  },
+  {
+   "id": "TR-fpgm-c",
+   "file": "TR-fpgm-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside fpgm at half (13578 B)"
+  },
+  {
+   "id": "TR-fpgm-d",
+   "file": "TR-fpgm-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside fpgm at last byte (14563 B)"
+  },
+  {
+   "id": "TR-gasp-a",
+   "file": "TR-gasp-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside gasp at table start (331332 B)"
+  },
+  {
+   "id": "TR-gasp-b",
+   "file": "TR-gasp-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside gasp at +1 byte (331333 B)"
+  },
+  {
+   "id": "TR-gasp-c",
+   "file": "TR-gasp-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside gasp at half (331340 B)"
+  },
+  {
+   "id": "TR-gasp-d",
+   "file": "TR-gasp-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside gasp at last byte (331347 B)"
+  },
+  {
+   "id": "TR-glyf-a",
+   "file": "TR-glyf-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside glyf at table start (26532 B)"
+  },
+  {
+   "id": "TR-glyf-b",
+   "file": "TR-glyf-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside glyf at +1 byte (26533 B)"
+  },
+  {
+   "id": "TR-glyf-c",
+   "file": "TR-glyf-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside glyf at half (161210 B)"
+  },
+  {
+   "id": "TR-glyf-d",
+   "file": "TR-glyf-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside glyf at last byte (295887 B)"
+  },
+  {
+   "id": "TR-head-a",
+   "file": "TR-head-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside head at table start (316 B)"
+  },
+  {
+   "id": "TR-head-b",
+   "file": "TR-head-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside head at +1 byte (317 B)"
+  },
+  {
+   "id": "TR-head-c",
+   "file": "TR-head-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside head at half (343 B)"
+  },
+  {
+   "id": "TR-head-d",
+   "file": "TR-head-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside head at last byte (369 B)"
+  },
+  {
+   "id": "TR-hhea-a",
+   "file": "TR-hhea-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside hhea at table start (372 B)"
+  },
+  {
+   "id": "TR-hhea-b",
+   "file": "TR-hhea-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside hhea at +1 byte (373 B)"
+  },
+  {
+   "id": "TR-hhea-c",
+   "file": "TR-hhea-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside hhea at half (390 B)"
+  },
+  {
+   "id": "TR-hhea-d",
+   "file": "TR-hhea-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside hhea at last byte (407 B)"
+  },
+  {
+   "id": "TR-hmtx-a",
+   "file": "TR-hmtx-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside hmtx at table start (536 B)"
+  },
+  {
+   "id": "TR-hmtx-b",
+   "file": "TR-hmtx-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside hmtx at +1 byte (537 B)"
+  },
+  {
+   "id": "TR-hmtx-c",
+   "file": "TR-hmtx-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside hmtx at half (5776 B)"
+  },
+  {
+   "id": "TR-hmtx-d",
+   "file": "TR-hmtx-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside hmtx at last byte (11015 B)"
+  },
+  {
+   "id": "TR-kern-a",
+   "file": "TR-kern-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside kern at table start (295888 B)"
+  },
+  {
+   "id": "TR-kern-b",
+   "file": "TR-kern-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside kern at +1 byte (295889 B)"
+  },
+  {
+   "id": "TR-kern-c",
+   "file": "TR-kern-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside kern at half (298621 B)"
+  },
+  {
+   "id": "TR-kern-d",
+   "file": "TR-kern-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside kern at last byte (301353 B)"
+  },
+  {
+   "id": "TR-loca-a",
+   "file": "TR-loca-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside loca at table start (16048 B)"
+  },
+  {
+   "id": "TR-loca-b",
+   "file": "TR-loca-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside loca at +1 byte (16049 B)"
+  },
+  {
+   "id": "TR-loca-c",
+   "file": "TR-loca-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside loca at half (21290 B)"
+  },
+  {
+   "id": "TR-loca-d",
+   "file": "TR-loca-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside loca at last byte (26531 B)"
+  },
+  {
+   "id": "TR-maxp-a",
+   "file": "TR-maxp-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside maxp at table start (408 B)"
+  },
+  {
+   "id": "TR-maxp-b",
+   "file": "TR-maxp-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside maxp at +1 byte (409 B)"
+  },
+  {
+   "id": "TR-maxp-c",
+   "file": "TR-maxp-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside maxp at half (424 B)"
+  },
+  {
+   "id": "TR-maxp-d",
+   "file": "TR-maxp-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside maxp at last byte (439 B)"
+  },
+  {
+   "id": "TR-name-a",
+   "file": "TR-name-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside name at table start (301356 B)"
+  },
+  {
+   "id": "TR-name-b",
+   "file": "TR-name-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside name at +1 byte (301357 B)"
+  },
+  {
+   "id": "TR-name-c",
+   "file": "TR-name-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside name at half (302832 B)"
+  },
+  {
+   "id": "TR-name-d",
+   "file": "TR-name-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside name at last byte (304307 B)"
+  },
+  {
+   "id": "TR-post-a",
+   "file": "TR-post-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside post at table start (304308 B)"
+  },
+  {
+   "id": "TR-post-b",
+   "file": "TR-post-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside post at +1 byte (304309 B)"
+  },
+  {
+   "id": "TR-post-c",
+   "file": "TR-post-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside post at half (317818 B)"
+  },
+  {
+   "id": "TR-post-d",
+   "file": "TR-post-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside post at last byte (331328 B)"
+  },
+  {
+   "id": "TR-prep-a",
+   "file": "TR-prep-a.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside prep at table start (14564 B)"
+  },
+  {
+   "id": "TR-prep-b",
+   "file": "TR-prep-b.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside prep at +1 byte (14565 B)"
+  },
+  {
+   "id": "TR-prep-c",
+   "file": "TR-prep-c.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside prep at half (14981 B)"
+  },
+  {
+   "id": "TR-prep-d",
+   "file": "TR-prep-d.ttf",
+   "kind": "trunc-table",
+   "desc": "file cut inside prep at last byte (15398 B)"
+  },
+  {
+   "id": "DR-numt0",
+   "file": "DR-numt0.ttf",
+   "kind": "dir",
+   "desc": "numTables = 0"
+  },
+  {
+   "id": "DR-numt1",
+   "file": "DR-numt1.ttf",
+   "kind": "dir",
+   "desc": "numTables = 1"
+  },
+  {
+   "id": "DR-numt4095",
+   "file": "DR-numt4095.ttf",
+   "kind": "dir",
+   "desc": "numTables = 4095"
+  },
+  {
+   "id": "DR-numt4096",
+   "file": "DR-numt4096.ttf",
+   "kind": "dir",
+   "desc": "numTables = 4096"
+  },
+  {
+   "id": "DR-glyf-lenmax",
+   "file": "DR-glyf-lenmax.ttf",
+   "kind": "dir",
+   "desc": "glyf length 0xFFFFFFFF"
+  },
+  {
+   "id": "DR-glyf-len0",
+   "file": "DR-glyf-len0.ttf",
+   "kind": "dir",
+   "desc": "glyf length 0"
+  },
+  {
+   "id": "DR-glyf-offmax",
+   "file": "DR-glyf-offmax.ttf",
+   "kind": "dir",
+   "desc": "glyf offset 0xFFFFFF00"
+  },
+  {
+   "id": "DR-glyf-offend",
+   "file": "DR-glyf-offend.ttf",
+   "kind": "dir",
+   "desc": "glyf offset 410704 length 0x1000"
+  },
+  {
+   "id": "DR-cmap-lenmax",
+   "file": "DR-cmap-lenmax.ttf",
+   "kind": "dir",
+   "desc": "cmap length 0xFFFFFFFF"
+  },
+  {
+   "id": "DR-cmap-len0",
+   "file": "DR-cmap-len0.ttf",
+   "kind": "dir",
+   "desc": "cmap length 0"
+  },
+  {
+   "id": "DR-cmap-offmax",
+   "file": "DR-cmap-offmax.ttf",
+   "kind": "dir",
+   "desc": "cmap offset 0xFFFFFF00"
+  },
+  {
+   "id": "DR-cmap-offend",
+   "file": "DR-cmap-offend.ttf",
+   "kind": "dir",
+   "desc": "cmap offset 410704 length 0x1000"
+  },
+  {
+   "id": "DR-name-lenmax",
+   "file": "DR-name-lenmax.ttf",
+   "kind": "dir",
+   "desc": "name length 0xFFFFFFFF"
+  },
+  {
+   "id": "DR-name-len0",
+   "file": "DR-name-len0.ttf",
+   "kind": "dir",
+   "desc": "name length 0"
+  },
+  {
+   "id": "DR-name-offmax",
+   "file": "DR-name-offmax.ttf",
+   "kind": "dir",
+   "desc": "name offset 0xFFFFFF00"
+  },
+  {
+   "id": "DR-name-offend",
+   "file": "DR-name-offend.ttf",
+   "kind": "dir",
+   "desc": "name offset 410704 length 0x1000"
+  },
+  {
+   "id": "DR-GSUB-lenmax",
+   "file": "DR-GSUB-lenmax.ttf",
+   "kind": "dir",
+   "desc": "GSUB length 0xFFFFFFFF"
+  },
+  {
+   "id": "DR-GSUB-len0",
+   "file": "DR-GSUB-len0.ttf",
+   "kind": "dir",
+   "desc": "GSUB length 0"
+  },
+  {
+   "id": "DR-GSUB-offmax",
+   "file": "DR-GSUB-offmax.ttf",
+   "kind": "dir",
+   "desc": "GSUB offset 0xFFFFFF00"
+  },
+  {
+   "id": "DR-GSUB-offend",
+   "file": "DR-GSUB-offend.ttf",
+   "kind": "dir",
+   "desc": "GSUB offset 410704 length 0x1000"
+  },
+  {
+   "id": "DR-ver-otto",
+   "file": "DR-ver-otto.ttf",
+   "kind": "dir",
+   "desc": "sfntVersion = b'OTTO'"
+  },
+  {
+   "id": "DR-ver-zero",
+   "file": "DR-ver-zero.ttf",
+   "kind": "dir",
+   "desc": "sfntVersion = b'\\x00\\x00\\x00\\x00'"
+  },
+  {
+   "id": "DR-ver-true",
+   "file": "DR-ver-true.ttf",
+   "kind": "dir",
+   "desc": "sfntVersion = b'true'"
+  },
+  {
+   "id": "DR-ver-ffff",
+   "file": "DR-ver-ffff.ttf",
+   "kind": "dir",
+   "desc": "sfntVersion = b'\\xff\\xff\\xff\\xff'"
+  },
+  {
+   "id": "DR-csum-all",
+   "file": "DR-csum-all.ttf",
+   "kind": "dir",
+   "desc": "every table checksum 0xFFFFFFFF"
+  },
+  {
+   "id": "DR-dup-head",
+   "file": "DR-dup-head.ttf",
+   "kind": "dir",
+   "desc": "duplicate 'head' entry (second is FFTM)"
+  },
+  {
+   "id": "HD-loc2",
+   "file": "HD-loc2.ttf",
+   "kind": "head",
+   "desc": "indexToLocFormat 2"
+  },
+  {
+   "id": "HD-loc3",
+   "file": "HD-loc3.ttf",
+   "kind": "head",
+   "desc": "indexToLocFormat 3"
+  },
+  {
+   "id": "HD-locswap",
+   "file": "HD-locswap.ttf",
+   "kind": "head",
+   "desc": "indexToLocFormat 0 on a 1 loca"
+  },
+  {
+   "id": "HD-upem0",
+   "file": "HD-upem0.ttf",
+   "kind": "head",
+   "desc": "unitsPerEm 0"
+  },
+  {
+   "id": "HD-upem1",
+   "file": "HD-upem1.ttf",
+   "kind": "head",
+   "desc": "unitsPerEm 1"
+  },
+  {
+   "id": "HD-upemmax",
+   "file": "HD-upemmax.ttf",
+   "kind": "head",
+   "desc": "unitsPerEm 0xFFFF"
+  },
+  {
+   "id": "HD-magic",
+   "file": "HD-magic.ttf",
+   "kind": "head",
+   "desc": "magicNumber 0"
+  },
+  {
+   "id": "HD-len53",
+   "file": "HD-len53.ttf",
+   "kind": "head",
+   "desc": "head directory length 53"
+  },
+  {
+   "id": "HD-len40",
+   "file": "HD-len40.ttf",
+   "kind": "head",
+   "desc": "head directory length 40"
+  },
+  {
+   "id": "HD-len0",
+   "file": "HD-len0.ttf",
+   "kind": "head",
+   "desc": "head directory length 0"
+  },
+  {
+   "id": "MX-numg0",
+   "file": "MX-numg0.ttf",
+   "kind": "maxp",
+   "desc": "maxp.numGlyphs 2620 -> 0"
+  },
+  {
+   "id": "MX-numg1",
+   "file": "MX-numg1.ttf",
+   "kind": "maxp",
+   "desc": "maxp.numGlyphs 2620 -> 1"
+  },
+  {
+   "id": "MX-numgmax",
+   "file": "MX-numgmax.ttf",
+   "kind": "maxp",
+   "desc": "maxp.numGlyphs 2620 -> 65535"
+  },
+  {
+   "id": "MX-numgplus1",
+   "file": "MX-numgplus1.ttf",
+   "kind": "maxp",
+   "desc": "maxp.numGlyphs 2620 -> 2621"
+  },
+  {
+   "id": "MX-ver05",
+   "file": "MX-ver05.ttf",
+   "kind": "maxp",
+   "desc": "maxp version 0.5 (CFF flavour) on a glyf font"
+  },
+  {
+   "id": "MX-len6",
+   "file": "MX-len6.ttf",
+   "kind": "maxp",
+   "desc": "maxp directory length 6"
+  },
+  {
+   "id": "LC-allff",
+   "file": "LC-allff.ttf",
+   "kind": "loca",
+   "desc": "every loca entry at the maximum"
+  },
+  {
+   "id": "LC-desc",
+   "file": "LC-desc.ttf",
+   "kind": "loca",
+   "desc": "loca descending: first entry = end of glyf, rest 0"
+  },
+  {
+   "id": "LC-zero",
+   "file": "LC-zero.ttf",
+   "kind": "loca",
+   "desc": "every loca entry 0 (all glyphs empty)"
+  },
+  {
+   "id": "LC-len4",
+   "file": "LC-len4.ttf",
+   "kind": "loca",
+   "desc": "loca directory length 4 of 10484"
+  },
+  {
+   "id": "LC-len2",
+   "file": "LC-len2.ttf",
+   "kind": "loca",
+   "desc": "loca directory length 2 of 10484"
+  },
+  {
+   "id": "LC-len0",
+   "file": "LC-len0.ttf",
+   "kind": "loca",
+   "desc": "loca directory length 0 of 10484"
+  },
+  {
+   "id": "GL-contoursmax",
+   "file": "GL-contoursmax.ttf",
+   "kind": "glyf",
+   "desc": "glyph 0 numberOfContours = 0x7FFF"
+  },
+  {
+   "id": "GL-endptmax",
+   "file": "GL-endptmax.ttf",
+   "kind": "glyf",
+   "desc": "glyph 0 first contour endPt = 0x7FFF"
+  },
+  {
+   "id": "GL-comp-self",
+   "file": "GL-comp-self.ttf",
+   "kind": "glyf",
+   "desc": "glyph 0 replaced by a composite that references glyph 0"
+  },
+  {
+   "id": "GL-len1",
+   "file": "GL-len1.ttf",
+   "kind": "glyf",
+   "desc": "glyf directory length 1 of 269356"
+  },
+  {
+   "id": "GL-len4",
+   "file": "GL-len4.ttf",
+   "kind": "glyf",
+   "desc": "glyf directory length 4 of 269356"
+  },
+  {
+   "id": "GL-len12",
+   "file": "GL-len12.ttf",
+   "kind": "glyf",
+   "desc": "glyf directory length 12 of 269356"
+  },
+  {
+   "id": "HM-hmetricsmax",
+   "file": "HM-hmetricsmax.ttf",
+   "kind": "hhea",
+   "desc": "hhea.numberOfHMetrics 2620 -> 65535"
+  },
+  {
+   "id": "HM-hmetrics0",
+   "file": "HM-hmetrics0.ttf",
+   "kind": "hhea",
+   "desc": "hhea.numberOfHMetrics 2620 -> 0"
+  },
+  {
+   "id": "HM-hmetricsplus1",
+   "file": "HM-hmetricsplus1.ttf",
+   "kind": "hhea",
+   "desc": "hhea.numberOfHMetrics 2620 -> 2621"
+  },
+  {
+   "id": "HM-hhea-len20",
+   "file": "HM-hhea-len20.ttf",
+   "kind": "hhea",
+   "desc": "hhea directory length 20 of 36"
+  },
+  {
+   "id": "HM-hhea-len34",
+   "file": "HM-hhea-len34.ttf",
+   "kind": "hhea",
+   "desc": "hhea directory length 34 of 36"
+  },
+  {
+   "id": "HM-hhea-len0",
+   "file": "HM-hhea-len0.ttf",
+   "kind": "hhea",
+   "desc": "hhea directory length 0 of 36"
+  },
+  {
+   "id": "HM-hmtx-len2",
+   "file": "HM-hmtx-len2.ttf",
+   "kind": "hmtx",
+   "desc": "hmtx directory length 2 of 10480"
+  },
+  {
+   "id": "HM-hmtx-len4",
+   "file": "HM-hmtx-len4.ttf",
+   "kind": "hmtx",
+   "desc": "hmtx directory length 4 of 10480"
+  },
+  {
+   "id": "HM-hmtx-len0",
+   "file": "HM-hmtx-len0.ttf",
+   "kind": "hmtx",
+   "desc": "hmtx directory length 0 of 10480"
+  },
+  {
+   "id": "CM-segmax",
+   "file": "CM-segmax.ttf",
+   "kind": "cmap",
+   "desc": "cmap fmt4 segCountX2 252 -> 65534"
+  },
+  {
+   "id": "CM-seg0",
+   "file": "CM-seg0.ttf",
+   "kind": "cmap",
+   "desc": "cmap fmt4 segCountX2 252 -> 0"
+  },
+  {
+   "id": "CM-seg1",
+   "file": "CM-seg1.ttf",
+   "kind": "cmap",
+   "desc": "cmap fmt4 segCountX2 252 -> 2"
+  },
+  {
+   "id": "CM-idrange",
+   "file": "CM-idrange.ttf",
+   "kind": "cmap",
+   "desc": "cmap fmt4 endCode[0] idRangeOffset 0xFFF0"
+  },
+  {
+   "id": "CM-sub-len4",
+   "file": "CM-sub-len4.ttf",
+   "kind": "cmap",
+   "desc": "cmap fmt4 subtable length field = 4"
+  },
+  {
+   "id": "CM-fmt12",
+   "file": "CM-fmt12.ttf",
+   "kind": "cmap",
+   "desc": "cmap subtable format 4 -> 12"
+  },
+  {
+   "id": "CM-fmt0",
+   "file": "CM-fmt0.ttf",
+   "kind": "cmap",
+   "desc": "cmap subtable format 4 -> 0"
+  },
+  {
+   "id": "CM-len4",
+   "file": "CM-len4.ttf",
+   "kind": "cmap",
+   "desc": "cmap directory length 4"
+  },
+  {
+   "id": "NM-countmax",
+   "file": "NM-countmax.ttf",
+   "kind": "name",
+   "desc": "name count 0xFFFF"
+  },
+  {
+   "id": "NM-len6",
+   "file": "NM-len6.ttf",
+   "kind": "name",
+   "desc": "name directory length 6"
+  },
+  {
+   "id": "NM-strlenmax",
+   "file": "NM-strlenmax.ttf",
+   "kind": "name",
+   "desc": "first name record stringLength 0xFFFF"
+  },
+  {
+   "id": "PO-ver2",
+   "file": "PO-ver2.ttf",
+   "kind": "post",
+   "desc": "post version 2.0 on a version-3 table"
+  },
+  {
+   "id": "PO-len32",
+   "file": "PO-len32.ttf",
+   "kind": "post",
+   "desc": "post directory length 32"
+  },
+  {
+   "id": "WO-ok",
+   "file": "WO-ok.woff",
+   "kind": "woff",
+   "desc": "the base font encoded as WOFF 1.0"
+  },
+  {
+   "id": "WO-len-1",
+   "file": "WO-len-1.woff",
+   "kind": "woff",
+   "desc": "WOFF header/directory: len-1"
+  },
+  {
+   "id": "WO-total12",
+   "file": "WO-total12.woff",
+   "kind": "woff",
+   "desc": "WOFF header/directory: total12"
+  },
+  {
+   "id": "WO-total64k",
+   "file": "WO-total64k.woff",
+   "kind": "woff",
+   "desc": "WOFF header/directory: total64k"
+  },
+  {
+   "id": "WO-origmax",
+   "file": "WO-origmax.woff",
+   "kind": "woff",
+   "desc": "WOFF header/directory: origmax"
+  },
+  {
+   "id": "WO-offmax",
+   "file": "WO-offmax.woff",
+   "kind": "woff",
+   "desc": "WOFF header/directory: offmax"
+  },
+  {
+   "id": "WO-compgtorig",
+   "file": "WO-compgtorig.woff",
+   "kind": "woff",
+   "desc": "WOFF header/directory: compgtorig"
+  },
+  {
+   "id": "WO-trunc20",
+   "file": "WO-trunc20.woff",
+   "kind": "woff",
+   "desc": "WOFF truncated by 20 bytes"
+  },
+  {
+   "id": "GS-ctl",
+   "file": "GS-ctl.ttf",
+   "kind": "gsub",
+   "desc": "GSUB vert, coverage fmt2 range 10..12 with 3 substitutes (well formed)"
+  },
+  {
+   "id": "GS-wrap",
+   "file": "GS-wrap.ttf",
+   "kind": "gsub",
+   "desc": "GSUB vert, coverage range start 0x8000 end 0xFFFF (end+1 wraps to 0)"
+  },
+  {
+   "id": "GS-desc",
+   "file": "GS-desc.ttf",
+   "kind": "gsub",
+   "desc": "GSUB vert, coverage range start 10 end 5 (descending, end+1 < start)"
+  },
+  {
+   "id": "CJ-ctl",
+   "file": "CJ-ctl.ttf",
+   "kind": "vertical",
+   "desc": "DroidSansFallbackFull.ttf unmodified (Han glyphs, real vhea/vmtx)"
+  },
+  {
+   "id": "CJ-rebuild",
+   "file": "CJ-rebuild.ttf",
+   "kind": "vertical",
+   "desc": "the same font rebuilt through rebuild() with no extra table"
+  },
+  {
+   "id": "CJ-witness",
+   "file": "CJ-witness.ttf",
+   "kind": "vertical",
+   "desc": "vhea/vmtx replaced: one long metric, advanceHeight 8000 units"
+  },
+  {
+   "id": "CJ-vmtx0",
+   "file": "CJ-vmtx0.ttf",
+   "kind": "vertical",
+   "desc": "vhea/vmtx replaced: advanceHeight 0 units"
+  },
+  {
+   "id": "CJ-gsub-ctl",
+   "file": "CJ-gsub-ctl.ttf",
+   "kind": "vertical",
+   "desc": "GSUB replaced by the well-formed control"
+  },
+  {
+   "id": "CJ-gsub-wrap",
+   "file": "CJ-gsub-wrap.ttf",
+   "kind": "vertical",
+   "desc": "GSUB replaced by the wrapping-range arm"
+  },
+  {
+   "id": "CJ-gsub-desc",
+   "file": "CJ-gsub-desc.ttf",
+   "kind": "vertical",
+   "desc": "GSUB replaced by the descending-range arm"
+  },
+  {
+   "id": "CO-twemoji",
+   "file": "CO-twemoji.ttf",
+   "kind": "real",
+   "desc": "Twemoji.ttf (3215988 B) unmodified"
+  },
+  {
+   "id": "CO-colrv1",
+   "file": "CO-colrv1.ttf",
+   "kind": "real",
+   "desc": "Noto-COLRv1.ttf (4812896 B) unmodified"
+  },
+  {
+   "id": "CO-notoemoji",
+   "file": "CO-notoemoji.ttf",
+   "kind": "real",
+   "desc": "NotoEmoji-Regular.ttf (878892 B) unmodified"
+  },
+  {
+   "id": "CO-opensans",
+   "file": "CO-opensans.ttf",
+   "kind": "real",
+   "desc": "OpenSans-Regular.ttf (217360 B) unmodified"
+  }
+ ]
+}

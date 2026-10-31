@@ -1,0 +1,48 @@
+[New LWP 1523183]
+[New LWP 1523182]
+[New LWP 1523181]
+[New LWP 1523180]
+[New LWP 1523175]
+[New LWP 1523165]
+[New LWP 1523164]
+[New LWP 1523163]
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <ima:enforcing>
+  <https://debuginfod.fedoraproject.org/>
+  <ima:ignore>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+
+warning: Can't read data for section '.debug_info' in file 'target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0'
+
+warning: Expected absolute pathname for libpthread in the inferior, but got target:/lib64/libc.so.6.
+
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+
+warning: Section .debug_aranges in target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0 entry at offset 0 debug_info_offset 0 does not exists, ignoring .debug_aranges.
+0x00007f44d43f9ebd in poll () from target:/lib64/libc.so.6
+Breakpoint 1 at 0x7f44e171285b
+[New LWP 1523262]
+[Switching to LWP 1523262]
+H 1 t=10 bp=1 rsp=0x7f44b5b64260
+H 2 t=10 bp=1 rsp=0x7f44b5b63ed0
+H 3 t=10 bp=1 rsp=0x7f44b5b63b40
+H 4 t=10 bp=1 rsp=0x7f44b5b637b0
+H 5 t=10 bp=1 rsp=0x7f44b5b63420
+H 6 t=10 bp=1 rsp=0x7f44b5b63090
+H 7 t=10 bp=1 rsp=0x7f44b5b62d00
+H 8 t=10 bp=1 rsp=0x7f44b5b62970
+H 9 t=10 bp=1 rsp=0x7f44b5b625e0
+
+Thread 1 "WebKitWebProces" received signal SIGTERM, Terminated.
+[Switching to LWP 1523155]
+0x00007f44d43f9ebd in poll () from target:/lib64/libc.so.6
+STOP rsp=0x7fff59f9bba0 pc=0x7f44d43f9ebd thread=1
+#0  0x00007f44d43f9ebd in poll () from target:/lib64/libc.so.6
+#1  0x00007f44e9567972 in poll () from target:/lib64/libasan.so.8
+#2  0x00007f44d49b2f04 in g_main_context_iterate_unlocked.isra () from target:/lib64/libglib-2.0.so.0
+#3  0x00007f44d4959447 in g_main_loop_run () from target:/lib64/libglib-2.0.so.0
+#4  0x00007f44d98941da in WTF::RunLoop::run () at /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:108
+[Inferior 1 (process 1523155) detached]

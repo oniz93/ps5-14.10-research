@@ -1,0 +1,92 @@
+[New LWP 1599330]
+[New LWP 1599329]
+[New LWP 1599328]
+[New LWP 1599327]
+[New LWP 1599320]
+[New LWP 1599304]
+[New LWP 1599303]
+[New LWP 1599302]
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <ima:enforcing>
+  <https://debuginfod.fedoraproject.org/>
+  <ima:ignore>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+
+warning: Can't read data for section '.debug_info' in file 'target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0'
+
+warning: Expected absolute pathname for libpthread in the inferior, but got target:/lib64/libc.so.6.
+
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+
+warning: Section .debug_aranges in target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0 entry at offset 0 debug_info_offset 0 does not exists, ignoring .debug_aranges.
+0x00007fd5c32ecebd in poll () from target:/lib64/libc.so.6
+Breakpoint 1 at 0x7fd5d23eaa5e (2 locations)
+Breakpoint 2 at 0x7fd5c84b831b: file /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp, line 266.
+slotwatch armed: dtor=1 free=2
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   <MULTIPLE>         
+1.1                         y   0x00007fd5d23eaa5e <WebCore::CanvasRenderingContext::~CanvasRenderingContext()+20>
+1.2                         y   0x00007fd5d23eb5cf <WebCore::CanvasRenderingContext::~CanvasRenderingContext()+9>
+2       breakpoint     keep n   0x00007fd5c84b831b in WTF::fastFree(void*) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:266
+CTXDTOR A=0x617000021800
+#0  0x00007fd5d23eaa5e in WebCore::CanvasRenderingContext::~CanvasRenderingContext() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007fd5d23ec5c8 in WebCore::CanvasRenderingContext2DBase::~CanvasRenderingContext2DBase() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007fd5d23ec70c in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007fd5d23ec733 in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007fd5d1fba82d in WebCore::HTMLCanvasElement::createContextBitmapRenderer(WTF::String const&, WebCore::ImageBitmapRenderingContextSettings&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#5  0x00007fd5d1fbd12d in WebCore::HTMLCanvasElement::getContext(JSC::JSGlobalObject&, WTF::String const&, WTF::FixedVector<JSC::Strong<JSC::Unknown, (JSC::ShouldStrongDestructorGrabLock)0> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FREED-A ptr=0x617000021800
+#0  WTF::fastFree (p=0x617000021800) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:266
+#1  0x00007fd5d23ec73b in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007fd5d1fba82d in WebCore::HTMLCanvasElement::createContextBitmapRenderer(WTF::String const&, WebCore::ImageBitmapRenderingContextSettings&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007fd5d1fbd12d in WebCore::HTMLCanvasElement::getContext(JSC::JSGlobalObject&, WTF::String const&, WTF::FixedVector<JSC::Strong<JSC::Unknown, (JSC::ShouldStrongDestructorGrabLock)0> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007fd5ce09ff8f in WebCore::jsHTMLCanvasElementPrototypeFunction_getContext(JSC::JSGlobalObject*, JSC::CallFrame*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FREE-RETURNED
+Hardware watchpoint 3: *(unsigned long*)0x617000021800
+WATCH installed on 0x617000021800
+WROTE-A addr=0x617000021800 val=0x0
+#0  0x00007fd5c68ca221 in WTF::VectorBufferBase<unsigned char, WTF::FastMalloc>::VectorBufferBase (this=0x617000021800) at /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Vector.h:378
+#1  WTF::VectorBuffer<unsigned char, 0ul, WTF::FastMalloc>::VectorBuffer (other=..., this=0x617000021800) at /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Vector.h:456
+#2  WTF::Vector<unsigned char, 0ul, WTF::UnsafeVectorOverflow, 16ul, WTF::FastMalloc>::Vector (other=..., this=0x617000021800) at /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Vector.h:1040
+#3  JSC::InstructionStream<JSC::BaseInstruction<JSC::JSOpcodeTraits> >::InstructionStream (instructions=..., this=0x617000021800) at /home/<user>/wk/WebKit/Source/JavaScriptCore/bytecode/InstructionStream.h:194
+#4  JSC::InstructionStreamWriter<JSC::BaseInstruction<JSC::JSOpcodeTraits> >::InstructionStreamWriter (this=0x617000021800) at /home/<user>/wk/WebKit/Source/JavaScriptCore/bytecode/InstructionStream.h:211
+#5  JSC::BytecodeGeneratorBase<JSC::JSGeneratorTraits>::BytecodeGeneratorBase (this=this@entry=0x617000021800, codeBlock=..., virtualRegisterCountForCalleeSaves=virtualRegisterCountForCalleeSaves@entry=4) at /home/<user>/wk/WebKit/Source/JavaScriptCore/bytecompiler/BytecodeGeneratorBaseInlines.h:44
+#6  0x00007fd5c6890725 in JSC::BytecodeGenerator::BytecodeGenerator (this=this@entry=0x617000021800, vm=..., functionNode=<optimized out>, functionNode@entry=0x613000006940, codeBlock=codeBlock@entry=0x62d00014ccd0, codeGenerationMode=..., codeGenerationMode@entry=..., parentScopeTDZVariables=..., parentPrivateNameEnvironment=<optimized out>) at /home/<user>/wk/WebKit/Source/JavaScriptCore/bytecompiler/BytecodeGenerator.cpp:404
+#7  0x00007fd5c6733bc4 in std::make_unique<JSC::BytecodeGenerator, JSC::VM&, JSC::FunctionNode*&, JSC::UnlinkedFunctionCodeBlock*&, WTF::OptionSet<JSC::CodeGenerationMode>&, WTF::RefPtr<JSC::TDZEnvironmentLink, WTF::RawPtrTraits<JSC::TDZEnvironmentLink>, WTF::DefaultRefDerefTraits<JSC::TDZEnvironmentLink> > const&, WTF::HashMap<WTF::RefPtr<WTF::UniquedStringImpl, WTF::PackedPtrTraits<WTF::UniquedStringImpl>, WTF::DefaultRefDerefTraits<WTF::UniquedStringImpl> >, JSC::PrivateNameEntry, JSC::IdentifierRepHash, WTF::HashTraits<WTF::RefPtr<WTF::UniquedStringImpl, WTF::RawPtrTraits<WTF::UniquedStringImpl>, WTF::DefaultRefDerefTraits<WTF::UniquedStringImpl> > >, JSC::PrivateNameEntryHashTraits, WTF::HashTableTraits> const*&> () at /usr/include/c++/13/bits/unique_ptr.h:1070
+#8  WTF::makeUnique<JSC::BytecodeGenerator, JSC::VM&, JSC::FunctionNode*&, JSC::UnlinkedFunctionCodeBlock*&, WTF::OptionSet<JSC::CodeGenerationMode>&, WTF::RefPtr<JSC::TDZEnvironmentLink, WTF::RawPtrTraits<JSC::TDZEnvironmentLink>, WTF::DefaultRefDerefTraits<JSC::TDZEnvironmentLink> > const&, WTF::HashMap<WTF::RefPtr<WTF::UniquedStringImpl, WTF::PackedPtrTraits<WTF::UniquedStringImpl>, WTF::DefaultRefDerefTraits<WTF::UniquedStringImpl> >, JSC::PrivateNameEntry, JSC::IdentifierRepHash, WTF::HashTraits<WTF::RefPtr<WTF::UniquedStringImpl, WTF::RawPtrTraits<WTF::UniquedStringImpl>, WTF::DefaultRefDerefTraits<WTF::UniquedStringImpl> > >, JSC::PrivateNameEntryHashTraits, WTF::HashTableTraits> const*&> () at /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/StdLibExtras.h:596
+#9  JSC::BytecodeGenerator::generate<JSC::FunctionNode, JSC::UnlinkedFunctionCodeBlock> (privateNameEnvironment=0x0, parentScopeTDZVariables=..., codeGenerationMode=..., unlinkedCodeBlock=0x62d00014ccd0, sourceCode=..., node=0x613000006940, vm=...) at /home/<user>/wk/WebKit/Source/JavaScriptCore/bytecompiler/BytecodeGenerator.h:394
+#10 JSC::generateUnlinkedFunctionCodeBlock (parseMode=<optimized out>, error=..., functionKind=<optimized out>, codeGenerationMode=..., kind=<optimized out>, source=..., executable=0x62d0000b9d80, vm=...) at /home/<user>/wk/WebKit/Source/JavaScriptCore/bytecode/UnlinkedFunctionExecutable.cpp:76
+#11 JSC::UnlinkedFunctionExecutable::unlinkedCodeBlockFor (this=0x62d0000b9d80, vm=..., source=..., specializationKind=<optimized out>, codeGenerationMode=..., error=..., parseMode=<optimized out>) at /home/<user>/wk/WebKit/Source/JavaScriptCore/bytecode/UnlinkedFunctionExecutable.cpp:239
+
+Thread 1 "WebKitWebProces" received signal SIGSEGV, Segmentation fault.
+0x00007fd5d23f4486 in WebCore::CanvasRenderingContext2DBase::setFillColor(WTF::String const&, std::optional<float>) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FAULT si_addr=$1 = 0x8
+SLOT A=0x617000021800
+SLOT shadow=0xc2e7fffc300:	0x00
+SLOT first32:
+0x617000021800:	0x00007fd5d7c7cbd8	0x0000602000029050
+0x617000021810:	0x0000070000020206	0x0000000000000000
+REGS
+rip            0x7fd5d23f4486      0x7fd5d23f4486 <WebCore::CanvasRenderingContext2DBase::setFillColor(WTF::String const&, std::optional<float>)+1118>
+rax            0x0                 0
+rbx            0x7fffa4d1d0a0      140735958601888
+rdi            0x8                 8
+rsi            0x7fffa4d1d410      140735958602768
+FAULT_BT
+#0  0x00007fd5d23f4486 in WebCore::CanvasRenderingContext2DBase::setFillColor(WTF::String const&, std::optional<float>) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007fd5d23f4af3 in WebCore::CanvasRenderingContext2DBase::setFillStyle(std::variant<WTF::String, WTF::RefPtr<WebCore::CanvasGradient, WTF::RawPtrTraits<WebCore::CanvasGradient>, WTF::DefaultRefDerefTraits<WebCore::CanvasGradient> >, WTF::RefPtr<WebCore::CanvasPattern, WTF::RawPtrTraits<WebCore::CanvasPattern>, WTF::DefaultRefDerefTraits<WebCore::CanvasPattern> > >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007fd5cd5a7a3a in WebCore::setJSCanvasRenderingContext2D_fillStyle(JSC::JSGlobalObject*, long, long, JSC::PropertyName) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007fd5c7a9b136 in WTF::FunctionPtr<(WTF::PtrTag)30177, bool(JSC::JSGlobalObject*, long, long, JSC::PropertyName), (WTF::FunctionAttributes)1>::operator() (in#3=..., in#2=108645492748928, in#1=<optimized out>, in#0=<optimized out>, this=0x7fffa4d1d6c0) at /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/FunctionPtr.h:104
+#4  JSC::JSObject::putInlineSlow (this=this@entry=0x60d0000406e8, globalObject=globalObject@entry=0x61f0000038e8, propertyName=..., value=..., slot=...) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSObject.cpp:837
+#5  0x00007fd5c6ec87d9 in JSC::JSObject::putInlineForJSObject (cell=0x60d0000406e8, globalObject=globalObject@entry=0x61f0000038e8, propertyName=..., value=..., value@entry=..., slot=...) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSObjectInlines.h:299
+#6  0x00007fd5c6e7ae9d in JSC::JSCell::putInline (slot=..., value=..., propertyName=..., globalObject=0x61f0000038e8, this=<optimized out>) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSCellInlines.h:475
+#7  JSC::JSValue::putInline (slot=..., value=..., propertyName=..., globalObject=0x61f0000038e8, this=0x7fffa4d1dd80) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSCJSValueInlines.h:1160
+#8  JSC::LLInt::llint_slow_path_put_by_id (callFrame=<optimized out>, pc=<optimized out>) at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LLIntSlowPaths.cpp:963
+#9  0x00007fd5c86b8bdb in llint_op_put_by_id () at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LowLevelInterpreter64.asm:118
+#10 0x0000000000000000 in ?? ()
+SLOT occupant:
+vtable for WebCore::CachedImage + 16 in section .data.rel.ro of target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+[Inferior 1 (process 1599298) detached]

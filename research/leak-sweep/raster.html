@@ -1,0 +1,147 @@
+<!doctype html><html><head><meta charset="utf-8"><title>raster</title>
+<script>
+'use strict';
+/* docs/95 part 8: rasters and decoders that allocate an intermediate buffer — canvas filters,
+   bitmap resizing, putImageData clipping, feTile, and (if it exists) WebAudio decodeAudioData.
+   Each probe reads its result back as bytes and looks for pointer-shaped words. */
+var Q=[],PUMPING=false,SENT=0;
+function send(e){ return new Promise(function(res){ var im=new Image(),d=false;
+  function fin(){ if(d)return; d=true; res(); } im.onload=fin; im.onerror=fin;
+  im.src='/ev?m='+encodeURIComponent(e); setTimeout(fin,250); }); }
+function pump(){ if(PUMPING)return; PUMPING=true; (async function(){ while(Q.length){ await send(Q.shift()); SENT++; } PUMPING=false; })(); }
+function add(k,v){ Q.push(k+'='+String(v).replace(/[\t\r\n]+/g,' ').slice(0,240)); pump(); }
+function T(k,fn){ try{ add(k, fn()); }catch(e){ add(k,'THROW '+e.name+' '+e.message); } }
+window.onerror=function(m,s,l,c){ add('ONERROR',m+' @'+l); return false; };
+new Image().src='/ev?m=BOOT+raster';
+T('det_ctl', detctl);
+
+function ptrscan(b){
+  /* A pointer in this build is 0x0000_6xxx_xxxx_xxxx (ASAN heap) or 0x0000_7fxx_xxxx_xxxx
+     (libraries): little-endian bytes are b0 b1 b2 b3 00 6x/7f 00 00. Testing byte 3 instead of
+     byte 5 matches ordinary RGBA pixel words followed by transparent padding — the false positive
+     this control exists to rule out. */
+  var hits=[], nz=0, i, j;
+  for(i=0;i<b.length;i++){ if(b[i]) nz++; }
+  for(j=0;j<8;j++) for(i=j;i+8<=b.length;i+=8){
+    if(b[i+6]===0 && b[i+7]===0 && b[i+5]>=0x60 && b[i+5]<=0x7f &&
+       (b[i]|b[i+1]|b[i+2]|b[i+3]|b[i+4])!==0){
+      var hx='';
+      for(var k=7;k>=0;k--) hx += (b[i+k]<16?'0':'')+b[i+k].toString(16);
+      hits.push('@'+i+'=0x'+hx);
+    }
+  }
+  return 'nz='+nz+'/'+b.length+' ptr='+hits.length+(hits.length?('['+hits.slice(0,3).join(',')+']'):'');
+}
+function detctl(){
+  var a=new Uint8Array(16); a[0]=0x40; a[1]=0x05; a[2]=0x01; a[4]=0x00; a[5]=0x61;   /* 0x0000610000010540 */
+  var b=new Uint8Array(16); b[0]=0x40; b[1]=0x05; b[2]=0x01; b[4]=0x00; b[5]=0x41;   /* 0x0000410000010540 */
+  return 'pos='+ptrscan(a)+' neg='+ptrscan(b);
+}
+function C(w,h){ var c=document.createElement('canvas'); c.width=w||64; c.height=h||64; return c; }
+function srcCanvas(){ var c=C(64,64), g=c.getContext('2d');
+  var grd=g.createLinearGradient(0,0,64,64); grd.addColorStop(0,'#f00'); grd.addColorStop(1,'#00f');
+  g.fillStyle=grd; g.fillRect(8,8,48,48); return c; }
+
+async function run(){
+  /* 1. canvas 2D filters on a transparent canvas: the filter buffer covers a larger area than the
+        painted one, which is exactly where an uncleared intermediate buffer would show. */
+  var cases = [
+    ['blur', 'blur(16px)'],
+    ['blur2', 'blur(24px)'],
+    ['shadow', 'drop-shadow(40px 40px 8px red)'],
+    ['bright', 'brightness(0.5)'],
+    ['multi', 'blur(8px) brightness(1.5) contrast(2)']
+  ];
+  for(var i=0;i<cases.length;i++){
+    (function(nm,f){
+      T('f_'+nm, function(){
+        var c=C(64,64), g=c.getContext('2d');
+        g.filter=f; g.drawImage(srcCanvas(),0,0);
+        g.filter='none';
+        return ptrscan(g.getImageData(0,0,64,64).data);
+      });
+      T('fr_'+nm, function(){
+        var c=C(64,64), g=c.getContext('2d');
+        g.filter=f; g.fillStyle='#0f0'; g.fillRect(20,20,8,8);
+        g.filter='none';
+        return ptrscan(g.getImageData(0,0,64,64).data);
+      });
+    })(cases[i][0], cases[i][1]);
+  }
+
+  /* 2. bitmap resize / crop options */
+  var bm = await createImageBitmap(srcCanvas());
+  var opts = [
+    ['rs3', {resizeWidth:3, resizeHeight:3, resizeQuality:'high'}],
+    ['rs7', {resizeWidth:7, resizeHeight:7, resizeQuality:'low'}],
+    ['rs128', {resizeWidth:128, resizeHeight:128, resizeQuality:'medium'}],
+    ['crop', {resizeWidth:63, resizeHeight:63, resizeQuality:'high'}]
+  ];
+  for(var k=0;k<opts.length;k++){
+    try{
+      var b2 = await createImageBitmap(srcCanvas(), opts[k][1]);
+      var c2=C(128,128), g2=c2.getContext('2d');
+      g2.drawImage(b2,0,0);
+      add('o_'+opts[k][0], b2.width+'x'+b2.height+' '+ptrscan(g2.getImageData(0,0,128,128).data));
+    }catch(e){ add('o_'+opts[k][0], 'FAIL '+e.name+': '+e.message); }
+  }
+
+  /* 3. putImageData clipped at the edge, then read the whole canvas back */
+  T('put_clip', function(){
+    var c=C(64,64), g=c.getContext('2d');
+    var id=new ImageData(16,16);
+    for(var i=0;i<id.data.length;i+=4){ id.data[i]=0xff; id.data[i+3]=0xff; }
+    g.putImageData(id, 58, 58);
+    return ptrscan(g.getImageData(0,0,64,64).data);
+  });
+
+  /* 4. SVG feTile / feImage over a filter region larger than the source */
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><defs><filter id="f" x="-50%" y="-50%" width="200%" height="200%"><feTile/></filter></defs><rect x="60" y="60" width="40" height="40" fill="red" filter="url(#f)"/></svg>';
+  try{
+    var im=new Image();
+    await new Promise(function(res,rej){ im.onload=res; im.onerror=rej; im.src='data:image/svg+xml;base64,'+btoa(svg); setTimeout(res,1500); });
+    var c4=C(200,200), g4=c4.getContext('2d'); g4.drawImage(im,0,0);
+    add('svg_tile', im.width+'x'+im.height+' '+ptrscan(g4.getImageData(0,0,200,200).data));
+  }catch(e){ add('svg_tile','FAIL '+e.name+': '+e.message); }
+
+  /* 5. WebAudio: does decodeAudioData exist and can it hand back samples? */
+  var AC = window.AudioContext || window.webkitAudioContext;
+  add('ac_type', typeof AC);
+  if(typeof AC === 'function'){
+    try{
+      var ac = new AC();
+      add('ac_state', ac.state+' rate='+ac.sampleRate);
+      function wav(seconds, rate, truncate){
+        var n = Math.floor((seconds||0.05)*rate), bytes = 44 + n*2;
+        var u = new Uint8Array(bytes), dv = new DataView(u.buffer);
+        function s(o,str){ for(var i=0;i<str.length;i++) u[o+i]=str.charCodeAt(i); }
+        s(0,'RIFF'); dv.setUint32(4, bytes-8, true); s(8,'WAVE'); s(12,'fmt ');
+        dv.setUint32(16,16,true); dv.setUint16(20,1,true); dv.setUint16(22,1,true);
+        dv.setUint32(24,rate,true); dv.setUint32(28,rate*2,true); dv.setUint16(32,2,true); dv.setUint16(34,16,true);
+        s(36,'data'); dv.setUint32(40, n*2, true);
+        for(var i=0;i<n;i++) dv.setInt16(44+i*2, Math.round(12000*Math.sin(i*0.1)), true);
+        return truncate ? u.slice(0, Math.floor(bytes*truncate)) : u;
+      }
+      for(var t=0;t<5;t++){
+        var frac = [1, 0.6, 0.95, 1, 1][t], nm = ['full','t60','t95','f441','f441s'][t];
+        var rate = [8000,8000,8000,44100,44100][t];
+        try{
+          var wb = wav(frac===1?0.2:0.05, rate, frac===1?0:frac);
+          var buf = await ac.decodeAudioData(wb.buffer);
+          var ch = buf.getChannelData(0);
+          add('au_'+nm, 'ok len='+buf.length+' ch='+buf.numberOfChannels+' '+ptrscan(new Uint8Array(ch.buffer)));
+        }catch(e){ add('au_'+nm, 'FAIL '+e.name+': '+e.message); }
+      }
+      try{ var cb = ac.createBuffer(1, 1024, 8000); add('au_create', ptrscan(new Uint8Array(cb.getChannelData(0).buffer))); }catch(e){ add('au_create','FAIL '+e.name+': '+e.message); }
+      try{ await ac.close(); }catch(e){}
+    }catch(e){ add('ac_ctor','FAIL '+e.name+': '+e.message); }
+  }
+
+  await new Promise(function(r){ setTimeout(r,400); });
+  while(Q.length||PUMPING) await new Promise(function(r){ setTimeout(r,50); });
+  add('DONE','sent='+SENT);
+  await new Promise(function(r){ setTimeout(r,200); });
+  document.title='DONE';
+}
+run();
+</script></head><body><p>raster</p></body></html>

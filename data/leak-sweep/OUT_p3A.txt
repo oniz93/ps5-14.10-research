@@ -1,0 +1,31 @@
+=== p3A port=12930 secs=20 q=part=3
+--- beacons (in order):
+BOOT+part=?part=3
+s1=@http://127.0.0.1:12930/leakcorpus.html:106:39 T@http://127.0.0.1:12930/leakcorpus.html:28:57 part3@http://127.0.0.1:12930/leakcorpus.html:106:4 @http://127.0.0.1:12930/leakcorpus.html:236:29 @http://127.0.0.1:12930/leak
+s2=g@http://127.0.0.1:12930/leakcorpus.html:107:61 T@http://127.0.0.1:12930/leakcorpus.html:28:57 part3@http://127.0.0.1:12930/leakcorpus.html:107:4 @http://127.0.0.1:12930/leakcorpus.html:236:29 @http://127.0.0.1:12930/lea
+s3=nosync
+s5=Bad@http://127.0.0.1:12930/leakcorpus.html:109:69 @http://127.0.0.1:12930/leakcorpus.html:109:81 T@http://127.0.0.1:12930/leakcorpus.html:28:57 part3@http://127.0.0.1:12930/leakcorpus.html:109:4 @http://127.0.0.1:12930/l
+s6=@http://127.0.0.1:12930/leakcorpus.html:110:40 T@http://127.0.0.1:12930/leakcorpus.html:28:57 part3@http://127.0.0.1:12930/leakcorpus.html:110:4 @http://127.0.0.1:12930/leakcorpus.html:236:29 @http://127.0.0.1:12930/leak
+s7=100
+u_href=http://127.0.0.1:12930/leakcorpus.html?part=3
+u_base=http://127.0.0.1:12930/leakcorpus.html?part=3
+u_url=http://127.0.0.1:12930/x?y=1#z
+u_origin=http://127.0.0.1:12930
+u_timeOrigin=1793384749787
+u_now=36.00000000000001
+u_dt={"locale":"en-US","calendar":"gregory","numberingSystem":"latn","timeZone":"America/Los_Angeles","year":"numeric","month":"numeric","day":"numeric"}
+u_nf={"locale":"en-US","numberingSystem":"latn","style":"decimal","minimumIntegerDigits":1,"minimumFractionDigits":0,"maximumFractionDigits":3,"useGrouping":"auto","notation":"standard","signDisplay":"auto","roundingMode":"ha
+u_coll={"locale":"en-US","usage":"sort","sensitivity":"variant","ignorePunctuation":false,"collation":"default","numeric":false,"caseFirst":"false"}
+u_ua=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/605.1.15
+u_plat=Linux x86_64
+u_hc=8
+u_langs=en-US
+u_screen=640x480 24
+u_tz=America/Los_Angeles
+u_doc=http://127.0.0.1:12930/leakcorpus.html?part=3 | http://127.0.0.1:12930/leakcorpus.html?part=3 |  | 127.0.0.1
+UNHANDLED=SyntaxError: The string did not match the expected pattern.
+DONE=part=3 sent=23
+--- maps samples: 16
+--- crash/abort:
+  access: none
+EXIT=124

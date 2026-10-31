@@ -1,0 +1,19 @@
+127.0.0.1 - - [30/Oct/2026 14:05:08] "GET /corpus.html?kinds=num HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 14:05:08] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:05:08] "GET /ev?m=BOOT%20arms%3D45%20kinds%3Dnum HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:05:08] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:05:08] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:05:08] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:05:08] "GET /ev?m=BEG%20N1-1000%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:05:08] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:05:08] "GET /ev?m=RES%20N1-1000%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20ink%3D1616%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D105 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:05:08] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:05:08] "GET /ev?m=BEG%20N2-33000%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:05:10] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:05:10] "GET /ev?m=RES%20N2-33000%20w%3D64.00%20w40%3D26.00%20ctl%3D64.00%20cw%3D64.00%20ink%3D1616%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D544 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:05:10] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:05:10] "GET /ev?m=BEG%20N3-65535%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:05:13] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:05:13] "GET /ev?m=RES%20N3-65535%20w%3D43.00%20w40%3D17.00%20ctl%3D64.00%20cw%3D43.00%20ink%3D3500%20inkctl%3D1616%20n%3D1%20st%3Dloaded%20ms%3D1005 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:05:13] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:05:13] "GET /ev?m=DONE%20n%3D45 HTTP/1.1" 404 -

@@ -1,0 +1,49 @@
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /caps16.html?arm=w HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=caps16%20arm%3Dw%20only%3D-%20resize%3Dfunction%20grv%3Dfunction%20te%3Dfunction%20idbkr%3Dfunction%20sab%3Dundefined%20gpu%3Dundefined%20vf%3Dundefined%20glctx%3Dnull%20glc%3Dundefined HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=W%20pre%20jsBL%3D0%20jsLen%3D0%20off%3D0%20bufBL%3D4112%20dv%3Dok%20expect4128%3D122%20expect5000%3D210 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=K%20ok%20type%3DArrayBuffer%20bl%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=K%20head%3D5a5b58595e5f5c5d%20at4128%3D7a7b78797e7f7c7d%20tail%3Da2a3a0a1a6a7a4a5 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=GR%20THREW%3DTypeError%3AArgument%201%20(%27array%27)%20to%20Crypto.getRandomValues%20must%20be%20an%20instan HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=GRn%20ok%20nz%3D8155%20of%208192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=GRi%20pre%20jsBL%3D8192%20bufBL%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=GRi%20THREW%3DTypeError%3AArgument%201%20(%27array%27)%20to%20Crypto.getRandomValues%20must%20be%20an%20instan HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=SE%20THREW%3DTypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20view%20or%20out-of HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=FI%20THREW%3DTypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20view%20or%20out-of HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=CW%20THREW%3DTypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20view%20or%20out-of HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=SO%20THREW%3DTypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20view%20or%20out-of HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=IX%20silent%20read4128%3Dundefined%20read5000%3Dundefined%20len%3D0 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=DV%20THREW%3DTypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20view%20or%20out-of HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=DVg%20THREW%3DTypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20view%20or%20out-of HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=DVb%20THREW%3DTypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20view%20or%20out-of HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=TEn%20THREW%3DTypeError%3AArgument%202%20(%27destination%27)%20to%20TextEncoder.encodeInto%20must%20be%20an%20 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=XH%20THREW%3DTypeError%3AUnderlying%20ArrayBuffer%20has%20been%20detached%20from%20the%20view%20or%20out-of HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=RB%20ok%20type%3DArrayBuffer%20bl%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=RB%20head%3D5a5b58595e5f5c5d%20at4128%3D7a7b78797e7f7c7d%20tail%3Da2a3a0a1a6a7a4a5 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=RBw%20ok%20type%3DArrayBuffer%20bl%3D8192 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=RBw%20head%3D5a5b58595e5f5c5d%20at4128%3D9900000000000000%20tail%3D0000000000000000 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /ev?m=done%20arm%3Dw HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 12:39:04] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 12:39:04] "GET /favicon.ico HTTP/1.1" 404 -

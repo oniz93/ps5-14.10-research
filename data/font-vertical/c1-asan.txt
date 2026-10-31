@@ -1,0 +1,14 @@
+==1401914==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x606000060958 at pc 0x7f8c8851ec4c bp 0x7ffee9312310 sp 0x7ffee9312308
+READ of size 2 at 0x606000060958 thread T0
+    #0 0x7f8c8851ec4b in WebCore::OpenType::BigEndianUShort::operator unsigned short() const /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/opentype/OpenTypeTypes.h:44
+    #7 0x7f8c8851f8f2 in WebCore::OpenType::LookupTable::getSubstitutions(WTF::HashMap<unsigned short, unsigned short, WTF::DefaultHash<unsigned short>, WTF::HashTraits<unsigned short>, WTF::HashTraits<unsigned short>, WTF::HashTableTraits>*, WebCore::SharedBuffer const&) const /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/opentype/OpenTypeVerticalData.cpp:182
+    #8 0x7f8c88517f9f in WebCore::OpenType::FeatureTable::getGlyphSubstitutions(WebCore::OpenType::LookupList const*, WTF::HashMap<unsigned short, unsigned short, WTF::DefaultHash<unsigned short>, WTF::HashTraits<unsigned short>, WTF::HashTraits<unsigned short>, WTF::HashTableTraits>*, WebCore::SharedBuffer const&) const /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/opentype/OpenTypeVerticalData.cpp:219
+    #9 0x7f8c88517f9f in WebCore::OpenType::GSUBTable::getVerticalGlyphSubstitutions(WTF::HashMap<unsigned short, unsigned short, WTF::DefaultHash<unsigned short>, WTF::HashTraits<unsigned short>, WTF::HashTraits<unsigned short>, WTF::HashTableTraits>*, WebCore::SharedBuffer const&) const /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/opentype/OpenTypeVerticalData.cpp:375
+    #10 0x7f8c88517f9f in WebCore::OpenTypeVerticalData::loadVerticalGlyphSubstitutions(WebCore::FontPlatformData const&) /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/opentype/OpenTypeVerticalData.cpp:493
+    #11 0x7f8c88519ede in WebCore::OpenTypeVerticalData::OpenTypeVerticalData(WebCore::FontPlatformData const&, WTF::Vector<unsigned short, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc>&&) /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/opentype/OpenTypeVerticalData.cpp:422
+    #18 0x7f8c87fee355 in WebCore::FontCache::verticalData(WebCore::FontPlatformData const&) /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/FontCache.cpp:343
+0x606000060958 is located 0 bytes after 56-byte region [0x606000060920,0x606000060958)
+allocated by thread T0 here:
+    #0 0x7f8c8c84b2ff in malloc (/lib64/libasan.so.8+0xd92ff) (BuildId: a42b37cdd3e851809894c84b99bfdb7c8fa9e357)
+    #7 0x7f8c811495ce in WebCore::FontPlatformData::openTypeTable(unsigned int) const /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp:335
+    #8 0x7f8c88517c32 in WebCore::OpenTypeVerticalData::loadVerticalGlyphSubstitutions(WebCore::FontPlatformData const&) /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/opentype/OpenTypeVerticalData.cpp:490

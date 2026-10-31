@@ -1,0 +1,63 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>rabsort — does %TypedArray%.prototype.sort use the stale length of a resized view?</title>
+<body><p id="p">rabsort</p>
+<script>
+// docs/103, claim 2 from ZigZagBoi (docs/90-canvas-claim-checked.md §Next 2: "P560 confirmed sort operates on
+// stale length").  docs/95 measured that a *read* after a shrink returns undefined; sort is a different path and
+// was not among the builtins checked.  If sort writes `m_length` elements while the buffer is smaller, the writes
+// land past byteLength inside the committed 64 KiB page (docs/100) — invisible unless we grow the buffer back and
+// read them.  If the length exceeds the committed page it should fault instead.
+//
+// arms:  shrink    comparator shrinks the buffer on its first call, then sort finishes
+//        noshrink  same sort, no shrink (control)
+//        grow      comparator GROWS the buffer (direction control)
+// knobs: n=elements (default 64), mx=maxByteLength (default n), big=1 -> 20000 elements (past the 64 KiB page)
+(function () {
+  'use strict';
+  function B(m, x) { try { (new Image()).src = '/ev?m=' + encodeURIComponent(String(m)) + (x ? '&' + x : ''); } catch (e) {} }
+  var Q = new URLSearchParams(location.search);
+  function K(k, d) { return Q.has(k) ? Q.get(k) : d; }
+  var ARM = K('arm', 'shrink');
+  var N   = Math.max(4, parseInt(K('n', '64'), 10));
+  var MX  = Math.max(N, parseInt(K('mx', String(N)), 10));
+
+  function run() {
+    var buf;
+    try { buf = new ArrayBuffer(N * 4, { maxByteLength: MX * 4 }); }
+    catch (e) { B('mkfail', 'e=' + e.name); B('done', 'x=1'); return; }
+    var v = new Uint32Array(buf, 0, N);
+    for (var i = 0; i < N; i++) v[i] = N - i;                 // descending, so a sort must move everything
+    var calls = 0, lenBefore = v.length, shrunkTo = -1;
+    var cmp = function (a, b) {
+      if (calls++ === 0) {
+        if (ARM === 'shrink') { buf.resize(16); shrunkTo = buf.byteLength; }
+        else if (ARM === 'grow') { try { buf.resize(MX * 4); shrunkTo = buf.byteLength; } catch (e) {} }
+      }
+      return a - b;
+    };
+    B('pre', 'arm=' + ARM + '&n=' + N + '&mx=' + MX + '&vl=' + lenBefore + '&bl=' + buf.byteLength);
+    var err = '', ms = 0, t0 = performance.now();
+    try { v.sort(cmp); } catch (e) { err = e.name + ':' + String(e.message).replace(/[^\x20-\x7e]/g, '?').slice(0, 70); }
+    ms = Math.round(performance.now() - t0);
+    B('sorted', 'arm=' + ARM + '&err=' + (err || '-') + '&ms=' + ms + '&calls=' + calls + '&shrunk=' + shrunkTo + '&bl=' + buf.byteLength);
+    // the scoring: grow back and see whether OOB writes are there even when sort threw
+    var grew = 0;
+    try { buf.resize(MX * 4); grew = 1; } catch (e) { B('growfail', 'e=' + e.name); }
+    var tail = [], nzTail = 0, sortedTail = 0;
+    if (grew) {
+      for (var j = 0; j < Math.min(N, 12); j++) {
+        var x = v[j];
+        tail.push(x);
+        if (x !== 0) nzTail++;
+        if (j && v[j] >= v[j - 1]) sortedTail++;
+      }
+    }
+    B('after', 'arm=' + ARM + '&grew=' + grew + '&nz12=' + nzTail + '&nondecreasing=' + sortedTail + '&v=' + tail.join(','));
+    B('done', 'arm=' + ARM);
+  }
+
+  setTimeout(run, 150);
+})();
+</script>
+</body>

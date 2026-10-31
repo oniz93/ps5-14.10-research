@@ -1,0 +1,218 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>caps13 — ImageBitmap split-dump</title>
+<!--
+  docs/92 — the split-dump shape applied to ImageBitmap.
+  dumpImageBitmap (SerializedScriptValue.cpp:1484-1534) writes: transfer tag+index, or
+  serializationState / logicalWidth / logicalHeight / resolutionScale / colorSpace / byteLength / bytes.
+  readImageBitmap (:4166-4201) re-derives imageDataSize = IntSize(logicalWidth,logicalHeight).scale((float)resolutionScale)
+  and hands it to ByteArrayPixelBuffer::tryCreate, whose 3-arg overload requires
+  computeBufferSize(format,size) == arrayBuffer->byteLength() EXACTLY (ByteArrayPixelBuffer.cpp:61-62).
+
+  Arms (one variable each):
+    presence        — what exists on this build (measured, never assumed)
+    copy            — structuredClone of a bitmap as a value: the copy path round trip + pixels
+    port            — the same over a MessagePort (copy, not transfer)
+    xfer            — transfer list, no close: the positive control for every close arm
+    copyclose-mid   — value (not transfer), getter BEFORE the bitmap closes it  -> ValidationError (action arm a)
+    xferclose-pre   — closed before the call, in the transfer list             -> DataCloneError (control 1)
+    xferclose-mid   — transfer list, getter AFTER the bitmap closes it         -> the out-of-band split (action arm b)
+    xferclose-win   — xferclose-mid over window.postMessage (same process, no IPC)
+    xferclose-wrk   — xferclose-mid over a dedicated worker (blob)
+    big             — 512x512 copy round trip: the length check with a real size
+    res2x           — a bitmap from a 2x srcset image, cloned: does the write side ever carry res != 1?
+-->
+<body>
+<canvas id="c" width="8" height="8"></canvas>
+<script>
+"use strict";
+const Q = new URLSearchParams(location.search);
+const ARM = Q.get('arm') || 'copy';
+const TMO = +(Q.get('tmo') || 4000);
+const S = [];
+function ev(m) { S.push(m); new Image().src = '/ev?m=' + encodeURIComponent(m); }
+function fin(extra) { ev('done&arm=' + ARM + (extra ? '&' + extra : '')); }
+function err(m) { ev('err&arm=' + ARM + '&e=' + encodeURIComponent(String(m).slice(0, 160))); }
+window.onerror = (m) => err('onerror:' + m);
+window.onunhandledrejection = (e) => err('unhandled:' + (e.reason && e.reason.name) + ':' + (e.reason && e.reason.message));
+
+const cv = document.getElementById('c');
+const cx = cv.getContext('2d', { willReadFrequently: true });
+cx.fillStyle = '#ff0000'; cx.fillRect(0, 0, 8, 8);
+
+function readPix(bmp) {                      // draw the arrived bitmap, read the first pixel back
+    try {
+        const w = bmp.width, h = bmp.height;
+        if (!w || !h) return 'nowh:' + w + 'x' + h;
+        const c2 = document.createElement('canvas'); c2.width = w; c2.height = h;
+        const x2 = c2.getContext('2d', { willReadFrequently: true });
+        x2.drawImage(bmp, 0, 0);
+        const d = x2.getImageData(0, 0, 1, 1).data;
+        return d[0] + ',' + d[1] + ',' + d[2] + ',' + d[3];
+    } catch (e) { return 'throw:' + e.name; }
+}
+function desc(v) {
+    if (v === null) return 'null';
+    if (v === undefined) return 'undef';
+    const t = typeof v;
+    if (t !== 'object') return t + ':' + String(v).slice(0, 20);
+    return (v.constructor && v.constructor.name) + ':w' + v.width + 'h' + v.height;
+}
+function withTimeout(p, ms) {
+    return Promise.race([p, new Promise(r => setTimeout(() => r('__TMO__'), ms))]);
+}
+function onePortMsg(value, transfer) {        // one MessagePort round trip, resolves {ok, data|err}
+    return new Promise((resolve) => {
+        const ch = new MessageChannel();
+        let settled = false;
+        const done = (o) => { if (!settled) { settled = true; resolve(o); } };
+        ch.port1.onmessage = (e) => done({ ok: 1, data: e.data, tag: 'msg' });
+        ch.port1.onmessageerror = (e) => done({ ok: 0, tag: 'messageerror' });
+        let posted = 0, name = '', message = '';
+        try { ch.port2.postMessage(value, transfer || []); posted = 1; }
+        catch (e) { name = e.name; message = String(e.message).slice(0, 80); }
+        if (!posted) { done({ ok: 0, tag: 'threw', name, message }); return; }
+        setTimeout(() => done({ ok: 0, tag: 'timeout' }), TMO);
+    });
+}
+const PNG_2X = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVR42mP4z8DwHxkzkC4AADxAH+Ea86VIAAAAAElFTkSuQmCC';
+
+async function main() {
+    ev('cap&arm=' + ARM + '&ua=' + encodeURIComponent((navigator.userAgent || '').slice(0, 40)));
+    if (ARM === 'presence') {
+        ev('presence&cib=' + typeof createImageBitmap + '&stc=' + typeof structuredClone +
+            '&ib=' + typeof ImageBitmap + '&close=' + (typeof ImageBitmap === 'function' ? typeof ImageBitmap.prototype.close : 'na') +
+            '&oc=' + typeof OffscreenCanvas + '&vf=' + typeof VideoFrame + '&mc=' + typeof MessageChannel +
+            '&idb=' + typeof indexedDB);
+        return fin();
+    }
+
+    if (ARM === 'copy') {
+        const b = await createImageBitmap(cv);
+        ev('src&w=' + b.width + '&h=' + b.height + '&px=' + readPix(b));
+        const o = structuredClone({ k: b });
+        ev('copy&w=' + o.k.width + '&h=' + o.k.height + '&px=' + readPix(o.k) + '&srcw=' + b.width);
+        return fin();
+    }
+
+    if (ARM === 'big') {
+        const big = document.createElement('canvas'); big.width = 512; big.height = 512;
+        const bx = big.getContext('2d'); bx.fillStyle = '#00ff00'; bx.fillRect(0, 0, 512, 512);
+        const b = await createImageBitmap(big);
+        const o = structuredClone({ k: b });
+        ev('big&w=' + o.k.width + '&h=' + o.k.height + '&px=' + readPix(o.k));
+        return fin();
+    }
+
+    if (ARM === 'res2x') {
+        const img = new Image();
+        img.srcset = PNG_2X + ' 2x';
+        img.src = PNG_2X;
+        await img.decode();
+        const b = await createImageBitmap(img);
+        ev('img&nw=' + img.naturalWidth + '&nh=' + img.naturalHeight + '&dpr=' + (window.devicePixelRatio || 1) +
+            '&bw=' + b.width + '&bh=' + b.height);
+        let r = '';
+        try { const o = structuredClone({ k: b }); r = 'ok:w' + o.k.width + 'x' + o.k.height; }
+        catch (e) { r = 'throw:' + e.name + ':' + String(e.message).slice(0, 50); }
+        ev('res2x&clone=' + encodeURIComponent(r));
+        return fin();
+    }
+
+    if (ARM === 'port') {
+        const b = await createImageBitmap(cv);
+        const r = await onePortMsg({ k: b });
+        if (!r.ok) return fin('rx=0&tag=' + r.tag + '&name=' + (r.name || '') + '&m=' + encodeURIComponent(r.message || ''));
+        ev('port&w=' + r.data.k.width + '&h=' + r.data.k.height + '&px=' + readPix(r.data.k) + '&srcw=' + b.width);
+        return fin();
+    }
+
+    if (ARM === 'xfer') {
+        const b = await createImageBitmap(cv);
+        const r = await onePortMsg({ k: b }, [b]);
+        ev('xfer&srcw=' + b.width + '&srch=' + b.height + '&ok=' + r.ok + '&tag=' + r.tag);
+        if (r.ok) ev('rx&w=' + r.data.k.width + '&h=' + r.data.k.height + '&px=' + readPix(r.data.k) + '&d=' + desc(r.data.k));
+        return fin();
+    }
+
+    if (ARM === 'copyclose-mid') {            // the getter runs BEFORE the bitmap is dumped (own-name order)
+        const b = await createImageBitmap(cv);
+        const g = { get z() { ev('getter&when=beforedump'); b.close(); ev('closed&srcw=' + b.width); return 1; } };
+        const r = await onePortMsg({ g: g, k: b });
+        ev('copyclosemid&ok=' + r.ok + '&tag=' + r.tag + '&name=' + (r.name || '') + '&m=' + encodeURIComponent(r.message || ''));
+        if (r.ok) ev('rx&d=' + desc(r.data.k) + '&g=' + r.data.g);
+        return fin();
+    }
+
+    if (ARM === 'xferclose-pre') {            // closed before the call, in the transfer list
+        const b = await createImageBitmap(cv);
+        b.close();
+        const r = await onePortMsg({ k: b }, [b]);
+        ev('xferpre&ok=' + r.ok + '&tag=' + r.tag + '&name=' + (r.name || '') + '&m=' + encodeURIComponent(r.message || '') + '&srcw=' + b.width);
+        if (r.ok) ev('rx&d=' + desc(r.data.k));
+        return fin();
+    }
+
+    if (ARM === 'xferclose-other') {         // control: the getter runs in the walk but closes a DIFFERENT bitmap
+        const b = await createImageBitmap(cv);
+        const b2 = await createImageBitmap(cv);
+        const g = { get z() { ev('getter&when=other&b2w=' + b2.width); b2.close(); ev('closed2&b2w=' + b2.width + '&bw=' + b.width); return 1; } };
+        const r = await onePortMsg({ k: b, g: g }, [b]);
+        ev('xother&ok=' + r.ok + '&tag=' + r.tag + '&name=' + (r.name || '') + '&m=' + encodeURIComponent(r.message || ''));
+        if (r.ok) ev('rx&w=' + r.data.k.width + '&h=' + r.data.k.height + '&px=' + readPix(r.data.k) + '&d=' + desc(r.data.k));
+        return fin();
+    }
+
+    if (ARM === 'xferclose-mid' || ARM === 'xferclose-win' || ARM === 'xferclose-wrk') {
+        const b = await createImageBitmap(cv);
+        let when = 'afterdump';
+        const g = { get z() { ev('getter&when=' + when); b.close(); ev('closed&srcw=' + b.width); return 1; } };
+        const msg = { k: b, g: g };            // k is dumped first, then g's getter closes it
+        ev('pre&srcw=' + b.width);
+
+        if (ARM === 'xferclose-mid') {
+            const r = await onePortMsg(msg, [b]);
+            ev('xmid&ok=' + r.ok + '&tag=' + r.tag + '&name=' + (r.name || '') + '&m=' + encodeURIComponent(r.message || ''));
+            if (r.ok) ev('rx&d=' + desc(r.data.k) + '&g=' + r.data.g + '&px=' + readPix(r.data.k));
+            return fin();
+        }
+
+        if (ARM === 'xferclose-win') {
+            const got = new Promise((resolve) => {
+                window.addEventListener('message', (e) => resolve({ ok: 1, data: e.data, tag: 'msg' }), { once: true });
+                window.addEventListener('messageerror', () => resolve({ ok: 0, tag: 'messageerror' }), { once: true });
+            });
+            let posted = 0, name = '', message = '';
+            try { window.postMessage(msg, '*', [b]); posted = 1; }
+            catch (e) { name = e.name; message = String(e.message).slice(0, 80); }
+            ev('wpost&posted=' + posted + '&name=' + name + '&m=' + encodeURIComponent(message));
+            if (!posted) return fin();
+            const r = await withTimeout(got, TMO);
+            if (r === '__TMO__') return fin('rx=timeout');
+            if (!r.ok) return fin('rx=0&tag=' + r.tag);
+            ev('rx&d=' + desc(r.data.k) + '&g=' + r.data.g + '&px=' + readPix(r.data.k));
+            return fin();
+        }
+
+        // worker transport: the walk (and the getter) runs here, the arrival is in the worker
+        const src = "self.onmessage=(e)=>{const b=e.data.k;self.postMessage({w:b.width,h:b.height,c:(b.constructor&&b.constructor.name),g:e.data.g});};" +
+                    "self.onmessageerror=()=>self.postMessage({err:'messageerror'});";
+        const w = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
+        const got = new Promise((resolve) => { w.onmessage = (e) => resolve({ ok: 1, data: e.data }); });
+        let posted = 0, name = '', message = '';
+        try { w.postMessage(msg, [b]); posted = 1; }
+        catch (e) { name = e.name; message = String(e.message).slice(0, 80); }
+        ev('wkrpost&posted=' + posted + '&name=' + name + '&m=' + encodeURIComponent(message));
+        if (!posted) return fin();
+        const r = await withTimeout(got, TMO);
+        if (r === '__TMO__') return fin('rx=timeout');
+        ev('rx&w=' + r.data.w + '&h=' + r.data.h + '&c=' + r.data.c + '&g=' + r.data.g + '&e=' + (r.data.err || ''));
+        return fin();
+    }
+
+    err('unknown_arm');
+    fin('badarm=1');
+}
+
+main().catch(e => err('catch:' + (e && e.name) + ':' + (e && e.message)));
+</script>

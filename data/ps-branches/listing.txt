@@ -1,0 +1,423 @@
+=== Source/JavaScriptCore/API/JSBase.cpp:144  alt=False  nb=1  block=144-147
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=2: WTF::initializeMainThread(); | RunLoop::run();
+=== Source/JavaScriptCore/API/JSBase.cpp:152  alt=True  nb=2  block=152-157
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=2: JSC::Options::initialize(); | JSC::Options::setOptions(args);
+   [#else] n=1: UNUSED_PARAM(args);
+=== Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp:44  alt=True  nb=2  block=44-48
+   [#if PLATFORM(PLAYSTATION)] n=1: Options::functionOverrides() = "/app0/testapiScripts/testapi-function-overrides.js";
+   [#else] n=1: Options::functionOverrides() = "./testapiScripts/testapi-function-overrides.js";
+=== Source/JavaScriptCore/API/tests/TypedArrayCTest.cpp:267  alt=False  nb=1  block=267-273
+   [#if !PLATFORM(PLAYSTATION)] n=5: forEachTypedArrayType([&](JSTypedArrayType type) { | JSValueRef exception = nullptr; | JSObjectMakeTypedArray(context, type, UINT_MAX, &exception); | return !exception; | });
+=== Source/JavaScriptCore/API/tests/testapi.c:1409  alt=False  nb=1  block=1409-1411
+   [#if !PLATFORM(PLAYSTATION)] n=1: RELEASE_ASSERT(!testCAPIViaCpp(filter));
+=== Source/JavaScriptCore/API/tests/testapi.c:2018  alt=True  nb=2  block=2018-2022
+   [#if PLATFORM(PLAYSTATION)] n=1: const char* scriptPath = "/app0/testapiScripts/testapi.js";
+   [#else] n=1: const char* scriptPath = "./testapiScripts/testapi.js";
+=== Source/JavaScriptCore/API/tests/testapi.c:2126  alt=False  nb=1  block=2126-2128
+   [#if !PLATFORM(PLAYSTATION)] n=1: failed |= testFunctionOverrides();
+=== Source/JavaScriptCore/API/tests/testapi.c:2193  alt=False  nb=1  block=2193-2195
+   [#if !PLATFORM(PLAYSTATION)] n=1: failed |= testExecutionTimeLimit();
+=== Source/JavaScriptCore/heap/BlockDirectory.cpp:63  alt=True  nb=2  block=63-88
+   [#if OS(UNIX) && !PLATFORM(PLAYSTATION)] n=22: size_t pageSize = WTF::pageSize(); | ASSERT(!(MarkedBlock::blockSize % pageSize)); | auto numberOfPagesInMarkedBlock = MarkedBlock::blockSize / pageSize; | // For some reason this can be unsigned char or char on different OSes... | using MincoreBufferType = std::remove_pointer_t<FunctionTraits<declt
+   [#else] n=1: UNUSED_PARAM(stats);
+=== Source/JavaScriptCore/inspector/remote/socket/RemoteInspectorSocket.cpp:41  alt=False  nb=1  block=41-43
+   [#if PLATFORM(PLAYSTATION)] n=1: extern const char* kInspectorBackendCommandsString;
+=== Source/JavaScriptCore/inspector/remote/socket/RemoteInspectorSocket.cpp:262  alt=False  nb=1  block=262-265
+   [#if PLATFORM(PLAYSTATION)] n=2: if (kInspectorBackendCommandsString) | return String::fromUTF8(kInspectorBackendCommandsString);
+=== Source/JavaScriptCore/inspector/remote/socket/posix/RemoteInspectorSocketPOSIX.cpp:96  alt=False  nb=1  block=96-102
+   [#if PLATFORM(PLAYSTATION)] n=5: if (setsockopt(fdListen, SOL_SOCKET, SO_USE_DEVLAN, &enabled, sizeof(enabled)) < 0) { | LOG_ERROR("setsocketopt() SO_USE_DEVLAN, errno = %d", errno); | ::close(fdListen); | return std::nullopt; | }
+=== Source/JavaScriptCore/llint/LLIntPCRanges.h:46  alt=True  nb=2  block=46-55
+   [#if PLATFORM(PLAYSTATION)] n=2: UNUSED_PARAM(pc); | return false;
+   [#else] n=5: uintptr_t pcAsInt = bitwise_cast<uintptr_t>(pc); | uintptr_t llintStart = untagCodePtr<uintptr_t, CFunctionPtrTag>(llintPCRangeStart); | uintptr_t llintEnd = untagCodePtr<uintptr_t, CFunctionPtrTag>(llintPCRangeEnd); | RELEASE_ASSERT(llintStart < llintEnd); | return llintStart <= pcAsInt && pcAsInt 
+=== Source/JavaScriptCore/runtime/JSDateMath.cpp:147  alt=False  nb=1  block=147-150
+   [#if PLATFORM(PLAYSTATION)] n=2: // FIXME: SUPER-4445, for downstream-only, workaround patch. ICU's Tiemzone does not work well, use WTF's API. | return WTF::calculateLocalTimeOffset(millisecondsFromEpoch, inputTimeType);
+=== Source/JavaScriptCore/runtime/JSDateMath.cpp:501  alt=False  nb=1  block=501-505
+   [#if PLATFORM(PLAYSTATION)] n=3: // FIXME: SUPER-6620, for downstream-only, workaround patch. ICU's Tiemzone does not work well | // so we can't get the display names from ICU. | return ""_s;
+=== Source/JavaScriptCore/runtime/JSLock.cpp:160  alt=False  nb=1  block=160-167
+   [#if PLATFORM(PLAYSTATION)] n=6: if (UNLIKELY(Options::enableSingleThreadCheck())) { | // Reaching here, current thread was "NewlyAdded" to the machineThreads and "single thread check" is required. | // That is, if more than one threads are registered to a single VM, JSC must CRASH() here. | if (m_vm->heap.machineThreads().threads(
+=== Source/JavaScriptCore/runtime/Options.cpp:452  alt=False  nb=1  block=452-458
+   [#if PLATFORM(PLAYSTATION)] n=5: #if ENABLE(MAT) | // Concurrent GC causes debugging hard for MAT. | // Be careful not only the timing, but the performance and the effeciency is also different. | Options::useConcurrentGC() = false; | #endif
+=== Source/JavaScriptCore/runtime/StructureID.h:50  alt=True  nb=4  block=48-56
+   [#if defined(STRUCTURE_HEAP_ADDRESS_SIZE_IN_MB) && STRUCTURE_HEAP_ADDRE] n=1: constexpr uintptr_t structureHeapAddressSize = STRUCTURE_HEAP_ADDRESS_SIZE_IN_MB * MB;
+   [#elif PLATFORM(PLAYSTATION)] n=1: constexpr uintptr_t structureHeapAddressSize = 128 * MB;
+   [#elif PLATFORM(IOS_FAMILY) && CPU(ARM64) && !CPU(ARM64E)] n=1: constexpr uintptr_t structureHeapAddressSize = 512 * MB;
+   [#else] n=1: constexpr uintptr_t structureHeapAddressSize = 4 * GB;
+=== Source/JavaScriptCore/runtime/VM.cpp:395  alt=False  nb=1  block=395-398
+   [#if PLATFORM(PLAYSTATION)] n=2: // FIXME: <PLAYSTATION> REMOVE disableFreezingForTesting() call after RNPS no longer needs this behavior | Config::disableFreezingForTesting();
+=== Source/JavaScriptCore/testmem/testmem.cpp:38  alt=False  nb=1  block=38-40
+   [#if PLATFORM(PLAYSTATION)] n=1: #include <memory-extra/showmap.h>
+=== Source/JavaScriptCore/testmem/testmem.cpp:53  alt=True  nb=2  block=53-65
+   [#if PLATFORM(PLAYSTATION)] n=9: memory_extra::showmap::Result<2> result; | auto* entry = result.reserve("SceNKFastMalloc"); | ASSERT(entry); | result.collect(); | return Footprint {
+   [#else] n=1: #error "No testmem implementation for this platform."
+=== Source/WebCore/Modules/encryptedmedia/CDM.cpp:50  alt=False  nb=1  block=50-52
+   [#if PLATFORM (PLAYSTATION)] n=1: #include "CDMPrivatePlayStation.h"
+=== Source/WebCore/Modules/encryptedmedia/CDM.cpp:85  alt=False  nb=1  block=85-89
+   [#if PLATFORM (PLAYSTATION)] n=3: CDMPrivatePlayStation* privatePlayStation = static_cast<CDMPrivatePlayStation*>(m_private.get()); | if (privatePlayStation) | privatePlayStation->setWebMusicPlayerEnabled(document.settings().webMusicPlayerEnabled());
+=== Source/WebCore/Modules/mediasource/MediaSource.cpp:334  alt=True  nb=2  block=334-340
+   [#if PLATFORM(PLAYSTATION)] n=2: // Video streams of some lincesees need 100ms as a fudge factor. | static NeverDestroyed<MediaTime> fudgeFactor(1, 10);
+   [#else] n=2: // Allow hasCurrentTime() to be off by as much as the length of two 24fps video frames | static NeverDestroyed<MediaTime> fudgeFactor(2002, 24000);
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:69  alt=False  nb=1  block=69-73
+   [#if PLATFORM(PLAYSTATION)] n=3: #define PS_LOG(fmt, ...)    { printf("[WebKit][%d]%s%s", __LINE__, (audioTracks().length() ? "[audio]" : ""), (videoTracks().length() ? "[video]" : "")); printf(fmt, ## __VA_ARGS__); printf("\n"); } | #include <libtweak/libtweak.h>
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:143  alt=False  nb=1  block=143-145
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG("SourceBuffer::setTimestampOffset offset = %f", offset);
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:186  alt=False  nb=1  block=186-188
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG("SourceBuffer::setAppendWindowStart value = %f", newValue);
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:218  alt=False  nb=1  block=218-220
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG("SourceBuffer::setAppendWindowEnd value = %f", newValue);
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:246  alt=False  nb=1  block=246-248
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG("SourceBuffer::appendBuffer length = %ld", data.length());
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:250  alt=False  nb=1  block=250-252
+   [#if !PLATFORM(PLAYSTATION)] n=1: monitorBufferingRate();
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:313  alt=False  nb=1  block=313-315
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG("SourceBuffer::remove start = %f, end = %f", start, end);
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:539  alt=False  nb=1  block=539-541
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG("buffer full, failing with QuotaExceededError error");
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:600  alt=False  nb=1  block=600-602
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG("SourceBuffer::sourceBufferPrivateAppendComplete - ParsingFailed");
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:628  alt=False  nb=1  block=628-630
+   [#if !PLATFORM(PLAYSTATION)] n=1: monitorBufferingRate();
+=== Source/WebCore/Modules/mediasource/SourceBuffer.cpp:633  alt=False  nb=1  block=633-635
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG("SourceBuffer::sourceBufferPrivateAppendComplete - buffered = %s", toString(m_private->buffered()).utf8().data());
+=== Source/WebCore/accessibility/AccessibilityObjectInterface.h:64  alt=True  nb=4  block=55-68
+   [#if PLATFORM(COCOA)] n=6: OBJC_CLASS WebAccessibilityObjectWrapper; | typedef WebAccessibilityObjectWrapper AccessibilityObjectWrapper; | typedef struct _NSRange NSRange; | typedef const struct __AXTextMarker* AXTextMarkerRef; | typedef const struct __AXTextMarkerRange* AXTextMarkerRangeRef;
+   [#elif USE(ATSPI)] n=1: typedef WebCore::AccessibilityObjectAtspi AccessibilityObjectWrapper;
+   [#elif PLATFORM(PLAYSTATION)] n=1: class AccessibilityObjectWrapper : public RefCounted<AccessibilityObjectWrapper> { };
+   [#else] n=1: class AccessibilityObjectWrapper;
+=== Source/WebCore/accessibility/AccessibilityObjectInterface.h:1457  alt=True  nb=4  block=1453-1461
+   [#if PLATFORM(COCOA)] n=1: RetainPtr<WebAccessibilityObjectWrapper> m_wrapper;
+   [#elif PLATFORM(WIN)] n=1: COMPtr<AccessibilityObjectWrapper> m_wrapper;
+   [#elif PLATFORM(PLAYSTATION)] n=1: RefPtr<AccessibilityObjectWrapper> m_wrapper;
+   [#elif USE(ATSPI)] n=1: RefPtr<AccessibilityObjectAtspi> m_wrapper;
+=== Source/WebCore/dom/Document.cpp:7552  alt=True  nb=2  block=7552-7558
+   [#if PLATFORM(PLAYSTATION)] n=3: // FIXME : If add --run-singly option to run-webkit-tests command, tests that use internals.setMediaElementRestrictions are more likely to failure. | // Because, m_userActivatedMediaFinishedPlayingTimestamp may be used before being set and in that case the function can return wrong result.(webkit.or
+   [#else] n=1: if (m_userActivatedMediaFinishedPlayingTimestamp + maxIntervalForUserGestureForwardingAfterMediaFinishesPlaying >= MonotonicTime::now())
+=== Source/WebCore/editing/Editor.h:402  alt=False  nb=1  block=402-404
+   [#if PLATFORM(PLAYSTATION)] n=1: void confirmComposition(const String&, unsigned);
+=== Source/WebCore/editing/FrameSelection.cpp:1435  alt=False  nb=1  block=1435-1441
+   [#if PLATFORM(PLAYSTATION)] n=5: // A caret on a text should not move by gamepad's direction keys while the caret is invisible, | // because it needs the text selection behavior prevents a situation where a cursor will move | // on the text after closing OSK witout Blur. | if (!caretIsVisible()) | return false;
+=== Source/WebCore/html/HTMLSelectElement.cpp:1325  alt=False  nb=1  block=1325-1328
+   [#if PLATFORM(PLAYSTATION)] n=2: // Since there is no way to send mouse events with CTRL key pressed by game pad, we treat mouse events as if CTRL key was always pressed. | multi = true;
+=== Source/WebCore/loader/DocumentLoader.cpp:2530  alt=True  nb=2  block=2530-2536
+   [#if PLATFORM(PLAYSTATION)] n=3: // Rebase Note: Removed a static cast due to bug with CFI in LLVM-9. | // this change can be reverted once a fix for this bug is released https://bugs.llvm.org/show_bug.cgi?id=43390. | m_frame->document()->addConsoleMessage(messageSource, messageLevel, message, requestIdentifier);
+   [#else] n=1: static_cast<ScriptExecutionContext*>(m_frame->document())->addConsoleMessage(messageSource, messageLevel, message, requestIdentifier);
+=== Source/WebCore/page/Chrome.h:235  alt=False  nb=1  block=235-239
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)] n=3: void postAccessibilityNotification(AccessibilityObject&, AXObjectCache::AXNotification); | void postAccessibilityNodeTextChangeNotification(AccessibilityObject*, AXTextChange, unsigned, const String&); | void postAccessibilityFrameLoadingEventNotification(AccessibilityObject*, AXObjectCache::AXLoadi
+=== Source/WebCore/page/ChromeClient.h:500  alt=False  nb=1  block=500-503
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)] n=2: virtual void postAccessibilityNodeTextChangeNotification(AccessibilityObject*, AXTextChange, unsigned, const String&) { } | virtual void postAccessibilityFrameLoadingEventNotification(AccessibilityObject*, AXObjectCache::AXLoadingEvent) { }
+=== Source/WebCore/page/DeprecatedGlobalSettings.cpp:107  alt=False  nb=1  block=107-119
+   [#if PLATFORM(PLAYSTATION)] n=11: void DeprecatedGlobalSettings::setPlayStationMediaPlayerEnabled(bool enabled) | { | if (shared().m_playStationMediaPlayerEnabled == enabled) | return; | shared().m_playStationMediaPlayerEnabled = enabled;
+=== Source/WebCore/page/DeprecatedGlobalSettings.h:51  alt=False  nb=1  block=51-54
+   [#if PLATFORM(PLAYSTATION)] n=2: WEBCORE_EXPORT static void setPlayStationMediaPlayerEnabled(bool flag); | static bool isPlayStationMediaPlayerEnabled() { return shared().m_playStationMediaPlayerEnabled; }
+=== Source/WebCore/page/DeprecatedGlobalSettings.h:201  alt=False  nb=1  block=201-203
+   [#if PLATFORM(PLAYSTATION)] n=1: bool m_playStationMediaPlayerEnabled { true };
+=== Source/WebCore/page/EventHandler.cpp:2278  alt=False  nb=1  block=2278-2294
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)] n=15: if (auto* cache = m_frame.document()->existingAXObjectCache()) { | if (WebCore::AXCoreObject* root = cache->rootObject()) { | // Get the element at Click coordinates. | // Since the target element cannot be obtained around the mouseEvent, it is obtained from AX's hittest. | LayoutPoint documentPoint
+=== Source/WebCore/page/EventHandler.cpp:4383  alt=True  nb=2  block=4383-4388
+   [#if PLATFORM(COCOA) || PLATFORM(PLAYSTATION)] n=1: return isKeyboardOptionTab(event);
+   [#else] n=2: UNUSED_PARAM(event); | return false;
+=== Source/WebCore/page/EventHandler.cpp:5102  alt=False  nb=1  block=5102-5108
+   [#if !PLATFORM(PLAYSTATION)] n=5: bool EventHandler::tabsToAllFormControls(KeyboardEvent*) const | { | // We always allow tabs to all controls | return true; | }
+=== Source/WebCore/page/FocusController.h:82  alt=False  nb=1  block=82-87
+   [#if PLATFORM(PLAYSTATION)] n=4: Element* nextEditableElement(Element*); | Element* previousEditableElement(Element*); | bool hasNextEditableElement(Element*); | bool hasPreviousEditableElement(Element*);
+=== Source/WebCore/page/NavigatorBase.cpp:61  alt=True  nb=2  block=61-65
+   [#if PLATFORM(PLAYSTATION)] n=1: #define WEBCORE_NAVIGATOR_VENDOR "Sony Interactive Entertainment Inc."_s
+   [#else] n=1: #define WEBCORE_NAVIGATOR_VENDOR "Apple Computer, Inc."_s
+=== Source/WebCore/page/NavigatorBase.cpp:109  alt=True  nb=6  block=95-118
+   [#if OS(LINUX)] n=7: static LazyNeverDestroyed<String> platformName; | static std::once_flag onceKey; | std::call_once(onceKey, [] { | struct utsname osname; | platformName.construct(uname(&osname) >= 0 ? makeString(osname.sysname, " ", osname.machine) : emptyString());
+   [#elif PLATFORM(IOS_FAMILY)] n=1: return deviceName();
+   [#elif OS(MACOS)] n=1: return "MacIntel"_s;
+   [#elif OS(WINDOWS)] n=1: return "Win32"_s;
+   [#elif PLATFORM(PLAYSTATION)] n=6: #if HAS_GETENV_NP | char buf[32]; | if (!getenv_np("SYSTEM_SOFTWARE_NAME", buf, sizeof(buf))) | return String::fromUTF8(buf); | #endif
+   [#else] n=1: return ""_s;
+=== Source/WebCore/page/csp/ContentSecurityPolicy.cpp:827  alt=True  nb=2  block=827-835
+   [#if PLATFORM(PLAYSTATION)] n=5: // down-stream only. | // Because `AND` judgment cannot accurately determine whether downcast judgment is possible or not, | // Use `OR` judgment to check reliably. | // The code has changed upstream, making cherry-picking difficult, so we deal with it downstream. | if (!usesReportTo || !is<Document
+   [#else] n=1: if (!usesReportTo && !is<Document>(m_scriptExecutionContext))
+=== Source/WebCore/platform/LocalizedStrings.cpp:83  alt=True  nb=3  block=77-106
+   [#if USE(GLIB)] n=5: va_list arguments; | va_start(arguments, format); | GUniquePtr<gchar> result(g_strdup_vprintf(format, arguments)); | va_end(arguments); | return String::fromUTF8(result.get());
+   [#elif PLATFORM(PLAYSTATION)] n=19: va_list args, argsCopy; | va_start(args, format); | va_copy(argsCopy, args); | // Do the format once to get the length. | char ch;
+   [#else] n=2: notImplemented(); | return String::fromUTF8(format);
+=== Source/WebCore/platform/MediaSample.h:42  alt=False  nb=1  block=42-44
+   [#if PLATFORM(PLAYSTATION)] n=1: typedef struct opaquePSMediaSample *PSMediaSampleRef;
+=== Source/WebCore/platform/MediaSample.h:63  alt=False  nb=1  block=63-65
+   [#if PLATFORM(PLAYSTATION)] n=1: PSMediaSampleType,
+=== Source/WebCore/platform/MediaSample.h:71  alt=False  nb=1  block=71-73
+   [#if PLATFORM(PLAYSTATION)] n=1: PSMediaSampleRef psSample;
+=== Source/WebCore/platform/MediaStrategy.cpp:63  alt=False  nb=1  block=63-65
+   [#if PLATFORM(PLAYSTATION)] n=1: WebCore::DeprecatedGlobalSettings::setPlayStationMediaPlayerEnabled(false);
+=== Source/WebCore/platform/ReferrerPolicy.h:50  alt=True  nb=2  block=50-54
+   [#if PLATFORM(PLAYSTATION)] n=1: Default = NoReferrerWhenDowngrade
+   [#else] n=1: Default = StrictOriginWhenCrossOrigin
+=== Source/WebCore/platform/WebCorePersistentCoders.cpp:468  alt=False  nb=1  block=468-474
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=5: encoder << certificateInfo.hasPrivateKey(); | if (certificateInfo.hasPrivateKey()) { | encoder << certificateInfo.privateKey(); | encoder << certificateInfo.privateKeyPassword(); | }
+=== Source/WebCore/platform/WebCorePersistentCoders.cpp:499  alt=False  nb=1  block=499-518
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=18: std::optional<bool> hasPrivateKey; | decoder >> hasPrivateKey; | if (!hasPrivateKey) | return std::nullopt; | if (*hasPrivateKey) {
+=== Source/WebCore/platform/Widget.cpp:277  alt=False  nb=1  block=277-321
+   [#if !PLATFORM(COCOA) && !PLATFORM(GTK) && !PLATFORM(WIN) && !PLATFORM(] n=43: Widget::~Widget() | { | ASSERT(!parent()); | notImplemented(); | }
+=== Source/WebCore/platform/encryptedmedia/CDMFactory.cpp:64  alt=False  nb=1  block=64-68
+   [#if !USE(GSTREAMER) && !USE(AVFOUNDATION) && !PLATFORM(PLAYSTATION)] n=3: void CDMFactory::platformRegisterFactories(Vector<CDMFactory*>&) | { | }
+=== Source/WebCore/platform/encryptedmedia/CDMInstance.h:82  alt=False  nb=1  block=82-84
+   [#if PLATFORM(PLAYSTATION)] n=1: Playstation,
+=== Source/WebCore/platform/graphics/AudioTrackPrivate.h:61  alt=True  nb=2  block=61-65
+   [#if PLATFORM(PLAYSTATION)] n=1: virtual bool enabled() const { return m_enabled; }
+   [#else] n=1: bool enabled() const { return m_enabled; }
+=== Source/WebCore/platform/graphics/Font.cpp:606  alt=True  nb=2  block=606-612
+   [#if !PLATFORM(PLAYSTATION)] n=2: // Try the characters individually. | if (!supportsCodePoint(codePoint) || !supportsCodePoint(*it))
+   [#else] n=2: bool vsText = (*it == 0xFE0E); | if ((platformData().isColorBitmapFont() && vsText) || (!supportsCodePoint(codePoint) || (!vsText && !supportsCodePoint(*it))))
+=== Source/WebCore/platform/graphics/FontCascadeDescription.h:34  alt=True  nb=3  block=32-38
+   [#if PLATFORM(COCOA)] n=1: #include "FontFamilySpecificationCoreText.h"
+   [#elif PLATFORM(PLAYSTATION)] n=1: #include "FontFamilySpecificationPlayStation.h"
+   [#else] n=1: #include "FontFamilySpecificationNull.h"
+=== Source/WebCore/platform/graphics/FontCascadeDescription.h:44  alt=True  nb=3  block=42-48
+   [#if PLATFORM(COCOA)] n=1: typedef FontFamilySpecificationCoreText FontFamilyPlatformSpecification;
+   [#elif PLATFORM(PLAYSTATION)] n=1: typedef FontFamilySpecificationPlayStation FontFamilyPlatformSpecification;
+   [#else] n=1: typedef FontFamilySpecificationNull FontFamilyPlatformSpecification;
+=== Source/WebCore/platform/graphics/ImageSource.cpp:604  alt=False  nb=1  block=604-610
+   [#if PLATFORM(PLAYSTATION)] n=5: // [Bug 196917] | // It's also possible that we have an ImageFrame but not frame contents, typically just after a dataChanged() call | // with EncodedDataStatus::SizeAvailable. We can also return the decoder size without caching in such case. | else if (!m_frames.isEmpty() && isDecoderAvailable() &&
+=== Source/WebCore/platform/graphics/MediaPlayer.cpp:101  alt=False  nb=1  block=101-103
+   [#if PLATFORM(PLAYSTATION)] n=1: #include "MediaPlayerPrivatePlayStation.h"
+=== Source/WebCore/platform/graphics/MediaPlayer.cpp:326  alt=False  nb=1  block=326-329
+   [#if PLATFORM(PLAYSTATION)] n=2: if (DeprecatedGlobalSettings::isPlayStationMediaPlayerEnabled()) | MediaPlayerPrivatePlayStation::registerMediaEngine(addMediaEngine);
+=== Source/WebCore/platform/graphics/MediaPlayer.cpp:1087  alt=False  nb=1  block=1087-1090
+   [#if !PLATFORM(PLAYSTATION)] n=2: if (m_presentationSize == size) | return;
+=== Source/WebCore/platform/graphics/MediaPlayer.h:654  alt=False  nb=1  block=654-656
+   [#if PLATFORM(PLAYSTATION)] n=1: String contentTypeRaw() const { return m_contentType.raw(); }
+=== Source/WebCore/platform/graphics/MediaPlayerEnums.h:40  alt=False  nb=1  block=40-42
+   [#if PLATFORM(PLAYSTATION)] n=1: NoResourceError,
+=== Source/WebCore/platform/graphics/MediaPlayerEnums.h:97  alt=False  nb=1  block=97-99
+   [#if PLATFORM(PLAYSTATION)] n=1: PlayStation,
+=== Source/WebCore/platform/graphics/PlatformDisplay.cpp:72  alt=False  nb=1  block=72-74
+   [#if PLATFORM(PLAYSTATION)] n=1: #include "PlatformDisplayPlayStation.h"
+=== Source/WebCore/platform/graphics/PlatformDisplay.cpp:147  alt=False  nb=1  block=147-149
+   [#if PLATFORM(PLAYSTATION)] n=1: return PlatformDisplayPlayStation::create();
+=== Source/WebCore/platform/graphics/PlatformDisplay.h:86  alt=False  nb=1  block=86-88
+   [#if PLATFORM(PLAYSTATION)] n=1: PlayStation,
+=== Source/WebCore/platform/graphics/SourceBufferPrivate.cpp:48  alt=False  nb=1  block=48-50
+   [#if PLATFORM(PLAYSTATION)] n=1: #include <libtweak/libtweak.h>
+=== Source/WebCore/platform/graphics/SourceBufferPrivate.cpp:52  alt=False  nb=1  block=52-54
+   [#if PLATFORM(PLAYSTATION)] n=1: #define PS_LOG(fmt, ...)    { printf("[WebKit][%d]%s%s", __LINE__, (hasAudio() ? "[audio]" : ""), (hasVideo() ? "[video]" : "")); printf(fmt, ## __VA_ARGS__); printf("\n"); }
+=== Source/WebCore/platform/graphics/SourceBufferPrivate.cpp:475  alt=False  nb=1  block=475-477
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG("SourceBufferPrivate::removeCodedFrames - start = %f, end = %f", start.toDouble(), end.toDouble());
+=== Source/WebCore/platform/graphics/SourceBufferPrivate.cpp:510  alt=False  nb=1  block=510-512
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG("SourceBufferPrivate::removeCodedFrames - buffered = %s", toString(m_buffered).utf8().data());
+=== Source/WebCore/platform/graphics/SourceBufferPrivate.cpp:562  alt=False  nb=1  block=562-565
+   [#if PLATFORM(PLAYSTATION)] n=2: uint64_t initialBufferedSize = totalTrackBufferSizeInBytes(); | PS_LOG("SourceBufferPrivate::evictCodedFrames currentTime = %f, require %ld bytes, maximum buffer size is %ld", currentTime.toDouble(), initialBufferedSize + newDataSize, maximumBufferSize);
+=== Source/WebCore/platform/graphics/SourceBufferPrivate.cpp:574  alt=False  nb=1  block=574-576
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG(" evicted : %ld", initialBufferedSize - totalTrackBufferSizeInBytes());
+=== Source/WebCore/platform/graphics/SourceBufferPrivate.cpp:583  alt=False  nb=1  block=583-585
+   [#if PLATFORM(PLAYSTATION)] n=1: PS_LOG(" FAILED to free enough after evicting : %ld", initialBufferedSize - totalTrackBufferSizeInBytes());
+=== Source/WebCore/platform/graphics/SourceBufferPrivate.cpp:1114  alt=True  nb=2  block=1114-1126
+   [#if PLATFORM(PLAYSTATION)] n=8: bool isLessThanMediaSampleTimeStamp = false; | if (LibTweak::isTweakActivatedFor(LibTweak::USE_1MEDIASAMPLE_MULTIPLEFRAMES)) | isLessThanMediaSampleTimeStamp = trackBuffer.highestPresentationTimestamp() - contiguousFrameTolerance < frameEndTimestamp; | else | isLessThanMediaSampleTimeStamp = trackBu
+   [#else] n=2: // If highest presentation timestamp for track buffer is set and less than or equal to presentation timestamp | if (trackBuffer.highestPresentationTimestamp().isValid() && trackBuffer.highestPresentationTimestamp() - contiguousFrameTolerance <= presentationTimestamp) {
+=== Source/WebCore/platform/graphics/SourceBufferPrivate.cpp:1157  alt=False  nb=1  block=1157-1166
+   [#if PLATFORM(PLAYSTATION)] n=8: // NOTE: When mediaSample with the same deocde timestamp and presentation timestamp are continuously added to | // the trackbuffer, the mediaSmaple added later is deleted. | // Since the mediaSample added later has priority, delete the mediaSample added earlier. | if (LibTweak::isTweakActivatedFor(L
+=== Source/WebCore/platform/graphics/WidthIterator.cpp:225  alt=True  nb=2  block=225-234
+   [#if !PLATFORM(PLAYSTATION)] n=6: // These 0 glyphs are needed by shapers if the source text has surrogate pairs. | // However, CTFontTransformGlyphs() can't delete these 0 glyphs from the shaped text, | // so we shouldn't add them in the first place if we're using that shaping routine. | // Any other shaping routine should delete t
+   [#else] n=1: UNUSED_PARAM(character);
+=== Source/WebCore/platform/graphics/cairo/CairoOperations.cpp:906  alt=True  nb=2  block=906-910
+   [#if PLATFORM(PLAYSTATION)] n=1: cairo_pattern_set_filter(pattern.get(), CAIRO_FILTER_BILINEAR);
+   [#else] n=1: cairo_pattern_set_filter(pattern.get(), CAIRO_FILTER_GOOD);
+=== Source/WebCore/platform/graphics/cairo/CairoOperations.cpp:913  alt=True  nb=2  block=913-917
+   [#if PLATFORM(PLAYSTATION)] n=1: cairo_pattern_set_filter(pattern.get(), CAIRO_FILTER_BILINEAR);
+   [#else] n=1: cairo_pattern_set_filter(pattern.get(), CAIRO_FILTER_BEST);
+=== Source/WebCore/platform/graphics/egl/GLContext.cpp:215  alt=False  nb=1  block=215-219
+   [#if PLATFORM(PLAYSTATION)] n=3: // Will use PBufferContext, so we just return here for PlayStation. | if (platformDisplay.type() == PlatformDisplay::Type::PlayStation) | return nullptr;
+=== Source/WebCore/platform/graphics/egl/GLContext.cpp:255  alt=False  nb=1  block=255-263
+   [#if PLATFORM(PLAYSTATION)] n=7: case PlatformDisplay::Type::PlayStation : | #if ENABLE(DIRECT_DRAWING_PLAYSTATION) | surface = eglCreateWindowSurface(display, config, (EGLNativeWindowType) window, nullptr); | #else | UNUSED_PARAM(window);
+=== Source/WebCore/platform/graphics/egl/GLContext.cpp:358  alt=False  nb=1  block=358-365
+   [#if PLATFORM(PLAYSTATION)] n=6: if (!context) { | RELEASE_LOG_INFO(Compositing, "Could not create platform context: %s. Using Pbuffer as fallback.", lastErrorString()); | context = createPbufferContext(platformDisplay, eglSharingContext); | if (!context) | RELEASE_LOG_INFO(Compositing, "Could not create Pbuffer context: %s.", last
+=== Source/WebCore/platform/graphics/egl/GLContext.cpp:406  alt=False  nb=1  block=406-409
+   [#if PLATFORM (PLAYSTATION)] n=2: case PlatformDisplay::Type::PlayStation : | break;
+=== Source/WebCore/platform/graphics/egl/GLContext.cpp:460  alt=False  nb=1  block=460-463
+   [#if PLATFORM (PLAYSTATION)] n=2: case PlatformDisplay::Type::PlayStation : | break;
+=== Source/WebCore/platform/graphics/freetype/FontCacheFreeType.cpp:127  alt=False  nb=1  block=127-141
+   [#if !PLATFORM(PLAYSTATION)] n=13: RefPtr<Font> FontCache::systemFallbackForCharacters(const FontDescription& description, const Font&, IsForPlatformFont, PreferColoredFont preferColoredFont, const UChar* characters, unsigned length) | { | RefPtr<FcPattern> resultPattern = m_fontSetCache.bestForCharacters(description, preferColoredFo
+=== Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp:127  alt=False  nb=1  block=127-132
+   [#if PLATFORM(PLAYSTATION)] n=4: #if CAIRO_HAS_FT_SYNTHESIZE_WEIGHT | // We don't use synthetic bold. | m_syntheticBold = false; | #endif
+=== Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp:254  alt=True  nb=2  block=254-266
+   [#if PLATFORM(PLAYSTATION)] n=9: // [SUPER-1171] | // Instead of doing skew, we correct the scale and baseline with the FC_MATRIX attribute: | //  xx: X-scale | //  yy: Y-scale | //  xy: X-offset
+   [#else] n=1: cairo_matrix_init(&fontMatrix, 1, -fontConfigMatrix.yx, -fontConfigMatrix.xy, 1, 0, 0);
+=== Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp:274  alt=False  nb=1  block=274-284
+   [#if PLATFORM(PLAYSTATION)] n=9: // Applying X-offset and Y-offset. | cairo_matrix_translate(&fontMatrix, fontConfigMatrix.xy, -fontConfigMatrix.yx); | #if CAIRO_HAS_FT_SYNTHESIZE_WEIGHT | cairo_ft_font_face_reset_synthesize_weight(fontFace); | int syntheticWeight = 0;
+=== Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp:287  alt=True  nb=2  block=287-292
+   [#if PLATFORM(PLAYSTATION)] n=2: // On PlayStation we use a slightly different skew value. | static const float syntheticObliqueSkew = -((double)0x03a / (double)0x100);
+   [#else] n=1: static const float syntheticObliqueSkew = -tanf(14 * acosf(0) / 90);
+=== Source/WebCore/platform/graphics/freetype/SimpleFontDataFreeType.cpp:137  alt=True  nb=2  block=137-159
+   [#if PLATFORM(PLAYSTATION)] n=9: // Use OS/2 table to keep compatibility with Silk porting. | FT_Long winAscent = FT_RoundFix(FT_MulFix((OS2Table->usWinAscent << 10), freeTypeFace->size->metrics.y_scale)); | // W/A: WEBBROWSER-311, static_cast<FT_Short>(OS2Table->usWinDescent) | // `usWinDescent` is usually a positive value. Howeve
+   [#else] n=11: const FT_Short kUseTypoMetricsMask = 1 << 7; | // FT_Size_Metrics::y_scale is in 16.16 fixed point format. | // Its (fractional) value is a factor that converts vertical metrics from design units to units of 1/64 pixels. | double yscale = (freeTypeFace->size->metrics.y_scale / 65536.0) / 64.0; | if 
+=== Source/WebCore/platform/graphics/harfbuzz/FontDescriptionHarfBuzz.cpp:31  alt=False  nb=1  block=31-41
+   [#if !PLATFORM(PLAYSTATION)] n=9: unsigned FontCascadeDescription::effectiveFamilyCount() const | { | return familyCount(); | } | FontFamilySpecification FontCascadeDescription::effectiveFamilyAt(unsigned index) const
+=== Source/WebCore/platform/graphics/nicosia/texmap/NicosiaContentLayerTextureMapperImpl.cpp:84  alt=False  nb=1  block=84-94
+   [#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)] n=9: bool ContentLayerTextureMapperImpl::needsSwapBuffersOnCompositingThread() | { | LockHolder locker(m_client.lock); | if (m_client.client) | return m_client.client->needsSwapBuffersOnCompositingThread();
+=== Source/WebCore/platform/graphics/nicosia/texmap/NicosiaContentLayerTextureMapperImpl.h:50  alt=False  nb=1  block=50-52
+   [#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)] n=1: virtual bool needsSwapBuffersOnCompositingThread() { return false; }
+=== Source/WebCore/platform/graphics/nicosia/texmap/NicosiaContentLayerTextureMapperImpl.h:69  alt=False  nb=1  block=69-71
+   [#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)] n=1: bool needsSwapBuffersOnCompositingThread();
+=== Source/WebCore/platform/graphics/playstation/MediaPlayerPrivatePlayStation.cpp:28  alt=False  nb=1  block=28-1249
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION)] n=1220: #if ENABLE(ENCRYPTED_MEDIA) | #include "CDMInstancePlayStation.h" | #endif | #include "CachedResourceLoader.h" | #include "Document.h"
+=== Source/WebCore/platform/graphics/playstation/MediaPlayerPrivatePlayStation.h:27  alt=False  nb=1  block=27-367
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION)] n=339: #include "CallbackQueuePlayStation.h" | #include "MediaPlayerPrivate.h" | #include "TextureMapperPlatformLayer.h" | #include <mediaplayer/PSMediaPlayerBackend.h> | #include <wtf/WeakPtr.h>
+=== Source/WebCore/platform/graphics/playstation/PlatformDisplayPlayStation.h:29  alt=False  nb=1  block=29-54
+   [#if PLATFORM(PLAYSTATION)] n=24: namespace WebCore { | class PlatformDisplayPlayStation : public PlatformDisplay { | public: | static std::unique_ptr<PlatformDisplayPlayStation> create() | {
+=== Source/WebCore/platform/graphics/playstation/eme/CDMFactoryPlayStation.cpp:28  alt=False  nb=1  block=28-67
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)] n=38: #include "CDMPrivatePlayStation.h" | #include <wtf/NeverDestroyed.h> | namespace WebCore { | void CDMFactory::platformRegisterFactories(Vector<CDMFactory*>& factories) | {
+=== Source/WebCore/platform/graphics/playstation/eme/CDMFactoryPlayStation.h:27  alt=False  nb=1  block=27-55
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)] n=27: #include "CDMFactory.h" | #include "CDMPrivate.h" | #include <mediaplayer/PSCDMFactoryBackend.h> | #include <wtf/WeakPtr.h> | #include <wtf/text/WTFString.h>
+=== Source/WebCore/platform/graphics/playstation/eme/CDMInstancePlayStation.cpp:28  alt=False  nb=1  block=28-131
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)] n=102: #include "CDMInstanceSessionPlayStation.h" | #include "CDMUtilPlayStation.h" | #include <wtf/RefPtr.h> | namespace WebCore { | CDMInstancePlayStation::CDMInstancePlayStation(std::shared_ptr<mediaplayer::PSCDMInstancePrivateInterface> backend)
+=== Source/WebCore/platform/graphics/playstation/eme/CDMInstancePlayStation.h:27  alt=False  nb=1  block=27-72
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)] n=44: #include "CDMInstance.h" | #include "CDMInstanceSessionPlayStation.h" | #include "CDMKeySystemConfiguration.h" | #include "SharedBuffer.h" | #include <mediaplayer/PSCDMInstancePrivateBackend.h>
+=== Source/WebCore/platform/graphics/playstation/eme/CDMInstanceSessionPlayStation.cpp:28  alt=False  nb=1  block=28-304
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)] n=275: #include "CDMUtilPlayStation.h" | #include <wtf/RefPtr.h> | namespace WebCore { | RefPtr<CDMInstanceSessionPlayStation> CDMInstanceSessionPlayStation::create() | {
+=== Source/WebCore/platform/graphics/playstation/eme/CDMInstanceSessionPlayStation.h:27  alt=False  nb=1  block=27-93
+   [#if PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=65: #include "CDMInstanceSession.h" | #include "CDMUtilPlayStation.h" | #include "CallbackQueuePlayStation.h" | #include "SharedBuffer.h" | #include <mediaplayer/PSCDMInstanceSessionBackend.h>
+=== Source/WebCore/platform/graphics/playstation/eme/CDMPrivatePlayStation.cpp:28  alt=False  nb=1  block=28-172
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)] n=143: #include "CDMInstancePlayStation.h" | #include "CDMUtilPlayStation.h" | #include "InitDataRegistry.h" | namespace WebCore { | std::unique_ptr<CDMPrivatePlayStation> CDMPrivatePlayStation::createCDM(const String& keySystem)
+=== Source/WebCore/platform/graphics/playstation/eme/CDMPrivatePlayStation.h:27  alt=False  nb=1  block=27-81
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)] n=53: #include "CDMInstance.h" | #include "CDMKeySystemConfiguration.h" | #include "CDMPrivate.h" | #include "CDMRequirement.h" | #include "CDMRestrictions.h"
+=== Source/WebCore/platform/graphics/playstation/eme/CDMUtilPlayStation.cpp:28  alt=False  nb=1  block=28-282
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)] n=253: namespace WebCore { | namespace CDMUtilPlayStation { | mediaplayer::PSCDMKeySystemConfigurationBackend convertTo(const CDMKeySystemConfiguration config) | { | mediaplayer::PSCDMKeySystemConfigurationBackend psConfig;
+=== Source/WebCore/platform/graphics/playstation/eme/CDMUtilPlayStation.h:27  alt=False  nb=1  block=27-71
+   [#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)] n=43: #include "CDMInstance.h" | #include "CDMInstanceSession.h" | #include "CDMKeySystemConfiguration.h" | #include "CDMPrivate.h" | #include "CDMRequirement.h"
+=== Source/WebCore/platform/graphics/playstation/mse/AudioTrackPrivatePlayStation.cpp:28  alt=False  nb=1  block=28-72
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=43: namespace WebCore { | AudioTrackPrivatePlayStation::AudioTrackPrivatePlayStation(std::unique_ptr<mediaplayer::AudioTrackBackend> audioTrack) | { | m_playstation = WTFMove(audioTrack); | }
+=== Source/WebCore/platform/graphics/playstation/mse/AudioTrackPrivatePlayStation.h:27  alt=False  nb=1  block=27-63
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=35: #include "AudioTrackPrivate.h" | #include <mediaplayer/PSTrackBackend.h> | #include <wtf/text/AtomString.h> | namespace WebCore { | class AudioTrackPrivatePlayStation : public AudioTrackPrivate {
+=== Source/WebCore/platform/graphics/playstation/mse/InbandTextTrackPrivatePlayStation.cpp:28  alt=False  nb=1  block=28-58
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=29: namespace WebCore { | InbandTextTrackPrivatePlayStation::InbandTextTrackPrivatePlayStation(CueFormat format, mediaplayer::TextTrackBackend& textTrack) | : InbandTextTrackPrivate(format) | { | m_kind = convertToTextTrackPlayStation(textTrack.kind());
+=== Source/WebCore/platform/graphics/playstation/mse/InbandTextTrackPrivatePlayStation.h:27  alt=False  nb=1  block=27-67
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=39: #include "InbandTextTrackPrivate.h" | #include <mediaplayer/PSEnumBackend.h> | #include <mediaplayer/PSTrackBackend.h> | #include <wtf/text/AtomString.h> | namespace WebCore {
+=== Source/WebCore/platform/graphics/playstation/mse/MediaDescriptionPlayStation.cpp:28  alt=False  nb=1  block=28-41
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=12: namespace WebCore { | MediaDescriptionPlayStation::MediaDescriptionPlayStation(mediaplayer::MediaDescriptionBackend& description) | { | m_codec = AtomString::fromLatin1(description.codec().c_str()); | m_isVideo = description.isVideo();
+=== Source/WebCore/platform/graphics/playstation/mse/MediaDescriptionPlayStation.h:27  alt=False  nb=1  block=27-61
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=33: #include "MediaDescription.h" | #include <mediaplayer/PSTrackBackend.h> | #include <wtf/text/AtomString.h> | namespace WebCore { | class MediaDescriptionPlayStation : public MediaDescription {
+=== Source/WebCore/platform/graphics/playstation/mse/MediaSamplePrivatePlayStation.cpp:30  alt=False  nb=1  block=30-154
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=123: namespace WebCore { | MediaSamplePrivatePlayStation::MediaSamplePrivatePlayStation(std::unique_ptr<mediaplayer::PSMediaSampleBackendInterface> backend) | : m_playstation(WTFMove(backend)) | { | m_pts = MediaTime::createWithDouble(m_playstation->presentationTime(), MediaTime::DefaultTimeScale);
+=== Source/WebCore/platform/graphics/playstation/mse/MediaSamplePrivatePlayStation.h:27  alt=False  nb=1  block=27-78
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=50: #include "MediaSample.h" | #include <mediaplayer/PSMediaSampleBackend.h> | namespace WebCore { | class PSMediaSampleBackendInterface; | class MediaSamplePrivatePlayStation final : public MediaSample {
+=== Source/WebCore/platform/graphics/playstation/mse/MediaSourcePrivatePlayStation.cpp:28  alt=False  nb=1  block=28-247
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=218: #include "ContentType.h" | #include "MediaPlayerPrivatePlayStation.h" | #include "MediaSourcePrivateClient.h" | #include "SourceBufferPrivatePlayStation.h" | #include "TimeRanges.h"
+=== Source/WebCore/platform/graphics/playstation/mse/MediaSourcePrivatePlayStation.h:27  alt=False  nb=1  block=27-92
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=64: #include "MediaSourcePrivate.h" | #include <mediaplayer/PSMediaSourceBackend.h> | namespace WebCore { | class SourceBufferPrivatePlayStation; | class MediaSourceClientPlayStation;
+=== Source/WebCore/platform/graphics/playstation/mse/SourceBufferPrivatePlayStation.cpp:28  alt=False  nb=1  block=28-344
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=315: #include "AudioTrackPrivatePlayStation.h" | #include "ContentType.h" | #include "InbandTextTrackPrivatePlayStation.h" | #include "MediaDescriptionPlayStation.h" | #include "MediaPlayerPrivatePlayStation.h"
+=== Source/WebCore/platform/graphics/playstation/mse/SourceBufferPrivatePlayStation.h:27  alt=False  nb=1  block=27-114
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=86: #include "ContentType.h" | #include "MediaPlayerPrivatePlayStation.h" | #include "SourceBufferPrivate.h" | #include "SourceBufferPrivateClient.h" | #include <mediaplayer/PSMediaSampleBackend.h>
+=== Source/WebCore/platform/graphics/playstation/mse/VideoTrackPrivatePlayStation.cpp:28  alt=False  nb=1  block=28-72
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=43: namespace WebCore { | VideoTrackPrivatePlayStation::VideoTrackPrivatePlayStation(std::unique_ptr<mediaplayer::VideoTrackBackend> videoTrack) | { | m_playstation = WTFMove(videoTrack); | }
+=== Source/WebCore/platform/graphics/playstation/mse/VideoTrackPrivatePlayStation.h:27  alt=False  nb=1  block=27-63
+   [#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)] n=35: #include "VideoTrackPrivate.h" | #include <mediaplayer/PSTrackBackend.h> | #include <wtf/text/AtomString.h> | namespace WebCore { | class VideoTrackPrivatePlayStation : public VideoTrackPrivate {
+=== Source/WebCore/platform/graphics/texmap/TextureMapper.cpp:36  alt=True  nb=2  block=36-41
+   [#if PLATFORM(PLAYSTATION)] n=2: // In order to lower the peak of the memory usage, we allocate textures directly. | RefPtr<BitmapTexture> selectedTexture = createTexture();
+   [#else] n=1: RefPtr<BitmapTexture> selectedTexture = m_texturePool->acquireTexture(size, flags);
+=== Source/WebCore/platform/graphics/texmap/TextureMapperGL.cpp:488  alt=False  nb=1  block=488-491
+   [#if PLATFORM(PLAYSTATION)] n=2: glUseProgram(program->programID()); | program->setOptions(options);
+=== Source/WebCore/platform/graphics/texmap/TextureMapperGL.cpp:701  alt=False  nb=1  block=701-703
+   [#if PLATFORM(PLAYSTATION)] n=1: program->setOptions(options);
+=== Source/WebCore/platform/graphics/texmap/TextureMapperGL.cpp:846  alt=False  nb=1  block=846-849
+   [#if PLATFORM(PLAYSTATION)] n=2: glUseProgram(program->programID()); | program->setOptions(options);
+=== Source/WebCore/platform/graphics/texmap/TextureMapperLayer.cpp:29  alt=False  nb=1  block=29-31
+   [#if PLATFORM(PLAYSTATION)] n=1: #include <libtweak/libtweak.h>
+=== Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.cpp:32  alt=False  nb=1  block=32-34
+   [#if PLATFORM(PLAYSTATION)] n=1: #include <WebKitResources/WebKitResources.h>
+=== Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.cpp:503  alt=False  nb=1  block=503-533
+   [#if PLATFORM(PLAYSTATION)] n=29: GLboolean compiler; | glGetBooleanv(GL_SHADER_COMPILER, &compiler); | if (!compiler) { | LOG(Compositing, "Using precompiled shaders"); | char vertexShaderFilename[64];
+=== Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.cpp:657  alt=False  nb=1  block=657-738
+   [#if PLATFORM(PLAYSTATION)] n=80: #define MatrixIndexTextureRGB       [0][0] | #define MatrixIndexSolidColor       [0][1] | #define MatrixIndexOpacity          [0][2] | #define MatrixIndexAntialiasing     [0][3] | #define MatrixIndexGrayscaleFilter  [1][0]
+=== Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.h:39  alt=True  nb=2  block=39-73
+   [#if PLATFORM(PLAYSTATION)] n=17: #define TEXMAP_UNIFORM_VARIABLES(macro) \ | macro(modelViewMatrix) \ | macro(projectionMatrix) \ | macro(textureSpaceMatrix) \ | macro(textureColorSpaceMatrix) \
+   [#else] n=15: #define TEXMAP_UNIFORM_VARIABLES(macro) \ | macro(modelViewMatrix) \ | macro(projectionMatrix) \ | macro(textureSpaceMatrix) \ | macro(textureColorSpaceMatrix) \
+=== Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.h:146  alt=False  nb=1  block=146-148
+   [#if PLATFORM(PLAYSTATION)] n=1: void setOptions(Options);
+=== Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.h:154  alt=False  nb=1  block=154-156
+   [#if PLATFORM(PLAYSTATION)] n=1: TextureMapperShaderProgram(const uint8_t* vertexShaderBinary, size_t vertexShaderBinarySize, const uint8_t* fragmentShaderBinary, size_t fragmentShaderBinarySize);
+=== Source/WebCore/platform/network/curl/AuthenticationChallenge.h:52  alt=False  nb=1  block=52-69
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=16: AuthenticationChallenge(const ProtectionSpace& protectionSpace, const Credential& proposedCredential, unsigned previousFailureCount, const ResourceResponse& response, const ResourceError& error, bool isForMainResource, bool isInMainFrame, const URL& requestURL) | : AuthenticationChallengeBase(protec
+=== Source/WebCore/platform/network/curl/AuthenticationChallenge.h:80  alt=False  nb=1  block=80-87
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=6: friend class AuthenticationChallengeBase; | static bool platformCompare(const AuthenticationChallenge&, const AuthenticationChallenge&); | bool m_isForMainResource { false }; | bool m_isInMainFrame { false }; | URL m_requestURL;
+=== Source/WebCore/platform/network/curl/AuthenticationChallengeCurl.cpp:39  alt=False  nb=1  block=39-41
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: , m_requestURL(curlResponse.url)
+=== Source/WebCore/platform/network/curl/AuthenticationChallengeCurl.cpp:47  alt=False  nb=1  block=47-49
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: , m_requestURL(url)
+=== Source/WebCore/platform/network/curl/AuthenticationChallengeCurl.cpp:140  alt=False  nb=1  block=140-145
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=4: bool AuthenticationChallenge::platformCompare(const AuthenticationChallenge& a, const AuthenticationChallenge& b) | { | return a.isForMainResource() == b.isForMainResource() && a.isInMainFrame() == b.isInMainFrame() && a.requestURL() == b.requestURL(); | }
+=== Source/WebCore/platform/network/curl/CertificateInfo.h:42  alt=False  nb=1  block=42-44
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: using PrivateKey = Vector<uint8_t>;
+=== Source/WebCore/platform/network/curl/CertificateInfo.h:48  alt=False  nb=1  block=48-50
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: CertificateInfo(int, CertificateChain&&, PrivateKey&&, String&&);
+=== Source/WebCore/platform/network/curl/CertificateInfo.h:58  alt=False  nb=1  block=58-61
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=2: const PrivateKey& privateKey() const { return m_privateKey; } | const String& privateKeyPassword() const { return m_privateKeyPassword; }
+=== Source/WebCore/platform/network/curl/CertificateInfo.h:67  alt=True  nb=2  block=67-72
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=2: bool isEmpty() const { return m_certificateChain.isEmpty() && m_privateKey.isEmpty() && m_privateKeyPassword.isEmpty(); } | bool hasPrivateKey() const { return !m_privateKey.isEmpty(); }
+   [#else] n=1: bool isEmpty() const { return m_certificateChain.isEmpty(); }
+=== Source/WebCore/platform/network/curl/CertificateInfo.h:75  alt=False  nb=1  block=75-77
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: static PrivateKey makePrivateKey(const uint8_t*, size_t);
+=== Source/WebCore/platform/network/curl/CertificateInfo.h:81  alt=True  nb=2  block=81-89
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=4: return verificationError() == other.verificationError() | && certificateChain() == other.certificateChain() | && privateKey() == other.privateKey() | && privateKeyPassword() == other.privateKeyPassword();
+   [#else] n=2: return verificationError() == other.verificationError() | && certificateChain() == other.certificateChain();
+=== Source/WebCore/platform/network/curl/CertificateInfo.h:97  alt=False  nb=1  block=97-100
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=2: PrivateKey m_privateKey; | String m_privateKeyPassword;
+=== Source/WebCore/platform/network/curl/CertificateInfoCurl.cpp:43  alt=False  nb=1  block=43-51
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=7: CertificateInfo::CertificateInfo(int verificationError, CertificateChain&& certificateChain, PrivateKey&& privateKey, String&& privateKeyPassword) | : m_verificationError(verificationError) | , m_certificateChain(WTFMove(certificateChain)) | , m_privateKey(WTFMove(privateKey)) | , m_privateKeyPasswo
+=== Source/WebCore/platform/network/curl/CertificateInfoCurl.cpp:55  alt=False  nb=1  block=55-58
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=2: if (hasPrivateKey()) | return { m_verificationError, crossThreadCopy(m_certificateChain), crossThreadCopy(m_privateKey), m_privateKeyPassword.isolatedCopy() };
+=== Source/WebCore/platform/network/curl/CertificateInfoCurl.cpp:75  alt=False  nb=1  block=75-82
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=6: CertificateInfo::PrivateKey CertificateInfo::makePrivateKey(const uint8_t* buffer, size_t size) | { | PrivateKey privateKey; | privateKey.append(buffer, size); | return privateKey;
+=== Source/WebCore/platform/network/curl/CookieJarDB.cpp:541  alt=True  nb=2  block=541-550
+   [#if PLATFORM(PLAYSTATION)] n=6: auto sqliteresult = statement.step(); | auto ret = checkSQLiteReturnCode(sqliteresult); | if (!ret) | LOG_ERROR("[CookieJarDB] Failed to insert cookie - %d %s\n", sqliteresult, sqlite3_errstr(sqliteresult)); | return ret;
+   [#else] n=1: return checkSQLiteReturnCode(statement.step());
+=== Source/WebCore/platform/network/curl/CurlContext.cpp:55  alt=False  nb=1  block=55-57
+   [#if PLATFORM(PLAYSTATION)] n=1: #include <libtweak/libtweak.h>
+=== Source/WebCore/platform/network/curl/CurlContext.cpp:357  alt=False  nb=1  block=357-360
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=2: if (LibTweak::isTweakActivatedFor(LibTweak::TweakId::DISABLE_OLD_TLS)) | curl_easy_setopt(m_handle, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+=== Source/WebCore/platform/network/curl/CurlContext.cpp:744  alt=False  nb=1  block=744-747
+   [#if PLATFORM(PLAYSTATION)] n=2: if (LibTweak::isTweakActivatedFor(LibTweak::TweakId::SHOULD_KEEP_BUG_CURL_CONTENT_LENGTH_DOWNLOAD)) | return -1;
+=== Source/WebCore/platform/network/curl/CurlContext.h:124  alt=False  nb=1  block=124-126
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: void setAdditionalRootCA(String &&rootCA) { m_sslHandle.setAdditionalRootCA(WTFMove(rootCA)); }
+=== Source/WebCore/platform/network/curl/CurlProxySettings.h:51  alt=False  nb=1  block=51-53
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: bool isActive() const { return m_mode == Mode::Custom && !isEmpty(); }
+=== Source/WebCore/platform/network/curl/CurlRequest.cpp:42  alt=False  nb=1  block=42-44
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: #include <WebSecurity/WebSecurity.h>
+=== Source/WebCore/platform/network/curl/CurlRequest.cpp:219  alt=False  nb=1  block=219-232
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=12: if (m_clientCertificate && m_clientCertificate->certificateChain().size()) { | auto& certificate = m_clientCertificate->certificateChain().at(0); | auto& privateKey = m_clientCertificate->privateKey(); | curl_blob sslCertBlob { const_cast<void*>(static_cast<const void*>(certificate.data())), certifi
+=== Source/WebCore/platform/network/curl/CurlRequest.cpp:467  alt=True  nb=2  block=467-471
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: if (needToInvokeDidReceiveResponse() && (result == CURLE_OK || isProxyAuthenticationRequired || WebSecurity::shouldBlock(m_response.statusCode, m_response.httpConnectCode))) {
+   [#else] n=1: if (needToInvokeDidReceiveResponse() && (result == CURLE_OK || isProxyAuthenticationRequired)) {
+=== Source/WebCore/platform/network/curl/CurlRequest.h:67  alt=False  nb=1  block=67-69
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: void setClientCertificate(const CertificateInfo& clientCertificate) { m_clientCertificate = clientCertificate; }
+=== Source/WebCore/platform/network/curl/CurlRequest.h:71  alt=True  nb=2  block=71-77
+   [#if PLATFORM(PLAYSTATION)] n=2: WEBCORE_EXPORT virtual void resume(); | WEBCORE_EXPORT virtual void cancel();
+   [#else] n=2: WEBCORE_EXPORT void resume(); | WEBCORE_EXPORT void cancel();
+=== Source/WebCore/platform/network/curl/CurlRequest.h:90  alt=True  nb=2  block=90-94
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: protected:
+   [#else] n=1: private:
+=== Source/WebCore/platform/network/curl/CurlRequest.h:153  alt=False  nb=1  block=153-155
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: std::optional<CertificateInfo> m_clientCertificate;
+=== Source/WebCore/platform/network/curl/CurlRequestScheduler.cpp:170  alt=False  nb=1  block=170-172
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: Thread::yield();
+=== Source/WebCore/platform/network/curl/CurlSSLHandle.h:71  alt=False  nb=1  block=71-73
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: void setAdditionalRootCA(String&&);
+=== Source/WebCore/platform/network/curl/CurlSSLHandle.h:112  alt=False  nb=1  block=112-114
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: size_t m_originalCACertDataSize { 0 };
+=== Source/WebCore/platform/network/curl/ResourceError.h:35  alt=False  nb=1  block=35-37
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: static ResourceError cancelledInServerTrustEvaluationError(const ResourceError&);
+=== Source/WebCore/platform/network/playstation/CurlSSLHandlePlayStation.cpp:38  alt=False  nb=1  block=38-40
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=1: m_originalCACertDataSize = certificateData->size();
+=== Source/WebCore/platform/network/playstation/CurlSSLHandlePlayStation.cpp:53  alt=False  nb=1  block=53-71
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=17: void CurlSSLHandle::setAdditionalRootCA(String&& additionalRootCA) | { | if (additionalRootCA.isEmpty()) | return; | if (!additionalRootCA.contains("-----BEGIN CERTIFICATE-----"_s))
+=== Source/WebCore/platform/network/playstation/CurlTMServiceRequest.cpp:29  alt=False  nb=1  block=29-213
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=183: #include "CurlRequest.h" | #include "CurlRequestScheduler.h" | #include "ResourceError.h" | #include "ResourceResponse.h" | #include "SharedBuffer.h"
+=== Source/WebCore/platform/network/playstation/CurlTMServiceRequest.h:28  alt=False  nb=1  block=28-75
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=46: #include "CurlRequest.h" | #include "CurlRequestClient.h" | namespace WebCore { | class CurlResponse; | class ResourceError;
+=== Source/WebCore/platform/network/playstation/ResourceErrorPlayStation.cpp:31  alt=False  nb=1  block=31-41
+   [#if PLATFORM(PLAYSTATION) // for downstream-only] n=9: ResourceError ResourceError::cancelledInServerTrustEvaluationError(const ResourceError& resourceError) | { | static const int cancelledInServerTrustEvaluationErrorCode = 1024; | auto error = resourceError; | error.m_errorCode = cancelledInServerTrustEvaluationErrorCode;
+=== Source/WebCore/rendering/RenderElement.cpp:1475  alt=False  nb=1  block=1475-1489
+   [#if PLATFORM(PLAYSTATION)] n=13: bool RenderElement::canDestroyDecodedData() | { | auto& frameView = view().frameView(); | if (!frameView.paintsEntireContents()) | return !isVisibleInViewport();
+=== Source/WebCore/rendering/RenderElement.h:369  alt=True  nb=2  block=369-375
+   [#if PLATFORM(PLAYSTATION)] n=3: // isVisibleInViewport() always returns true while paintsEntireContents() is true. | // Thus we need to handle this case without using isVisibleInViewport(). | bool canDestroyDecodedData() final;
+   [#else] n=1: bool canDestroyDecodedData() final { return !isVisibleInViewport(); }
+=== Source/WebCore/rendering/RenderLayer.cpp:2129  alt=False  nb=1  block=2129-2134
+   [#if PLATFORM(PLAYSTATION)] n=4: // temporary fix for SUPER-6884. When software filter full layer rendering is enabled, | // some of the containers are already rendered and thereby render tree can have null parents. | if (!parentLayer) | return;
+=== Source/WebCore/rendering/RenderLayer.cpp:5638  alt=False  nb=1  block=5638-5640
+   [#if PLATFORM(PLAYSTATION)] n=1: renderer().view().setHasSoftwareFilters(true);
+=== Source/WebCore/rendering/RenderMenuList.cpp:380  alt=False  nb=1  block=380-382
+   [#if PLATFORM(PLAYSTATION)] n=1: popupDidHide();

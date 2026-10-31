@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
+  <defs>
+<font id="f1" horiz-adv-x="1000"><font-face font-family="Zzext2" units-per-em="1000" ascent="800" descent="200"/><missing-glyph horiz-adv-x="500" d="M0 0 L500 0 L500 500 Z"/><glyph unicode="A" horiz-adv-x="1000" d="M0 0 L1000 0 L1000 800 L0 800 Z"/></font>
+  </defs>
+</svg>

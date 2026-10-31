@@ -1,0 +1,6059 @@
+[
+ {
+  "file": "Source/JavaScriptCore/API/JSBase.cpp",
+  "line": 144,
+  "ps_cond_lines": [
+   144
+  ],
+  "block_open": 144,
+  "block_close": 147,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "WTF::initializeMainThread();",
+     "RunLoop::run();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/JavaScriptCore/API/JSBase.cpp",
+  "line": 152,
+  "ps_cond_lines": [
+   152
+  ],
+  "block_open": 152,
+  "block_close": 157,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "JSC::Options::initialize();",
+     "JSC::Options::setOptions(args);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "UNUSED_PARAM(args);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp",
+  "line": 44,
+  "ps_cond_lines": [
+   44
+  ],
+  "block_open": 44,
+  "block_close": 48,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "Options::functionOverrides() = \"/app0/testapiScripts/testapi-function-overrides.js\";"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "Options::functionOverrides() = \"./testapiScripts/testapi-function-overrides.js\";"
+    ]
+   }
+  ],
+  "category": "test",
+  "kind": "",
+  "note": "script path /app0"
+ },
+ {
+  "file": "Source/JavaScriptCore/API/tests/TypedArrayCTest.cpp",
+  "line": 267,
+  "ps_cond_lines": [
+   267
+  ],
+  "block_open": 267,
+  "block_close": 273,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 5,
+    "code": [
+     "forEachTypedArrayType([&](JSTypedArrayType type) {",
+     "JSValueRef exception = nullptr;",
+     "JSObjectMakeTypedArray(context, type, UINT_MAX, &exception);",
+     "return !exception;",
+     "});"
+    ]
+   }
+  ],
+  "category": "test",
+  "kind": "",
+  "note": "UINT_MAX typed-array allocation test skipped"
+ },
+ {
+  "file": "Source/JavaScriptCore/API/tests/testapi.c",
+  "line": 1409,
+  "ps_cond_lines": [
+   1409
+  ],
+  "block_open": 1409,
+  "block_close": 1411,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "RELEASE_ASSERT(!testCAPIViaCpp(filter));"
+    ]
+   }
+  ],
+  "category": "test",
+  "kind": "",
+  "note": "testCAPIViaCpp skipped"
+ },
+ {
+  "file": "Source/JavaScriptCore/API/tests/testapi.c",
+  "line": 2018,
+  "ps_cond_lines": [
+   2018
+  ],
+  "block_open": 2018,
+  "block_close": 2022,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "const char* scriptPath = \"/app0/testapiScripts/testapi.js\";"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "const char* scriptPath = \"./testapiScripts/testapi.js\";"
+    ]
+   }
+  ],
+  "category": "test",
+  "kind": "",
+  "note": "script path /app0"
+ },
+ {
+  "file": "Source/JavaScriptCore/API/tests/testapi.c",
+  "line": 2126,
+  "ps_cond_lines": [
+   2126
+  ],
+  "block_open": 2126,
+  "block_close": 2128,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "failed |= testFunctionOverrides();"
+    ]
+   }
+  ],
+  "category": "test",
+  "kind": "",
+  "note": "testFunctionOverrides skipped"
+ },
+ {
+  "file": "Source/JavaScriptCore/API/tests/testapi.c",
+  "line": 2193,
+  "ps_cond_lines": [
+   2193
+  ],
+  "block_open": 2193,
+  "block_close": 2195,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "failed |= testExecutionTimeLimit();"
+    ]
+   }
+  ],
+  "category": "test",
+  "kind": "",
+  "note": "testExecutionTimeLimit skipped"
+ },
+ {
+  "file": "Source/JavaScriptCore/heap/BlockDirectory.cpp",
+  "line": 63,
+  "ps_cond_lines": [
+   63
+  ],
+  "block_open": 63,
+  "block_close": 88,
+  "conds": [
+   "#if OS(UNIX) && !PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if OS(UNIX) && !PLATFORM(PLAYSTATION)",
+    "nlines": 22,
+    "code": [
+     "size_t pageSize = WTF::pageSize();",
+     "ASSERT(!(MarkedBlock::blockSize % pageSize));",
+     "auto numberOfPagesInMarkedBlock = MarkedBlock::blockSize / pageSize;",
+     "// For some reason this can be unsigned char or char on different OSes...",
+     "using MincoreBufferType = std::remove_pointer_t<FunctionTraits<decltype(mincore)>::ArgumentType<2>>;",
+     "static_assert(std::is_same_v<std::make_unsigned_t<MincoreBufferType>, unsigned char>);",
+     "Vector<MincoreBufferType, 16> pagedBits(numberOfPagesInMarkedBlock, MincoreBufferType { });",
+     "for (auto* handle : m_blocks) {"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "UNUSED_PARAM(stats);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "mincore paged-out statistic replaced by UNUSED_PARAM(stats)"
+ },
+ {
+  "file": "Source/JavaScriptCore/inspector/remote/socket/RemoteInspectorSocket.cpp",
+  "line": 41,
+  "ps_cond_lines": [
+   41
+  ],
+  "block_open": 41,
+  "block_close": 43,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "extern const char* kInspectorBackendCommandsString;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/JavaScriptCore/inspector/remote/socket/RemoteInspectorSocket.cpp",
+  "line": 262,
+  "ps_cond_lines": [
+   262
+  ],
+  "block_open": 262,
+  "block_close": 265,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "if (kInspectorBackendCommandsString)",
+     "return String::fromUTF8(kInspectorBackendCommandsString);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/JavaScriptCore/inspector/remote/socket/posix/RemoteInspectorSocketPOSIX.cpp",
+  "line": 96,
+  "ps_cond_lines": [
+   96
+  ],
+  "block_open": 96,
+  "block_close": 102,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 5,
+    "code": [
+     "if (setsockopt(fdListen, SOL_SOCKET, SO_USE_DEVLAN, &enabled, sizeof(enabled)) < 0) {",
+     "LOG_ERROR(\"setsocketopt() SO_USE_DEVLAN, errno = %d\", errno);",
+     "::close(fdListen);",
+     "return std::nullopt;",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/JavaScriptCore/llint/LLIntPCRanges.h",
+  "line": 46,
+  "ps_cond_lines": [
+   46
+  ],
+  "block_open": 46,
+  "block_close": 55,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "UNUSED_PARAM(pc);",
+     "return false;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 5,
+    "code": [
+     "uintptr_t pcAsInt = bitwise_cast<uintptr_t>(pc);",
+     "uintptr_t llintStart = untagCodePtr<uintptr_t, CFunctionPtrTag>(llintPCRangeStart);",
+     "uintptr_t llintEnd = untagCodePtr<uintptr_t, CFunctionPtrTag>(llintPCRangeEnd);",
+     "RELEASE_ASSERT(llintStart < llintEnd);",
+     "return llintStart <= pcAsInt && pcAsInt <= llintEnd;"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "isLLIntPC() returns false: VMTraps ignores a trap taken in LLInt code; profiling/asserts see no LLInt frame"
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/JSDateMath.cpp",
+  "line": 147,
+  "ps_cond_lines": [
+   147
+  ],
+  "block_open": 147,
+  "block_close": 150,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "// FIXME: SUPER-4445, for downstream-only, workaround patch. ICU's Tiemzone does not work well, use WTF's API.",
+     "return WTF::calculateLocalTimeOffset(millisecondsFromEpoch, inputTimeType);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "ICU timezone offset replaced by WTF::calculateLocalTimeOffset()"
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/JSDateMath.cpp",
+  "line": 501,
+  "ps_cond_lines": [
+   501
+  ],
+  "block_open": 501,
+  "block_close": 505,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "// FIXME: SUPER-6620, for downstream-only, workaround patch. ICU's Tiemzone does not work well",
+     "// so we can't get the display names from ICU.",
+     "return \"\"_s;"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "timezone display names return the empty string"
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/JSLock.cpp",
+  "line": 160,
+  "ps_cond_lines": [
+   160
+  ],
+  "block_open": 160,
+  "block_close": 167,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "if (UNLIKELY(Options::enableSingleThreadCheck())) {",
+     "// Reaching here, current thread was \"NewlyAdded\" to the machineThreads and \"single thread check\" is required.",
+     "// That is, if more than one threads are registered to a single VM, JSC must CRASH() here.",
+     "if (m_vm->heap.machineThreads().threads(AbstractLocker(NoLockingNecessary)).size() > 1)",
+     "CRASH();",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "CRASH() under Options::enableSingleThreadCheck() (default off)"
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/Options.cpp",
+  "line": 452,
+  "ps_cond_lines": [
+   452
+  ],
+  "block_open": 452,
+  "block_close": 458,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 5,
+    "code": [
+     "#if ENABLE(MAT)",
+     "// Concurrent GC causes debugging hard for MAT.",
+     "// Be careful not only the timing, but the performance and the effeciency is also different.",
+     "Options::useConcurrentGC() = false;",
+     "#endif"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "useConcurrentGC=false, but only inside #if ENABLE(MAT) (default OFF)"
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/StructureID.h",
+  "line": 50,
+  "ps_cond_lines": [
+   50
+  ],
+  "block_open": 48,
+  "block_close": 56,
+  "conds": [
+   "#if defined(STRUCTURE_HEAP_ADDRESS_SIZE_IN_MB) && STRUCTURE_HEAP_ADDRESS_SIZE_IN_MB > 0",
+   "#elif PLATFORM(PLAYSTATION)",
+   "#elif PLATFORM(IOS_FAMILY) && CPU(ARM64) && !CPU(ARM64E)",
+   "#else"
+  ],
+  "n_branches": 4,
+  "has_alt": true,
+  "alt_conds": [
+   "#if defined(STRUCTURE_HEAP_ADDRESS_SIZE_IN_MB) && STRUCTURE_HEAP_ADDRESS_SIZE_IN_MB > 0",
+   "#elif PLATFORM(IOS_FAMILY) && CPU(ARM64) && !CPU(ARM64E)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if defined(STRUCTURE_HEAP_ADDRESS_SIZE_IN_MB) && STRUCTURE_HEAP_ADDRESS_SIZE_IN_MB > 0",
+    "nlines": 1,
+    "code": [
+     "constexpr uintptr_t structureHeapAddressSize = STRUCTURE_HEAP_ADDRESS_SIZE_IN_MB * MB;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "constexpr uintptr_t structureHeapAddressSize = 128 * MB;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(IOS_FAMILY) && CPU(ARM64) && !CPU(ARM64E)",
+    "nlines": 1,
+    "code": [
+     "constexpr uintptr_t structureHeapAddressSize = 512 * MB;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "constexpr uintptr_t structureHeapAddressSize = 4 * GB;"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "structure heap is 128 MB instead of 4 GB; structureIDMask = 0x07ffffff"
+ },
+ {
+  "file": "Source/JavaScriptCore/runtime/VM.cpp",
+  "line": 395,
+  "ps_cond_lines": [
+   395
+  ],
+  "block_open": 395,
+  "block_close": 398,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "// FIXME: <PLAYSTATION> REMOVE disableFreezingForTesting() call after RNPS no longer needs this behavior",
+     "Config::disableFreezingForTesting();"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "Config::disableFreezingForTesting() at VM::finishInitialization"
+ },
+ {
+  "file": "Source/JavaScriptCore/testmem/testmem.cpp",
+  "line": 38,
+  "ps_cond_lines": [
+   38
+  ],
+  "block_open": 38,
+  "block_close": 40,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <memory-extra/showmap.h>"
+    ]
+   }
+  ],
+  "category": "test",
+  "kind": "",
+  "note": "showmap include"
+ },
+ {
+  "file": "Source/JavaScriptCore/testmem/testmem.cpp",
+  "line": 53,
+  "ps_cond_lines": [
+   53
+  ],
+  "block_open": 53,
+  "block_close": 65,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 9,
+    "code": [
+     "memory_extra::showmap::Result<2> result;",
+     "auto* entry = result.reserve(\"SceNKFastMalloc\");",
+     "ASSERT(entry);",
+     "result.collect();",
+     "return Footprint {",
+     "static_cast<uint64_t>(entry->rss),",
+     "static_cast<uint64_t>(entry->vss)",
+     "};"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#error \"No testmem implementation for this platform.\""
+    ]
+   }
+  ],
+  "category": "test",
+  "kind": "",
+  "note": "showmap footprint"
+ },
+ {
+  "file": "Source/WebCore/Modules/encryptedmedia/CDM.cpp",
+  "line": 50,
+  "ps_cond_lines": [
+   50
+  ],
+  "block_open": 50,
+  "block_close": 52,
+  "conds": [
+   "#if PLATFORM (PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM (PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include \"CDMPrivatePlayStation.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebCore/Modules/encryptedmedia/CDM.cpp",
+  "line": 85,
+  "ps_cond_lines": [
+   85
+  ],
+  "block_open": 85,
+  "block_close": 89,
+  "conds": [
+   "#if PLATFORM (PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM (PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "CDMPrivatePlayStation* privatePlayStation = static_cast<CDMPrivatePlayStation*>(m_private.get());",
+     "if (privatePlayStation)",
+     "privatePlayStation->setWebMusicPlayerEnabled(document.settings().webMusicPlayerEnabled());"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/MediaSource.cpp",
+  "line": 334,
+  "ps_cond_lines": [
+   334
+  ],
+  "block_open": 334,
+  "block_close": 340,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "// Video streams of some lincesees need 100ms as a fudge factor.",
+     "static NeverDestroyed<MediaTime> fudgeFactor(1, 10);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 2,
+    "code": [
+     "// Allow hasCurrentTime() to be off by as much as the length of two 24fps video frames",
+     "static NeverDestroyed<MediaTime> fudgeFactor(2002, 24000);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "currentTimeFudgeFactor 1/10 s instead of 2002/24000 s"
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 69,
+  "ps_cond_lines": [
+   69
+  ],
+  "block_open": 69,
+  "block_close": 73,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "#define PS_LOG(fmt, ...)    { printf(\"[WebKit][%d]%s%s\", __LINE__, (audioTracks().length() ? \"[audio]\" : \"\"), (videoTracks().length() ? \"[video]\" : \"\")); printf(fmt, ## __VA_ARGS__); printf(\"\\n\"); }",
+     "#include <libtweak/libtweak.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 143,
+  "ps_cond_lines": [
+   143
+  ],
+  "block_open": 143,
+  "block_close": 145,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\"SourceBuffer::setTimestampOffset offset = %f\", offset);"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 186,
+  "ps_cond_lines": [
+   186
+  ],
+  "block_open": 186,
+  "block_close": 188,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\"SourceBuffer::setAppendWindowStart value = %f\", newValue);"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 218,
+  "ps_cond_lines": [
+   218
+  ],
+  "block_open": 218,
+  "block_close": 220,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\"SourceBuffer::setAppendWindowEnd value = %f\", newValue);"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 246,
+  "ps_cond_lines": [
+   246
+  ],
+  "block_open": 246,
+  "block_close": 248,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\"SourceBuffer::appendBuffer length = %ld\", data.length());"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 250,
+  "ps_cond_lines": [
+   250
+  ],
+  "block_open": 250,
+  "block_close": 252,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "monitorBufferingRate();"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "monitorBufferingRate() not called on append"
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 313,
+  "ps_cond_lines": [
+   313
+  ],
+  "block_open": 313,
+  "block_close": 315,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\"SourceBuffer::remove start = %f, end = %f\", start, end);"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 539,
+  "ps_cond_lines": [
+   539
+  ],
+  "block_open": 539,
+  "block_close": 541,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\"buffer full, failing with QuotaExceededError error\");"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 600,
+  "ps_cond_lines": [
+   600
+  ],
+  "block_open": 600,
+  "block_close": 602,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\"SourceBuffer::sourceBufferPrivateAppendComplete - ParsingFailed\");"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 628,
+  "ps_cond_lines": [
+   628
+  ],
+  "block_open": 628,
+  "block_close": 630,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "monitorBufferingRate();"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "monitorBufferingRate() not called on append completion"
+ },
+ {
+  "file": "Source/WebCore/Modules/mediasource/SourceBuffer.cpp",
+  "line": 633,
+  "ps_cond_lines": [
+   633
+  ],
+  "block_open": 633,
+  "block_close": 635,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\"SourceBuffer::sourceBufferPrivateAppendComplete - buffered = %s\", toString(m_private->buffered()).utf8().data());"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/accessibility/AccessibilityObjectInterface.h",
+  "line": 64,
+  "ps_cond_lines": [
+   64
+  ],
+  "block_open": 55,
+  "block_close": 68,
+  "conds": [
+   "#if PLATFORM(COCOA)",
+   "#elif USE(ATSPI)",
+   "#elif PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 4,
+  "has_alt": true,
+  "alt_conds": [
+   "#if PLATFORM(COCOA)",
+   "#elif USE(ATSPI)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(COCOA)",
+    "nlines": 6,
+    "code": [
+     "OBJC_CLASS WebAccessibilityObjectWrapper;",
+     "typedef WebAccessibilityObjectWrapper AccessibilityObjectWrapper;",
+     "typedef struct _NSRange NSRange;",
+     "typedef const struct __AXTextMarker* AXTextMarkerRef;",
+     "typedef const struct __AXTextMarkerRange* AXTextMarkerRangeRef;",
+     "OBJC_CLASS NSAttributedString;"
+    ]
+   },
+   {
+    "cond": "#elif USE(ATSPI)",
+    "nlines": 1,
+    "code": [
+     "typedef WebCore::AccessibilityObjectAtspi AccessibilityObjectWrapper;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "class AccessibilityObjectWrapper : public RefCounted<AccessibilityObjectWrapper> { };"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "class AccessibilityObjectWrapper;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/accessibility/AccessibilityObjectInterface.h",
+  "line": 1457,
+  "ps_cond_lines": [
+   1457
+  ],
+  "block_open": 1453,
+  "block_close": 1461,
+  "conds": [
+   "#if PLATFORM(COCOA)",
+   "#elif PLATFORM(WIN)",
+   "#elif PLATFORM(PLAYSTATION)",
+   "#elif USE(ATSPI)"
+  ],
+  "n_branches": 4,
+  "has_alt": true,
+  "alt_conds": [
+   "#if PLATFORM(COCOA)",
+   "#elif PLATFORM(WIN)",
+   "#elif USE(ATSPI)"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(COCOA)",
+    "nlines": 1,
+    "code": [
+     "RetainPtr<WebAccessibilityObjectWrapper> m_wrapper;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(WIN)",
+    "nlines": 1,
+    "code": [
+     "COMPtr<AccessibilityObjectWrapper> m_wrapper;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "RefPtr<AccessibilityObjectWrapper> m_wrapper;"
+    ]
+   },
+   {
+    "cond": "#elif USE(ATSPI)",
+    "nlines": 1,
+    "code": [
+     "RefPtr<AccessibilityObjectAtspi> m_wrapper;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/dom/Document.cpp",
+  "line": 7552,
+  "ps_cond_lines": [
+   7552
+  ],
+  "block_open": 7552,
+  "block_close": 7558,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "// FIXME : If add --run-singly option to run-webkit-tests command, tests that use internals.setMediaElementRestrictions are more likely to failure.",
+     "// Because, m_userActivatedMediaFinishedPlayingTimestamp may be used before being set and in that case the function can return wrong result.(webkit.org/b/212629)",
+     "if (m_userActivatedMediaFinishedPlayingTimestamp && m_userActivatedMediaFinishedPlayingTimestamp + maxIntervalForUserGestureForwardingAfterMediaFinishesPlaying >= MonotonicTime::now())"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "if (m_userActivatedMediaFinishedPlayingTimestamp + maxIntervalForUserGestureForwardingAfterMediaFinishesPlaying >= MonotonicTime::now())"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "extra `timestamp &&` guard: no user gesture in the first 5 s of uptime"
+ },
+ {
+  "file": "Source/WebCore/editing/Editor.h",
+  "line": 402,
+  "ps_cond_lines": [
+   402
+  ],
+  "block_open": 402,
+  "block_close": 404,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "void confirmComposition(const String&, unsigned);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/editing/FrameSelection.cpp",
+  "line": 1435,
+  "ps_cond_lines": [
+   1435
+  ],
+  "block_open": 1435,
+  "block_close": 1441,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 5,
+    "code": [
+     "// A caret on a text should not move by gamepad's direction keys while the caret is invisible,",
+     "// because it needs the text selection behavior prevents a situation where a cursor will move",
+     "// on the text after closing OSK witout Blur.",
+     "if (!caretIsVisible())",
+     "return false;"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "caret does not move while caretIsVisible() is false"
+ },
+ {
+  "file": "Source/WebCore/html/HTMLSelectElement.cpp",
+  "line": 1325,
+  "ps_cond_lines": [
+   1325
+  ],
+  "block_open": 1325,
+  "block_close": 1328,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "// Since there is no way to send mouse events with CTRL key pressed by game pad, we treat mouse events as if CTRL key was always pressed.",
+     "multi = true;"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "every mouse-driven updateSelectedState() is treated as ctrl-click (multi=true)"
+ },
+ {
+  "file": "Source/WebCore/loader/DocumentLoader.cpp",
+  "line": 2530,
+  "ps_cond_lines": [
+   2530
+  ],
+  "block_open": 2530,
+  "block_close": 2536,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "// Rebase Note: Removed a static cast due to bug with CFI in LLVM-9.",
+     "// this change can be reverted once a fix for this bug is released https://bugs.llvm.org/show_bug.cgi?id=43390.",
+     "m_frame->document()->addConsoleMessage(messageSource, messageLevel, message, requestIdentifier);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "static_cast<ScriptExecutionContext*>(m_frame->document())->addConsoleMessage(messageSource, messageLevel, message, requestIdentifier);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "inert",
+  "note": "static_cast removed, same addConsoleMessage call (CFI workaround)"
+ },
+ {
+  "file": "Source/WebCore/page/Chrome.h",
+  "line": 235,
+  "ps_cond_lines": [
+   235
+  ],
+  "block_open": 235,
+  "block_close": 239,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)",
+    "nlines": 3,
+    "code": [
+     "void postAccessibilityNotification(AccessibilityObject&, AXObjectCache::AXNotification);",
+     "void postAccessibilityNodeTextChangeNotification(AccessibilityObject*, AXTextChange, unsigned, const String&);",
+     "void postAccessibilityFrameLoadingEventNotification(AccessibilityObject*, AXObjectCache::AXLoadingEvent);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/page/ChromeClient.h",
+  "line": 500,
+  "ps_cond_lines": [
+   500
+  ],
+  "block_open": 500,
+  "block_close": 503,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)",
+    "nlines": 2,
+    "code": [
+     "virtual void postAccessibilityNodeTextChangeNotification(AccessibilityObject*, AXTextChange, unsigned, const String&) { }",
+     "virtual void postAccessibilityFrameLoadingEventNotification(AccessibilityObject*, AXObjectCache::AXLoadingEvent) { }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/page/DeprecatedGlobalSettings.cpp",
+  "line": 107,
+  "ps_cond_lines": [
+   107
+  ],
+  "block_open": 107,
+  "block_close": 119,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 11,
+    "code": [
+     "void DeprecatedGlobalSettings::setPlayStationMediaPlayerEnabled(bool enabled)",
+     "{",
+     "if (shared().m_playStationMediaPlayerEnabled == enabled)",
+     "return;",
+     "shared().m_playStationMediaPlayerEnabled = enabled;",
+     "#if ENABLE(VIDEO)",
+     "platformStrategies()->mediaStrategy().resetMediaEngines();",
+     "#endif"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/page/DeprecatedGlobalSettings.h",
+  "line": 51,
+  "ps_cond_lines": [
+   51
+  ],
+  "block_open": 51,
+  "block_close": 54,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "WEBCORE_EXPORT static void setPlayStationMediaPlayerEnabled(bool flag);",
+     "static bool isPlayStationMediaPlayerEnabled() { return shared().m_playStationMediaPlayerEnabled; }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/page/DeprecatedGlobalSettings.h",
+  "line": 201,
+  "ps_cond_lines": [
+   201
+  ],
+  "block_open": 201,
+  "block_close": 203,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "bool m_playStationMediaPlayerEnabled { true };"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/page/EventHandler.cpp",
+  "line": 2278,
+  "ps_cond_lines": [
+   2278
+  ],
+  "block_open": 2278,
+  "block_close": 2294,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ACCESSIBILITY)",
+    "nlines": 15,
+    "code": [
+     "if (auto* cache = m_frame.document()->existingAXObjectCache()) {",
+     "if (WebCore::AXCoreObject* root = cache->rootObject()) {",
+     "// Get the element at Click coordinates.",
+     "// Since the target element cannot be obtained around the mouseEvent, it is obtained from AX's hittest.",
+     "LayoutPoint documentPoint = documentPointForWindowPoint(m_frame, platformMouseEvent.position());",
+     "if (WebCore::AXCoreObject* axObject = root->accessibilityHitTest(flooredIntPoint(documentPoint))) {",
+     "if (WebCore::Element* element = axObject->element()) {",
+     "// Always signals the AXPressDidSucceed event."
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/page/EventHandler.cpp",
+  "line": 4383,
+  "ps_cond_lines": [
+   4383
+  ],
+  "block_open": 4383,
+  "block_close": 4388,
+  "conds": [
+   "#if PLATFORM(COCOA) || PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(COCOA) || PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "return isKeyboardOptionTab(event);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 2,
+    "code": [
+     "UNUSED_PARAM(event);",
+     "return false;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/page/EventHandler.cpp",
+  "line": 5102,
+  "ps_cond_lines": [
+   5102
+  ],
+  "block_open": 5102,
+  "block_close": 5108,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 5,
+    "code": [
+     "bool EventHandler::tabsToAllFormControls(KeyboardEvent*) const",
+     "{",
+     "// We always allow tabs to all controls",
+     "return true;",
+     "}"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "tabsToAllFormControls defined in page/playstation/EventHandlerPlayStation.cpp"
+ },
+ {
+  "file": "Source/WebCore/page/FocusController.h",
+  "line": 82,
+  "ps_cond_lines": [
+   82
+  ],
+  "block_open": 82,
+  "block_close": 87,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "Element* nextEditableElement(Element*);",
+     "Element* previousEditableElement(Element*);",
+     "bool hasNextEditableElement(Element*);",
+     "bool hasPreviousEditableElement(Element*);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/page/NavigatorBase.cpp",
+  "line": 61,
+  "ps_cond_lines": [
+   61
+  ],
+  "block_open": 61,
+  "block_close": 65,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define WEBCORE_NAVIGATOR_VENDOR \"Sony Interactive Entertainment Inc.\"_s"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#define WEBCORE_NAVIGATOR_VENDOR \"Apple Computer, Inc.\"_s"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/page/NavigatorBase.cpp",
+  "line": 109,
+  "ps_cond_lines": [
+   109
+  ],
+  "block_open": 95,
+  "block_close": 118,
+  "conds": [
+   "#if OS(LINUX)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif OS(MACOS)",
+   "#elif OS(WINDOWS)",
+   "#elif PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 6,
+  "has_alt": true,
+  "alt_conds": [
+   "#if OS(LINUX)",
+   "#elif PLATFORM(IOS_FAMILY)",
+   "#elif OS(MACOS)",
+   "#elif OS(WINDOWS)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if OS(LINUX)",
+    "nlines": 7,
+    "code": [
+     "static LazyNeverDestroyed<String> platformName;",
+     "static std::once_flag onceKey;",
+     "std::call_once(onceKey, [] {",
+     "struct utsname osname;",
+     "platformName.construct(uname(&osname) >= 0 ? makeString(osname.sysname, \" \", osname.machine) : emptyString());",
+     "});",
+     "return platformName->isolatedCopy();"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(IOS_FAMILY)",
+    "nlines": 1,
+    "code": [
+     "return deviceName();"
+    ]
+   },
+   {
+    "cond": "#elif OS(MACOS)",
+    "nlines": 1,
+    "code": [
+     "return \"MacIntel\"_s;"
+    ]
+   },
+   {
+    "cond": "#elif OS(WINDOWS)",
+    "nlines": 1,
+    "code": [
+     "return \"Win32\"_s;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "#if HAS_GETENV_NP",
+     "char buf[32];",
+     "if (!getenv_np(\"SYSTEM_SOFTWARE_NAME\", buf, sizeof(buf)))",
+     "return String::fromUTF8(buf);",
+     "#endif",
+     "return \"PlayStation 4\"_s;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return \"\"_s;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/page/csp/ContentSecurityPolicy.cpp",
+  "line": 827,
+  "ps_cond_lines": [
+   827
+  ],
+  "block_open": 827,
+  "block_close": 835,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 5,
+    "code": [
+     "// down-stream only.",
+     "// Because `AND` judgment cannot accurately determine whether downcast judgment is possible or not,",
+     "// Use `OR` judgment to check reliably.",
+     "// The code has changed upstream, making cherry-picking difficult, so we deal with it downstream.",
+     "if (!usesReportTo || !is<Document>(m_scriptExecutionContext))"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "if (!usesReportTo && !is<Document>(m_scriptExecutionContext))"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "sec",
+  "note": "AND inverted to OR: PS returns early where upstream downcasts; a downstream FIX"
+ },
+ {
+  "file": "Source/WebCore/platform/LocalizedStrings.cpp",
+  "line": 83,
+  "ps_cond_lines": [
+   83
+  ],
+  "block_open": 77,
+  "block_close": 106,
+  "conds": [
+   "#if USE(GLIB)",
+   "#elif PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#if USE(GLIB)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if USE(GLIB)",
+    "nlines": 5,
+    "code": [
+     "va_list arguments;",
+     "va_start(arguments, format);",
+     "GUniquePtr<gchar> result(g_strdup_vprintf(format, arguments));",
+     "va_end(arguments);",
+     "return String::fromUTF8(result.get());"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 19,
+    "code": [
+     "va_list args, argsCopy;",
+     "va_start(args, format);",
+     "va_copy(argsCopy, args);",
+     "// Do the format once to get the length.",
+     "char ch;",
+     "int resultSize = vsnprintf(&ch, 1, format, argsCopy);",
+     "va_end(argsCopy);",
+     "if (resultSize <= 0) {"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 2,
+    "code": [
+     "notImplemented();",
+     "return String::fromUTF8(format);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/MediaSample.h",
+  "line": 42,
+  "ps_cond_lines": [
+   42
+  ],
+  "block_open": 42,
+  "block_close": 44,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "typedef struct opaquePSMediaSample *PSMediaSampleRef;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/MediaSample.h",
+  "line": 63,
+  "ps_cond_lines": [
+   63
+  ],
+  "block_open": 63,
+  "block_close": 65,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PSMediaSampleType,"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/MediaSample.h",
+  "line": 71,
+  "ps_cond_lines": [
+   71
+  ],
+  "block_open": 71,
+  "block_close": 73,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PSMediaSampleRef psSample;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/MediaStrategy.cpp",
+  "line": 63,
+  "ps_cond_lines": [
+   63
+  ],
+  "block_open": 63,
+  "block_close": 65,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "WebCore::DeprecatedGlobalSettings::setPlayStationMediaPlayerEnabled(false);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/ReferrerPolicy.h",
+  "line": 50,
+  "ps_cond_lines": [
+   50
+  ],
+  "block_open": 50,
+  "block_close": 54,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "Default = NoReferrerWhenDowngrade"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "Default = StrictOriginWhenCrossOrigin"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "sec",
+  "note": "Default = NoReferrerWhenDowngrade instead of StrictOriginWhenCrossOrigin"
+ },
+ {
+  "file": "Source/WebCore/platform/WebCorePersistentCoders.cpp",
+  "line": 468,
+  "ps_cond_lines": [
+   468
+  ],
+  "block_open": 468,
+  "block_close": 474,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 5,
+    "code": [
+     "encoder << certificateInfo.hasPrivateKey();",
+     "if (certificateInfo.hasPrivateKey()) {",
+     "encoder << certificateInfo.privateKey();",
+     "encoder << certificateInfo.privateKeyPassword();",
+     "}"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "CertificateInfo codec gains hasPrivateKey/privateKey/privateKeyPassword"
+ },
+ {
+  "file": "Source/WebCore/platform/WebCorePersistentCoders.cpp",
+  "line": 499,
+  "ps_cond_lines": [
+   499
+  ],
+  "block_open": 499,
+  "block_close": 518,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 18,
+    "code": [
+     "std::optional<bool> hasPrivateKey;",
+     "decoder >> hasPrivateKey;",
+     "if (!hasPrivateKey)",
+     "return std::nullopt;",
+     "if (*hasPrivateKey) {",
+     "std::optional<WebCore::CertificateInfo::PrivateKey> privateKey;",
+     "decoder >> privateKey;",
+     "if (!privateKey)"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "CertificateInfo decoder requires the three extra fields"
+ },
+ {
+  "file": "Source/WebCore/platform/Widget.cpp",
+  "line": 277,
+  "ps_cond_lines": [
+   277
+  ],
+  "block_open": 277,
+  "block_close": 321,
+  "conds": [
+   "#if !PLATFORM(COCOA) && !PLATFORM(GTK) && !PLATFORM(WIN) && !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(COCOA) && !PLATFORM(GTK) && !PLATFORM(WIN) && !PLATFORM(PLAYSTATION)",
+    "nlines": 43,
+    "code": [
+     "Widget::~Widget()",
+     "{",
+     "ASSERT(!parent());",
+     "notImplemented();",
+     "}",
+     "void Widget::setFrameRect(const IntRect& rect)",
+     "{",
+     "m_frame = rect;"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "Widget::~Widget/setFrameRect not the notImplemented stub"
+ },
+ {
+  "file": "Source/WebCore/platform/encryptedmedia/CDMFactory.cpp",
+  "line": 64,
+  "ps_cond_lines": [
+   64
+  ],
+  "block_open": 64,
+  "block_close": 68,
+  "conds": [
+   "#if !USE(GSTREAMER) && !USE(AVFOUNDATION) && !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !USE(GSTREAMER) && !USE(AVFOUNDATION) && !PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "void CDMFactory::platformRegisterFactories(Vector<CDMFactory*>&)",
+     "{",
+     "}"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "platformRegisterFactories defined in playstation/eme/CDMFactoryPlayStation.cpp"
+ },
+ {
+  "file": "Source/WebCore/platform/encryptedmedia/CDMInstance.h",
+  "line": 82,
+  "ps_cond_lines": [
+   82
+  ],
+  "block_open": 82,
+  "block_close": 84,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "Playstation,"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "inert",
+  "note": "Playstation inserted MID-enum: Remote 3->4, Thunder 4->5 on PS"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/AudioTrackPrivate.h",
+  "line": 61,
+  "ps_cond_lines": [
+   61
+  ],
+  "block_open": 61,
+  "block_close": 65,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "virtual bool enabled() const { return m_enabled; }"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "bool enabled() const { return m_enabled; }"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "enabled() made virtual in the base class"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/Font.cpp",
+  "line": 606,
+  "ps_cond_lines": [
+   606
+  ],
+  "block_open": 606,
+  "block_close": 612,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "// Try the characters individually.",
+     "if (!supportsCodePoint(codePoint) || !supportsCodePoint(*it))"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 2,
+    "code": [
+     "bool vsText = (*it == 0xFE0E);",
+     "if ((platformData().isColorBitmapFont() && vsText) || (!supportsCodePoint(codePoint) || (!vsText && !supportsCodePoint(*it))))"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "variation-selector test: FE0E accepted without a glyph, colour fonts refuse it"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/FontCascadeDescription.h",
+  "line": 34,
+  "ps_cond_lines": [
+   34
+  ],
+  "block_open": 32,
+  "block_close": 38,
+  "conds": [
+   "#if PLATFORM(COCOA)",
+   "#elif PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#if PLATFORM(COCOA)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(COCOA)",
+    "nlines": 1,
+    "code": [
+     "#include \"FontFamilySpecificationCoreText.h\""
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include \"FontFamilySpecificationPlayStation.h\""
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "#include \"FontFamilySpecificationNull.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/FontCascadeDescription.h",
+  "line": 44,
+  "ps_cond_lines": [
+   44
+  ],
+  "block_open": 42,
+  "block_close": 48,
+  "conds": [
+   "#if PLATFORM(COCOA)",
+   "#elif PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 3,
+  "has_alt": true,
+  "alt_conds": [
+   "#if PLATFORM(COCOA)",
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(COCOA)",
+    "nlines": 1,
+    "code": [
+     "typedef FontFamilySpecificationCoreText FontFamilyPlatformSpecification;"
+    ]
+   },
+   {
+    "cond": "#elif PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "typedef FontFamilySpecificationPlayStation FontFamilyPlatformSpecification;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "typedef FontFamilySpecificationNull FontFamilyPlatformSpecification;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/ImageSource.cpp",
+  "line": 604,
+  "ps_cond_lines": [
+   604
+  ],
+  "block_open": 604,
+  "block_close": 610,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 5,
+    "code": [
+     "// [Bug 196917]",
+     "// It's also possible that we have an ImageFrame but not frame contents, typically just after a dataChanged() call",
+     "// with EncodedDataStatus::SizeAvailable. We can also return the decoder size without caching in such case.",
+     "else if (!m_frames.isEmpty() && isDecoderAvailable() && m_decoder->isSizeAvailable())",
+     "size = m_decoder->size();"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "size taken from the decoder when frames exist without contents; metadata cache not written"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/MediaPlayer.cpp",
+  "line": 101,
+  "ps_cond_lines": [
+   101
+  ],
+  "block_open": 101,
+  "block_close": 103,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include \"MediaPlayerPrivatePlayStation.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/MediaPlayer.cpp",
+  "line": 326,
+  "ps_cond_lines": [
+   326
+  ],
+  "block_open": 326,
+  "block_close": 329,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "if (DeprecatedGlobalSettings::isPlayStationMediaPlayerEnabled())",
+     "MediaPlayerPrivatePlayStation::registerMediaEngine(addMediaEngine);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/MediaPlayer.cpp",
+  "line": 1087,
+  "ps_cond_lines": [
+   1087
+  ],
+  "block_open": 1087,
+  "block_close": 1090,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "if (m_presentationSize == size)",
+     "return;"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "setPresentationSize() forwards even when the size is unchanged"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/MediaPlayer.h",
+  "line": 654,
+  "ps_cond_lines": [
+   654
+  ],
+  "block_open": 654,
+  "block_close": 656,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "String contentTypeRaw() const { return m_contentType.raw(); }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/MediaPlayerEnums.h",
+  "line": 40,
+  "ps_cond_lines": [
+   40
+  ],
+  "block_open": 40,
+  "block_close": 42,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "NoResourceError,"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/MediaPlayerEnums.h",
+  "line": 97,
+  "ps_cond_lines": [
+   97
+  ],
+  "block_open": 97,
+  "block_close": 99,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PlayStation,"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/PlatformDisplay.cpp",
+  "line": 72,
+  "ps_cond_lines": [
+   72
+  ],
+  "block_open": 72,
+  "block_close": 74,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include \"PlatformDisplayPlayStation.h\""
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/PlatformDisplay.cpp",
+  "line": 147,
+  "ps_cond_lines": [
+   147
+  ],
+  "block_open": 147,
+  "block_close": 149,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "return PlatformDisplayPlayStation::create();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/PlatformDisplay.h",
+  "line": 86,
+  "ps_cond_lines": [
+   86
+  ],
+  "block_open": 86,
+  "block_close": 88,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PlayStation,"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "inert",
+  "note": "PlayStation inserted before the USE(EGL) values: Surfaceless/GBM shift by one"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/SourceBufferPrivate.cpp",
+  "line": 48,
+  "ps_cond_lines": [
+   48
+  ],
+  "block_open": 48,
+  "block_close": 50,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <libtweak/libtweak.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/SourceBufferPrivate.cpp",
+  "line": 52,
+  "ps_cond_lines": [
+   52
+  ],
+  "block_open": 52,
+  "block_close": 54,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#define PS_LOG(fmt, ...)    { printf(\"[WebKit][%d]%s%s\", __LINE__, (hasAudio() ? \"[audio]\" : \"\"), (hasVideo() ? \"[video]\" : \"\")); printf(fmt, ## __VA_ARGS__); printf(\"\\n\"); }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/SourceBufferPrivate.cpp",
+  "line": 475,
+  "ps_cond_lines": [
+   475
+  ],
+  "block_open": 475,
+  "block_close": 477,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\"SourceBufferPrivate::removeCodedFrames - start = %f, end = %f\", start.toDouble(), end.toDouble());"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/SourceBufferPrivate.cpp",
+  "line": 510,
+  "ps_cond_lines": [
+   510
+  ],
+  "block_open": 510,
+  "block_close": 512,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\"SourceBufferPrivate::removeCodedFrames - buffered = %s\", toString(m_buffered).utf8().data());"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/SourceBufferPrivate.cpp",
+  "line": 562,
+  "ps_cond_lines": [
+   562
+  ],
+  "block_open": 562,
+  "block_close": 565,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "uint64_t initialBufferedSize = totalTrackBufferSizeInBytes();",
+     "PS_LOG(\"SourceBufferPrivate::evictCodedFrames currentTime = %f, require %ld bytes, maximum buffer size is %ld\", currentTime.toDouble(), initialBufferedSize + newDataSize, maximumBufferSize);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/SourceBufferPrivate.cpp",
+  "line": 574,
+  "ps_cond_lines": [
+   574
+  ],
+  "block_open": 574,
+  "block_close": 576,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\" evicted : %ld\", initialBufferedSize - totalTrackBufferSizeInBytes());"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/SourceBufferPrivate.cpp",
+  "line": 583,
+  "ps_cond_lines": [
+   583
+  ],
+  "block_open": 583,
+  "block_close": 585,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "PS_LOG(\" FAILED to free enough after evicting : %ld\", initialBufferedSize - totalTrackBufferSizeInBytes());"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": ""
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/SourceBufferPrivate.cpp",
+  "line": 1114,
+  "ps_cond_lines": [
+   1114
+  ],
+  "block_open": 1114,
+  "block_close": 1126,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 8,
+    "code": [
+     "bool isLessThanMediaSampleTimeStamp = false;",
+     "if (LibTweak::isTweakActivatedFor(LibTweak::USE_1MEDIASAMPLE_MULTIPLEFRAMES))",
+     "isLessThanMediaSampleTimeStamp = trackBuffer.highestPresentationTimestamp() - contiguousFrameTolerance < frameEndTimestamp;",
+     "else",
+     "isLessThanMediaSampleTimeStamp = trackBuffer.highestPresentationTimestamp() - contiguousFrameTolerance <= presentationTimestamp;",
+     "// If highest presentation timestamp for track buffer is set and less than frame end timestamp.",
+     "if (trackBuffer.highestPresentationTimestamp().isValid() && isLessThanMediaSampleTimeStamp) {"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 2,
+    "code": [
+     "// If highest presentation timestamp for track buffer is set and less than or equal to presentation timestamp",
+     "if (trackBuffer.highestPresentationTimestamp().isValid() && trackBuffer.highestPresentationTimestamp() - contiguousFrameTolerance <= presentationTimestamp) {"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "tweak-gated: `<` and frameEndTimestamp instead of `<=` and presentationTimestamp"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/SourceBufferPrivate.cpp",
+  "line": 1157,
+  "ps_cond_lines": [
+   1157
+  ],
+  "block_open": 1157,
+  "block_close": 1166,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 8,
+    "code": [
+     "// NOTE: When mediaSample with the same deocde timestamp and presentation timestamp are continuously added to",
+     "// the trackbuffer, the mediaSmaple added later is deleted.",
+     "// Since the mediaSample added later has priority, delete the mediaSample added earlier.",
+     "if (LibTweak::isTweakActivatedFor(LibTweak::USE_1MEDIASAMPLE_MULTIPLEFRAMES) && trackBuffer.lastDecodeTimestamp().isValid() && decodeTimestamp == trackBuffer.lastDecodeTimestamp()) {",
+     "auto iterPair = trackBuffer.samples().presentationOrder().findSamplesBetweenPresentationTimes(presentationTimestamp, frameEndTimestamp);",
+     "if (iterPair.first != trackBuffer.samples().presentationOrder().end())",
+     "erasedSamples.addRange(iterPair.first, iterPair.second);",
+     "}"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "tweak-gated extra erasure of samples sharing the last decode timestamp"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/WidthIterator.cpp",
+  "line": 225,
+  "ps_cond_lines": [
+   225
+  ],
+  "block_open": 225,
+  "block_close": 234,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "// These 0 glyphs are needed by shapers if the source text has surrogate pairs.",
+     "// However, CTFontTransformGlyphs() can't delete these 0 glyphs from the shaped text,",
+     "// so we shouldn't add them in the first place if we're using that shaping routine.",
+     "// Any other shaping routine should delete these glyphs from the shaped text.",
+     "if (!U_IS_BMP(character))",
+     "glyphBuffer.add(0, font, 0, currentCharacterIndex + 1);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "UNUSED_PARAM(character);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "no 0-glyph padding for non-BMP characters (glyph buffer shorter than the code-unit count)"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/cairo/CairoOperations.cpp",
+  "line": 906,
+  "ps_cond_lines": [
+   906
+  ],
+  "block_open": 906,
+  "block_close": 910,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "cairo_pattern_set_filter(pattern.get(), CAIRO_FILTER_BILINEAR);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "cairo_pattern_set_filter(pattern.get(), CAIRO_FILTER_GOOD);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "CAIRO_FILTER_BILINEAR where shared code uses CAIRO_FILTER_GOOD"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/cairo/CairoOperations.cpp",
+  "line": 913,
+  "ps_cond_lines": [
+   913
+  ],
+  "block_open": 913,
+  "block_close": 917,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "cairo_pattern_set_filter(pattern.get(), CAIRO_FILTER_BILINEAR);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "cairo_pattern_set_filter(pattern.get(), CAIRO_FILTER_BEST);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "CAIRO_FILTER_BILINEAR where shared code uses CAIRO_FILTER_BEST"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/egl/GLContext.cpp",
+  "line": 215,
+  "ps_cond_lines": [
+   215
+  ],
+  "block_open": 215,
+  "block_close": 219,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "// Will use PBufferContext, so we just return here for PlayStation.",
+     "if (platformDisplay.type() == PlatformDisplay::Type::PlayStation)",
+     "return nullptr;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/egl/GLContext.cpp",
+  "line": 255,
+  "ps_cond_lines": [
+   255
+  ],
+  "block_open": 255,
+  "block_close": 263,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 7,
+    "code": [
+     "case PlatformDisplay::Type::PlayStation :",
+     "#if ENABLE(DIRECT_DRAWING_PLAYSTATION)",
+     "surface = eglCreateWindowSurface(display, config, (EGLNativeWindowType) window, nullptr);",
+     "#else",
+     "UNUSED_PARAM(window);",
+     "#endif",
+     "break;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/egl/GLContext.cpp",
+  "line": 358,
+  "ps_cond_lines": [
+   358
+  ],
+  "block_open": 358,
+  "block_close": 365,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "if (!context) {",
+     "RELEASE_LOG_INFO(Compositing, \"Could not create platform context: %s. Using Pbuffer as fallback.\", lastErrorString());",
+     "context = createPbufferContext(platformDisplay, eglSharingContext);",
+     "if (!context)",
+     "RELEASE_LOG_INFO(Compositing, \"Could not create Pbuffer context: %s.\", lastErrorString());",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/egl/GLContext.cpp",
+  "line": 406,
+  "ps_cond_lines": [
+   406
+  ],
+  "block_open": 406,
+  "block_close": 409,
+  "conds": [
+   "#if PLATFORM (PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM (PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "case PlatformDisplay::Type::PlayStation :",
+     "break;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/egl/GLContext.cpp",
+  "line": 460,
+  "ps_cond_lines": [
+   460
+  ],
+  "block_open": 460,
+  "block_close": 463,
+  "conds": [
+   "#if PLATFORM (PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM (PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "case PlatformDisplay::Type::PlayStation :",
+     "break;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/freetype/FontCacheFreeType.cpp",
+  "line": 127,
+  "ps_cond_lines": [
+   127
+  ],
+  "block_open": 127,
+  "block_close": 141,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 13,
+    "code": [
+     "RefPtr<Font> FontCache::systemFallbackForCharacters(const FontDescription& description, const Font&, IsForPlatformFont, PreferColoredFont preferColoredFont, const UChar* characters, unsigned length)",
+     "{",
+     "RefPtr<FcPattern> resultPattern = m_fontSetCache.bestForCharacters(description, preferColoredFont == PreferColoredFont::Yes, characters, length);",
+     "if (!resultPattern)",
+     "return nullptr;",
+     "bool fixedWidth, syntheticBold, syntheticOblique;",
+     "getFontPropertiesFromPattern(resultPattern.get(), description, fixedWidth, syntheticBold, syntheticOblique);",
+     "RefPtr<cairo_font_face_t> fontFace = adoptRef(cairo_ft_font_face_create_for_pattern(resultPattern.get()));"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "systemFallbackForCharacters defined in playstation/FontCachePlayStation.cpp"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp",
+  "line": 127,
+  "ps_cond_lines": [
+   127
+  ],
+  "block_open": 127,
+  "block_close": 132,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "#if CAIRO_HAS_FT_SYNTHESIZE_WEIGHT",
+     "// We don't use synthetic bold.",
+     "m_syntheticBold = false;",
+     "#endif"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "synthetic bold disabled"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp",
+  "line": 254,
+  "ps_cond_lines": [
+   254
+  ],
+  "block_open": 254,
+  "block_close": 266,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 9,
+    "code": [
+     "// [SUPER-1171]",
+     "// Instead of doing skew, we correct the scale and baseline with the FC_MATRIX attribute:",
+     "//  xx: X-scale",
+     "//  yy: Y-scale",
+     "//  xy: X-offset",
+     "//  yx: Y-offset",
+     "// Applying X-scale and Y-scale.",
+     "cairo_matrix_init(&fontMatrix, fontConfigMatrix.xx, 0, 0, fontConfigMatrix.yy, 0, 0);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "cairo_matrix_init(&fontMatrix, 1, -fontConfigMatrix.yx, -fontConfigMatrix.xy, 1, 0, 0);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "font matrix built from FC_MATRIX instead of cairo_matrix_init(1,-yx,-xy,1,0,0)"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp",
+  "line": 274,
+  "ps_cond_lines": [
+   274
+  ],
+  "block_open": 274,
+  "block_close": 284,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 9,
+    "code": [
+     "// Applying X-offset and Y-offset.",
+     "cairo_matrix_translate(&fontMatrix, fontConfigMatrix.xy, -fontConfigMatrix.yx);",
+     "#if CAIRO_HAS_FT_SYNTHESIZE_WEIGHT",
+     "cairo_ft_font_face_reset_synthesize_weight(fontFace);",
+     "int syntheticWeight = 0;",
+     "if (FcPatternGetInteger(optionsPattern, \"FCL_SYNTHETIC_WEIGHT\", 0, &syntheticWeight) == FcResultMatch)",
+     "cairo_ft_font_face_set_synthesize_weight(fontFace, syntheticWeight);",
+     "#endif // CAIRO_HAS_FT_SYNTHESIZE_WEIGHT"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "translates the matrix and resets the synthesized weight"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/freetype/FontPlatformDataFreeType.cpp",
+  "line": 287,
+  "ps_cond_lines": [
+   287
+  ],
+  "block_open": 287,
+  "block_close": 292,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "// On PlayStation we use a slightly different skew value.",
+     "static const float syntheticObliqueSkew = -((double)0x03a / (double)0x100);"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "static const float syntheticObliqueSkew = -tanf(14 * acosf(0) / 90);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "syntheticObliqueSkew constant -0x03a/0x100 instead of -tanf(14 deg)"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/freetype/SimpleFontDataFreeType.cpp",
+  "line": 137,
+  "ps_cond_lines": [
+   137
+  ],
+  "block_open": 137,
+  "block_close": 159,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 9,
+    "code": [
+     "// Use OS/2 table to keep compatibility with Silk porting.",
+     "FT_Long winAscent = FT_RoundFix(FT_MulFix((OS2Table->usWinAscent << 10), freeTypeFace->size->metrics.y_scale));",
+     "// W/A: WEBBROWSER-311, static_cast<FT_Short>(OS2Table->usWinDescent)",
+     "// `usWinDescent` is usually a positive value. However, there are also fonts with negative values. Cast to type signed to avoid unexpected values.",
+     "FT_Long winDescent = FT_RoundFix(FT_MulFix((static_cast<FT_Short>(OS2Table->usWinDescent) << 10), freeTypeFace->size->metrics.y_scale));",
+     "ascent = winAscent >> 16;",
+     "descent = winDescent >> 16;",
+     "lineGap = 0.f; // This is to keep compatibility with Silk porting."
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 11,
+    "code": [
+     "const FT_Short kUseTypoMetricsMask = 1 << 7;",
+     "// FT_Size_Metrics::y_scale is in 16.16 fixed point format.",
+     "// Its (fractional) value is a factor that converts vertical metrics from design units to units of 1/64 pixels.",
+     "double yscale = (freeTypeFace->size->metrics.y_scale / 65536.0) / 64.0;",
+     "if (OS2Table->fsSelection & kUseTypoMetricsMask) {",
+     "ascent = narrowPrecisionToFloat(yscale * OS2Table->sTypoAscender);",
+     "descent = -narrowPrecisionToFloat(yscale * OS2Table->sTypoDescender);",
+     "lineGap = narrowPrecisionToFloat(yscale * OS2Table->sTypoLineGap);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "OS/2 winAscent/winDescent instead of typo metrics"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/harfbuzz/FontDescriptionHarfBuzz.cpp",
+  "line": 31,
+  "ps_cond_lines": [
+   31
+  ],
+  "block_open": 31,
+  "block_close": 41,
+  "conds": [
+   "#if !PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if !PLATFORM(PLAYSTATION)",
+    "nlines": 9,
+    "code": [
+     "unsigned FontCascadeDescription::effectiveFamilyCount() const",
+     "{",
+     "return familyCount();",
+     "}",
+     "FontFamilySpecification FontCascadeDescription::effectiveFamilyAt(unsigned index) const",
+     "{",
+     "return familyAt(index);",
+     "}"
+    ]
+   }
+  ],
+  "category": "stub",
+  "kind": "",
+  "note": "effectiveFamilyCount/At defined in playstation/FontDescriptionPlayStation.cpp"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/nicosia/texmap/NicosiaContentLayerTextureMapperImpl.cpp",
+  "line": 84,
+  "ps_cond_lines": [
+   84
+  ],
+  "block_open": 84,
+  "block_close": 94,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)",
+    "nlines": 9,
+    "code": [
+     "bool ContentLayerTextureMapperImpl::needsSwapBuffersOnCompositingThread()",
+     "{",
+     "LockHolder locker(m_client.lock);",
+     "if (m_client.client)",
+     "return m_client.client->needsSwapBuffersOnCompositingThread();",
+     "return false;",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/nicosia/texmap/NicosiaContentLayerTextureMapperImpl.h",
+  "line": 50,
+  "ps_cond_lines": [
+   50
+  ],
+  "block_open": 50,
+  "block_close": 52,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)",
+    "nlines": 1,
+    "code": [
+     "virtual bool needsSwapBuffersOnCompositingThread() { return false; }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/nicosia/texmap/NicosiaContentLayerTextureMapperImpl.h",
+  "line": 69,
+  "ps_cond_lines": [
+   69
+  ],
+  "block_open": 69,
+  "block_close": 71,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(VIDEO) && ENABLE(PUNCH_HOLE)",
+    "nlines": 1,
+    "code": [
+     "bool needsSwapBuffersOnCompositingThread();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/MediaPlayerPrivatePlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 1249,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION)",
+    "nlines": 1220,
+    "code": [
+     "#if ENABLE(ENCRYPTED_MEDIA)",
+     "#include \"CDMInstancePlayStation.h\"",
+     "#endif",
+     "#include \"CachedResourceLoader.h\"",
+     "#include \"Document.h\"",
+     "#include \"FocusController.h\"",
+     "#include \"GraphicsContext.h\"",
+     "#include \"HTMLMediaElement.h\""
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/MediaPlayerPrivatePlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 367,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION)",
+    "nlines": 339,
+    "code": [
+     "#include \"CallbackQueuePlayStation.h\"",
+     "#include \"MediaPlayerPrivate.h\"",
+     "#include \"TextureMapperPlatformLayer.h\"",
+     "#include <mediaplayer/PSMediaPlayerBackend.h>",
+     "#include <wtf/WeakPtr.h>",
+     "#if !(USE(NICOSIA) && USE(TEXTURE_MAPPER_GL))",
+     "#error \"MediaPlayerPrivatePlayStation supports only NICOSIA and TEXTURE_MAPPER_GL\"",
+     "#endif"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/PlatformDisplayPlayStation.h",
+  "line": 29,
+  "ps_cond_lines": [
+   29
+  ],
+  "block_open": 29,
+  "block_close": 54,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 24,
+    "code": [
+     "namespace WebCore {",
+     "class PlatformDisplayPlayStation : public PlatformDisplay {",
+     "public:",
+     "static std::unique_ptr<PlatformDisplayPlayStation> create()",
+     "{",
+     "return std::unique_ptr<PlatformDisplayPlayStation>(new PlatformDisplayPlayStation());",
+     "}",
+     "virtual ~PlatformDisplayPlayStation() = default;"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/eme/CDMFactoryPlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 67,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)",
+    "nlines": 38,
+    "code": [
+     "#include \"CDMPrivatePlayStation.h\"",
+     "#include <wtf/NeverDestroyed.h>",
+     "namespace WebCore {",
+     "void CDMFactory::platformRegisterFactories(Vector<CDMFactory*>& factories)",
+     "{",
+     "factories.append(&CDMFactoryPlayStation::singleton());",
+     "}",
+     "CDMFactoryPlayStation& CDMFactoryPlayStation::singleton()"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/eme/CDMFactoryPlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 55,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)",
+    "nlines": 27,
+    "code": [
+     "#include \"CDMFactory.h\"",
+     "#include \"CDMPrivate.h\"",
+     "#include <mediaplayer/PSCDMFactoryBackend.h>",
+     "#include <wtf/WeakPtr.h>",
+     "#include <wtf/text/WTFString.h>",
+     "namespace WebCore {",
+     "class CDMFactoryPlayStation : public CDMFactory {",
+     "public:"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/eme/CDMInstancePlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 131,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)",
+    "nlines": 102,
+    "code": [
+     "#include \"CDMInstanceSessionPlayStation.h\"",
+     "#include \"CDMUtilPlayStation.h\"",
+     "#include <wtf/RefPtr.h>",
+     "namespace WebCore {",
+     "CDMInstancePlayStation::CDMInstancePlayStation(std::shared_ptr<mediaplayer::PSCDMInstancePrivateInterface> backend)",
+     "{",
+     "m_playstation = backend;",
+     "}"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/eme/CDMInstancePlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 72,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)",
+    "nlines": 44,
+    "code": [
+     "#include \"CDMInstance.h\"",
+     "#include \"CDMInstanceSessionPlayStation.h\"",
+     "#include \"CDMKeySystemConfiguration.h\"",
+     "#include \"SharedBuffer.h\"",
+     "#include <mediaplayer/PSCDMInstancePrivateBackend.h>",
+     "#include <mediaplayer/PSCDMKeySystemConfigurationBackend.h>",
+     "#include <wtf/WeakPtr.h>",
+     "#include <wtf/text/WTFString.h>"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/eme/CDMInstanceSessionPlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 304,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)",
+    "nlines": 275,
+    "code": [
+     "#include \"CDMUtilPlayStation.h\"",
+     "#include <wtf/RefPtr.h>",
+     "namespace WebCore {",
+     "RefPtr<CDMInstanceSessionPlayStation> CDMInstanceSessionPlayStation::create()",
+     "{",
+     "return adoptRef(*new CDMInstanceSessionPlayStation());",
+     "}",
+     "CDMInstanceSessionPlayStation::CDMInstanceSessionPlayStation()"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/eme/CDMInstanceSessionPlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 93,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 65,
+    "code": [
+     "#include \"CDMInstanceSession.h\"",
+     "#include \"CDMUtilPlayStation.h\"",
+     "#include \"CallbackQueuePlayStation.h\"",
+     "#include \"SharedBuffer.h\"",
+     "#include <mediaplayer/PSCDMInstanceSessionBackend.h>",
+     "#include <mutex>",
+     "#include <wtf/Ref.h>",
+     "#include <wtf/Vector.h>"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/eme/CDMPrivatePlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 172,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)",
+    "nlines": 143,
+    "code": [
+     "#include \"CDMInstancePlayStation.h\"",
+     "#include \"CDMUtilPlayStation.h\"",
+     "#include \"InitDataRegistry.h\"",
+     "namespace WebCore {",
+     "std::unique_ptr<CDMPrivatePlayStation> CDMPrivatePlayStation::createCDM(const String& keySystem)",
+     "{",
+     "return makeUnique<CDMPrivatePlayStation>(keySystem);",
+     "}"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/eme/CDMPrivatePlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 81,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)",
+    "nlines": 53,
+    "code": [
+     "#include \"CDMInstance.h\"",
+     "#include \"CDMKeySystemConfiguration.h\"",
+     "#include \"CDMPrivate.h\"",
+     "#include \"CDMRequirement.h\"",
+     "#include \"CDMRestrictions.h\"",
+     "#include \"CDMSessionType.h\"",
+     "#include \"CDMUtilPlayStation.h\"",
+     "#include \"CallbackQueuePlayStation.h\""
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/eme/CDMUtilPlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 282,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)",
+    "nlines": 253,
+    "code": [
+     "namespace WebCore {",
+     "namespace CDMUtilPlayStation {",
+     "mediaplayer::PSCDMKeySystemConfigurationBackend convertTo(const CDMKeySystemConfiguration config)",
+     "{",
+     "mediaplayer::PSCDMKeySystemConfigurationBackend psConfig;",
+     "psConfig.label = config.label.utf8().data();",
+     "for (auto type : config.initDataTypes) {",
+     "std::string strType(type.string().utf8().data());"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/eme/CDMUtilPlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 71,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) && ENABLE(ENCRYPTED_MEDIA)",
+    "nlines": 43,
+    "code": [
+     "#include \"CDMInstance.h\"",
+     "#include \"CDMInstanceSession.h\"",
+     "#include \"CDMKeySystemConfiguration.h\"",
+     "#include \"CDMPrivate.h\"",
+     "#include \"CDMRequirement.h\"",
+     "#include \"CDMRestrictions.h\"",
+     "#include \"CDMSessionType.h\"",
+     "#include \"SharedBuffer.h\""
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/AudioTrackPrivatePlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 72,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 43,
+    "code": [
+     "namespace WebCore {",
+     "AudioTrackPrivatePlayStation::AudioTrackPrivatePlayStation(std::unique_ptr<mediaplayer::AudioTrackBackend> audioTrack)",
+     "{",
+     "m_playstation = WTFMove(audioTrack);",
+     "}",
+     "AudioTrackPrivate::Kind AudioTrackPrivatePlayStation::convertToAudioTrackPlayStation(std::string strKind) const",
+     "{",
+     "AudioTrackPrivate::Kind kind = None;"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/AudioTrackPrivatePlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 63,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 35,
+    "code": [
+     "#include \"AudioTrackPrivate.h\"",
+     "#include <mediaplayer/PSTrackBackend.h>",
+     "#include <wtf/text/AtomString.h>",
+     "namespace WebCore {",
+     "class AudioTrackPrivatePlayStation : public AudioTrackPrivate {",
+     "public:",
+     "static RefPtr<AudioTrackPrivatePlayStation> create(std::unique_ptr<mediaplayer::AudioTrackBackend> audioTrack)",
+     "{"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/InbandTextTrackPrivatePlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 58,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 29,
+    "code": [
+     "namespace WebCore {",
+     "InbandTextTrackPrivatePlayStation::InbandTextTrackPrivatePlayStation(CueFormat format, mediaplayer::TextTrackBackend& textTrack)",
+     ": InbandTextTrackPrivate(format)",
+     "{",
+     "m_kind = convertToTextTrackPlayStation(textTrack.kind());",
+     "m_label = AtomString::fromLatin1(textTrack.label().c_str());",
+     "m_language = AtomString::fromLatin1(textTrack.language().c_str());",
+     "m_id = AtomString::fromLatin1(textTrack.id().c_str());"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/InbandTextTrackPrivatePlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 67,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 39,
+    "code": [
+     "#include \"InbandTextTrackPrivate.h\"",
+     "#include <mediaplayer/PSEnumBackend.h>",
+     "#include <mediaplayer/PSTrackBackend.h>",
+     "#include <wtf/text/AtomString.h>",
+     "namespace WebCore {",
+     "class InbandTextTrackPrivatePlayStation : public InbandTextTrackPrivate {",
+     "public:",
+     "static RefPtr<InbandTextTrackPrivatePlayStation> create(CueFormat format, mediaplayer::TextTrackBackend& textTrack)"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/MediaDescriptionPlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 41,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 12,
+    "code": [
+     "namespace WebCore {",
+     "MediaDescriptionPlayStation::MediaDescriptionPlayStation(mediaplayer::MediaDescriptionBackend& description)",
+     "{",
+     "m_codec = AtomString::fromLatin1(description.codec().c_str());",
+     "m_isVideo = description.isVideo();",
+     "m_isAudio = description.isAudio();",
+     "m_isText = description.isText();",
+     "}"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/MediaDescriptionPlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 61,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 33,
+    "code": [
+     "#include \"MediaDescription.h\"",
+     "#include <mediaplayer/PSTrackBackend.h>",
+     "#include <wtf/text/AtomString.h>",
+     "namespace WebCore {",
+     "class MediaDescriptionPlayStation : public MediaDescription {",
+     "public:",
+     "static RefPtr<MediaDescriptionPlayStation> create(mediaplayer::MediaDescriptionBackend& description)",
+     "{"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/MediaSamplePrivatePlayStation.cpp",
+  "line": 30,
+  "ps_cond_lines": [
+   30
+  ],
+  "block_open": 30,
+  "block_close": 154,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 123,
+    "code": [
+     "namespace WebCore {",
+     "MediaSamplePrivatePlayStation::MediaSamplePrivatePlayStation(std::unique_ptr<mediaplayer::PSMediaSampleBackendInterface> backend)",
+     ": m_playstation(WTFMove(backend))",
+     "{",
+     "m_pts = MediaTime::createWithDouble(m_playstation->presentationTime(), MediaTime::DefaultTimeScale);",
+     "m_dts = MediaTime::createWithDouble(m_playstation->decodeTime(), MediaTime::DefaultTimeScale);",
+     "m_duration = MediaTime::createWithDouble(m_playstation->duration(), MediaTime::DefaultTimeScale);",
+     "m_trackId = String::fromLatin1(m_playstation->trackID().c_str());"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/MediaSamplePrivatePlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 78,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 50,
+    "code": [
+     "#include \"MediaSample.h\"",
+     "#include <mediaplayer/PSMediaSampleBackend.h>",
+     "namespace WebCore {",
+     "class PSMediaSampleBackendInterface;",
+     "class MediaSamplePrivatePlayStation final : public MediaSample {",
+     "public:",
+     "static Ref<MediaSamplePrivatePlayStation> create(std::unique_ptr<mediaplayer::PSMediaSampleBackendInterface> sample)",
+     "{"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/MediaSourcePrivatePlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 247,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 218,
+    "code": [
+     "#include \"ContentType.h\"",
+     "#include \"MediaPlayerPrivatePlayStation.h\"",
+     "#include \"MediaSourcePrivateClient.h\"",
+     "#include \"SourceBufferPrivatePlayStation.h\"",
+     "#include \"TimeRanges.h\"",
+     "#include <wtf/RefPtr.h>",
+     "namespace WebCore {",
+     "void MediaSourcePrivatePlayStation::open(MediaPlayerPrivatePlayStation& mediaPlayer, MediaSourcePrivateClient& client)"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/MediaSourcePrivatePlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 92,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 64,
+    "code": [
+     "#include \"MediaSourcePrivate.h\"",
+     "#include <mediaplayer/PSMediaSourceBackend.h>",
+     "namespace WebCore {",
+     "class SourceBufferPrivatePlayStation;",
+     "class MediaSourceClientPlayStation;",
+     "class MediaPlayerPrivatePlayStation;",
+     "class PlatformTimeRanges;",
+     "class MediaSourcePrivatePlayStation final : public MediaSourcePrivate"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/SourceBufferPrivatePlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 344,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 315,
+    "code": [
+     "#include \"AudioTrackPrivatePlayStation.h\"",
+     "#include \"ContentType.h\"",
+     "#include \"InbandTextTrackPrivatePlayStation.h\"",
+     "#include \"MediaDescriptionPlayStation.h\"",
+     "#include \"MediaPlayerPrivatePlayStation.h\"",
+     "#include \"MediaSample.h\"",
+     "#include \"MediaSamplePrivatePlayStation.h\"",
+     "#include \"MediaSourcePrivatePlayStation.h\""
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/SourceBufferPrivatePlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 114,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 86,
+    "code": [
+     "#include \"ContentType.h\"",
+     "#include \"MediaPlayerPrivatePlayStation.h\"",
+     "#include \"SourceBufferPrivate.h\"",
+     "#include \"SourceBufferPrivateClient.h\"",
+     "#include <mediaplayer/PSMediaSampleBackend.h>",
+     "#include <mediaplayer/PSSourceBufferBackend.h>",
+     "#include <mediaplayer/PSSourceBufferBackendClient.h>",
+     "#include <wtf/WeakPtr.h>"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/VideoTrackPrivatePlayStation.cpp",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 72,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 43,
+    "code": [
+     "namespace WebCore {",
+     "VideoTrackPrivatePlayStation::VideoTrackPrivatePlayStation(std::unique_ptr<mediaplayer::VideoTrackBackend> videoTrack)",
+     "{",
+     "m_playstation = WTFMove(videoTrack);",
+     "}",
+     "VideoTrackPrivate::Kind VideoTrackPrivatePlayStation::convertToVideoTrackPlayStation(std::string strKind) const",
+     "{",
+     "VideoTrackPrivate::Kind kind = None;"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/playstation/mse/VideoTrackPrivatePlayStation.h",
+  "line": 27,
+  "ps_cond_lines": [
+   27
+  ],
+  "block_open": 27,
+  "block_close": 63,
+  "conds": [
+   "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if ENABLE(VIDEO) && PLATFORM(PLAYSTATION) && ENABLE(MEDIA_SOURCE)",
+    "nlines": 35,
+    "code": [
+     "#include \"VideoTrackPrivate.h\"",
+     "#include <mediaplayer/PSTrackBackend.h>",
+     "#include <wtf/text/AtomString.h>",
+     "namespace WebCore {",
+     "class VideoTrackPrivatePlayStation : public VideoTrackPrivate {",
+     "public:",
+     "static RefPtr<VideoTrackPrivatePlayStation> create(std::unique_ptr<mediaplayer::VideoTrackBackend> videoTrack)",
+     "{"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapper.cpp",
+  "line": 36,
+  "ps_cond_lines": [
+   36
+  ],
+  "block_open": 36,
+  "block_close": 41,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "// In order to lower the peak of the memory usage, we allocate textures directly.",
+     "RefPtr<BitmapTexture> selectedTexture = createTexture();"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "RefPtr<BitmapTexture> selectedTexture = m_texturePool->acquireTexture(size, flags);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "one BitmapTexture per acquire instead of the texture pool (no reuse)"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapperGL.cpp",
+  "line": 488,
+  "ps_cond_lines": [
+   488
+  ],
+  "block_open": 488,
+  "block_close": 491,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "glUseProgram(program->programID());",
+     "program->setOptions(options);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapperGL.cpp",
+  "line": 701,
+  "ps_cond_lines": [
+   701
+  ],
+  "block_open": 701,
+  "block_close": 703,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "program->setOptions(options);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapperGL.cpp",
+  "line": 846,
+  "ps_cond_lines": [
+   846
+  ],
+  "block_open": 846,
+  "block_close": 849,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "glUseProgram(program->programID());",
+     "program->setOptions(options);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapperLayer.cpp",
+  "line": 29,
+  "ps_cond_lines": [
+   29
+  ],
+  "block_open": 29,
+  "block_close": 31,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <libtweak/libtweak.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.cpp",
+  "line": 32,
+  "ps_cond_lines": [
+   32
+  ],
+  "block_open": 32,
+  "block_close": 34,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <WebKitResources/WebKitResources.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.cpp",
+  "line": 503,
+  "ps_cond_lines": [
+   503
+  ],
+  "block_open": 503,
+  "block_close": 533,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 29,
+    "code": [
+     "GLboolean compiler;",
+     "glGetBooleanv(GL_SHADER_COMPILER, &compiler);",
+     "if (!compiler) {",
+     "LOG(Compositing, \"Using precompiled shaders\");",
+     "char vertexShaderFilename[64];",
+     "char fragmentShaderFilename[64];",
+     "const char* vertexShaderBinary;",
+     "uint32_t vertexShaderBinarySize;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.cpp",
+  "line": 657,
+  "ps_cond_lines": [
+   657
+  ],
+  "block_open": 657,
+  "block_close": 738,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 80,
+    "code": [
+     "#define MatrixIndexTextureRGB       [0][0]",
+     "#define MatrixIndexSolidColor       [0][1]",
+     "#define MatrixIndexOpacity          [0][2]",
+     "#define MatrixIndexAntialiasing     [0][3]",
+     "#define MatrixIndexGrayscaleFilter  [1][0]",
+     "#define MatrixIndexSepiaFilter      [1][1]",
+     "#define MatrixIndexSaturateFilter   [1][2]",
+     "#define MatrixIndexHueRotateFilter  [1][3]"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.h",
+  "line": 39,
+  "ps_cond_lines": [
+   39
+  ],
+  "block_open": 39,
+  "block_close": 73,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 17,
+    "code": [
+     "#define TEXMAP_UNIFORM_VARIABLES(macro) \\",
+     "macro(modelViewMatrix) \\",
+     "macro(projectionMatrix) \\",
+     "macro(textureSpaceMatrix) \\",
+     "macro(textureColorSpaceMatrix) \\",
+     "macro(opacity) \\",
+     "macro(color) \\",
+     "macro(expandedQuadEdgesInScreenSpace) \\"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 15,
+    "code": [
+     "#define TEXMAP_UNIFORM_VARIABLES(macro) \\",
+     "macro(modelViewMatrix) \\",
+     "macro(projectionMatrix) \\",
+     "macro(textureSpaceMatrix) \\",
+     "macro(textureColorSpaceMatrix) \\",
+     "macro(opacity) \\",
+     "macro(color) \\",
+     "macro(yuvToRgb) \\"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.h",
+  "line": 146,
+  "ps_cond_lines": [
+   146
+  ],
+  "block_open": 146,
+  "block_close": 148,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "void setOptions(Options);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.h",
+  "line": 154,
+  "ps_cond_lines": [
+   154
+  ],
+  "block_open": 154,
+  "block_close": 156,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "TextureMapperShaderProgram(const uint8_t* vertexShaderBinary, size_t vertexShaderBinarySize, const uint8_t* fragmentShaderBinary, size_t fragmentShaderBinarySize);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/AuthenticationChallenge.h",
+  "line": 52,
+  "ps_cond_lines": [
+   52
+  ],
+  "block_open": 52,
+  "block_close": 69,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 16,
+    "code": [
+     "AuthenticationChallenge(const ProtectionSpace& protectionSpace, const Credential& proposedCredential, unsigned previousFailureCount, const ResourceResponse& response, const ResourceError& error, bool isForMainResource, bool isInMainFrame, const URL& requestURL)",
+     ": AuthenticationChallengeBase(protectionSpace, proposedCredential, previousFailureCount, response, error)",
+     ", m_isForMainResource(isForMainResource)",
+     ", m_isInMainFrame(isInMainFrame)",
+     ", m_requestURL(requestURL)",
+     "{",
+     "}",
+     "void setIsForMainResource(bool isForMainResource) { m_isForMainResource = isForMainResource; }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/AuthenticationChallenge.h",
+  "line": 80,
+  "ps_cond_lines": [
+   80
+  ],
+  "block_open": 80,
+  "block_close": 87,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 6,
+    "code": [
+     "friend class AuthenticationChallengeBase;",
+     "static bool platformCompare(const AuthenticationChallenge&, const AuthenticationChallenge&);",
+     "bool m_isForMainResource { false };",
+     "bool m_isInMainFrame { false };",
+     "URL m_requestURL;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/AuthenticationChallengeCurl.cpp",
+  "line": 39,
+  "ps_cond_lines": [
+   39
+  ],
+  "block_open": 39,
+  "block_close": 41,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     ", m_requestURL(curlResponse.url)"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/AuthenticationChallengeCurl.cpp",
+  "line": 47,
+  "ps_cond_lines": [
+   47
+  ],
+  "block_open": 47,
+  "block_close": 49,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     ", m_requestURL(url)"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/AuthenticationChallengeCurl.cpp",
+  "line": 140,
+  "ps_cond_lines": [
+   140
+  ],
+  "block_open": 140,
+  "block_close": 145,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 4,
+    "code": [
+     "bool AuthenticationChallenge::platformCompare(const AuthenticationChallenge& a, const AuthenticationChallenge& b)",
+     "{",
+     "return a.isForMainResource() == b.isForMainResource() && a.isInMainFrame() == b.isInMainFrame() && a.requestURL() == b.requestURL();",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CertificateInfo.h",
+  "line": 42,
+  "ps_cond_lines": [
+   42
+  ],
+  "block_open": 42,
+  "block_close": 44,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "using PrivateKey = Vector<uint8_t>;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CertificateInfo.h",
+  "line": 48,
+  "ps_cond_lines": [
+   48
+  ],
+  "block_open": 48,
+  "block_close": 50,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "CertificateInfo(int, CertificateChain&&, PrivateKey&&, String&&);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CertificateInfo.h",
+  "line": 58,
+  "ps_cond_lines": [
+   58
+  ],
+  "block_open": 58,
+  "block_close": 61,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "const PrivateKey& privateKey() const { return m_privateKey; }",
+     "const String& privateKeyPassword() const { return m_privateKeyPassword; }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CertificateInfo.h",
+  "line": 67,
+  "ps_cond_lines": [
+   67
+  ],
+  "block_open": 67,
+  "block_close": 72,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "bool isEmpty() const { return m_certificateChain.isEmpty() && m_privateKey.isEmpty() && m_privateKeyPassword.isEmpty(); }",
+     "bool hasPrivateKey() const { return !m_privateKey.isEmpty(); }"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "bool isEmpty() const { return m_certificateChain.isEmpty(); }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CertificateInfo.h",
+  "line": 75,
+  "ps_cond_lines": [
+   75
+  ],
+  "block_open": 75,
+  "block_close": 77,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "static PrivateKey makePrivateKey(const uint8_t*, size_t);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CertificateInfo.h",
+  "line": 81,
+  "ps_cond_lines": [
+   81
+  ],
+  "block_open": 81,
+  "block_close": 89,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 4,
+    "code": [
+     "return verificationError() == other.verificationError()",
+     "&& certificateChain() == other.certificateChain()",
+     "&& privateKey() == other.privateKey()",
+     "&& privateKeyPassword() == other.privateKeyPassword();"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 2,
+    "code": [
+     "return verificationError() == other.verificationError()",
+     "&& certificateChain() == other.certificateChain();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CertificateInfo.h",
+  "line": 97,
+  "ps_cond_lines": [
+   97
+  ],
+  "block_open": 97,
+  "block_close": 100,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "PrivateKey m_privateKey;",
+     "String m_privateKeyPassword;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CertificateInfoCurl.cpp",
+  "line": 43,
+  "ps_cond_lines": [
+   43
+  ],
+  "block_open": 43,
+  "block_close": 51,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 7,
+    "code": [
+     "CertificateInfo::CertificateInfo(int verificationError, CertificateChain&& certificateChain, PrivateKey&& privateKey, String&& privateKeyPassword)",
+     ": m_verificationError(verificationError)",
+     ", m_certificateChain(WTFMove(certificateChain))",
+     ", m_privateKey(WTFMove(privateKey))",
+     ", m_privateKeyPassword(WTFMove(privateKeyPassword))",
+     "{",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CertificateInfoCurl.cpp",
+  "line": 55,
+  "ps_cond_lines": [
+   55
+  ],
+  "block_open": 55,
+  "block_close": 58,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "if (hasPrivateKey())",
+     "return { m_verificationError, crossThreadCopy(m_certificateChain), crossThreadCopy(m_privateKey), m_privateKeyPassword.isolatedCopy() };"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CertificateInfoCurl.cpp",
+  "line": 75,
+  "ps_cond_lines": [
+   75
+  ],
+  "block_open": 75,
+  "block_close": 82,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 6,
+    "code": [
+     "CertificateInfo::PrivateKey CertificateInfo::makePrivateKey(const uint8_t* buffer, size_t size)",
+     "{",
+     "PrivateKey privateKey;",
+     "privateKey.append(buffer, size);",
+     "return privateKey;",
+     "}"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CookieJarDB.cpp",
+  "line": 541,
+  "ps_cond_lines": [
+   541
+  ],
+  "block_open": 541,
+  "block_close": 550,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 6,
+    "code": [
+     "auto sqliteresult = statement.step();",
+     "auto ret = checkSQLiteReturnCode(sqliteresult);",
+     "if (!ret)",
+     "LOG_ERROR(\"[CookieJarDB] Failed to insert cookie - %d %s\\n\", sqliteresult, sqlite3_errstr(sqliteresult));",
+     "return ret;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "return checkSQLiteReturnCode(statement.step());"
+    ]
+   }
+  ],
+  "category": "log",
+  "kind": "",
+  "note": "logs the sqlite3 result on insert"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlContext.cpp",
+  "line": 55,
+  "ps_cond_lines": [
+   55
+  ],
+  "block_open": 55,
+  "block_close": 57,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "#include <libtweak/libtweak.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlContext.cpp",
+  "line": 357,
+  "ps_cond_lines": [
+   357
+  ],
+  "block_open": 357,
+  "block_close": 360,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 2,
+    "code": [
+     "if (LibTweak::isTweakActivatedFor(LibTweak::TweakId::DISABLE_OLD_TLS))",
+     "curl_easy_setopt(m_handle, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlContext.cpp",
+  "line": 744,
+  "ps_cond_lines": [
+   744
+  ],
+  "block_open": 744,
+  "block_close": 747,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "if (LibTweak::isTweakActivatedFor(LibTweak::TweakId::SHOULD_KEEP_BUG_CURL_CONTENT_LENGTH_DOWNLOAD))",
+     "return -1;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlContext.h",
+  "line": 124,
+  "ps_cond_lines": [
+   124
+  ],
+  "block_open": 124,
+  "block_close": 126,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "void setAdditionalRootCA(String &&rootCA) { m_sslHandle.setAdditionalRootCA(WTFMove(rootCA)); }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlProxySettings.h",
+  "line": 51,
+  "ps_cond_lines": [
+   51
+  ],
+  "block_open": 51,
+  "block_close": 53,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "bool isActive() const { return m_mode == Mode::Custom && !isEmpty(); }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlRequest.cpp",
+  "line": 42,
+  "ps_cond_lines": [
+   42
+  ],
+  "block_open": 42,
+  "block_close": 44,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "#include <WebSecurity/WebSecurity.h>"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "include only"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlRequest.cpp",
+  "line": 219,
+  "ps_cond_lines": [
+   219
+  ],
+  "block_open": 219,
+  "block_close": 232,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 12,
+    "code": [
+     "if (m_clientCertificate && m_clientCertificate->certificateChain().size()) {",
+     "auto& certificate = m_clientCertificate->certificateChain().at(0);",
+     "auto& privateKey = m_clientCertificate->privateKey();",
+     "curl_blob sslCertBlob { const_cast<void*>(static_cast<const void*>(certificate.data())), certificate.size(), CURL_BLOB_COPY };",
+     "curl_easy_setopt(m_curlHandle->handle(), CURLOPT_SSLCERT_BLOB, &sslCertBlob);",
+     "curl_blob sslKeyBlob { const_cast<void*>(static_cast<const void*>(privateKey.data())), privateKey.size(), CURL_BLOB_COPY };",
+     "curl_easy_setopt(m_curlHandle->handle(), CURLOPT_SSLKEY_BLOB, &sslKeyBlob);",
+     "curl_easy_setopt(m_curlHandle->handle(), CURLOPT_KEYPASSWD, m_clientCertificate->privateKeyPassword().utf8().data());"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlRequest.cpp",
+  "line": 467,
+  "ps_cond_lines": [
+   467
+  ],
+  "block_open": 467,
+  "block_close": 471,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "if (needToInvokeDidReceiveResponse() && (result == CURLE_OK || isProxyAuthenticationRequired || WebSecurity::shouldBlock(m_response.statusCode, m_response.httpConnectCode))) {"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "if (needToInvokeDidReceiveResponse() && (result == CURLE_OK || isProxyAuthenticationRequired)) {"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "didReceiveResponse also invoked when WebSecurity::shouldBlock(status, connectCode)"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlRequest.h",
+  "line": 67,
+  "ps_cond_lines": [
+   67
+  ],
+  "block_open": 67,
+  "block_close": 69,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "void setClientCertificate(const CertificateInfo& clientCertificate) { m_clientCertificate = clientCertificate; }"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlRequest.h",
+  "line": 71,
+  "ps_cond_lines": [
+   71
+  ],
+  "block_open": 71,
+  "block_close": 77,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 2,
+    "code": [
+     "WEBCORE_EXPORT virtual void resume();",
+     "WEBCORE_EXPORT virtual void cancel();"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 2,
+    "code": [
+     "WEBCORE_EXPORT void resume();",
+     "WEBCORE_EXPORT void cancel();"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "resume()/cancel() made virtual"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlRequest.h",
+  "line": 90,
+  "ps_cond_lines": [
+   90
+  ],
+  "block_open": 90,
+  "block_close": 94,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "protected:"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "private:"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "inert",
+  "note": "member section made protected instead of private"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlRequest.h",
+  "line": 153,
+  "ps_cond_lines": [
+   153
+  ],
+  "block_open": 153,
+  "block_close": 155,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "std::optional<CertificateInfo> m_clientCertificate;"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlRequestScheduler.cpp",
+  "line": 170,
+  "ps_cond_lines": [
+   170
+  ],
+  "block_open": 170,
+  "block_close": 172,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "Thread::yield();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlSSLHandle.h",
+  "line": 71,
+  "ps_cond_lines": [
+   71
+  ],
+  "block_open": 71,
+  "block_close": 73,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "void setAdditionalRootCA(String&&);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/CurlSSLHandle.h",
+  "line": 112,
+  "ps_cond_lines": [
+   112
+  ],
+  "block_open": 112,
+  "block_close": 114,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "size_t m_originalCACertDataSize { 0 };"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/curl/ResourceError.h",
+  "line": 35,
+  "ps_cond_lines": [
+   35
+  ],
+  "block_open": 35,
+  "block_close": 37,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "static ResourceError cancelledInServerTrustEvaluationError(const ResourceError&);"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ },
+ {
+  "file": "Source/WebCore/platform/network/playstation/CurlSSLHandlePlayStation.cpp",
+  "line": 38,
+  "ps_cond_lines": [
+   38
+  ],
+  "block_open": 38,
+  "block_close": 40,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 1,
+    "code": [
+     "m_originalCACertDataSize = certificateData->size();"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/network/playstation/CurlSSLHandlePlayStation.cpp",
+  "line": 53,
+  "ps_cond_lines": [
+   53
+  ],
+  "block_open": 53,
+  "block_close": 71,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 17,
+    "code": [
+     "void CurlSSLHandle::setAdditionalRootCA(String&& additionalRootCA)",
+     "{",
+     "if (additionalRootCA.isEmpty())",
+     "return;",
+     "if (!additionalRootCA.contains(\"-----BEGIN CERTIFICATE-----\"_s))",
+     "return;",
+     "auto data = std::get_if<CertificateInfo::Certificate>(&m_caCertInfo);",
+     "if (!data)"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/network/playstation/CurlTMServiceRequest.cpp",
+  "line": 29,
+  "ps_cond_lines": [
+   29
+  ],
+  "block_open": 29,
+  "block_close": 213,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 183,
+    "code": [
+     "#include \"CurlRequest.h\"",
+     "#include \"CurlRequestScheduler.h\"",
+     "#include \"ResourceError.h\"",
+     "#include \"ResourceResponse.h\"",
+     "#include \"SharedBuffer.h\"",
+     "#include \"SynchronousLoaderClient.h\"",
+     "#include <WebSecurity/WebSecurity.h>",
+     "#include <wtf/Language.h>"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/network/playstation/CurlTMServiceRequest.h",
+  "line": 28,
+  "ps_cond_lines": [
+   28
+  ],
+  "block_open": 28,
+  "block_close": 75,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 46,
+    "code": [
+     "#include \"CurlRequest.h\"",
+     "#include \"CurlRequestClient.h\"",
+     "namespace WebCore {",
+     "class CurlResponse;",
+     "class ResourceError;",
+     "class ResourceResponse;",
+     "class SharedBuffer;",
+     "class CurlTMServiceRequest : public CurlRequest, public CurlRequestClient {"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/platform/network/playstation/ResourceErrorPlayStation.cpp",
+  "line": 31,
+  "ps_cond_lines": [
+   31
+  ],
+  "block_open": 31,
+  "block_close": 41,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION) // for downstream-only"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION) // for downstream-only",
+    "nlines": 9,
+    "code": [
+     "ResourceError ResourceError::cancelledInServerTrustEvaluationError(const ResourceError& resourceError)",
+     "{",
+     "static const int cancelledInServerTrustEvaluationErrorCode = 1024;",
+     "auto error = resourceError;",
+     "error.m_errorCode = cancelledInServerTrustEvaluationErrorCode;",
+     "error.m_localizedDescription = \"Canceled From ServerTrustEvaluation\"_s;",
+     "return error;",
+     "}"
+    ]
+   }
+  ],
+  "category": "impl",
+  "kind": "",
+  "note": "PS-only implementation file"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderElement.cpp",
+  "line": 1475,
+  "ps_cond_lines": [
+   1475
+  ],
+  "block_open": 1475,
+  "block_close": 1489,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 13,
+    "code": [
+     "bool RenderElement::canDestroyDecodedData()",
+     "{",
+     "auto& frameView = view().frameView();",
+     "if (!frameView.paintsEntireContents())",
+     "return !isVisibleInViewport();",
+     "IntRect visibleRect;",
+     "#if USE(COORDINATED_GRAPHICS)",
+     "visibleRect = frameView.fixedVisibleContentRect();"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "canDestroyDecodedData() answers for paintsEntireContents() using fixedVisibleContentRect"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderElement.h",
+  "line": 369,
+  "ps_cond_lines": [
+   369
+  ],
+  "block_open": 369,
+  "block_close": 375,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)",
+   "#else"
+  ],
+  "n_branches": 2,
+  "has_alt": true,
+  "alt_conds": [
+   "#else"
+  ],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 3,
+    "code": [
+     "// isVisibleInViewport() always returns true while paintsEntireContents() is true.",
+     "// Thus we need to handle this case without using isVisibleInViewport().",
+     "bool canDestroyDecodedData() final;"
+    ]
+   },
+   {
+    "cond": "#else",
+    "nlines": 1,
+    "code": [
+     "bool canDestroyDecodedData() final { return !isVisibleInViewport(); }"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "mem",
+  "note": "declares the PS canDestroyDecodedData() override (out-of-line)"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderLayer.cpp",
+  "line": 2129,
+  "ps_cond_lines": [
+   2129
+  ],
+  "block_open": 2129,
+  "block_close": 2134,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 4,
+    "code": [
+     "// temporary fix for SUPER-6884. When software filter full layer rendering is enabled,",
+     "// some of the containers are already rendered and thereby render tree can have null parents.",
+     "if (!parentLayer)",
+     "return;"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "returns instead of ASSERT(parentLayer) when enclosingFilterRepaintLayer() is null"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderLayer.cpp",
+  "line": 5638,
+  "ps_cond_lines": [
+   5638
+  ],
+  "block_open": 5638,
+  "block_close": 5640,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "renderer().view().setHasSoftwareFilters(true);"
+    ]
+   }
+  ],
+  "category": "dev",
+  "kind": "behav",
+  "note": "sets RenderView::m_hasSoftwareFilters on every layer with filters"
+ },
+ {
+  "file": "Source/WebCore/rendering/RenderMenuList.cpp",
+  "line": 380,
+  "ps_cond_lines": [
+   380
+  ],
+  "block_open": 380,
+  "block_close": 382,
+  "conds": [
+   "#if PLATFORM(PLAYSTATION)"
+  ],
+  "n_branches": 1,
+  "has_alt": false,
+  "alt_conds": [],
+  "branches": [
+   {
+    "cond": "#if PLATFORM(PLAYSTATION)",
+    "nlines": 1,
+    "code": [
+     "popupDidHide();"
+    ]
+   }
+  ],
+  "category": "add",
+  "kind": "",
+  "note": "platform path/hook/field"
+ }
+]

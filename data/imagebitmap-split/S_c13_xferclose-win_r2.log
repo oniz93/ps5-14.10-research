@@ -1,0 +1,78 @@
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+MESA: error: ZINK: vkEnumeratePhysicalDevices failed (VK_ERROR_INITIALIZATION_FAILED)
+MESA: error: ZINK: failed to choose pdev
+glx: failed to create drisw screen
+failed to load driver: zink
+Gtk-Message: 09:53:20.017: Failed to load module "colorreload-gtk-module"
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+MESA: error: ZINK: vkEnumeratePhysicalDevices failed (VK_ERROR_INITIALIZATION_FAILED)
+MESA: error: ZINK: failed to choose pdev
+libEGL warning: egl: failed to create dri2 screen
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+libEGL warning: egl: failed to create dri2 screen
+amdgpu: unknown (family_id, chip_external_rev): (143, 132)
+libEGL warning: egl: failed to create dri2 screen
+Gtk-Message: 09:53:20.356: Failed to load module "colorreload-gtk-module"
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==909405==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7f21846bbcf4 bp 0x7ffd5c624d80 sp 0x7ffd5c624d70 T0)
+==909405==The signal is caused by a READ memory access.
+==909405==Hint: this fault was caused by a dereference of a high value address (see register values below).  Disassemble the provided pc to learn which register was used.
+    #0 0x7f21846bbcf4 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119
+    #1 0x7f2183a7ac05 in WebCore::ChromeClient::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>/wk/WebKit/Source/WebCore/page/ChromeClient.cpp:50
+    #2 0x7f2183a7a8c7 in WebCore::Chrome::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >) /home/<user>/wk/WebKit/Source/WebCore/page/Chrome.cpp:554
+    #3 0x7f2182c73437 in WebCore::ImageBitmapBacking::connect(WebCore::ScriptExecutionContext&) /home/<user>/wk/WebKit/Source/WebCore/html/ImageBitmapBacking.cpp:91
+    #4 0x7f218114f97e in WebCore::CloneDeserializer::readTransferredImageBitmap() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4034
+    #5 0x7f21811afc81 in WebCore::CloneDeserializer::readTerminal() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4731
+    #6 0x7f218112b087 in WebCore::CloneDeserializer::deserialize() /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:4911
+    #7 0x7f21811301dc in WebCore::CloneDeserializer::deserialize(JSC::JSGlobalObject*, JSC::JSGlobalObject*, WTF::Vector<WTF::RefPtr<WebCore::MessagePort, WTF::RawPtrTraits<WebCore::MessagePort>, WTF::DefaultRefDerefTraits<WebCore::MessagePort> >, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc> const&, WTF::Vector<std::optional<WebCore::ImageBitmapBacking>, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc>&&, WTF::Vector<JSC::ArrayBufferContents, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc>*, WTF::Vector<unsigned char, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc> const&, WTF::Vector<WTF::String, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc> const&, WTF::Vector<WTF::String, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc>, WTF::Vector<JSC::ArrayBufferContents, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc>*) /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:2815
+    #8 0x7f21811301dc in WebCore::SerializedScriptValue::deserialize(JSC::JSGlobalObject&, JSC::JSGlobalObject*, WTF::Vector<WTF::RefPtr<WebCore::MessagePort, WTF::RawPtrTraits<WebCore::MessagePort>, WTF::DefaultRefDerefTraits<WebCore::MessagePort> >, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc> const&, WTF::Vector<WTF::String, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc> const&, WTF::Vector<WTF::String, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc> const&, WebCore::SerializationErrorMode, bool*) /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:5566
+    #9 0x7f21811305c6 in WebCore::SerializedScriptValue::deserialize(JSC::JSGlobalObject&, JSC::JSGlobalObject*, WTF::Vector<WTF::RefPtr<WebCore::MessagePort, WTF::RawPtrTraits<WebCore::MessagePort>, WTF::DefaultRefDerefTraits<WebCore::MessagePort> >, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc> const&, WebCore::SerializationErrorMode, bool*) /home/<user>/wk/WebKit/Source/WebCore/bindings/js/SerializedScriptValue.cpp:5561
+    #10 0x7f2182241c80 in WebCore::MessageEvent::create(JSC::JSGlobalObject&, WTF::Ref<WebCore::SerializedScriptValue, WTF::RawPtrTraits<WebCore::SerializedScriptValue> >&&, WTF::String const&, WTF::String const&, std::optional<std::variant<WTF::RefPtr<WebCore::WindowProxy, WTF::RawPtrTraits<WebCore::WindowProxy>, WTF::DefaultRefDerefTraits<WebCore::WindowProxy> >, WTF::RefPtr<WebCore::MessagePort, WTF::RawPtrTraits<WebCore::MessagePort>, WTF::DefaultRefDerefTraits<WebCore::MessagePort> >, WTF::RefPtr<WebCore::ServiceWorker, WTF::RawPtrTraits<WebCore::ServiceWorker>, WTF::DefaultRefDerefTraits<WebCore::ServiceWorker> > > >&&, WTF::Vector<WTF::RefPtr<WebCore::MessagePort, WTF::RawPtrTraits<WebCore::MessagePort>, WTF::DefaultRefDerefTraits<WebCore::MessagePort> >, 0ul, WTF::CrashOnOverflow, 16ul, WTF::FastMalloc>&&) /home/<user>/wk/WebKit/Source/WebCore/dom/MessageEvent.cpp:73
+    #11 0x7f2183c9e296 in operator() /home/<user>/wk/WebKit/Source/WebCore/page/LocalDOMWindow.cpp:944
+    #12 0x7f2183c9e296 in call /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Function.h:53
+    #13 0x7f21821a4cff in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Function.h:82
+    #14 0x7f21821a4cff in WebCore::EventLoopFunctionDispatchTask::execute() /home/<user>/wk/WebKit/Source/WebCore/dom/EventLoop.cpp:160
+    #15 0x7f218219e4ee in WebCore::EventLoop::run() /home/<user>/wk/WebKit/Source/WebCore/dom/EventLoop.cpp:124
+    #16 0x7f2182453430 in WebCore::WindowEventLoop::didReachTimeToRun() /home/<user>/wk/WebKit/Source/WebCore/dom/WindowEventLoop.cpp:121
+    #17 0x7f2182465a43 in void std::__invoke_impl<void, void (WebCore::WindowEventLoop::*&)(), WebCore::WindowEventLoop*&>(std::__invoke_memfun_deref, void (WebCore::WindowEventLoop::*&)(), WebCore::WindowEventLoop*&) /usr/include/c++/13/bits/invoke.h:74
+    #18 0x7f2182465a43 in std::__invoke_result<void (WebCore::WindowEventLoop::*&)(), WebCore::WindowEventLoop*&>::type std::__invoke<void (WebCore::WindowEventLoop::*&)(), WebCore::WindowEventLoop*&>(void (WebCore::WindowEventLoop::*&)(), WebCore::WindowEventLoop*&) /usr/include/c++/13/bits/invoke.h:96
+    #19 0x7f2182465a43 in void std::_Bind<void (WebCore::WindowEventLoop::*(WebCore::WindowEventLoop*))()>::__call<void, , 0ul>(std::tuple<>&&, std::_Index_tuple<0ul>) /usr/include/c++/13/functional:506
+    #20 0x7f2182465a43 in void std::_Bind<void (WebCore::WindowEventLoop::*(WebCore::WindowEventLoop*))()>::operator()<, void>() /usr/include/c++/13/functional:591
+    #21 0x7f2182465a43 in WTF::Detail::CallableWrapper<std::_Bind<void (WebCore::WindowEventLoop::*(WebCore::WindowEventLoop*))()>, void>::call() /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Function.h:53
+    #22 0x7f217bcab185 in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Function.h:82
+    #23 0x7f217bcab185 in WebCore::Timer::fired() /home/<user>/wk/WebKit/Source/WebCore/platform/Timer.h:139
+    #24 0x7f21841a435d in WebCore::ThreadTimers::sharedTimerFiredInternal() /home/<user>/wk/WebKit/Source/WebCore/platform/ThreadTimers.cpp:127
+    #25 0x7f21841a47eb in operator() /home/<user>/wk/WebKit/Source/WebCore/platform/ThreadTimers.cpp:67
+    #26 0x7f21841a47eb in call /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Function.h:53
+    #27 0x7f21840cb747 in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Function.h:82
+    #28 0x7f21840cb747 in WebCore::MainThreadSharedTimer::fired() /home/<user>/wk/WebKit/Source/WebCore/platform/MainThreadSharedTimer.cpp:83
+    #29 0x7f21840de357 in void std::__invoke_impl<void, void (WebCore::MainThreadSharedTimer::*&)(), WebCore::MainThreadSharedTimer*&>(std::__invoke_memfun_deref, void (WebCore::MainThreadSharedTimer::*&)(), WebCore::MainThreadSharedTimer*&) /usr/include/c++/13/bits/invoke.h:74
+    #30 0x7f21840de357 in std::__invoke_result<void (WebCore::MainThreadSharedTimer::*&)(), WebCore::MainThreadSharedTimer*&>::type std::__invoke<void (WebCore::MainThreadSharedTimer::*&)(), WebCore::MainThreadSharedTimer*&>(void (WebCore::MainThreadSharedTimer::*&)(), WebCore::MainThreadSharedTimer*&) /usr/include/c++/13/bits/invoke.h:96
+    #31 0x7f21840de357 in void std::_Bind<void (WebCore::MainThreadSharedTimer::*(WebCore::MainThreadSharedTimer*))()>::__call<void, , 0ul>(std::tuple<>&&, std::_Index_tuple<0ul>) /usr/include/c++/13/functional:506
+    #32 0x7f21840de357 in void std::_Bind<void (WebCore::MainThreadSharedTimer::*(WebCore::MainThreadSharedTimer*))()>::operator()<, void>() /usr/include/c++/13/functional:591
+    #33 0x7f21840de357 in WTF::Detail::CallableWrapper<std::_Bind<void (WebCore::MainThreadSharedTimer::*(WebCore::MainThreadSharedTimer*))()>, void>::call() /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Function.h:53
+    #34 0x7f217bcab1e3 in WTF::Function<void ()>::operator()() const /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/Function.h:82
+    #35 0x7f217bcab1e3 in WTF::RunLoop::Timer::fired() /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/RunLoop.h:195
+    #36 0x7f2179090b5f in operator() /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:177
+    #37 0x7f2179090b5f in _FUN /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:181
+    #38 0x7f2179093070 in operator() /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:53
+    #39 0x7f2179093070 in _FUN /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:56
+    #40 0x7f2174157e5b in g_main_context_dispatch_unlocked.lto_priv.0 (/lib64/libglib-2.0.so.0+0x5be5b) (BuildId: 0db4819f356ae2bda594693a4ddd401695247bb3)
+    #41 0x7f21741b2f67 in g_main_context_iterate_unlocked.isra.0 (/lib64/libglib-2.0.so.0+0xb6f67) (BuildId: 0db4819f356ae2bda594693a4ddd401695247bb3)
+    #42 0x7f2174159446 in g_main_loop_run (/lib64/libglib-2.0.so.0+0x5d446) (BuildId: 0db4819f356ae2bda594693a4ddd401695247bb3)
+    #43 0x7f21790941d9 in WTF::RunLoop::run() /home/<user>/wk/WebKit/Source/WTF/wtf/glib/RunLoopGLib.cpp:108
+    #44 0x7f217d7250a0 in WebKit::AuxiliaryProcessMainBase<WebKit::WebProcess, true>::run(int, char**) /home/<user>/wk/WebKit/Source/WebKit/Shared/AuxiliaryProcessMain.h:72
+    #45 0x7f217d7250a0 in int WebKit::AuxiliaryProcessMain<WebKit::WebProcessMainGtk>(int, char**) /home/<user>/wk/WebKit/Source/WebKit/Shared/AuxiliaryProcessMain.h:98
+    #46 0x7f217d72341c in WebKit::WebProcessMain(int, char**) /home/<user>/wk/WebKit/Source/WebKit/WebProcess/gtk/WebProcessMainGtk.cpp:98
+    #47 0x40114e in main /home/<user>/wk/WebKit/Source/WebKit/WebProcess/EntryPoint/unix/WebProcessMain.cpp:31
+    #48 0x7f2173c0d149 in __libc_start_call_main (/lib64/libc.so.6+0x28149) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851)
+    #49 0x7f2173c0d20a in __libc_start_main_impl (/lib64/libc.so.6+0x2820a) (BuildId: 1cd2d1016ef987f11f5709c2aa0deb4520dcc851)
+    #50 0x401084 in _start (/home/<user>/wk/WebKit/WebKitBuild/ASAN/bin/WebKitWebProcess+0x401084) (BuildId: 519695c9add5270e8c889f0230bf5e79254f132a)
+
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /home/<user>/wk/WebKit/Source/WebCore/platform/graphics/ImageBuffer.cpp:119 in WebCore::SerializedImageBuffer::sinkIntoImageBuffer(std::unique_ptr<WebCore::SerializedImageBuffer, std::default_delete<WebCore::SerializedImageBuffer> >)
+==909405==ABORTING
+
+** (MiniBrowser:909355): WARNING **: 09:53:22.185: WebProcess CRASHED
+EXIT=124

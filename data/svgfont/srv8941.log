@@ -1,0 +1,29 @@
+127.0.0.1 - - [30/Oct/2026 14:19:43] "GET /corpus.html?kinds=gsub2,gsub3&gap=200 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Oct/2026 14:19:43] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:43] "GET /ev?m=BOOT%20arms%3D52%20kinds%3Dgsub2%7Cgsub3 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:43] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:43] "GET /ev?m=BEG%20G4-two-lig-ab%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:43] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:43] "GET /ev?m=RES%20G4-two-lig-ab%20w%3D40.00%20w40%3D16.00%20ctl%3D118.00%20cw%3D40.00%20wp%3D-%20ink%3D1260%20inkctl%3D3038%20n%3D1%20st%3Dloaded%20ms%3D86 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:44] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:44] "GET /ev?m=BEG%20G5-two-lig-ac%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:44] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:44] "GET /ev?m=RES%20G5-two-lig-ac%20w%3D40.00%20w40%3D16.00%20ctl%3D104.00%20cw%3D40.00%20wp%3D-%20ink%3D1260%20inkctl%3D2278%20n%3D1%20st%3Dloaded%20ms%3D76 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:44] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:44] "GET /ev?m=BEG%20G6-one-lig-ab%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:44] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:44] "GET /ev?m=RES%20G6-one-lig-ab%20w%3D90.00%20w40%3D36.00%20ctl%3D118.00%20cw%3D90.00%20wp%3D-%20ink%3D8000%20inkctl%3D3038%20n%3D1%20st%3Dloaded%20ms%3D78 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:44] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:44] "GET /ev?m=BEG%20G7-three-lig-ab%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:44] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:44] "GET /ev?m=RES%20G7-three-lig-ab%20w%3D40.00%20w40%3D16.00%20ctl%3D118.00%20cw%3D40.00%20wp%3D-%20ink%3D1260%20inkctl%3D3038%20n%3D1%20st%3Dloaded%20ms%3D75 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:44] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:44] "GET /ev?m=BEG%20G8-two-difffirst-ab%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:45] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:45] "GET /ev?m=RES%20G8-two-difffirst-ab%20w%3D90.00%20w40%3D36.00%20ctl%3D118.00%20cw%3D90.00%20wp%3D-%20ink%3D8000%20inkctl%3D3038%20n%3D1%20st%3Dloaded%20ms%3D77 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:45] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:45] "GET /ev?m=BEG%20G9-two-difffirst-cd%20kind%3Dindoc HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:45] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:45] "GET /ev?m=RES%20G9-two-difffirst-cd%20w%3D70.00%20w40%3D28.00%20ctl%3D110.00%20cw%3D70.00%20wp%3D-%20ink%3D8000%20inkctl%3D2577%20n%3D1%20st%3Dloaded%20ms%3D76 HTTP/1.1" 404 -
+127.0.0.1 - - [30/Oct/2026 14:19:45] code 404, message File not found
+127.0.0.1 - - [30/Oct/2026 14:19:45] "GET /ev?m=DONE%20n%3D52 HTTP/1.1" 404 -

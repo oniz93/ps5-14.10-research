@@ -1,0 +1,186 @@
+[New LWP 1600218]
+[New LWP 1600217]
+[New LWP 1600216]
+[New LWP 1600215]
+[New LWP 1600204]
+[New LWP 1600194]
+[New LWP 1600193]
+[New LWP 1600192]
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <ima:enforcing>
+  <https://debuginfod.fedoraproject.org/>
+  <ima:ignore>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+
+warning: Can't read data for section '.debug_info' in file 'target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0'
+
+warning: Expected absolute pathname for libpthread in the inferior, but got target:/lib64/libc.so.6.
+
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+
+warning: Section .debug_aranges in target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0 entry at offset 0 debug_info_offset 0 does not exists, ignoring .debug_aranges.
+0x00007f45e0399ebd in poll () from target:/lib64/libc.so.6
+Breakpoint 1 at 0x7f45ef3eaa5e (2 locations)
+Breakpoint 2 at 0x7f45e56b831b: file /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp, line 266.
+Breakpoint 3 at 0x7f45e56b8202: file /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp, line 237.
+SIZES CanvasRenderingContext2D=? CachedImage=? CachedResource=? StringImpl=24
+slotwatch armed: dtor=1 free=2 alloc=3
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   <MULTIPLE>         
+1.1                         y   0x00007f45ef3eaa5e <WebCore::CanvasRenderingContext::~CanvasRenderingContext()+20>
+1.2                         y   0x00007f45ef3eb5cf <WebCore::CanvasRenderingContext::~CanvasRenderingContext()+9>
+2       breakpoint     keep n   0x00007f45e56b831b in WTF::fastFree(void*) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:266
+3       breakpoint     keep n   0x00007f45e56b8202 in WTF::fastMalloc(unsigned long) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:237
+CTXDTOR A=0x617000011c00
+#0  0x00007f45ef3eaa5e in WebCore::CanvasRenderingContext::~CanvasRenderingContext() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007f45ef3ec5c8 in WebCore::CanvasRenderingContext2DBase::~CanvasRenderingContext2DBase() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f45ef3ec70c in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f45ef3ec733 in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f45eefba82d in WebCore::HTMLCanvasElement::createContextBitmapRenderer(WTF::String const&, WebCore::ImageBitmapRenderingContextSettings&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#5  0x00007f45eefbd12d in WebCore::HTMLCanvasElement::getContext(JSC::JSGlobalObject&, WTF::String const&, WTF::FixedVector<JSC::Strong<JSC::Unknown, (JSC::ShouldStrongDestructorGrabLock)0> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FREED-A ptr=0x617000011c00
+#0  WTF::fastFree (p=0x617000011c00) at /home/<user>/wk/WebKit/Source/WTF/wtf/FastMalloc.cpp:266
+#1  0x00007f45ef3ec73b in WebCore::CanvasRenderingContext2D::~CanvasRenderingContext2D() () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f45eefba82d in WebCore::HTMLCanvasElement::createContextBitmapRenderer(WTF::String const&, WebCore::ImageBitmapRenderingContextSettings&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f45eefbd12d in WebCore::HTMLCanvasElement::getContext(JSC::JSGlobalObject&, WTF::String const&, WTF::FixedVector<JSC::Strong<JSC::Unknown, (JSC::ShouldStrongDestructorGrabLock)0> >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f45eb09ff8f in WebCore::jsHTMLCanvasElementPrototypeFunction_getContext(JSC::JSGlobalObject*, JSC::CallFrame*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FREE-RETURNED
+Hardware watchpoint 4: *(unsigned long*)0x617000011c00
+WATCH installed on 0x617000011c00
+ALLOC req=720 ret=0x617000011c00 n=1  <== A
+#0  0x00007f45effcf4a7 in WebCore::createResource(WebCore::CachedResource::Type, WebCore::CachedResourceRequest&&, PAL::SessionID, WebCore::CookieJar const*, WebCore::Settings const&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007f45effcf762 in WebCore::CachedResourceLoader::loadResource(WebCore::CachedResource::Type, PAL::SessionID, WebCore::CachedResourceRequest&&, WebCore::CookieJar const&, WebCore::Settings const&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f45efff96b4 in WebCore::CachedResourceLoader::requestResource(WebCore::CachedResource::Type, WebCore::CachedResourceRequest&&, WebCore::CachedResourceLoader::ForPreload, WebCore::ImageLoading) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f45efffcd51 in WebCore::CachedResourceLoader::requestImage(WebCore::CachedResourceRequest&&, WebCore::ImageLoading) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f45efdd9bb3 in WebCore::ImageLoader::updateFromElement(WebCore::RelevantMutation) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#5  0x00007f45efddb2df in WebCore::ImageLoader::updateFromElementIgnoringPreviousError(WebCore::RelevantMutation) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#6  0x00007f45ef075162 in WebCore::HTMLImageElement::selectImageSource(WebCore::RelevantMutation) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#7  0x00007f45ef0769de in WebCore::HTMLImageElement::attributeChanged(WebCore::QualifiedName const&, WTF::AtomString const&, WTF::AtomString const&, WebCore::Element::AttributeModificationReason) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+WROTE-A addr=0x617000011c00 val=0x7f45f4b4bd90
+#0  0x00007f45effc0d6b in WebCore::CachedResource::CachedResource(WebCore::CachedResourceRequest&&, WebCore::CachedResource::Type, PAL::SessionID, WebCore::CookieJar const*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007f45eff6eb24 in WebCore::CachedImage::CachedImage(WebCore::CachedResourceRequest&&, PAL::SessionID, WebCore::CookieJar const*) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f45effcf4bb in WebCore::createResource(WebCore::CachedResource::Type, WebCore::CachedResourceRequest&&, PAL::SessionID, WebCore::CookieJar const*, WebCore::Settings const&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f45effcf762 in WebCore::CachedResourceLoader::loadResource(WebCore::CachedResource::Type, PAL::SessionID, WebCore::CachedResourceRequest&&, WebCore::CookieJar const&, WebCore::Settings const&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f45efff96b4 in WebCore::CachedResourceLoader::requestResource(WebCore::CachedResource::Type, WebCore::CachedResourceRequest&&, WebCore::CachedResourceLoader::ForPreload, WebCore::ImageLoading) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#5  0x00007f45efffcd51 in WebCore::CachedResourceLoader::requestImage(WebCore::CachedResourceRequest&&, WebCore::ImageLoading) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#6  0x00007f45efdd9bb3 in WebCore::ImageLoader::updateFromElement(WebCore::RelevantMutation) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#7  0x00007f45efddb2df in WebCore::ImageLoader::updateFromElementIgnoringPreviousError(WebCore::RelevantMutation) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#8  0x00007f45ef075162 in WebCore::HTMLImageElement::selectImageSource(WebCore::RelevantMutation) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#9  0x00007f45ef0769de in WebCore::HTMLImageElement::attributeChanged(WebCore::QualifiedName const&, WTF::AtomString const&, WTF::AtomString const&, WebCore::Element::AttributeModificationReason) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+ALLOC req=744 ret=0x617000011f80 n=2
+ALLOC req=712 ret=0x617000011f80 n=3
+ALLOC req=712 ret=0x617000012300 n=4
+ALLOC req=712 ret=0x617000012680 n=5
+ALLOC req=712 ret=0x617000012a00 n=6
+ALLOC req=712 ret=0x617000012d80 n=7
+ALLOC req=712 ret=0x617000013100 n=8
+ALLOC req=712 ret=0x617000013480 n=9
+ALLOC req=712 ret=0x617000013800 n=10
+ALLOC req=712 ret=0x617000013b80 n=11
+ALLOC req=712 ret=0x617000013f00 n=12
+ALLOC req=712 ret=0x617000014280 n=13
+ALLOC req=712 ret=0x617000014600 n=14
+ALLOC req=712 ret=0x617000014980 n=15
+ALLOC req=712 ret=0x617000014d00 n=16
+ALLOC req=712 ret=0x617000015080 n=17
+ALLOC req=712 ret=0x617000015400 n=18
+ALLOC req=712 ret=0x617000015780 n=19
+ALLOC req=712 ret=0x617000015b00 n=20
+ALLOC req=712 ret=0x617000015e80 n=21
+ALLOC req=712 ret=0x617000016200 n=22
+ALLOC req=712 ret=0x617000016580 n=23
+ALLOC req=712 ret=0x617000016900 n=24
+ALLOC req=712 ret=0x617000016c80 n=25
+ALLOC req=712 ret=0x617000017000 n=26
+ALLOC req=712 ret=0x617000017380 n=27
+ALLOC req=712 ret=0x617000017700 n=28
+ALLOC req=712 ret=0x617000017a80 n=29
+ALLOC req=712 ret=0x617000017e00 n=30
+ALLOC req=712 ret=0x617000018180 n=31
+ALLOC req=712 ret=0x617000018500 n=32
+ALLOC req=712 ret=0x617000018880 n=33
+ALLOC req=712 ret=0x617000018c00 n=34
+ALLOC req=712 ret=0x617000018f80 n=35
+ALLOC req=712 ret=0x617000019300 n=36
+ALLOC req=712 ret=0x617000019680 n=37
+ALLOC req=712 ret=0x617000019a00 n=38
+ALLOC req=712 ret=0x617000019d80 n=39
+ALLOC req=712 ret=0x61700001a100 n=40
+ALLOC req=712 ret=0x61700001a480 n=41
+ALLOC req=712 ret=0x61700001a800 n=42
+ALLOC req=712 ret=0x61700001ab80 n=43
+ALLOC req=712 ret=0x61700001af00 n=44
+ALLOC req=712 ret=0x61700001b280 n=45
+ALLOC req=712 ret=0x61700001b600 n=46
+ALLOC req=712 ret=0x61700001b980 n=47
+ALLOC req=712 ret=0x61700001bd00 n=48
+ALLOC req=712 ret=0x61700001c080 n=49
+ALLOC req=712 ret=0x61700001c400 n=50
+ALLOC req=712 ret=0x61700001c780 n=51
+ALLOC req=712 ret=0x61700001cb00 n=52
+ALLOC req=712 ret=0x61700001ce80 n=53
+ALLOC req=712 ret=0x61700001d200 n=54
+ALLOC req=712 ret=0x61700001d580 n=55
+ALLOC req=712 ret=0x61700001d900 n=56
+ALLOC req=712 ret=0x61700001dc80 n=57
+ALLOC req=712 ret=0x61700001e000 n=58
+ALLOC req=712 ret=0x61700001e380 n=59
+ALLOC req=712 ret=0x61700001e700 n=60
+ALLOC req=712 ret=0x61700001ea80 n=61
+ALLOC req=712 ret=0x61700001ee00 n=62
+ALLOC req=712 ret=0x61700001f180 n=63
+ALLOC req=712 ret=0x61700001f500 n=64
+ALLOC req=712 ret=0x61700001f880 n=65
+ALLOC req=712 ret=0x61700001fc00 n=66
+ALLOC req=712 ret=0x61700001ff80 n=67
+ALLOC req=712 ret=0x617000020300 n=68
+ALLOC req=712 ret=0x617000020680 n=69
+ALLOC req=712 ret=0x617000020a00 n=70
+ALLOC req=712 ret=0x617000020d80 n=71
+ALLOC req=712 ret=0x617000021100 n=72
+ALLOC req=712 ret=0x617000021480 n=73
+ALLOC req=712 ret=0x617000021800 n=74
+ALLOC req=712 ret=0x617000021b80 n=75
+ALLOC req=712 ret=0x617000021f00 n=76
+ALLOC req=712 ret=0x617000022280 n=77
+ALLOC req=712 ret=0x617000022600 n=78
+ALLOC req=712 ret=0x617000022980 n=79
+ALLOC req=712 ret=0x617000022d00 n=80
+ALLOC req=712 ret=0x617000023080 n=81
+ALLOC req=712 ret=0x617000023400 n=82
+ALLOC req=720 ret=0x617000023780 n=83
+ALLOC req=744 ret=0x617000023b00 n=84
+
+Thread 1 "WebKitWebProces" received signal SIGSEGV, Segmentation fault.
+0x00007f45ef3bf3fa in WebCore::parseColor(WTF::String const&, WebCore::CanvasBase&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+FAULT si_addr=$1 = 0x0
+SLOT A=0x617000011c00
+SLOT shadow=0xc2e7fffa380:	0x00
+SLOT first32:
+0x617000011c00:	0x00007f45f4c7cbd8	0x0000602000028e70
+0x617000011c10:	0x0000070000020206	0x0000000000000000
+REGS
+rip            0x7f45ef3bf3fa      0x7f45ef3bf3fa <WebCore::parseColor(WTF::String const&, WebCore::CanvasBase&)+280>
+rax            0x10e3ea98ed852531  1217074266861020465
+rbx            0x7ffc4f770c10      140721641688080
+rdi            0x7ffc4f770b20      140721641687840
+rsi            0x7ffc4f7711f0      140721641689584
+FAULT_BT
+#0  0x00007f45ef3bf3fa in WebCore::parseColor(WTF::String const&, WebCore::CanvasBase&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#1  0x00007f45ef3c296f in WebCore::CanvasStyle::createFromString(WTF::String const&, WebCore::CanvasBase&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#2  0x00007f45ef3f455a in WebCore::CanvasRenderingContext2DBase::setFillColor(WTF::String const&, std::optional<float>) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#3  0x00007f45ef3f4af3 in WebCore::CanvasRenderingContext2DBase::setFillStyle(std::variant<WTF::String, WTF::RefPtr<WebCore::CanvasGradient, WTF::RawPtrTraits<WebCore::CanvasGradient>, WTF::DefaultRefDerefTraits<WebCore::CanvasGradient> >, WTF::RefPtr<WebCore::CanvasPattern, WTF::RawPtrTraits<WebCore::CanvasPattern>, WTF::DefaultRefDerefTraits<WebCore::CanvasPattern> > >&&) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#4  0x00007f45ea5a7a3a in WebCore::setJSCanvasRenderingContext2D_fillStyle(JSC::JSGlobalObject*, long, long, JSC::PropertyName) () from target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+#5  0x00007f45e4c9b136 in WTF::FunctionPtr<(WTF::PtrTag)30177, bool(JSC::JSGlobalObject*, long, long, JSC::PropertyName), (WTF::FunctionAttributes)1>::operator() (in#3=..., in#2=108645492748928, in#1=<optimized out>, in#0=<optimized out>, this=0x7ffc4f7714a0) at /home/<user>/wk/WebKit/WebKitBuild/ASAN/WTF/Headers/wtf/FunctionPtr.h:104
+#6  JSC::JSObject::putInlineSlow (this=this@entry=0x60d0000406e8, globalObject=globalObject@entry=0x61f0000038e8, propertyName=..., value=..., slot=...) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSObject.cpp:837
+#7  0x00007f45e40c87d9 in JSC::JSObject::putInlineForJSObject (cell=0x60d0000406e8, globalObject=globalObject@entry=0x61f0000038e8, propertyName=..., value=..., value@entry=..., slot=...) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSObjectInlines.h:299
+#8  0x00007f45e407ae9d in JSC::JSCell::putInline (slot=..., value=..., propertyName=..., globalObject=0x61f0000038e8, this=<optimized out>) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSCellInlines.h:475
+#9  JSC::JSValue::putInline (slot=..., value=..., propertyName=..., globalObject=0x61f0000038e8, this=0x7ffc4f771b60) at /home/<user>/wk/WebKit/Source/JavaScriptCore/runtime/JSCJSValueInlines.h:1160
+#10 JSC::LLInt::llint_slow_path_put_by_id (callFrame=<optimized out>, pc=<optimized out>) at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LLIntSlowPaths.cpp:963
+#11 0x00007f45e58b8bdb in llint_op_put_by_id () at /home/<user>/wk/WebKit/Source/JavaScriptCore/llint/LowLevelInterpreter64.asm:118
+SLOT occupant:
+vtable for WebCore::CachedImage + 16 in section .data.rel.ro of target:/home/<user>/wk/WebKit/WebKitBuild/ASAN/lib/libwebkit2gtk-4.1.so.0
+[Inferior 1 (process 1600188) detached]

@@ -1,0 +1,85 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>vertical substitution arms</title>
+<!-- docs/102: does a `vert` substitution reach a JS-visible value?  Each arm is
+     a webfont whose vhea/vmtx GSUB differ from its control in one table only.
+     The advance height is read back per character: with vmtx[g] = 256 + g at
+     font-size 4px (upem 256) one font unit is exactly 1/64 px, so the measured
+     height * 64 - 256 is the glyph id the shaper used. -->
+<body style="margin:0"><div id="stage"></div>
+<script>
+const P = new URLSearchParams(location.search);
+const ONLY = P.get('only') ? P.get('only').split(',') : null;
+const TMO = +(P.get('tmo') || 2000);
+function log(m) { new Image().src = '/ev?m=' + encodeURIComponent(m); }
+(async function () {
+  let man;
+  try { man = await (await fetch('manifest.json', { cache: 'no-store' })).json(); }
+  catch (e) { log('MANFAIL ' + e.name + ':' + e.message); return; }
+  const arms = man.arms.filter(a => !ONLY || ONLY.includes(a.id));
+  log('MAN n=' + arms.length + '/' + man.arms.length + ' upem=' + man.upem +
+      ' glyphs=' + man.glyphs + ' g_from=' + man.g_from + ' g_to=' + man.g_to);
+  const c0 = document.createElement('canvas').getContext('2d');
+  c0.font = '24px monospace';
+  log('CTL fallback_h=' + (function () {
+    const d = document.createElement('div');
+    d.style.cssText = 'position:absolute;left:-20000px;top:0;writing-mode:vertical-rl;' +
+      'font-size:24px;line-height:1;margin:0;padding:0;border:0;';
+    d.textContent = '\u4e2d\u4e2d\u4e2d';
+    document.body.appendChild(d);
+    const r = d.getBoundingClientRect().height; d.remove(); return r.toFixed(3);
+  })());
+  for (const a of arms) {
+    log('BEG ' + a.id);
+    let r = 'st=?';
+    let f = null;
+    try {
+      f = new FontFace('vg_' + a.id, 'url(' + a.file + ')');
+      document.fonts.add(f);
+      const res = await Promise.race([
+        f.load().then(() => 'loaded', e => 'rej:' + (e && e.name)),
+        new Promise(x => setTimeout(() => x('timeout'), TMO))]);
+      const fs = a.fs;
+      const mk = txt => {
+        const d = document.createElement('div');
+        d.style.cssText = 'position:absolute;left:-20000px;top:0;writing-mode:vertical-rl;' +
+          'font-size:' + fs + 'px;line-height:1;margin:0;padding:0;border:0;' +
+          'font-family:"vg_' + a.id + '",monospace;';
+        d.textContent = txt;
+        document.body.appendChild(d);
+        return d;
+      };
+      const d1 = mk('\u4e2d');
+      const b1 = d1.getBoundingClientRect();
+      const h1 = b1.height, w1 = b1.width;
+      const d3 = mk('\u4e2d\u4e2d\u4e2d');
+      const b3 = d3.getBoundingClientRect();
+      const h3 = b3.height, w3 = b3.width;
+      const rects = [];
+      for (let i = 0; i < 3; i++) {
+        const rg = document.createRange();
+        rg.setStart(d3.firstChild, i); rg.setEnd(d3.firstChild, i + 1);
+        const b = rg.getBoundingClientRect();
+        rects.push(b.height.toFixed(3) + '@' + (b.top - b3.top).toFixed(3));
+      }
+      const dh = document.createElement('div');
+      dh.style.cssText = 'position:absolute;left:-20000px;top:0;writing-mode:horizontal-tb;' +
+        'font-size:' + fs + 'px;line-height:1;margin:0;padding:0;border:0;' +
+        'font-family:"vg_' + a.id + '",monospace;white-space:nowrap;';
+      dh.textContent = '\u4e2d\u4e2d\u4e2d';
+      document.body.appendChild(dh);
+      const hw = dh.getBoundingClientRect().width;
+      dh.remove();
+      d1.remove(); d3.remove();
+      const gid = (h3 / 3) * 64 - 256;
+      r = 'st=' + f.status + ' res=' + res + ' fs=' + fs +
+          ' h1=' + h1.toFixed(4) + ' w1=' + w1.toFixed(3) +
+          ' h3=' + h3.toFixed(4) + ' w3=' + w3.toFixed(3) +
+          ' rc=' + rects.join(',') + ' gid=' + gid.toFixed(2) + ' hw=' + hw.toFixed(3);
+    } catch (e) { r += ' EXC=' + e.name + ':' + e.message; }
+    log('RES ' + a.id + ' ' + r);
+    try { if (f) document.fonts.delete(f); } catch (e) {}
+  }
+  log('DONE n=' + arms.length);
+})();
+</script>

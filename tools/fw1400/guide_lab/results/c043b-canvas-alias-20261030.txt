@@ -1,0 +1,16 @@
+c043b on retail 14.10 (PS5, User's Guide WebView) — 2026-10-30 17:15:36
+manifest: ["c043b-canvas-alias-spray-first.js"]
+page: https://manuals.playstation.net/document/en/ps5/  (lab DNS + lab CA)
+
+BOOT:1-from-0
+c043b-boot
+c043b-getter inner=true
+c043b-trigger inner=true outer=true same=false
+c043b-sprayed=80
+c043b-stale a=11.110011 b=22.220022 e=55.550055
+c043b-CHANNEL sentinel-match
+c043b-alias=2
+c043b-reverse a=1.23 e=12.13 REVERSE-OK
+c043b-prop-lineWidth-alias=2
+c043b-ALIVE
+FUZZ-RUNNER-DONE:1

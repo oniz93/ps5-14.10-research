@@ -60,6 +60,15 @@ not as a memory-corruption primitive.
 
 - **Confirmed live UAF:** `FontFaceSet::load()` dereferences a freed 192-byte `CSSFontFace` (plain `fastFree`,
   not IsoHeap). ASAN: `CSSFontFace::status()` at `CSSFontFace.h:104` from `FontFaceSet.cpp:196`.
+- **Second live UAF, and its slot is measured from inside — `docs/112`.** `HTMLCanvasElement::getContext`
+  overwrites `m_context` during the options-getter re-entry, destroying the 712-byte
+  `CanvasRenderingContext2D` the inner `getContext('2d')` returned while its JS wrapper keeps the raw
+  pointer. gdb on the run's own WebProcess: the free is `CanvasRenderingContext2D::~… ←
+  createContextBitmapRenderer ← getContext`, and the slot `A` is then genuinely recycled — but in
+  `docs/103`'s arms it was taken first by the harness's own `new Image()` beacon (`CachedImage`, **720** B,
+  memory-cached, hence permanent), which is why every spray there failed. Move that beacon after the spray
+  and the 80-context spray takes A (`sent hit=0`, 6/6); eighty 692-char `atob` strings take it too
+  (704/712/720/744 are one ASAN class). The string occupant is the attacker-byte foothold `docs/65` had.
 - **Reclaim: OURS, with our bytes — measured.** `docs/65`, "Attempt 4": a 172-character 8-bit `atob` string in the
   getter after `warm=1` owns the freed 192-byte chunk. Proof, one character apart in the same container:
   byte 0x87 = `0x41` → `RELEASE_ASSERT_NOT_REACHED` in `CSSFontFace::fontLoadTiming()` (`:568`); byte 0x86 = `0x41`
@@ -487,8 +496,289 @@ not as a memory-corruption primitive.
   **0 sanitizer reports, 0 exceptions**. The GC arm collected in **0 of 6** sampled windows
   (`pre=8/8 post=8/8`) and is recorded as the negative it is.
 
+- **The deserialization-abort family is enumerated and measured, and it is one input wide — `docs/90`.**
+  Six sites carry the `RELEASE_ASSERT(vm.hasPendingTerminationException())` after a `MessageEvent::create`
+  (`BroadcastChannel.cpp:256`, `LocalDOMWindow.cpp:947`, `MessagePort.cpp:295`,
+  `WorkerMessagingProxy.cpp:199`/`:245`, `ServiceWorkerContainer.cpp:472`) — `docs/89` counted two. The
+  `docs/89` input (explicit-length `DataView` over a resizable buffer, shrink in the walk, buffer in the
+  transfer list) aborts **four** of them from page script: MessagePort 3/3, `window.postMessage` 3/3 in
+  both IDL spellings, worker → document 2/2 (`:199`, thread T0), document → worker (`:245`, thread T9).
+  The other two do **not**, for measured reasons: across the **service worker** IPC a 0-byte transferred
+  buffer arrives **non-resizable** (`mx=0`, against `mx=192` for the same buffer over a MessagePort), so
+  `DataView::wrappedAs` returns nullptr and `toJS` yields `jsNull` — the message completes with `v ===
+  null`, no exception, no assert; and `BroadcastChannel` has no transfer list, so the buffer is written
+  in-line at the view's dump point and the DataView arrives intact (`vb=192&bb=192`). Every other
+  fail path in `CloneDeserializer` is a clean `fail()` → `ValidationError` → `didFail` → `messageerror`:
+  57 `fail();` call sites, and the two non-`try*` allocations are measured negatives — `constructEmptyArray`
+  cannot throw from a page payload (ArrayStorage allocates a **fixed** vector, so an array of 0x10000001
+  arrives with `al=268435457` after a 22 s walk, and 0x10000000 behaves identically; ≈80 ns per hole) and
+  the transfer-list rejections throw at `postMessage` before a message exists (`DataCloneError` ×3
+  measured). The sharpest control is that the same message through `structuredClone` is a catchable
+  `TypeError("Unable to deserialize data.")` 3/3 with no abort: **the defect is the caller's error mode
+  (`NonThrowing` + `RELEASE_ASSERT`), not the input.** Pages `research/fuzz-cssom/caps10.html`
+  (md5 `daed8a5fc70ded2ca1a798dadcbc910e`), `sw90d.js` (md5 `bd658cf382fe62a0e64226f6d12d3be5`), runner
+  `c10run.sh`; logs `data/deser-family/`.
+  - **The fail-silent wrapper shape is measured and inert, and it explains the whole family's asymmetry —
+  `docs/91`.** A failed view wrapper is stored as `null`, is reachable through the **object pool**
+  (a message carrying the same view four times arrives with all four slots `null` and
+  `a === b === cc[0] === d`), and page script consumes it as an ordinary `null`: `new Map([[null,1]])`,
+  `JSON.stringify`, `Object.keys` all work and the only throw is the page's own `null.byteLength`
+  `TypeError` — no sanitizer line, no abort, 23 runs over 16 arms. It cannot become an object of the
+  wrong type: the deserializer's only typed consumer of a pooled value re-checks
+  `inherits<JSArrayBuffer>()` (`SerializedScriptValue.cpp:3290-3293`, false for `jsNull()`), the other
+  four `readTerminal()` sites are value positions, an out-of-bounds view is clamped by
+  `viewByteLength` (`JSDataView.h:59-78`) and cannot be re-serialized (`:1376`). **The rule behind the
+  asymmetry:** `DataView::wrapImpl` calls the *verifying* `JSDataView::create` (`runtime/DataView.cpp:67`,
+  throws at `JSDataView.cpp:52/59/64`) while `GenericTypedArrayView::wrapImpl` calls the
+  *non-verifying* `create` overload (`GenericTypedArrayViewInlines.h:145`), so only the DataView
+  spelling can leave a pending exception — and only it aborts. **The transport decides the outcome of
+  one payload:** `MessagePort` → abort at `MessagePort.cpp:295` (3/3 + a re-run); `client.postMessage`
+  (SW) → `null` (2/2 + a re-run), because the SW IPC delivers the transferred buffer with
+  `mx=0` (non-resizable), so `wrappedAs` declines *before* `wrapImpl` can throw; a typed array over the
+  port arrives as an empty out-of-bounds object (`vb0 bb0`, write dropped) and over the SW path as
+  `null`. Auto-length is a clean `messageerror` on that transport in both directions
+  (`:3311-3315` tests the *arriving* buffer's resizability), so explicit-length is the only input that
+  reaches the throw. The second unchecked site, `cryptoKey = getJSValue(result.get())` (`:3848`), is
+  measured on three key classes (extractable HMAC, non-extractable HMAC, ECDSA P-256 pair) — every one
+  arrives as a real `CryptoKey`, so it has no page-side null. Pages
+  `research/fuzz-cssom/caps12.html` (md5 `1d19801f33e75f07000abbd045601e4f`), `sw12.js` (md5
+  `20e217ce9debe8ba27023cbd61430dbd`), runner `c12run.sh`; logs `data/deser-null/`.
+- **The split-dump shape is closed on the length and open on the out-of-band payload — and that one is a
+  measured crash, 9/9 over three transports (`docs/92`).** `ImageBitmap` was the only other page-reachable
+  native whose length is *derived* on read: `dumpImageBitmap` writes `logicalSize`/`resolutionScale`/`byteLength`
+  (`SerializedScriptValue.cpp:1521-1533`) and `readImageBitmap` re-derives `imageDataSize = logicalSize.scale(res)`
+  for `ByteArrayPixelBuffer::tryCreate` (`:4180-4191`). It cannot disagree: the writer's length comes from
+  `getPixelBuffer` → `toBackendCoordinates` → the *same* truncating `IntSize::scale` (`ImageBufferBackend.h:163-170`,
+  `IntSize.h:95-104`) and `tryCreate` demands exact equality (`ByteArrayPixelBuffer.cpp:61-62`); moreover every
+  creator path calls the 4-argument `ImageBitmap::createImageBuffer` whose `resolutionScale` defaults to 1 — the
+  only 5-argument call site in the tree is the reader itself — so a non-1 scale is not page-reachable, and
+  `OffscreenCanvas`/`WebCodecsVideoFrame` are measured absent. **The split that is real is the transfer's
+  out-of-band backing store:** the transfer list is validated before the walk (`:5397-5399`), the tag is written
+  from the transfer map during it (`:1486-1491`), and `ImageBitmap::detachBitmaps` takes the stores after it
+  (`:5481`), so a getter calling `close()` in between leaves a **disengaged**
+  `std::optional<ImageBitmapBacking>` at that index — and `readTransferredImageBitmap` dereferences it
+  (`:4034`) with no engagement check, so `connect()`'s `if (!m_serializedBitmap)` guard (`ImageBitmapBacking.cpp:83`)
+  reads a field of an object that was never constructed. Under ASAN that field is the malloc fill, so the
+  deref is `SEGV` on `0xbebebebebebebe` at `ImageBuffer.cpp:119`: MessagePort 5/5, `window.postMessage` 2/2,
+  document→worker 2/2 (`:88`, `WebWorkerClient`, thread T9). Four controls: no close arrives 8×8; a getter
+  closing a *different* bitmap does not crash; closed before the call and closed before a value-path dump are
+  both `DataCloneError`. **DoS, not a primitive** — the pointer is uninitialized memory. Page
+  `research/fuzz-cssom/caps13.html` (md5 `e2f28fcf10136e73ce5d1923ccf4bc4d`), runner `c13run.sh`, retry wrapper
+  `c13rep.sh`; logs `data/imagebitmap-split/`. One operational note: a **concurrent session** patched the
+  oracle's `SerializedScriptValue.cpp` at 09:54 with a `fprintf` that over-reads the 32-byte element, so runs
+  after that time are not on the drop's file (`0518be…` vs `4e3d9e…`) and must be restored before scoring.
+- **The 32-byte element does not yet take page bytes — five shaping schemes, all negative (`docs/93`).** The
+  pointer survives removing ASAN's fill (`max_malloc_fill_size=0` gives a deterministic recycled
+  `0x00000000002b6280` at +8 in 4/4 runs), so the crash is not the fill, and a release build has two outcomes,
+  not one. 512-byte `StringImpl`s + churn, 64 CSS faces freed at `buildCompleted()` with a 12-character family
+  (the measured class: `sizeof=32 cap=1`), the 512/1024/2048 classes, zero bytes (which *must* trip the
+  `ImageBitmapBacking.cpp:83` early return) and a `41…` pattern all left `+8` unchanged and all crashed, 5/5.
+  Three design constraints recorded there: a `StringImpl` puts `m_length`, not a byte, at +8; the vector is
+  allocated in the `takeAllMessagesForPort` reply dispatch, not the getter's frame; and `WeakRef`-plus-churn is
+  unusable as the free side (`JSWeakObjectRef::deref` write-barriers its target, so 200 targets survived
+  900,000 allocations, `dead=0` 3/3). Two further dead family members are measured on their own channels: the
+  Wasm **agent-cluster** comparison (`WebAssembly` is `undefined`; the `SharedWorker` port and a cross-origin
+  `window.postMessage` both deliver) and the **`isTypeExposedToGlobalObject`** membrane (`AudioContext` stays
+  `suspended`; console has `WEB_AUDIO OFF`). Page `research/fuzz-cssom/caps11.html`
+  (`f2aa6befd12d18c8bf88a2618b60f876`), runner `c11run.sh`. **Patch state, verified after this run closed:**
+  while it was written the oracle's file was `b32d7b655…` (the `[IBT]` print cut to 24 bytes + the flag byte, so
+  it no longer trips its own `heap-buffer-overflow` or preempts the SEGV), but a concurrent session has since
+  **restored it to the drop's `4e3d9ea56468dfa59230d48cea4b5321`** with a relink in flight — so the `[IBT]`
+  payload dump is gone from the build the next run will find. `patch_ibt.py` re-applies it (three lines, additive)
+  when the payload bytes are what the arm needs; without it a shaping arm can only be scored from the fault
+  address or from the no-crash outcome.
+
+- **The 32-byte backing-store element is page-controlled, and the pointer it hands the engine is chosen by the
+  page — measured (`docs/94`).** The element that `readTransferredImageBitmap` reads (`:4034`) is a 32-byte
+  FastMalloc block built by `ImageBitmap::detachBitmaps` (`:5490`) and reused as-is: for a bitmap closed inside
+  a getter the optional is disengaged, the engagement byte at **24** is always written `0` by the
+  `std::optional` move-constructor, and only byte **8** (`m_serializedBitmap`) is ever read — so the value is
+  whatever the *last* 32-byte block the walk freed still holds. Two page actions select it, and a third writes
+  it: in-getter beacons leave the document URL's host there (`"127.0.0.1"` → `0x2e302e002e373231`,
+  `"localhost"` → `0x736f680061636f6c`), a quiet getter leaves a heap pointer (`heap-buffer-overflow READ of size
+  8 at 0x6030000b1b70`), and a `structuredClone(<16-bit string>)` as the getter's last statement leaves its own
+  serialize buffer, so `+8` reads stream bytes 8..15. Measured on the drop's file, quarantine off,
+  `max_malloc_fill_size=0`: `'A','B',NUL…,U+0100` → `SEGV on unknown address 0x000042004100` (2/2), `'C','D'` →
+  `0x000044004300`, the 8-bit spelling → `0x000043424180` (low byte = `StringDataIs8BitFlag`), all-NUL → **no
+  crash**, `ImageBitmap:w0h0`. Controls: a 16-byte-class stream (class 16) and the same arm with the ASAN fill on
+  both fail to take the slot. So `docs/92` §4's open question is answered in both directions and the field is 56
+  page-chosen bits — still a read-only dereference (one virtual call at `ImageBuffer.cpp:119`), i.e. a DoS with a
+  chosen address, not criterion 3. Two plans are measured dead on the way: `ArrayBuffer.prototype.transfer` is
+  `undefined` (`useArrayBufferTransfer` defaults false, `JSArrayBufferPrototype.cpp:464`) and a GC-freed
+  `ArrayBuffer` spray cannot work because the collection is deferred inside the binding call
+  (`fcount=0/313` in a getter, `313/313` in a plain task) and because the slot takes the *last* free of the walk.
+  Pages `research/fuzz-cssom/caps14.html` (md5 `5e6619afdace5c68d4f94aba1bae55a2`), `c14run.sh`, `c14gdb.sh`;
+  logs `data/`… `/tmp/S_c14_cl*.log`.
+- **The JS-visible surface carries no address — swept whole and measured (`docs/95`).** 193 beacon records
+  (180 probes) over
+  the five boundaries the action named (clone/`postMessage` failure texts, `DOMException`/`Error.stack`
+  including worker frames, `ImageBitmap` crossing a worker, `URL`/`performance`/`Intl`/`navigator` strings,
+  `MessageEvent` `origin`/`source`) plus 17 readback scans, each part run twice in two processes and scored
+  against `/proc/<pid>/maps`: 183 records byte-identical across ASLR once the URL port is normalised, the 10
+  that change are clocks, UUIDs and `Math.random`, none lands in a readable mapping, and **no entry contains
+  a ≥10-digit hex token at all** (the only one is the detector's own control). Every readback surface is zero-filled (`nz=0/64`, 15/15, including both resizable-grow paths —
+  `ArrayBuffer.cpp:541`/`:627`), and truncated/corrupt PNG/JPEG, SVG `feBlur`/`feTurbulence`/`feTile`,
+  canvas filters and `createImageBitmap` resizes produce no pointer-shaped word under a detector whose
+  positive control fires and lands in `0x610000000000`. WebGL/WebGL2/`OffscreenCanvas`/`VideoFrame`/
+  `WebAssembly`/`SharedArrayBuffer` measured absent; `decodeAudioData` fails `EncodingError` on five WAVs.
+  Pages `research/leak-sweep/*.html`, runner `lkrun.sh`, scorer `diff.py`, logs `data/leak-sweep/`.
+- **A second source-level deviation, dead at the IDL boundary — measured (`docs/95` §6).**
+  `ArrayBufferView::byteOffset()`/`byteLength()` test the bounds **inverted** (`if (UNLIKELY(!(byteOffsetStart
+  > bufferByteLength || byteOffsetEnd > bufferByteLength))) return 0;`), where upstream main has no `!`, so
+  an out-of-bounds resizable view would hand WebCore the stale raw length and raw offset instead of 0. Not
+  reachable: `JSGenericTypedArrayView::toWrapped` refuses every view whose buffer is
+  `isResizableOrGrowableShared()` (`JSGenericTypedArrayViewInlines.h:928-934`), measured across `Blob`,
+  `Response`, `TextDecoder`, `crypto.subtle.digest` and `ImageData` — an OOB view throws `TypeError:
+  Underlying ArrayBuffer has been detached from the view or out-of-bounds`, and an in-bounds resizable view
+  silently takes the **USVString** branch, so `new Blob([view]).size` is the length of `String(view)` (223
+  for 64 elements vs 64 for the non-resizable control). `wrappedAs()` deliberately skips the sub-range check
+  for resizable buffers (`GenericTypedArrayViewInlines.h:107-115`), which is the bypass to look for — **and it
+  exists: `docs/96`, next bullet.**
+- **The inversion is reachable, and it is a JS-visible out-of-bounds read plus two crash spellings — measured
+  (`docs/96`).** `IDBKey::createBinary(JSC::JSArrayBufferView&)` (`IDBKey.cpp:53-59`) is the one WebCore
+  consumer that takes a *raw* JS view, and it goes `possiblySharedImpl()` → `wrappedAs()` (no sub-range check
+  for resizable buffers) → `ThreadSafeDataBuffer::copyData(view->data(), view->byteLength())` → `memcpy`.
+  `IDBKeyRange.only(view).lower` hands the copy back to JS as an `ArrayBuffer` and needs no database. Measured,
+  quarantine off (`caps15.html` md5 `60a9556b…`, logs `data/oobview/`): an 8192-byte view over a resizable
+  buffer shrunk to 4112 reads `byteLength` **0** in JS and produces a **8192-byte** `ArrayBuffer` whose bytes
+  are the pre-shrink `i^0x5a` pattern through `at4128=7a7b7879…`; the in-bounds twin (`byteLength` 8192)
+  produces a **0-byte** key — the inversion in both directions. Controls on the same object:
+  `structuredClone` → `DataCloneError`, `new Blob([v])` → `TypeError`. A shrink that crosses a **64 KiB**
+  boundary (`PageCount::pageSize`, `PageCount.h:111`; `ArrayBuffer::resize` mprotects `[roundUp64K(new), old)`)
+  is an ASAN `SEGV` in `memcpy` ← `ThreadSafeDataBuffer.h:52` ← `IDBKey.cpp:58` ←
+  `IDBBindingUtilities.cpp:250` ← `IDBKeyRange.cpp:75`, and the auto-length underflow
+  (`byteOffset > bufferByteLength` → `roundDownToMultipleOf(1, 2^64-k)`) is `READ of size 4294963216`. The
+  copy length is bounded by `maxByteLength` (the constructor refuses a longer view, measured `RangeError`) and
+  the reservation is allocated **zeroed** (`Gigacage::tryAllocateZeroedVirtualPages`), so no bounded spelling
+  can return foreign bytes — 16/16 fresh 64 KiB reservations read all-zero. Audit
+  `tools/oobview-audit.py`, 12/12. So the IDL gate `docs/95` measured is real, but it is not the only producer.
+- **The write direction is closed, and the inversion is confined to the native class — measured (`docs/97`).**
+  There are two `byteLength()`s: `JSC::ArrayBufferView`'s (native, inverted, `ArrayBufferView.h:120`) and
+  `JSArrayBufferView`'s (JS wrapper, correct, `integerIndexedObjectByteLength`, `JSArrayBufferView.h:311`), so
+  every JS-level write spelling (`set`/`fill`/`copyWithin`/`sort`/`view[i]=`/`DataView.set*`) works on the
+  correct length and refuses an OOB view. The native one is reachable only through a converter, and all six
+  producer spellings gate `isResizableOrGrowableShared()` — including `JSArrayBuffer::toWrapped`
+  (`JSArrayBuffer.h:86-92`), so `(ArrayBuffer or ArrayBufferView)` unions are gated on both arms. The IDL
+  census is 36 statements / **7 write consumers**, of which exactly one exists on this build:
+  `Crypto::getRandomValues` (`Crypto.cpp:57-70`). Measured on one object in one process: the OOB view returns
+  an 8192-byte key (`at4128=7a7b…`) and after **nine** write spellings (eleven arms) the same key reads **byte-identical**
+  (`RB` = `K`), with `RBw` proving the witness is sensitive; the same eight spellings all write on a
+  non-resizable control (`nz=8162/8192`). Two new facts: the inverted test returns 0 for an *in-bounds*
+  resizable view too, so a `byteLength()`-bounded write fails closed; and `ArrayBuffer::resize()` memsets the
+  newly-visible range on grow (`ArrayBuffer.cpp:540`), which is why a grow-back is not a usable readback.
+  Audit `tools/abview-write-sweep.py` 23/23, `data/abview-write/`. The inverted-bounds thread is exhausted in
+  both directions; **the programme's live memory primitives remain `docs/65` (one-byte write, inert) and
+  `docs/94` (page-chosen pointer, read-only deref)** — no route to criterion 3 from either.
+
+- **The text path carries no address, and it is the last un-swept JS-visible byte source — measured
+  (`docs/98`).** 125 records × two processes, 63 rasterisation arms, 12 knob arms, 11 odd widths, two
+  SVG-text arms, `toDataURL` PNG/JPEG, all 12 `TextMetrics` fields: **0 pointer-shaped words**,
+  125/125 records identical across ASLR. The detector needed correcting first: `docs/95`'s
+  `b5/b6/b7` rule fires on premultiplied grey pixels (`68 68 68 68 00 00 00 00`, 76 of the
+  calibration run's 118 records), so the sharp rule also pins `b3=b4=0` and the loose windows are
+  counted as `grey=` (1678). The reason is structural and measured on one object: `premult_proof`
+  writes the canonical word into a canvas and reads back eight zero bytes (a 48-bit address has
+  byte 3 = 0 → an alpha-0 pixel → premultiplied away), while the same bytes through
+  `Blob → arrayBuffer` are seen (`raw_chain ptr=1`); the store is `tryFastCalloc`
+  (`ImageBufferCairoImageSurfaceBackend.cpp:86-88`), the readback copies `4u * width` densely
+  (`ImageBufferBackend.cpp:113`), and cairo shows glyphs straight to the destination
+  (`CairoOperations.cpp:311`) — no WebKit-side glyph atlas. Two enabling facts for the next action:
+  the canvas 2D context has **no** `letterSpacing`/`wordSpacing`/`fontKerning`/`fontStretch`/
+  `fontVariantCaps`/`textRendering`/`filter`, and **a webfont served over HTTP really loads**
+  (`face_gD st=loaded`, widths and all 12 metrics identical to the `local()` face).
 - **Console** is wedged on the Guide menu with a dead WebProcess; needs a manual app restart by the operator before
-  any on-console case can run. Local ASAN work is unaffected.
+  any on-console case can run. Local ASAN work is unaffected. The DoS family above adds four page-side
+  crash sites that all need `ArrayBuffer.prototype.resize` (so `Options::useResizableArrayBuffer`, still
+  unmeasured on the console), none of which is a memory primitive.
+- **The one ungated OOB read cannot leak, for a structural reason — measured (`docs/100`).** `docs/96`'s key path
+  copies a raw `byteLength()`; a full 64 KiB committed page read out from behind a 16-byte buffer returns
+  `bl=65536 nz=16` — the page's own 16 bytes and 65,520 zeroes — and 0 pointer-shaped pairs. A resizable
+  `ArrayBuffer` never reaches `fastMalloc`: `ArrayBuffer::tryCreate`'s `maxByteLength` branch goes to
+  `tryAllocateResizableMemory` (`ArrayBuffer.cpp:316`), which commits `roundUpToMultipleOf<64 KiB>` pages of a
+  `BufferMemoryManager` reservation (`:79-96`) and builds the contents from that pointer with no memset, so the
+  over-read can only ever see the buffer's own fresh-zero pages — never a `StringImpl`, an `ArrayBuffer`
+  neighbour, or the cage. Neighbour arms (`ab`, `str`, 64 planted of the class) give `seen=0`; the in-bounds
+  control gives `bl=0`. Two corrections: a view longer than the live buffer **cannot be built from birth**
+  (`RangeError: Length out of range of buffer`, the ctor validates against `byteLength`, not `maxByteLength` — grow
+  first, then view, then shrink), and `docs/96` §8's "find another consumer" is qualified: it would still read
+  zeroes. The shape survives as a 64 KiB zero-page oracle; the leak must come from a bug.
+- **The OTF is out of the engine and every table checks out — measured (`docs/104`).** Three runs, one arm each
+  (`G6`/`G4`/`N3`), gdb attached to that run's own WebProcess at `*FT_New_Memory_Face` (its only caller in the
+  drop) dumping `$rsi..$rsi+$rdx`: 1 348 / 1 536 / 6 947 424 bytes, all `OTTO`, the same 14 tables in the
+  writer's order (`CFF GSUB OS/2 VORG cmap head hhea hmtx kern maxp name post vhea vmtx`), no `loca`/`glyf`,
+  `maxp.numGlyphs` 4/6/65 535. `G6` is one LigatureSet with one offset and a coverage of one glyph — `hb-shape`
+  gives `[2=0+900]`, the page's `w=90.00`. `G4` is `0001 001a 0002 0008 | 0002 0006 000c | …`:
+  **`LigatureSetCount` = 2 with one offset written and the second slot = `0x0002`, the first set's own
+  `LigatureCount`** — a reader that enumerates the declared array lands at subtable+2 and reads the coverage
+  offset (26) as its "LigatureCount"; fontTools 4.67 refuses the subtable (`ValueError: bytes length not a
+  multiple of item size`) and `hb-shape 2.8.1` shapes `ab` as `[1=0+200|4=1+200]`, the page's `w=40.00`. The
+  lookup is feature 0 = `liga`, the only feature the `DFLT` script enables (:873). `N3`'s format-12 subtable is
+  intact (65 535 groups, 786 436 B) and its format-4 one is malformed **differently than `docs/101` §3 said**:
+  `bmpMappings` is 65 505 because the arm's range crosses U+10000, so `segCount` is 65 506 and does not wrap —
+  `clampTo<uint16_t>` saturates `length` and `segCountX2` at 65 535 against 524 064 real bytes. New facts: glyph
+  ids follow `std::sort(…, compareCodepointsLexicographically)` (:1430), not document order, and Ligature offsets
+  are relative to the set's start including its `2 + 2n` header. Dumps `data/otf-dump/{g6,g4}/*.otf` (+ hashes and
+  the regeneration command in `dumps.txt`, the 6.9 MB one not stored), parser `tools/otf-dump-parse.py`,
+  transcript `data/otf-dump/logs/`.
+- **A live module address in the slot makes the engine execute `call *(*value + 0x20)`, and slot 4 is
+  `sinkIntoImageBuffer` — `docs/104`.** Harness `research/canvas-alias/vrun.sh` reads the running WebProcess's
+  `/proc/<pid>/maps`, plants `base+offset` (rounded to the 256-alignment the encoding forces) through a file the
+  page fetches, so the value is a real address of that process rather than a guess. Six arms: every fault is
+  exactly `qword_at_target + 0x20` and the top frame is `ImageBuffer.cpp:119`, i.e. `element+8 → this`, `*(this) →
+  vptr`, `call *(vptr+0x20)` — and `0x20` is slot 4, which the vtable order confirms is the virtual we want
+  (`ImageBuffer.h:248-259`). **Caveat that decides the next move:** those qwords are **link-time** offsets in this
+  build, not relocated runtime addresses, so `*(value)` is unmapped and a fake vtable must be `base + *value` —
+  cheap once anything leaks `base`, impossible without it. A real call therefore needs a *relocated* vptr (a live
+  heap object → the leak again) or the `.got` route (§4).
+- **The two ZigZagBoi claims are reproduced, and neither is a primitive — `docs/103`.** (a) The canvas UAF
+  itself reproduces and its free is synchronous — `createContextBitmapRenderer`'s `unique_ptr` reset →
+  `WTF::fastFree`, 712-byte region, 32 bytes inside, `heap-use-after-free` under quarantine at
+  `CanvasRenderingContext::canvasBase()` — but **same-type occupation never takes the slot** at 1/2/8/32/500/3000
+  fresh contexts, at 2000 contexts whose canvases were made before the trigger, or after a 400 k-object churn:
+  the first use dies in `CanvasBase::scriptExecutionContext()` every time. So the alias half is **unconfirmed
+  locally** and only the console can settle it; do not restate their p553 numbers as reproduced. Note also that
+  `Uint8Array(712)` is *not* the same class as a freed fastFree chunk — `ArrayBuffer` data comes from
+  `Gigacage::tryMalloc`. (b) `sort` on a shrunk view **is** on a stale length (192 comparator calls, the length
+  is read once at `TypedArrayPrototype.js:229`) but the write-back is **guarded**: it throws
+  `TypeError: … detached … or out-of-bounds` from the per-store check (`JSArrayBufferViewInlines.h:194`) and
+  writes **nothing** — grow the buffer back and the bytes past the shrink are still the zero page. The
+  asymmetry is the keeper: JSC validates on store and not on load, so reads past a shrunk view are fine and
+  writes are not.
+- **No API producer can leak, and the canvas carrier is lossless once the packing is fixed — `docs/102`.**
+  Searching the two shapes a leak needs (a native `ArrayBufferView&` parameter, which skips the IDL converter
+  that refuses resizable views, and a copy into a JS-visible object) gives exactly three families: `Crypto::
+  getRandomValues` (write), the `WebGL*` declarations (compiled out) and `IDBKey` (the `docs/96` read). The
+  copy sites that take `data()`+`byteLength()` are all reached through the same gated converter or take an
+  `ArrayBuffer`, not a view (`BlobBuilder`, `StructuredClone::cloneArrayBuffer`, `ImageBitmap`,
+  `ShareDataReader`, `NetworkSendQueue`), so every one copies from the same committed zero page. **The leak
+  must come from a bug.** Second half, a correction to `docs/98`: its premultiplication loss is its own byte
+  packing, not the canvas — with one byte per pixel in **R** and alpha pinned to 255, a realistic pointer shape
+  round-trips 8/8, the `byte3 = 0` toy word 8/8, and a 0..255 sweep 256/256 with **0 lossy values**, so
+  `getImageData → toBlob → arrayBuffer` is a faithful byte carrier and `docs/98`'s "the canvas store cannot
+  carry an address" holds only for an RGBA-packed word.
+- **A pointer oracle over the `docs/94` slot is calibrated in both directions — `docs/101`.** Any 8-byte value
+  can now be tested against the element instead of just crashing blindly: a valid `SerializedImageBuffer`
+  vptr makes the call return and the message **arrive**, `0` takes the `ImageBitmapBacking.cpp:83` early return
+  and the page gets a **detached** bitmap (`rx&d=ImageBitmap:w0h0`, `w=0 h=0`), anything else is a `SEGV` at
+  `ImageBuffer.cpp:119`. Three encoding traps are recorded (the pointer's low byte must be `0x00`, so candidates
+  are 256-aligned; an all-ASCII payload serialises 8-bit and shifts that byte to `0x80`, so a trailing `U+0100`
+  unit forces 16-bit; the stream must be 25 bytes so the freed block is class 32) and one allocator condition:
+  **with ASAN's malloc fill on, every value crashes**, so the arms run `max_malloc_fill_size=0` — the closest
+  available stand-in for a release build. It is a **validator, not a scanner**: a wrong-but-mapped address does
+  not arrive because the value is *called*, so a successful arm needs a real vtable, not readable memory — the
+  five candidates tried (`0x4141414100`, `0x7f00000000`, `0x7f00001000`, two zero controls) all crashed. Tools
+  `research/leak-sweep/poracle.sh`, `oarun.sh` (kills only its own port so concurrent runs do not collide), page
+  `caps14.html`. `caps18.html` is a sweep skeleton that never reaches the slot (always crashes, 4 runs) and is
+  kept only as the harness frame.
+- **Rung 1.5 (egress) is answered from the public chains: the WebKit process reaches libkernel and issues
+  syscalls.** The published 4.03 chain ROPs inside the WebKit process and calls `getpid`/`write`/`socketpair`
+  from a **worker thread's** stack, and finds libkernel's base from a GOT import the WebKit library itself
+  carries (`libSceNKWebKit`, `OFFSET_wk___stack_chk_fail_import`) — so the WebProcess needs no separate sandbox
+  escape to gain a syscall surface, and the base comes from the same primitive that reads WebKit. Two shape
+  constraints follow and match the kernel-side notes: CFI is forward-edge only, so a **return address** on a
+  worker stack is the pivot (never a vtable — although WebKit itself is built without `ENABLE_CFI`, which is not
+  a port option here and only arrives via `ENABLE_SANITIZERS`); and clang's `__stack_chk_fail` interposition check
+  has to be defeated. Read as: a WebView bug is a usable entry, and rung 1 — not 1.5 — is what is missing.
 - **The flip needs no attacker bytes — measured, and this is the console page.** `docs/65`, "Attempt 9":
   `mode=none&npre=0&npost=0&quiet=2&doc=zzd&docn=2` (page md5 `f0d1b337aaad040b5f1824a162295759`) reads
   `DFACE zzd0:loaded zzd1:unloaded` with `scan strs=0 faces=0` — no container, no `new FontFace`, no warm-up — 9/9 in
@@ -500,27 +790,894 @@ not as a memory-corruption primitive.
   the `DFACE` scan. The page's whole workload is: pick `t`, remove `<style id=v>`, layout, `insertRule` two
   unresolvable `@font-face` rules at index 0, layout, report.
 
+- **The font parser is measured and only WebKit's vertical GSUB has a defect — `docs/99`.** 190 arms
+  over two bases, run as page `FontFace`s under the ASAN oracle with quarantine off: **109 accepted /
+  77 rejected / 4 crashed, and no sanitizer report on any FreeType input.** FreeType's requirement at
+  open is exactly the tables before `glyf` (`head`, `hhea`, `maxp`, `cmap`, `hmtx`, `loca`, `OS/2`,
+  `cvt`, `fpgm`, `prep`); everything from `glyf` on can be cut away and the face still opens, with the
+  per-character fallback as the only sign (`w=60.00` vs `55.56`). `numTables` 0x1000, table lengths 0
+  and 0xFFFFFFFF, offsets past EOF, a duplicate `head`, an all-max/descending/zero `loca`, `numGlyphs`
+  0xFFFF, a 0x7FFF-contour glyph and a self-referencing composite are all accepted without a report.
+  The defect is `OpenTypeVerticalData.cpp:182` (`map->set(from, substitute[indexTo])`): a `Coverage`
+  format-2 range that wraps (`end+1` = 0) or descends passes the drop's `indexTo + (fromEnd - from) >
+  countTo` test because the subtraction goes negative, and the loop then runs the uint16 wrap — 32768
+  and 65532 reads — `heap-buffer-overflow READ of size 2`, 7/7 over six runs and two bases. Upstream
+  has `if (fromEnd <= from || …)` and `unsigned` locals; the drop has neither. **Console: compiled
+  out** (`ENABLE(OPENTYPE_VERTICAL)` is GTK/WPE-only), so on 14.10 the whole font surface is FreeType.
+- **The next font path is the SVG writer, and unlike the GSUB bug it does exist on the console.**
+  `CSSFontFaceSource::load` (`:162-171`) calls `convertSVGToOTFFont` (`svg/SVGToOTFFontConversion.cpp:1559`)
+  for an in-document `SVGFontFaceElement` (`CSSFontFaceSrcLocalValue::svgFontFaceElement`,
+  `CSSFontFaceSrcValue.cpp:55`) or a `CachedSVGFont` fetched over HTTP, and the bytes it writes go
+  straight into `createFontCustomPlatformData` → `FT_New_Memory_Face`. SVG fonts are not behind a
+  feature macro (`grep -rn SVG_FONTS Source/cmake Source/WTF/wtf/PlatformEnable.h` is empty), so this
+  is WebKit code that builds `head`/`maxp`/`hmtx`/`cmap`/`loca`/`glyf` from page-supplied path data on
+  every port. Nothing in this programme has ever run it.
+
+- **The SVG font writer is reachable on both halves, memory-clean on 52 arms, and its one defect is a
+  silent GSUB truncation that is upstream's — measured (`docs/101`).** An in-document `<font>` with a
+  `<font-face font-family>` is used by a plain CSS `font-family` with **no `@font-face` at all**
+  (`SVGFontFaceElement::rebuildFontFace` :262-298 → `Resolver::addCurrentSVGFontFaceRules`,
+  `StyleResolver.cpp:205-212`), and `url(f.svg#f1)` reaches `CachedSVGFont`; both end in
+  `convertSVGToOTFFont` → `createFontCustomPlatformData` → `FT_New_Memory_Face`. The drop writes a
+  **CFF/OTTO** font — 14 tables, **no `loca`, no `glyf`** (the action's table list was wrong) — with
+  one Type-2 charstring per glyph. 52 arms / 82 arm executions / 11 runs, quarantine off:
+  **0 sanitizer reports, 0 aborts**, 45 arms accepted by FreeType and used by the page. Bounds:
+  **65 535 glyphs is the largest font accepted** and it loads and is used (`w=43.00` from a generated
+  430-unit advance); **65 536 refuses the whole font**; at 65 535 `appendFormat4CMAPTable`'s
+  `uint16_t segCount` (:315) is 65 536 → 0, and nothing changes because both Unicode encoding records
+  point at the format-12 subtable (:351-370). A `d` cut mid-command or containing `NaN` fails the
+  **whole font**, not the glyph (`m_error`, :1288 → `nullopt`); `units-per-em="-1000"` collapses every
+  advance to 0 because `unitsPerEm()` (:88-98) only tests `!value` after `static_cast<unsigned>` of a
+  negative float; `H`/`V`/`Q`/`A` geometry is correct because `SVGPathParser::parse` defaults to
+  `NormalizedParsing` and the `CFFBuilder` `ASSERT_NOT_REACHED` handlers (:1222-1227) never run.
+  **The defect:** two `<glyph>` ligatures sharing a first character — the `ff`/`fi`/`fl` case — give
+  `LigatureSetCount = ligaturePairs.size()` (:771) with one offset emitted per *distinct first glyph*
+  (:772), the shaper rejects the lookup and **all** ligature substitution stops: measured `w=40.00`
+  (the two single advances) against `90.00` for the same font with `{ab,cd}` or `{ab}` alone — 6 arms,
+  one variable each. **Upstream main carries both lines verbatim**, so this is a WebKit bug, not a
+  Sony deviation. Not memory-unsafe and structurally cannot be: every other count the writer emits is
+  understated, and the one overstated count is internal to the single `m_result` allocation and
+  rejected by the reader.
+
+- **The vertical substitution channel is JS-visible, and the funnel is a glyph id — measured (`docs/102`).**
+  `docs/99`'s OOB GSUB read was "does anything read these glyph ids back"; the answer is **`hmtx` advances**.
+  Four `vhea`/`vmtx` arms (one long metric vs 49 382, 256 vs 512 vs 1 024 units on `中`) are identical to the
+  base at 24 px/char, while doubling `hmtx[中]` gives 48 px → the layout never reads
+  `OpenTypeVerticalData::m_advanceHeights` (**this explains `docs/99` §6's withdrawn `vmtx` witness**, which is
+  now recorded as explained, not withdrawn). A `vert` `SingleSubst2` 7 109→7 064 changes the measured advance
+  115 → 114 px/char (`H0` vs `H1`), the *descending* `Coverage` range with in-allocation reads matches the
+  well-formed arm exactly (`H2`), the wrapping range is inert (`H3` = `H0`), and horizontal width is unchanged
+  (`hw=345`) → vertical-only. At 1 unit = 1 px the substituted id reads back exactly (7 320, 7 356, 20 256,
+  32 256 px for ids 7 064, 7 100, 20 000, 32 000) and the ceiling is exact too: **32 767 px is reported,
+  32 768 px collapses to 0**, a pixel bound rather than a font-unit one. The unpadded arm still aborts in
+  `LookupTable::getSubstitutions` before layout, so the OOB word itself is an inference for a non-ASAN build;
+  `ENABLE(OPENTYPE_VERTICAL)` is GTK/WPE-only, so the channel does not exist on 14.10 and does not touch
+  criterion 3. Note also that the drop supports `lookupType == 1` only (`:139`), so a real CJK font's type-7
+  `vert` lookup is inert — the whole funnel needs a hand-built table.
+- **The `docs/94` slot's value is an engine pointer at every level, and the leak action has no candidate left —
+  measured (`docs/103`).** A gdb probe at `ImageBitmapBacking::connect` dumps the 32-byte element itself: with no
+  page action (`arm=md8&sk=none`) `+8 = 0x611000040c80`, the 8 bytes there are another engine pointer, and the
+  engine's vtable-slot load lands at `*(*(+8)) + 0x20` — ASAN `heap-buffer-overflow READ of size 8` at
+  `ImageBuffer.cpp:119`, `docs/94` §4's quiet row reproduced with the bytes in hand. With a page string freed in
+  the getter (`sk=title`) the value moved to a **live `StringImpl`** (refCount 2, length 3, `m_data16 =
+  self+0x14`, chars `"pad"` inline), so the vptr the engine loaded was `(m_length<<32)|m_refCount =
+  0x0000000300000002` — two 32-bit integers, structurally never a vtable; the reuse arms (`A2`/`A3`) put no page
+  word anywhere, which the inline-character layout explains. Candidate (b) therefore cannot "make the call
+  return", and candidate (c) counts to zero: **2** raw `JSC::JSArrayBufferView` occurrences in `Source/WebCore`
+  outside `bindings/js` (both `IDBKey`, `docs/96`), with `toWrappedAllowShared` applying the same resizable
+  refusal as `toWrapped` in all four spellings. Corrections: ASAN prints the **shadow** address for a bad vptr
+  (`0xdfff8004` for `0x300000022`), which looks like a pointer and is not one; `docs/94` §6's "no address" is
+  that. Page `research/fuzz-cssom/caps19.html`, probes `research/leak-sweep/md8gdb.sh`, predictions and
+  falsification `data/md8/predictions.md`.
+- **The ligature count overshoots the table and no reader in the process follows it — measured (`docs/105`).**
+  300 ligatures sharing one first glyph make `LigatureSetCount` 300 against one written offset slot (slot 1 =
+  `0x012c` = set0's `LigatureCount`), at 150× `G4`: subtable 3 016 B of a 3 224-byte `GSUB`, `numGlyphs` 327,
+  page `w=60.00`. A byte model (`tools/gsub-trust-model.py`) splits the question three ways — the declared array
+  ends at subtable+606, **2 410 B short** of the subtable's end (the writer declares 2 B per pair and emits 6-8,
+  so the array can never overtake the data); following the bogus offsets reaches **810 B past the subtable** and
+  **3 584 B past the `GSUB` end** across all 300; and one bogus record's `compCount` 65 535 asks for **127 584 B
+  past the font**. So the bytes declare reads outside the allocation and no engine reader takes them: the console
+  shapes with HarfBuzz (`OptionsPlayStation.cmake:329-334`, `USE_FREETYPE`/`USE_HARFBUZZ` unconditional), whose
+  sanitizer bounds every offset, and the drop's own parser reads `lookupType != 1` only
+  (`OpenTypeVerticalData.cpp:140`) and is GTK/WPE-only. The well-formed twin at the same N
+  (`G11-lig300-distinct`) measures **100.00** and decompiles cleanly in the same run — the mismatch, not the
+  size. ASAN: 0 reports, 0 aborts, `EXIT=124`, `access: none` in four logs. **`docs/101` §5 is now measured, with
+  one qualification: the safety is the reader's sanitizer, not the writer's arithmetic.**
+
+- **Every Sony-only branch in `Source/JavaScriptCore` + `Source/WebCore` is now classified, and the
+  allocation-and-free layer is where the differences are not — `docs/106`.** 186 conditional blocks (21 JSC,
+  165 WebCore; 206 raw matches + 4 `PLATFORM (PLAYSTATION)` spellings, minus 24 `#endif` trailer comments):
+  **42 replace shared logic**, 5 are stubs for a `playstation/` definition, 13 are logs, 32 are PS-only
+  implementations, 8 are tests, 86 add a platform path. Not one of the six memory-lifetime replacements is
+  reachable on the GTK oracle: `StructureID`'s 128 MB heap makes `structureIDMask = 0x07ffffff`, so a
+  corrupted StructureID can only decode inside the structure reservation; the console's `WebConfig::g_config`
+  (which *is* `g_jscConfig`, unified record) is never `mprotect`ed because `WTFConfig.cpp`'s only protection
+  arm is `#elif OS(LINUX)` while the port is plain `OS(UNIX)`, and `VM.cpp:395` skips the freeze call anyway;
+  `RenderElement::canDestroyDecodedData` destroys decoded image data where shared code refuses, whenever
+  `shouldPaintEntireContents()` is true; the rest is `#if ENABLE(MAT)`-gated or compositor allocation shape.
+  Two deviations that are real and non-memory: **`ReferrerPolicy::Default = NoReferrerWhenDowngrade`** — a
+  console document with no policy sends its full URL cross-origin, measured on the oracle in the opposite
+  direction (`research/referrer/refrun.sh`: default `referer=http://localhost:8971/`, `unsafe-url` full,
+  `no-referrer` none) — and `ContentSecurityPolicy.cpp:827`, whose AND→OR is a *downstream fix*.
+  `isLLIntPC()` returning false costs a `VMTraps` trap in LLInt code and profiler frames, nothing more.
+  Blind spot recorded: 46 of the 64 files in `WebCore/PlatformPlayStation.cmake` carry no `#if` at all, and
+  `ENABLE_LIBPAS` defaults **OFF** there — so the next surface is WTF + bmalloc + WebKit (`docs/106` §7-§8).
+
+- **The Sony-only surface outside `JavaScriptCore`/`WebCore` is enumerated too, and the interesting differences
+  are bounds, not logic — `docs/107`.** 183 blocks (`Source/WTF` 30, `Source/bmalloc` 36, `Source/WebKit` 117;
+  189 raw lines, 53 with a non-PS alternative branch): 138 add, 33 `dev` (21 behaviour, **5 memory**, 4 inert,
+  2 security, 1 flag), 8 stub, 3 impl, 1 flag. The five memory rows, all in the allocator layer:
+  **every non-JavaScript WTF thread gets a 64 KB stack** (`-DDEFAULT_THREAD_STACK_SIZE_IN_KB=64`,
+  `PlatformPlayStation.cmake:44`; JS threads 512 KB) where the oracle passes no `setstacksize` at all (8 MB
+  glibc); `PageBlock`'s ceiling is **16 KB** where every 4 KB port clamps at 4 KB; `BUSE_RELEASE_LARGE_FREE 0`
+  makes the PS-only `LargeMap::purge()` **dead**; `isSanitizerEnabled()` returning false is *why the oracle
+  runs bmalloc as a debug heap and the console does not*; and `IPC::Connection` closes the socket **before** it
+  stops its monitor thread (`ConnectionUnix.cpp:115-116` vs `:134`). Two corrections: **docs/106 §6.4's
+  `canDestroyDecodedData` candidate is dead by construction** (nothing in the WebProcess ever sets
+  `paintsEntireContents()` — `grep -rn shouldPaintEntireContents Source/` yields only the `ChromeClient.h`
+  default, the `LocalFrameView.cpp:343` caller and a WebKitLegacy/mac override), and docs/106 §7's blind spot
+  is **45** unguarded files, not 46 (`PlatformPlayStation.cmake:36` is a commented-out `.cpp`). The file lists:
+  WebCore 63 `.cpp/.mm` (18 guarded / 45 not), WebKit 125, WTF 14; **0** of the 136 PS-only files supply a body
+  for a definition that `Sources.txt` compiles unguarded — every one is a docs/106 stub or a port abstraction.
+  New build facts, from `OptionsPlayStation.cmake`: **`ENABLE_JIT`/`FTL_JIT`/`DFG_JIT` OFF** (LLInt only) and
+  **`USE_ISO_MALLOC` OFF**, so the 834 WebCore `WTF_MAKE_ISO_ALLOCATED` classes lose their dedicated heaps on
+  console. The negative that matters most: **bmalloc's small-heap geometry is compile-time**
+  (`smallLineSize 256`, `smallPageSize 4 KB`, `chunkSize 1 MB`, `Sizes.h:51-54`), so docs/65's and docs/94's
+  page geometry and reuse order **do** transfer to the console. And a compile-time proof that the port is not
+  plain `OS(UNIX)`: `MemoryPressureHandlerUnix.cpp:131` `#error`s unless `OS(LINUX)` or `OS(FREEBSD)` holds, and
+  the `_np`/`pthread_np.h`/`CLOCK_MONOTONIC_FAST` API set says `OS(FREEBSD)` — which leaves docs/106 §6.2's
+  conclusion intact (the freeze is skipped at `VM.cpp:395`) but corrects its first reason.
+
+- **The four page-driven "recursive walkers" are priced, and two of them do not recurse in C++ at all —
+  measured (`docs/108`).** On the oracle, `$rsp` read at every breakpoint hit over the whole recursion:
+  `WebCore::createIDBKeyFromValue` **912 B/level**, constant over 2 000 deltas (min = max = mode), total
+  **1 824 000 B** at its own cap of 2 000 (`maximumDepth`, `IDBBindingUtilities.cpp:194`), identical on a
+  worker thread (measured on thread 10, `widb2000`); `CSSParserImpl::consumeRegularRuleList` **1 520 B/level**
+  over 127 deltas, 193 040 B at the parser's cap of 128 (`:67`, `:582-587`). `CloneSerializer::serialize` and
+  `CloneDeserializer::deserialize` are `while (1) switch (state)` machines: **1 hit** for a depth-20 000 clone
+  and **1 hit** for a depth-20 000 `MessagePort` message, with `maximumFilterRecursion = 40000` a *heap* cap
+  whose breach is a catchable `RangeError` (`clone err d=41000`), and `SVGPathParser::parsePathData` is a
+  `while` loop (`:303-319`, source-read). `JSON.parse` is recursive but thread-aware — it falls back to the
+  iterative parser at `vm.softStackLimit()` (`LiteralParser.cpp:1190-1205`) and parses 100 000 levels with no
+  error. Recompiling both recursive TUs from the same tree at `-O2` without ASAN (build's own includes and
+  defines) gives the release-shaped frames **128 B** (exact: the IDB recursion is a direct self-call) and
+  **160 B** for the CSS entry function alone, whose per-level cost also carries two intermediate frames that were
+  not recompiled (so 160 B is a lower bound there); the ASAN `-O1` build charges 912 and 1 520. Console arithmetic from the port's own sizes (`Threading.cpp:101-118` + `PlatformPlayStation.cmake:44`):
+  a `ThreadType::JavaScript` thread (512 KiB) fits 4 096 IDB levels (exact) or ≤ 3 276 CSS levels (the CSS
+  figure is an upper bound), a 64 KiB thread 512 or ≤ 409 — and **the 64 KiB define makes none of the four walkers a page-reachable hazard**,
+  because none of them runs on a non-JS WTF thread and every one is either iterative or capped. What remains is
+  one inequality: the deepest legal structure (2 000 IDB levels) needs the release frame to be **≤ 262 B** to
+  fit a worker's 512 KiB — 2.05× above the `-O2` measurement, 3.5× below the ASAN one. Also measured: the
+  oracle's worker stack is exactly **8 388 608 B** (the mapping containing the worker's `$rsp`), i.e. 16× the
+  console's, so the oracle cannot settle that inequality by itself. Harness `research/stack-depth/{stack.html,
+  stkrun.sh,arms.sh}`, page md5 `9d7b7880bfc0061f6dc1a52ab17c21c6`, logs `data/stack-depth/`.
+- **The console's own 512 KiB is emulated on the oracle, and it moved the boundary into a recursion `docs/108`
+  never instrumented — measured (`docs/109`).** `ulimit -s 512` gives the worker an `rw-p` mapping of exactly
+  **524 288 B** (a 4 096-byte `---p` guard below it) and 1 024 gives 1 048 576 B, so the console's
+  `ThreadType::JavaScript` size is a knob, not an inference. Sweeping `arm=widb&d=` at that size: **`d=376` is
+  `ok` (2/2) and `d=377` is a `stack-overflow`** — but the crash is in `WebCore::toJS(…, IDBKey*)`
+  (`IDBBindingUtilities.cpp:153`), the **outbound** key conversion, which recurses once per level at
+  **1 344 B** (constant over 278 and 377 deltas) against the inbound walker's 912 B. At `d=376` the deepest
+  `toJS` hit has **288 B** above the floor and is the number level (no call); `d=377` puts an array level
+  there and `constructEmptyArray` crosses into the guard page 668 B below the floor. The walk's own limit is
+  556-557 entries (`u512_2000` crashes at 557 in `Vector::append`:228, with the walk complete at `d=550`), and
+  at 1 MiB the boundary is **766/767** in the conversion and **1 132** entries in the walk —
+  `floor((S-offset)/frame)` reproduces all four with the two measured offsets (15 776 / 18 656 B). Release
+  frames from the same TU at `-O2`: **144 B** for `toJS` (the recursive call goes straight to
+  `[clone .part.0]`, bypassing the public thunk) and 128 B for the walk, so the deepest legal structure
+  (2 000 levels) needs **54.9 %** and **48.8 %** of a console worker's stack — the 262 B threshold is 1.82× /
+  2.05× above them, so **a legal structure cannot push a console worker over** at the measured release frames.
+  The remaining unknown is Sony's clang frame, which no oracle arm can bound from above except by the ASAN
+  frame (1 344 B, 5.1× over). Harness `research/stack-depth/ulrun.sh` + `STK_BT=1`, logs
+  `data/stack-depth/ulimits/` (22 arms).
+- **The IsoHeap question is settled for both builds, and it was never about `docs/65` — measured (`docs/111`).**
+  `wtf/IsoMalloc.h:31` is `#if USE(SYSTEM_MALLOC) || !USE(ISO_MALLOC)`, so the 834 `WTF_MAKE_ISO_ALLOCATED` classes
+  become `WTF_MAKE_FAST_ALLOCATED` on the console by the port default (`OptionsPlayStation.cmake:211` OFF, the
+  generic default at `WebKitFeatures.cmake:267` ON being the only other site) **and** on the oracle by
+  `USE_SYSTEM_MALLOC 1` (`cmakeconfig.h:200,211`; `fastMalloc` → `malloc`, `FastMalloc.cpp:156,236,265`).
+  Measured on the real `CanvasRenderingContext2D.cpp` compiled with the build's own flags: `U WTF::fastMalloc`, no
+  allocator symbols defined in the object, 0 mangled `_ZN6bmalloc3api7IsoHeap`; and 0 in the whole 3.7 GB library
+  with `IsoSubspace` 2 928 as the same-file control. `css/CSSFontFace.h:61` is
+  `WTF_MAKE_FAST_ALLOCATED_WITH_HEAP_IDENTIFIER`, so `docs/65` never depended on the answer; JSC has no
+  `USE(ISO_MALLOC)` reference, so `docs/76` stands; `docs/103`'s canvas negative is **not** explained by type
+  segregation, and `c043b` cannot discriminate IsoHeap from a bmalloc size-class free list. Data `data/isoheap/`.
+
 ## Next actions, in order, each with its verification
 
-1. **Next: enumerate the family behind that abort — every page-reachable way to make message
-   deserialization fail, and which of them need a resizable ArrayBuffer.**
-   `docs/89` §3 measured one member and showed the defect is in the *handling*, not the input: a
-   deserialization that fails, or leaves a pending exception, for any reason other than termination hits
-   `RELEASE_ASSERT(vm.hasPendingTerminationException())` at `MessagePort.cpp:295` and
-   `WorkerMessagingProxy.cpp:245`. The size of that input set is unknown. `CloneDeserializer` has many
-   `fail()` returns, and `SerializedScriptValue::create` has several `SerializationReturnCode` producers
-   (the transfer-list rejections at `:5377-5399`, detached/locked buffers, `read*` failures in the
-   deserializer, `ValidationError` from `readArrayBufferViewImpl`'s `return false` paths). The ones that
-   matter are those a page can steer **without** a resizable buffer, because whether the console build
-   keeps `Options::useResizableArrayBuffer` (default **true** in this drop, `OptionsList.h:578`) is
-   unmeasured. Audit every failure return in `SerializedScriptValue.cpp`'s neighbourhood for a
-   page-controlled input, then for each candidate run one arm of `caps9.html`'s shape with the one
-   variable changed, plus a control that differs only in that variable.
-   **Verify:** each candidate is its own arm, scored from whether the harness aborts (`EXIT` plus a
-   `WTFCrashWithInfo` frame in the ASAN log naming `MessagePort.cpp:295` or
-   `WorkerMessagingProxy.cpp:245`), never from a beacon; record the ones that abort with the exact site
-   and the ones that return cleanly with the reason they are filtered. Do **not** re-enter the console
-   for this.
+1. **Next: turn the string occupant of the canvas slot into a controlled pointer read** — `docs/112` leaves the
+   page with 692 attacker-chosen bytes holding the freed `CanvasRenderingContext2D` slot, which is the thing
+   `docs/65`'s `CSSFontFace` never had (its occupant was 172 bytes of a `StringImpl` too, but the object was a
+   font face). The stale wrapper is a `JSCanvasRenderingContext2D` with a raw
+   `CanvasRenderingContext*`, so any getter/setter that reads a pointer member of the container is a deref of
+   *our* bytes. `CanvasRenderingContext::m_canvas` is a `CanvasBase&` (one pointer) and
+   `CanvasRenderingContext2DBase::setFillColor` reaches `CanvasStyle::createFromString(color, canvasBase())`
+   before anything else, which is where the string arm dies today (`CanvasBase.h:97
+   scriptExecutionContext`). **Verify:** with `arm=str&n=80&btrig=late`, put a chosen 8-byte value at the offset
+   `setFillColor` reads as `m_canvas` (find it from the crash `si_addr` and a `x/` of the container), and score
+   the ASAN fault address against the value placed: the value plus the member offset the engine then touches,
+   with the same bytes at a neighbouring offset as the offset-shifted control and a second value as the
+   value control. A result is the reported address being our value (+ a constant) and changing with the value;
+   "the fault address does not follow the bytes" is also a result and closes the getter path. No console access.
+
+1. ~~**Next: settle which build has IsoHeap, because the drop's CMake and the console disagree and several closures
+   rest on the answer.**~~ **DONE 2026-10-30 (`docs/111`) — one condition with two arms, both builds land on the
+   general heap, and `docs/65`'s object turns out not to be an ISO class at all.** `IsoMalloc.h:31` is
+   `#if USE(SYSTEM_MALLOC) || !USE(ISO_MALLOC)`. The console takes the second arm by the port default
+   (`OptionsPlayStation.cmake:211` OFF against `WebKitFeatures.cmake:267` ON — those are the only two sites in the
+   tree), so all **834** `WTF_MAKE_ISO_ALLOCATED` classes compile to `WTF_MAKE_FAST_ALLOCATED`; our oracle takes
+   the first, because its `cmakeconfig.h` (sha `4d1cfe68…`, 6 983 B) says `USE_ISO_MALLOC 1` **and**
+   `USE_SYSTEM_MALLOC 1`, so `fastMalloc` is `malloc` (`FastMalloc.cpp:156,236,265`). Measured, one variable — the
+   real `CanvasRenderingContext2D.cpp` compiled with the build's own `DEFINES/INCLUDES/FLAGS` into a
+   12 218 040-byte object — has `U WTF::fastMalloc(unsigned long)` and **none** of the four allocator symbols the
+   ISO-on branch would define in that same object (`IsoHeapInlines.h:159-190`), and 0 mangled
+   `_ZN6bmalloc3api7IsoHeap`; the oracle's own 3 695 564 176-byte library has 0 of them too, against `IsoSubspace`
+   2 928 as the same-file pipeline control (its 77 `IsoHeap*` strings are JSC's `IsoHeapCellType`). The distro
+   library is stripped (0 `.symtab`) and gives no verdict. **Scope corrections:** `css/CSSFontFace.h:61` is
+   `WTF_MAKE_FAST_ALLOCATED_WITH_HEAP_IDENTIFIER`, so `docs/65` never depended on this gate; `Source/JavaScriptCore`
+   has no `USE(ISO_MALLOC)` reference, so `docs/76`'s `stringSpace` stands; `docs/103`'s local canvas negative was
+   **not** caused by type segregation (that build has none), and `c043b` cannot discriminate IsoHeap from a plain
+   bmalloc size-class free list — the discriminating input is a cross-type allocation of the same size, which is a
+   console case. Data `data/isoheap/` (`gate.txt`, `census.txt`, `verdicts.json`). Two limits: no ISO-on object
+   could be built here (`bmalloc/GigacageConfig.h` is never generated in a system-malloc build dir), and the shipped
+   console value is not readable from source — only an explicit `-DUSE_ISO_MALLOC=ON` in Sony's cmake would flip it.
+1. ~~**Next: give `docs/103`'s canvas negative a measured cause — it is the one local result `docs/111` leaves
+   unexplained, and it decides whether the console's deterministic same-type reclaim has any local analogue.**~~
+   **DONE 2026-10-30 (`docs/112`) — the cause is the page's own beacon, and the local oracle does reclaim the slot,
+   6/6.** With gdb on the run's own WebProcess (dtor → `A`, `fastFree(A)`, a `fastMalloc` tracer for the 704–744
+   class and a write watchpoint on `A`), the exact `docs/103` arm gives: free at `0x6170…1c00` from
+   `CanvasRenderingContext2D::~CanvasRenderingContext2D ← createContextBitmapRenderer ← getContext`, then
+   **`ALLOC req=720 ret=A n=1 <== A`** from `createResource ← CachedResourceLoader::loadResource ←
+   requestImage ← ImageLoader::updateFromElement` with `WROTE-A val=CachedResource-vtable` at offset 0 — a
+   `CachedImage` of **720** bytes allocated by the `B('trig')` beacon one statement after `getContext` returns,
+   memory-cached, so it keeps the slot for the whole run while all 80 `req=712` contexts land at `0x…12300`,
+   `0x…12680`, … (the ladder never touches A; the page dies at its first use, 4/4). Move that one beacon after the
+   spray (`btrig=late`) and the slot is taken by the transient 744-byte `JSC::BytecodeGenerator`, freed, then by
+   **`ALLOC req=712 ret=A n=2` = `CanvasRenderingContext2D::create`**, and the page scores
+   `sent hit=0 e=777.25 f=0` / `done` / `access: none` — **6/6** (11101-3, 11131-3; gdb 11105). Cross-type arm
+   (`arm=str`: eighty 692-char `atob` strings = 712 B): `ALLOC req=712 ret=A` from
+   `StringImpl::createUninitializedInternalNonEmpty(length=692) ← String::String ← Base64Utilities::atob`,
+   `WROTE-A val=0x2`, page dies (2/2) — same size, different class, same slot. No-spray control: the slot is owned
+   by the BytecodeGenerator (library vtable at A at the fault, `si_addr=0x8`), so a live context is required, 1/1.
+   `bkind=sb` (retail's `sendBeacon`) swaps the thief to `CachedRawResource` (**704** B via
+   `CachedResourceLoader::requestBeaconResource ← NavigatorBeacon::sendBeacon`) but its beacons never reach the
+   server (0 `GET/POST /ev`), so that arm is recorded as **unscored**. Corrections: 704/712/720/744 are one ASAN
+   class (712 never identified a class); `docs/108`'s "local build cannot judge occupation" narrows to *class
+   geometry*, not ordering/liveness; `docs/103`'s crash site is a property of the occupant, not of the bug. Page
+   md5 `08bfde9edc37a3e20130049fb7129d3a`, harness `research/canvas-alias/slotgdb.sh` + `slotwatch.py`, logs
+   `data/canvas-slot/`.
+2. ~~**Next: put the console's 512 KiB on the oracle — glibc derives the default thread stack size from
+   `RLIMIT_STACK`, so a worker really can be given the console's stack without touching the console, and the
+   maps instrument below already proves the size it got.**~~ **DONE 2026-10-30 (`docs/109`) — the console's
+   524 288-byte stack is on the oracle, the boundary is 376 levels, and the IDB key path turns out to recurse
+   twice.** `ulimit -s 512` gives the worker an `rw-p` mapping of exactly **524 288 B** (with a 4 096-byte
+   `---p` guard below it, `maps_u512_376.txt`) and `ulimit -s 1024` gives **1 048 576 B**. The sweep is not the
+   one the action assumed: `d=376` is `ok` (2/2) and `d=377` crashes, but both crashes are in
+   `WebCore::toJS(…, IDBKey*)` (`IDBBindingUtilities.cpp:153`) — the **outbound** conversion `docs/108` never
+   instrumented — at **1 344 B/level** (constant over 278 and 377 deltas), against the inbound walk's 912 B.
+   At `d=376` the deepest `toJS` hit has **288 B** left and that level is the number (no call); `d=377` puts an
+   array level there and its `constructEmptyArray` crosses the floor, 668 B into the guard page. The walk's own
+   limit is 556-557 entries (`u512_2000`: 557 hits, then `Vector::append`:228), and at 1 MiB the boundary is
+   **766/767** in the conversion and 1 132 entries in the walk — `floor((S-offset)/frame)` predicts all four
+   exactly with the two measured offsets (15 776 / 18 656 B). Release frames from the same TU at `-O2`:
+   **144 B** for `toJS` (its recursive call goes straight to `[clone .part.0]`, so the 16-byte thunk is not
+   per-level) and 128 B for the walk, so a legal 2 000-level key needs **54.9 %** and **48.8 %** of a console
+   worker's stack: the 262 B threshold sits 1.82× / 2.05× above them, i.e. **the console cannot be pushed over
+   by a legal structure at the measured release frames** — conditional only on Sony's clang frame, which no
+   oracle run can bound from above except by the ASAN frame. 22 arms, harness `research/stack-depth/ulrun.sh`
+   (+`STK_BT=1` in `stkrun.sh`), logs `data/stack-depth/ulimits/`. Original text: **Next: put the console's 512 KiB on the oracle — glibc derives the default thread stack size from
+   `RLIMIT_STACK`, so a worker really can be given the console's stack without touching the console, and the
+   maps instrument below already proves the size it got.** `docs/108` priced the walkers but had to stop at a
+   threshold, because the oracle's threads are 8 MiB (measured: the worker's stack mapping is exactly
+   8 388 608 B) while 14.10 gives a `ThreadType::JavaScript` thread 524 288 B. The premise is already verified in
+   `docs/108` §5: with only `ulimit -s 1024` added in front of `run_nq.sh`, the worker's mapping is
+   **1 048 576 B** (`data/stack-depth/maps_ul1024.txt`), so `STK_ULIMIT=512` gives the console's own number. The page's deepest *legal*
+   recursion is the IDB key builder at 2 000 levels, and the console is safe only if the release frame is
+   ≤ **262 B/level** (measured `-O2`: 128 B; measured ASAN `-O1`: 912 B, i.e. 3.5× over). **Verify:** launch the
+   same `run_nq.sh` under `ulimit -s 512` (and 1 024 as a second arm), confirm from `/proc/<pid>/maps` that the
+   worker's stack mapping is the reduced size, then sweep `arm=widb&d=` downward from 2 000 until the arm stops
+   returning `ok`; the crash depth gives the frame the path costs *including its callers* and the ratio to
+   262 B settles whether the console's worker can be pushed over by a legal structure. One depth per run, one
+   control at half that depth, and the same page and runner as `docs/108` (`research/stack-depth/`) — the only
+   changed variable is the thread's stack size.
+2. ~~**Next: turn docs/107's 64 KB thread stack into a predicted console limit — the oracle can measure the
+   per-frame cost of a page-driven recursion without changing the console.**~~ **DONE 2026-10-30 (`docs/108`) —
+   all four walkers priced by `$rsp` per level, and the answer is that two of them do not recurse at all.**
+   `createIDBKeyFromValue` costs **912 B/level** in this ASAN build (2 000 deltas, min = max = 912; total
+   1 824 000 B at its own cap of 2 000, and identical on a worker thread, measured on thread 10), and
+   `CSSParserImpl::consumeRegularRuleList` **1 520 B/level** (127 deltas; 193 040 B at the parser's cap of 128).
+   `CloneSerializer::serialize` and `CloneDeserializer::deserialize` are iterative state machines — **1 hit**
+   for a depth-20 000 clone and for a depth-20 000 `MessagePort` message — and over `maximumFilterRecursion =
+   40000` is a JS `RangeError`, not a stack event; `SVGPathParser::parsePathData` is a `while` loop (source-read);
+   `JSON.parse` is recursive but falls back to the iterative parser at `vm.softStackLimit()`, measured at
+   `d=100000`, no error. Recompiling both TUs at `-O2` without ASAN (same includes/defines) gives the
+   release-shaped frames: **128 B** and **160 B**, so the console's limits are 4 096 / 3 276 levels in a 512 KiB
+   JS thread and 512 / 409 in a 64 KiB one. **The 64 KiB define converts none of the four into a page-reachable
+   hazard**: none of them runs on a non-JS WTF thread, and the deepest legal structure costs 48.8 % of a worker's
+   512 KiB at the `-O2` frame and 3.5× its size at the ASAN frame — hence the 262 B threshold the next action
+   tests. Original text: **Next: turn docs/107's 64 KB thread stack into a predicted console limit — the oracle can measure the
+   per-frame cost of a page-driven recursion without changing the console.** `-DDEFAULT_THREAD_STACK_SIZE_IN_KB=64`
+   is a PS-only build define (`PlatformPlayStation.cmake:44`) and `Thread::establishHandle` passes it to
+   `pthread_attr_setstacksize` (`posix/ThreadingPOSIX.cpp:294-295`), so every WorkQueue/RunLoop/compiler/IPC
+   thread on 14.10 has 1/128 of the oracle's 8 MB — and `OSAllocatorPlayStation::reserve*` **drops guard pages**
+   (`ASSERT_UNUSED(includesGuardPages, !includesGuardPages)`), so an overflow there is silent corruption rather
+   than a fault. The recursive walkers a page can drive are already enumerated: `CloneSerializer`'s walk
+   (`SerializedScriptValue.cpp:2590`, depth-limited), `IDBBindingUtilities::createIDBKeyFromValue`
+   (`docs/78`, `depth=8` measured), the CSS parser's nested blocks, and `SVGPathParser`. **Verify:** on the
+   oracle, attach gdb to the run's own WebProcess, break at the recursive function, and read `$rsp` at entry
+   for successive depths (`ignore` counts) to get the **frame size in bytes**; then `65536 / frame` is the
+   console's depth limit and `depth_max(page) × frame` the fraction of it a page can reach. One page that
+   builds the deepest legal structure, one control at half the depth, quarantine off, scored from the `$rsp`
+   deltas and from the page's own counters — no console access.
+2. ~~**Next: read the Sony-only surface *outside* `Source/JavaScriptCore`/`Source/WebCore` — the allocator and
+   the config record are where the last audit's two structural facts came from, and neither directory has
+   been read with this question.**~~ **DONE 2026-10-30 (`docs/107`) — 183 blocks classified, 33 `dev`, and the
+   five memory rows are all allocator bounds rather than logic changes.** `Source/WTF` 32 lines/30 blocks,
+   `Source/bmalloc` 39 (22 `BPLATFORM`)/36, `Source/WebKit` 118/117; 189 raw lines → 183 blocks (53 with a
+   non-PS alternative). Verdicts `data/ps-branches/verdicts-outer.json`: 138 `add`, 33 `dev` (21 behav, 5 mem,
+   4 inert, 2 sec, 1 flag), 8 `stub`, 3 `impl`, 1 `flag`. The memory rows: 64 KB non-JS WTF thread stacks
+   (`PlatformPlayStation.cmake:44` + `Threading.cpp:104-117`; JS 512 KB), `PageBlock` ceiling 16 KB
+   (`PageBlock.h:52`), `LargeMap::purge()` dead under `BUSE_RELEASE_LARGE_FREE 0` (`BPlatform.h:360`,
+   `bmalloc.cpp:151`), `isSanitizerEnabled()` false on PS (`Environment.cpp:130`) which is the oracle's debug
+   heap, and `ConnectionUnix`'s close-before-detach ordering (`:115-116` vs `:134`). Source-list half
+   (`tools/ps-file-list-sweep.py`): WebCore 63 `.cpp/.mm` = 18 guarded + **45** unguarded (docs/106 §7 said
+   46 — one entry is commented out at `PlatformPlayStation.cmake:36`), WebKit 125, WTF 14; 136 PS-only files,
+   **0** supplying a body for a definition `Sources.txt` compiles unguarded. Corrections: **docs/106 §6.4 is
+   dead by construction**; §6.2's conclusion stands but its first reason is wrong because the port must define
+   `__linux__` **or** `__FreeBSD__` (`MemoryPressureHandlerUnix.cpp:131` `#error`), and the API set says
+   FreeBSD. New build facts: `ENABLE_JIT`/`FTL`/`DFG` OFF (LLInt only), `USE_ISO_MALLOC` OFF (834 classes out
+   of their heaps), bmalloc small-heap geometry compile-time so docs/65/docs/94 offsets transfer.
+   Original text: **Next: read the Sony-only surface *outside* `Source/JavaScriptCore`/`Source/WebCore` — the allocator and
+   the config record are where the last audit's two structural facts came from, and neither directory has
+   been read with this question.** `Source/WTF` (32 `PLATFORM(PLAYSTATION)` lines / 16 files), `Source/bmalloc`
+   (39 `PLATFORM(PLAYSTATION)` + 22 `BPLATFORM(PLAYSTATION)` / 22 files) and `Source/WebKit` (118 lines / 57
+   files); plus the **46** files in `Source/WebCore/PlatformPlayStation.cmake` that carry no `#if` at all and
+   are PS-only by source list (the last audit's blind spot, `docs/106` §7). `ENABLE_LIBPAS` defaults **OFF**
+   there (`OptionsPlayStation.cmake:284,286` → `-DBENABLE_LIBPAS=0`), so the classic bmalloc allocator is what
+   the console runs — read every `BPLATFORM(PLAYSTATION)` block in `bmalloc/{Heap,Scavenger,LargeMap,Mutex,
+   BVMTags,VMAllocate,BPlatform}.{h,cpp}` and say for each whether it changes a *bound*, a *container* or a
+   *lifetime* that shared code also has. **Verify:** the same classification table as `docs/106`, one verdict
+   per block with the line quoted, and for every `dev` row either a page/ASAN arm on the oracle or an explicit
+   "console-only, unmeasured" — the oracle is GTK, so `BPLATFORM(PLAYSTATION)` code cannot run there.
+   Do **not** re-enter the console.
+
+1. ~~**Next: read every Sony-only branch in the tree — a `PLATFORM(PLAYSTATION)` block that changes shared logic is
+   the one place upstream has no test coverage, and the three source-level deviations this programme has found
+   were all in *plain* code that no audit had read with this question in mind.**~~ **DONE 2026-10-30 —
+   186 conditional blocks (21 JSC, 165 WebCore) classified, 42 of them replacements, and not one of the six
+   memory-lifetime ones is reachable on the oracle (`docs/106`).** The surface reconciles exactly: 206 raw
+   matches + 4 `PLATFORM (PLAYSTATION)` spellings, of which 24 are `#endif` trailer comments → 186 blocks;
+   GOAL's 17/185 is the `.cpp`/`.h` subset plus comments. Verdicts (`tools/ps-branch-classify.py`,
+   `data/ps-branches/verdicts.json`): 42 `dev`, 5 `stub`, 13 `log`, 32 `impl`, 8 `test`, 86 `add`. The six
+   memory rows are all console-only or build-dependent — `StructureID` 128 MB mask (containment: a corrupted
+   StructureID can only decode into the reservation), `VM.cpp` + `WTFConfig.cpp:150` (`#elif OS(LINUX)` means
+   the port's `WebConfig::g_config` is *never* mprotected, and PS additionally skips the freeze call),
+   `RenderElement::canDestroyDecodedData` (destroys decoded image data where shared code refuses whenever
+   `shouldPaintEntireContents()`), `Options::useConcurrentGC` (`#if ENABLE(MAT)`, default OFF),
+   `TextureMapper` (no texture pool), `BlockDirectory` (statistics only). Two real deviations, both
+   non-memory: **`ReferrerPolicy::Default` = `NoReferrerWhenDowngrade`**, so a console page without a policy
+   sends its **full URL** cross-origin — measured on the oracle in the other direction (default = origin
+   only, `unsafe-url` = full, `no-referrer` = none) with `research/referrer/refrun.sh`; and
+   `ContentSecurityPolicy.cpp:827`'s AND→OR, which is a **downstream fix** (upstream's `&&` lets a
+   non-Document context reach `downcast<Document>`; `WorkletGlobalScope.cpp:63` is the null-client
+   constructor). `LLIntPCRanges::isLLIntPC` returning false is a *behaviour* row, not a memory one: it makes
+   `VMTraps` drop a trap taken in LLInt code and leaves profiling/asserts without LLInt frames, nothing more.
+   Verify (original):
+
+0. ~~**Check the two claims taken from ZigZagBoi's repo (`docs/90`)** — same-type canvas occupation as field control,
+   and `Array.prototype.sort` on a resized view.~~ **DONE 2026-10-30 by the concurrent session (`docs/103`,
+   commit `74bad58`): the canvas UAF reproduces with a synchronous free but same-type occupation never takes the
+   slot, and `sort`'s comparisons run past the shrink while the write-back store is guarded.** Their `p553`
+   "bidirectional R/W" is an in-type self-alias by their own limitations section, and its evidence file is a
+   reconstruction, so reproduce rather than cite — measured, that is what it is: unconfirmed locally and a
+   console arm. Verify (original): canvas —
+   a sentinel written into a freshly created context is visible through the stale wrapper, and `save()`/`restore()`
+   moves `m_stateStack`; sort — a shrunken resizable view sorted after the callback shows reads past the new length.
+
+1. ~~**Next: turn the GSUB over-read into a JS-visible byte — a `Vector<uint16_t>` of substituted glyphs is
+   built from OOB `substitute[]` entries, so does anything copy it back to script?**~~ **DONE 2026-10-30 — it
+   is JS-visible, through `hmtx` advances, with a 15-bit funnel and a hard 32 767 px ceiling (`docs/102`).**
+   `V0`-`V3` (one `vhea`/`vmtx` variable each, up to 49 382 long metrics and 1 024 units on `中`) are
+   **identical to the untouched base**, while doubling the same glyph's `hmtx` advance doubles the layout
+   (`Hx`: 24 → 48 px/char) — so the advance this layout uses is `hmtx`, never
+   `OpenTypeVerticalData::m_advanceHeights`, which is exactly why `docs/99` §6's `vmtx` witness could not
+   move. A `vert` `SingleSubst2` entry 7 109→7 064 then moves the measured advance 115 → 114 px/char
+   (`H0` vs `H1`, one table), the **descending** `Coverage` range with its `substitute[]` reads inside the
+   same allocation is **byte-identical to the well-formed arm** (`H2`), the wrapping range is inert
+   (`H3` = `H0`), and the horizontal width is unchanged in all four (`hw=345`) — vertical-only. At 1 font
+   unit = 1 px (font-size 256, upem 256) the substituted id reads back **exactly**: 7 320 = 256+7 064,
+   7 356 = 256+7 100, 20 256, 32 256; 32 767 px is reported and **32 768 px collapses to 0** (`B1`/`B2`),
+   a *pixel* bound (the same 40 000-unit advance is 5 000 px at font-size 32 and 0 at 256). The unpadded
+   arm still aborts in `LookupTable::getSubstitutions` (`:182`, 56-byte region) before any layout, so the
+   OOB values themselves remain an inference for a build without ASAN — and `ENABLE_OPENTYPE_VERTICAL` is
+   still GTK/WPE-only, so **none of this exists on 14.10**. Original text: **Next: turn the GSUB over-read into a JS-visible byte — a `Vector<uint16_t>` of substituted glyphs is
+   built from OOB `substitute[]` entries, so does anything copy it back to script?** `docs/99` closed the
+   FreeType corpus negative and found the one real defect next door: `LookupTable::getSubstitutions`
+   (`Source/WebCore/platform/graphics/freetype/GSUBTable.cpp`) accepts a `Coverage` format-2 range whose `end+1`
+   wraps (`0x8000..0xFFFF`) or descends (`10..5`), so `indexTo + (fromEnd - from)` underflows the bounds test and
+   the loop reads past `substitute[]` — `heap-buffer-overflow READ`, 7/7. The substituted glyph ids are what
+   `OpenTypeVerticalData::loadVerticalGlyphSubstitutions` stores into `m_verticalGlyphMap`
+   (`HashMap<uint16_t,uint16_t>`). The question is whether a *vertical* substitution reaches a JS-visible value:
+   the map is only consulted for vertical layout, so a page would need `writing-mode: vertical-rl` / `vertical-lr`
+   text with the webfont and a measurable per-glyph difference. **Verify:** one page that loads a font whose
+   `vhea`/`vmtx` are valid and whose synthetic `GSUB` carries the wrapping coverage, sets vertical text, and reads
+   back per-character advances/`TextMetrics` bounded by the OOB range versus the same font with a correct range —
+   a difference proves the OOB glyph ids reached layout; also record whether an id can be made large enough to be
+   distinguishable from the neighbours a correct table would have produced. If nothing JS-visible moves, say so
+   and mark the defect read-only and inert. Do **not** re-enter the console.
+1. ~~**Next: a heap-address disclosure has to come from a memory-safety bug now, because every API surface is
+   closed.**~~ **DONE 2026-10-30 — both remaining candidates close, (b) by measurement at the element itself and
+   (c) by a tree-wide count (`docs/103`).** `docs/95` (five API surfaces), `docs/98` (rasterisation) and `docs/100`
+   (the one ungated OOB read, which is mmap zeroes) close the API route between them, and `docs/100` also names
+   why: a resizable `ArrayBuffer` never reaches `fastMalloc`, so the overflow cannot see a neighbour. So the leak
+   has to be a bug that copies *engine* bytes into JS. Candidates in order of reachability: (a) ~~the GSUB
+   over-read above, if its glyph ids reach layout~~ — **measured, `docs/102`**: they do, but the funnel is a glyph
+   id (15 bits, 32 767 px bound) and the code path is absent from the console, so it cannot be the console leak;
+   (b) ~~the `docs/94` slot's `m_data8` arm — a freed `StringImpl` hands the element a real character *pointer*,
+   and `sinkIntoImageBuffer` reads a vptr from it, so a fake object whose vtable slot lands on a real function
+   would make the call return and reveal where it went~~ — **measured, `docs/103`: the value at element+8 is an
+   engine pointer and the engine chases two of its own indirections (`+8` → an object → its first word → the
+   `+0x20` slot) before calling; where the value did point at a live `StringImpl`, the vptr loaded was
+   `(m_length<<32)|m_refCount = 0x0000000300000002`, which is never a vtable, and the call's only JS-visible
+   product is `width/height` of an `ImageBuffer` a real function returned**;
+   (c) ~~any new ungated producer of a view/OOB length~~ — **counted, `docs/103`: 2 raw `JSC::JSArrayBufferView`
+   occurrences in `Source/WebCore` outside `bindings/js/`, both `IDBKey` (`docs/96`), and every converter spelling
+   including `toWrappedAllowShared` applies the resizable refusal — 0 new producers**. So the leak has to come
+   from a *different* bug class than "an OOB length that reaches a copy", and this action has no candidate left.
+   Original text: **Next: a heap-address disclosure has to come from a memory-safety bug now, because every API surface is
+   closed.** `docs/95` (five API surfaces), `docs/98` (rasterisation) and `docs/100` (the one ungated OOB read, which
+   is mmap zeroes) close the API route between them, and `docs/100` also names why: a resizable `ArrayBuffer`
+   never reaches `fastMalloc`, so the overflow cannot see a neighbour. So the leak has to be a bug that copies
+   *engine* bytes into JS. Candidates in order of reachability: (a) ~~the GSUB over-read above, if its glyph ids
+   reach layout~~ — **measured, `docs/102`**: they do, but the funnel is a glyph id (15 bits, 32 767 px bound) and
+   the code path is absent from the console, so it cannot be the console leak**; (b) the `docs/94` slot's `m_data8` arm — a freed `StringImpl` hands the element a real character
+   *pointer*, and `sinkIntoImageBuffer` reads a vptr from it, so a fake object whose vtable slot lands on a real
+   function would make the call return and reveal where it went; (c) any new ungated producer of a view/OOB length.
+   **Verify:** `docs/95`'s rule — a JS-visible value that changes between two runs **and** lies inside a mapping
+   of the same `/proc/<pid>/maps`, with `research/leak-sweep/diff.py` as the scorer and the assumed class of each
+   candidate written down before the run.
+
+1. ~~**Next: take the OTF out of the engine and score it table by table — `docs/101` §4's cause is read
+   from the source, not from the bytes, and the 65 535-glyph cmap is inferred, not measured.**~~ **DONE
+   2026-10-30 (`docs/104`) — the OTF is out of the engine and every claim in §4 is byte for byte
+   confirmed, while §3's clamp statement is falsified.** Three runs, one arm each, gdb attached to the
+   run's own WebProcess at `*FT_New_Memory_Face` (single caller in the drop) with `$rsi/$rdx` dumped:
+   `G6` 1 348 B, `G4` 1 536 B, `N3` 6 947 424 B, all `OTTO` with the same 14 tables and no
+   `loca`/`glyf` (`maxp` 4/6/65 535). `G6` is one LigatureSet, one offset `8`, coverage at +18 with
+   `GlyphCount` 1 — `hb-shape` gives `[2=0+900]`, the page's `w=90.00`. `G4` is
+   `0001 001a 0002 0008 | 0002 0006 000c | …`: `LigatureSetCount` = 2 with **one** offset written and
+   the second slot = `0x0002`, the first set's own `LigatureCount` (the walk a reader does lands on
+   the coverage offset, 26, as its "LigatureCount"); fontTools 4.67 refuses the subtable (`ValueError:
+   bytes length not a multiple of item size`) and `hb-shape` gives `[1=0+200|4=1+200]` = the page's
+   `w=40.00`; the lookup is feature 0 `liga`, the only feature the `DFLT` script enables. `N3`'s
+   format-12 subtable is intact (65 535 groups, 786 436 B) and its format-4 one is malformed
+   *differently than predicted*: `bmpMappings` is 65 505 (the arm's range crosses U+10000, 30 non-BMP
+   mappings), so `segCount` is 65 506 and does not wrap — `clampTo<uint16_t>` saturates `length` and
+   `segCountX2` at 65 535 against 524 064 real bytes. New facts: glyph ids follow
+   `std::sort(…, compareCodepointsLexicographically)` (:1430), not document order; Ligature offsets are
+   relative to the set's start including its `2 + 2n` header. Two predictions were corrected by the
+   dumps (glyph ids, and the `segCountX2 == 0` claim), and neither correction changes any conclusion.
+   Original text: **Next: take the OTF out of the engine and score it table by table — `docs/101` §4's cause is read
+   from the source, not from the bytes, and the 65 535-glyph cmap is inferred, not measured.**
+   `docs/101` measured the *behaviour* with one variable per arm (two ligatures sharing a first glyph
+   lose all substitution: `w=40.00` vs `90.00`; six arms) and found the two lines that explain it
+   (`append16(ligaturePairs.size())` at :771 against `grow(overlappingFirstGlyphSegmentLengths.size() * 2)`
+   at :772), and it inferred that `N3`'s `segCountX2 == 0` format-4 subtable is masked by the
+   format-12 subtable at the same offset. Neither claim has been made against bytes the engine
+   produced. **Verify:** capture the buffer on the oracle with gdb — breakpoint on
+   `WebCore::createFontCustomPlatformData(SharedBuffer&, WTF::String const&)`
+   (`FontCustomPlatformDataFreeType.cpp:137`, the only caller of `FT_New_Memory_Face`), `finish`, dump
+   `buffer.data()`/`buffer.size()` — for `G6` (one ligature), `G4` (two sharing a first glyph) and
+   `N3` (65 535 glyphs), then parse each dump with fontTools in the `wk` box: `G6` must be one
+   `LigatureSet` with one offset, `G4` must declare two sets with only one offset written so that the
+   second offset is the first LigatureSet's own header bytes (that overlap is the byte-level statement
+   of §4 and of the shaper's rejection), and `N3` must show a format-4 subtable with `segCountX2 == 0`
+   beside an intact format-12 one. If a dump disagrees with §4, correct §4. Do **not** re-enter the
+   console.
+1. ~~**Next: make the ligature count overshoot the GSUB table and see whether any reader reads past it**~~ **DONE
+   2026-10-30 — it overshoots, and every reader in the process is bounded (`docs/105`).** One arm with 300
+   ligatures all starting with `f` (`G10-lig300-f`), dumped at `FT_New_Memory_Face`: `LigatureSetCount` = **300**
+   with **one** offset slot grown and slot 1 = `0x012c` = the first set's own `LigatureCount`, at 150× `G4`'s
+   size (subtable 3 016 B of a 3 224-byte `GSUB`, `maxp.numGlyphs` 327, `w=60.00`). A new byte model
+   (`tools/gsub-trust-model.py`) separates three questions: enumerating the declared array ends at subtable+606,
+   **2 410 B short** of the subtable's end (the declared array can never overtake the data — 2 B declared per
+   pair against 6-8 B emitted); following the bogus offsets reaches **810 B past the subtable** and, across all
+   300, **3 584 B past the `GSUB` table's end** into `OS/2`/`cmap`; and one bogus record's `compCount` 65 535
+   would ask for **127 584 B past the end of the font**. So a naive reader *does* leave the buffer — and no
+   reader here does: the console shapes with HarfBuzz (`OptionsPlayStation.cmake:329-334` sets `USE_FREETYPE`/
+   `USE_HARFBUZZ` unconditionally), whose sanitizer bounds every offset (fontTools 4.67 fails the decompile with
+   `unpack requires a buffer of 2 bytes` at `CompCount`, `hb-shape` gives `[6=0+200|1=1+200|1=2+200]`), and the
+   drop's own parser reads `lookupType != 1` only (`OpenTypeVerticalData.cpp:140`) and is GTK/WPE-only anyway.
+   The well-formed twin at the same N (`G11-lig300-distinct`, 300 distinct first glyphs) measures **100.00** and
+   decompiles cleanly, in the same run as the defective arm's 60.00 — so it is the count/slot mismatch, not the
+   size. ASAN, quarantine off, two arms: 0 reports, 0 aborts, `EXIT=124`, `access: none` in all four logs.
+   Original text: the subtable declares `ligaturePairs.size()` sets while `grow(overlappingFirstGlyphSegmentLengths.size() * 2)`
+   wrote one offset per *distinct first glyph* (`:771-772`), so a font with N ligatures that all start with the
+   same glyph declares N offsets and writes one. In `G4` (N=2) the bogus slot landed on the first set's
+   `LigatureCount` — a 2 — so the damage is invisible; with N large, a reader that enumerates the declared array
+   reads `2N-2` bytes that were never written, and `GSUB` is table 2 of 14, so those reads cross into `OS/2`,
+   `VORG` and `cmap` inside the same font buffer. **Verify:** one corpus arm with 300 ligatures that all start
+   with `f` (`{fa, fb, …}`; a real `ff`/`fi`/`fl` font is the same shape), dumped through
+   `research/svgfont/otfgdb.sh` to confirm the layout (count 300, one offset, the second slot = the first set's
+   `LigatureCount`); then (a) score what a count-trusting reader does with the dump — fontTools' GSUB decompile
+   and `hb-shape` on text that reaches the lookup — and (b) run the same page under the ASAN oracle, quarantine
+   off, one arm, scoring from `ERROR: AddressSanitizer` frames. If the reader stays inside the `SharedBuffer`,
+   the result is "malformed but not memory-unsafe" and `docs/101` §5's assertion becomes measured instead of
+   argued; if it does not, this is a second console-live font defect and `docs/99`'s family grows. Do **not**
+   re-enter the console. (This is now the first unchecked local action: with it, everything else in this list is
+   either done or the console half.)
+
+1. ~~**Next: the SVG font writer — the only console-live font path left, and it is WebKit building an
+   sfnt out of page data.**~~ **DONE 2026-10-30 — reachable on both halves, 52 arms with no sanitizer
+   report, and one silent GSUB defect that upstream shares (`docs/101`).** In-document `<font>` +
+   `font-family` needs no `@font-face` (`SVGFontFaceElement::rebuildFontFace` :262-298 →
+   `Resolver::addCurrentSVGFontFaceRules`); `url(f.svg#f1)` goes through `CachedSVGFont` and needs a
+   `<font-face>` child or it is `st=error`. The writer emits a **CFF/OTTO** font (14 tables, no
+   `loca`/`glyf`), one Type-2 charstring per glyph. 52 arms / 82 executions / 11 runs: **0 sanitizer
+   reports, 0 aborts**, 45 accepted; 65 535 glyphs loads and is used, 65 536 refuses the font, a bad
+   `d` fails the whole font, `units-per-em="-1000"` zeroes every advance, `H`/`V`/`Q`/`A` normalise
+   correctly. The defect: two ligatures sharing a first glyph (the `ff`/`fi`/`fl` case) write
+   `LigatureSetCount = ligaturePairs.size()` with one offset per distinct first glyph (:771-772), the
+   lookup is dropped and `w` falls to the two single advances (40.00 vs 90.00, 6 arms, 1 variable);
+   upstream main has both lines verbatim, so it is WebKit's, not Sony's. Original text: **Next: the SVG font writer — the only console-live font path left, and it is WebKit building an
+   sfnt out of page data.** `CSSFontFaceSource::load` calls `convertSVGToOTFFont` for an in-document
+   `<font>` referenced from `src` (`CSSFontFaceSrcLocalValue::svgFontFaceElement`) and for an external
+   `url(font.svg#id)` through `CachedSVGFont`; the result is handed to `createFontCustomPlatformData`
+   → `FT_New_Memory_Face`. Unlike `docs/99` §3's GSUB bug, SVG fonts are always compiled — no feature
+   macro gates them — so this path exists on PLAYSTATION. Both halves are page-controlled: the path
+   parser (`SVGPathParser`) and the sfnt assembly (`SVGToOTFFontConversion.cpp`, ~1560 lines that write
+   `head`/`maxp`/`hmtx`/`cmap`/`loca`/`glyf` by hand). **Verify:** (a) first that the path is
+   reachable at all — one page with an in-document `<svg><defs><font id="f" horiz-adv-x="…"><font-face
+   units-per-em="…" ascent="…"/><glyph unicode="A" d="M0 0 L100 0 L100 100 Z"/></font></defs></svg>`
+   plus `@font-face { src: url(#f) format(svg) }`, and its external twin `url(font.svg#f)` — and a
+   beacon that says which one loaded (`st=loaded`, measured width against a nonexistent family); a
+   path that never loads is itself the result and must be written down before any mutation is tried;
+   (b) then one mutation per arm under the ASAN oracle, quarantine off, `BEG` before each arm: `d`
+   with a huge segment count, a `d` that ends mid-command, `<glyph>` with no `d`, duplicate
+   `unicode`, `horiz-adv-x` 0/0xFFFF, `units-per-em` 0, `ascent` > `units-per-em`, a `<font>` with
+   65536 glyphs, and a `<font-face>` whose `bbox` disagrees with the glyphs; (c) a control font
+   element with one square glyph. Score from `ERROR: AddressSanitizer` frames and from whether
+   FreeType accepts the OTF WebKit wrote. Do **not** re-enter the console.
+
+1. ~~**Next: the font parser is page-reachable and unsanitised — measure what a page can make FreeType do.**~~
+   **DONE 2026-10-30 — FreeType takes the whole structured corpus without a sanitizer report, and the
+   drop's vertical GSUB parser reads past its table buffer 7/7 (`docs/99`).** 190 arms over two bases
+   (table-directory runs, per-table file truncations at every boundary, `head`/`maxp`/`loca`/`glyf`/
+   `hhea`/`hmtx`/`cmap`/`name`/`post` field mutations, WOFF 1.0 header faults, four real colour faces,
+   and a synthetic `GSUB`) run as page `FontFace`s, quarantine off, one `BEG`/`RES` beacon pair per arm:
+   **109 accepted, 77 rejected, 0 sanitizer reports on any FreeType input**. The rejection line is
+   per-table and sits exactly at `glyf` — a cut at or after `glyf` still opens the face (`TR-glyf-a`
+   `st=loaded`, then `w=60.00` against the control's `55.56`: the face has no outlines and the page
+   falls back per character), a cut before it does not. The one defect is WebKit's own:
+   `LookupTable::getSubstitutions` accepts a `Coverage` format-2 range whose `end+1` wraps (0x8000..
+   0xFFFF) or descends (10..5) and indexes `substitute[]` past the table — `heap-buffer-overflow READ
+   of size 2` at `OpenTypeVerticalData.cpp:182`, 7/7 over six runs and two bases, region = the 56-byte
+   `openTypeTable()` copy, reached from `CSSFontFaceSource::font` with a vertical `FontDescription`.
+   Upstream main carries the guard the drop lacks (`fromEnd <= from`, plus `unsigned` locals), so it is
+   the **third source-level deviation** of `docs/95` §6's family — and `ENABLE(OPENTYPE_VERTICAL)` is
+   on only for GTK/WPE (`PlatformEnable.h:887`, `OptionsPlayStation.cmake` never sets it), so it is
+   **compiled out on PlayStation**. Limits in `docs/99` §6: the oracle's FreeType is the distro's
+   2.13.1, not Sony's; and the `vmtx` advance-height witness did not move layout — withdrawn, not
+   explained. Original text: `docs/98` established the enabling facts: `@font-face { src: url(f.ttf) }` over HTTP reaches
+   `FontCustomPlatformDataFreeType.cpp:144` (`FT_New_Memory_Face`) with `status=loaded` and metrics identical
+   to the `local()` face, and `grep -rn OpenTypeSanitizer Source/WebCore Source/WebKit` is **empty** in this
+   drop — there is no OpenType Sanitizer between page bytes and FreeType. Every audit this programme has run
+   is WebKit-side; this parser never has been. **Verify:** (a) one page that loads a corpus of mutated fonts
+   as `FontFace` objects and reports `status`/`loaded`/`measureText` per arm, so a *rejected* input is
+   distinguishable from a *crashing* one — table-directory runs (`numTables`, `tableLength` past the file),
+   `head`/`maxp`/`loca`/`cmap`/`glyf`/`hmtx` truncations at every boundary, `loca` disagreeing with
+   `maxp.numGlyphs`, `hmtx` shorter than `numberOfHMetrics`, and a bitmap face (CBDT/`sbix`/COLR) to reach
+   the non-outline paths; (b) the same corpus under the ASAN oracle, quarantine **off**, one arm per run
+   group, scored from `ERROR: AddressSanitizer`/`WTFCrash` frames in the log, with a beacon sent **before**
+   each load so an abort names its input; (c) a control arm with the unmodified font. A negative is a
+   result — write which families FreeType rejects cleanly. State the version boundary explicitly: the
+   oracle's FreeType is the distro's 2.13.1 (`freetype-2.13.1-2.fc39`), the console ships its own, so a
+   crash found here is a parser-surface result, not a console claim. Do **not** re-enter the console.
+1. ~~**Next: the last un-swept JS-visible byte source — font/glyph rasterisation.**~~ **DONE 2026-10-30 —
+   NEGATIVE, and the reason is structural and measured (`docs/98`).** 125 records per run, two processes,
+   63 rasterisation arms (9 font configurations × 7 strings), 12 knob arms, 11 odd widths, two SVG-text
+   arms, `toDataURL` PNG/JPEG and all 12 `TextMetrics` fields: **0 pointer-shaped words**, **125/125 records
+   byte-identical across ASLR**, `pn`/`jpeg` checksums identical. The detector had to be corrected first —
+   `docs/95`'s `b5/b6/b7` rule fires on premultiplied grey pixels (`68 68 68 68 00 00 00 00`), 76 of the
+   calibration run's 118 records; the sharp rule adds `b3=b4=0` and counts the rejected windows as `grey=`
+   (1678 over two runs). The reason, measured on one object: `premult_proof` writes the canonical word into
+   a canvas and reads back **eight zero bytes** — a 48-bit address has byte 3 = 0, so it can only sit in an
+   alpha-0 pixel where premultiplication zeroes it — while the same bytes through `Blob → arrayBuffer` are
+   seen (`raw_chain ptr=1`); the store is `tryFastCalloc` (`ImageBufferCairoImageSurfaceBackend.cpp:86-88`),
+   the readback copies `4u * width` densely (`ImageBufferBackend.cpp:113`, measured `odd1..odd509 solid=1`
+   with `nz = 4·W·3`), and cairo shows glyphs straight to the destination (`CairoOperations.cpp:311`) with no
+   WebKit-side glyph atlas. Controls: recycling canary `painted_ok=533/533 canary_found=0` over 64 fresh
+   surfaces, ghosting bit-exact at four odd sizes (`d0 red0`), 48-canvas churn `with_ptr=0`, ink census
+   80/80 arms painted (84..24329 px). `EXIT=124`, `access: none`, 26 maps samples per run. Page
+   `research/leak-sweep/glyph.html` (`bdbb38ac…`), runner `glyrun.sh` (`0a2a6050…`), logs
+   `data/glyph-raster/`. Original text: `docs/97` closed the inverted-bounds thread in both directions
+   (zero page-reachable writers, measured), so the write side of `docs/96` is no longer open. What
+   `docs/95` named as remaining is the text path: glyph rasterisation, `TextMetrics`, and canvas `fillText`
+   have never been scored with the leak detector. **Verify:** one page that renders through many font/glyph
+   configurations (`@font-face` with `local()`/`url()`, `unicodeRange` splits, `font-feature-settings`,
+   subpixel AA on/off, fractional sizes, `letterSpacing`), reads every JS-visible output back
+   (`getImageData`, `toDataURL` length, all `TextMetrics` fields), and is run **twice** in two processes and
+   scored against `/proc/<pid>/maps` with `research/leak-sweep/diff.py` and its positive control — a
+   ≥10-digit hex token that changes across ASLR and lands in a readable mapping is a disclosure; a stable one
+   is a constant and must be written as a negative. If it is negative, write that and treat the leak thread
+   as closed for this build. Do **not** re-enter the console.
+1. ~~**Next: audit the *write* direction of the same inversion — every consumer that writes into an
+   `ArrayBufferView`, and whether an out-of-bounds resizable view can reach one.**~~ **DONE 2026-10-30 —
+   ZERO page-reachable writers, and the reason is structural (`docs/97`).** Six functions produce a native
+   view and every one refuses `isResizableOrGrowableShared()` at the binding call site —
+   `JSArrayBufferView::toWrapped`/`toWrappedAllowShared` (`JSArrayBufferViewInlines.h:94-110`),
+   `JSGenericTypedArrayView::toWrapped*` (`JSGenericTypedArrayViewInlines.h:928-942`), and
+   `JSArrayBuffer::toWrapped*` (`JSArrayBuffer.h:86-98`, which gates the `ArrayBuffer` arm of every
+   `(ArrayBuffer or ArrayBufferView)` union, so `new FontFace('x', resizableAB)` never reaches
+   `FontFace.cpp:93` either). `possiblySharedImpl()` has 4 call sites, 3 inside a gated function, and the
+   fourth is `IDBKey.cpp:55` — the read of `docs/96`. The IDL census (36 statements, parsed, not grepped)
+   gives **7 write consumers**, of which exactly one exists here: `Crypto::getRandomValues`
+   (`Crypto.cpp:57`, bound `array.byteLength()`, cap 65536); WebGL's `readPixels`/`getBufferSubData`,
+   WebCodecs' `copyTo`, OPFS's `read` and WebGPU's `writeBuffer` are all measured absent
+   (`webgl=null`, `VideoFrame`/`FileSystemFileHandle`/`navigator.storage.getDirectory` undefined,
+   `navigator.gpu` undefined while `GPUQueue` is a function). `TextEncoder::encodeInto`
+   (`TextEncoder.cpp:49`, `U8_APPEND` bounded by `byteLength()`) is the typed-view spelling of the same
+   shape, also refused. Measured on one object, one process: `K` (key read, 8192 bytes, `at4128=7a7b…`) then
+   nine write spellings (`getRandomValues`, `set`, `fill`, `copyWithin`, `sort`, `v[i]=`, two DataView writes,
+   `encodeInto`, `XHR.send`) — all `TypeError` except the index write (silent drop, spec), and
+   then `RB` (**identical to `K`, byte for byte**) with `RBw` proving the witness sees a page write. Positive
+   control: the same eight spellings write on a non-resizable view (`65/66/65/68/69`, `written=8`,
+   `nz=8162`). Two-layer picture measured in arm `ok`: the JSC gate follows the **live** bounds
+   (`u[4128]=0x47`, `dv.setUint8` both work in bounds, refuse after the shrink) while the IDL converter
+   refuses **resizability** even in bounds. Two new facts recorded: the inverted test also returns 0 for an
+   in-bounds resizable view, so a `byteLength()`-bounded write fails *closed*; and `ArrayBuffer::resize()`
+   memsets the newly-visible range on grow (`ArrayBuffer.cpp:540`), which is why a grow-back is not a usable
+   readback witness. Audit `tools/abview-write-sweep.py` **23/23**; pages `caps16.html`
+   (`eb6f2c9a…`), `c16run.sh` (`b012a9b6…`); logs `data/abview-write/`. Original text: **Next: audit the
+   *write* direction of the same inversion — every consumer that writes into an `ArrayBufferView`, and
+   whether an out-of-bounds resizable view can reach one.** `docs/96` closed the read
+   direction from both sides: the bounded spellings copy out of the buffer's own zeroed reservation (16/16
+   all-zero, and the reservation is `reserveAndCommit`/`tryLargeZeroedMemalignVirtual` by construction) and
+   the unbounded one (`byteLength()` underflow → `READ of size 4294963216`) always dies before a byte reaches
+   JS. What has not been asked is whether the same inverted test can make the engine *write* out of bounds:
+   `ArrayBufferView::setImpl`/`setRangeImpl`/`zeroRangeImpl` (`ArrayBufferView.h:221-262`) bound their
+   `memmove`/`memset` with `byteLength()`, and the two `wrappedAs` producers are read-only, so the candidate
+   family is elsewhere: every WebCore *and* JSC site that takes a raw `JSArrayBufferView` (`jsDynamicCast`/
+   `jsCast`/`jsCast<JSGenericTypedArrayView<…>*>`) and writes through `vector()`+`length()` or
+   `data()`+`byteLength()` **without** `JSTypedArray::validateTypedArray`/`isOutOfBounds` — `crypto.getRandomValues`
+   is the obvious one to read first, then `WebAssembly`-gated and canvas paths. **Verify:** the sweep's count of
+   write consumers (0 is a result and must be written), then for the first candidate a page whose beacon is an
+   ASAN `WRITE of size N` at a buffer whose `byteLength` is smaller than N, with the same page and a
+   non-resizable control that writes only N. If the count is 0, say so and move to font/glyph rasterisation
+   (`docs/95`'s last un-swept JS-visible byte source). Do **not** re-enter the console.
+
+1. ~~**Next: reach `ArrayBufferView::byteOffset()/byteLength()` with an out-of-bounds resizable view — or
+   prove every constructor is gated.**~~ **DONE 2026-10-30 — reachable, through exactly one ungated producer,
+   and it is a JS-visible out-of-bounds read plus two crash spellings (`docs/96`).** The producer is
+   `IDBKey::createBinary(JSC::JSArrayBufferView&)` (`IDBKey.cpp:53-59`): it calls
+   `JSArrayBufferView::possiblySharedImpl()` → `wrappedAs()` (which deliberately skips `verifySubRangeLength`
+   for resizable buffers, `GenericTypedArrayViewInlines.h:111-112`) → `ThreadSafeDataBuffer::copyData(data(),
+   byteLength())` → `memcpy`. `IDBKeyRange.only(view)` needs no database and is synchronous, and the binary key
+   comes back to JS as an `ArrayBuffer` (`IDBBindingUtilities.cpp:161-172`). Measured (`caps15.html`
+   `60a9556b…`, quarantine off): `R1 jsBL=0 jsLen=0 off=0 bufBL=4112` → `R1 ok type=ArrayBuffer bl=8192`
+   with the whole pre-shrink `i^0x5a` pattern including `at4128=7a7b7879…` — an 8192-byte copy out of a
+   4112-byte buffer, returned to JS. The in-bounds arm is the same inversion from the other side:
+   `R0 jsBL=8192 → bl=0`. Controls on the *same object*: `structuredClone` → `DataCloneError`,
+   `new Blob([v])` → `TypeError`. Audit `tools/oobview-audit.py` 12/12: the gate exists only in
+   `toWrapped`/`toWrappedAllowShared` and in the serializer's call-site `isOutOfBounds()`
+   (`SerializedScriptValue.cpp:1377`); `possiblySharedImpl()` has exactly two WebCore callers. Two crash
+   spellings: a shrink that crosses a **64 KiB** boundary (`PageCount::pageSize`, `PageCount.h:111`; `resize`
+   mprotects `[roundUp64K(new), old)` PROT_NONE) → ASAN `SEGV` in `__memcpy_avx_unaligned_erms` ←
+   `ThreadSafeDataBuffer.h:52` ← `IDBKey.cpp:58` ← `IDBBindingUtilities.cpp:250` ← `IDBKeyRange.cpp:75` (a
+   shrink 8192→4096 does *not* fault, and still reads 8192 — measured); and the **auto-length underflow**
+   (`byteOffset > bufferByteLength` → `roundDownToMultipleOf(1, underflow)` truncated to `unsigned`) →
+   `READ of size 4294963216`. Every bounded byte is page-written or zero, so this is **not** a disclosure and
+   **not** criterion 3. Logs `data/oobview/`.
+   Original text: **Next: reach `ArrayBufferView::byteOffset()/byteLength()` with an out-of-bounds resizable
+   view — or prove every constructor is gated.** The drop's bounds test is inverted relative to upstream
+   (`docs/95` §6) and the only gate measured is `toWrapped`'s refusal of resizable buffers. Enumerate every
+   path that builds a `JSC::ArrayBufferView` for WebCore *without* that gate: callers of `wrappedAs()` and
+   `possiblySharedImpl()`, `DataView::wrappedAs` (`DataView.h:80`), `AudioBuffer.copyToChannel` /
+   `copyFromChannel` (typed, not a union), and any binding with `[AllowShared]`. For the first one that can
+   be handed an OOB view, call a consumer whose output is JS-visible (`Blob.arrayBuffer`,
+   `TextDecoder.decode`, `ImageData`'s `.data`, `AudioBuffer.copyFromChannel`) with a **fixed-length** view
+   (`new Uint8Array(ab, 0, N)`, not the length-tracking form) over a resizable buffer shrunk after the view
+   was made. **Verify:** a beacon of the form `oob size=4096 jsBL=0` — the consumer returns the view's raw
+   `lengthRaw()` while `view.byteLength` is 0 — and the same page with a non-resizable control returns 0.
+   Cap the requested length at one page (`resize` keeps the first page mapped, so a bounded read does not
+   fault); a `SEGV` at the page boundary is not a result and must be recorded as a crash. If every
+   constructor is gated, write that as the negative and move to font/glyph rasterisation, the last
+   un-swept JS-visible byte source in this build.
+
+1. ~~**Next: enumerate the family behind that abort — every page-reachable way to make message
+   deserialization fail, and which of them need a resizable ArrayBuffer.**~~ **DONE 2026-10-30 — the
+   family is six `RELEASE_ASSERT` sites, four of them abort from page script, and exactly one input
+   reaches any of them (`docs/90`).** `grep -rn hasPendingTerminationException` gives six sites that
+   follow a `MessageEvent::create` (`BroadcastChannel.cpp:256`, `LocalDOMWindow.cpp:947`,
+   `MessagePort.cpp:295`, `WorkerMessagingProxy.cpp:199` and `:245`, `ServiceWorkerContainer.cpp:472`),
+   not the two `docs/89` recorded. Measured, one mechanism per arm (`caps10.html`, md5
+   `daed8a5fc70ded2ca1a798dadcbc910e`): MessagePort **aborts** (3/3), `window.postMessage` **aborts** in
+   both IDL spellings (3/3 at `LocalDOMWindow.cpp:947`), worker → document **aborts**
+   (2/2 at `WorkerMessagingProxy.cpp:199`), document → worker **aborts** (`:245`, thread T9). The other
+   two do not, for measured reasons: a service worker's 0-byte transfer arrives **non-resizable**
+   (`mx=0` across the SW→client IPC versus `mx=192` for the same buffer over a MessagePort), so
+   `DataView::wrappedAs` returns nullptr and `toJS` yields `null` with no exception; and
+   `BroadcastChannel` has no transfer list, so the buffer is written in-line at the view's dump and the
+   DataView arrives intact. **The whole family needs a resizable ArrayBuffer** — the one throw is
+   `JSDataView::create` via the verifying `DataView::wrapImpl`, and every other fail path in the
+   deserializer is a clean `fail()` → `ValidationError` → `messageerror`. The two candidate second
+   members are measured negatives: `constructEmptyArray` cannot throw from a page payload (ArrayStorage
+   allocates a fixed vector, so 0x10000001 elements arrive, 22 s walk, and 0x10000000 behaves
+   identically), and the transfer-list rejections all throw at `postMessage` before a message exists.
+   The sharpest control: the same message through `structuredClone` is a catchable `TypeError("Unable to
+   deserialize data.")`, 3/3, no abort — the defect is the caller's error mode, not the input.
+1. ~~**Next: turn the disengaged optional into a chosen address — groom the 32-byte FastMalloc element so
+   `m_serializedBitmap` holds page bytes, then read the fault address out of ASAN.**~~ **DONE 2026-10-30 —
+   NEGATIVE, five schemes, and the arms settle more than they shape (`docs/93`).** Arm (a) is real and is
+   *not* the fill: with `max_malloc_fill_size=0` the payload is a deterministic recycled chunk, `+8` =
+   `0x00000000002b6280` in 4/4 runs, so the non-null pointer survives removing the fill and a release build
+   has *two* outcomes, not the one `docs/92` predicted. Arms (b)/(c) never land: 200 × 512-byte `StringImpl`s
+   + 900 k objects of churn, 64 CSS `@font-face` faces freed deterministically at `buildCompleted()` with a
+   12-character family (the measured class: `sizeof=32 cap=1`, `0x14+12`), the same at 512/1024/2048-byte
+   classes (all negative *before* the instrumented class was known), and zero-byte (`gch=Z`, where a landed
+   chunk **must** give the `ImageBitmapBacking.cpp:83` early return and a delivered message) and
+   `41 41 41 41 00 00 00 00` (`gch=X`) payloads — every arm crashed with `+8` unchanged, 5/5, and the zero
+   arm crashed 3/3. Three findings the next arm must design around: a `StringImpl` puts **no page byte** at
+   `+8` (that offset is `m_length`; characters start at `0x14`), the `Vector` is allocated in the
+   `takeAllMessagesForPort` **reply dispatch** after the IPC round trip (not in the getter's frame), and the
+   `WeakRef`-plus-churn witness is unusable as the free side — 200 targets survived 900,000 allocations in a
+   later job (`dead=0`, 3/3) because `JSWeakObjectRef::deref` write-barriers its target on every version
+   change (`JSWeakObjectRef.h:50-57`). Provenance: every run is on oracle file `b32d7b655…` (the 24-byte
+   print that no longer preempts the SEGV), `ninja` idle; page `caps11.html`
+   (`f2aa6befd12d18c8bf88a2618b60f876`), runner `c11run.sh` (`ba79609b93a142fc5fa24da8ccf7f55c`).
+   `docs/93` also records two dead family members `docs/90`'s table does not name, both measured on their own
+   channel: the **agent-cluster** comparison (Wasm tags) is dead because `WebAssembly` is `undefined` while
+   the `SharedWorker` port and a cross-origin `window.postMessage` both deliver, and the
+   **`isTypeExposedToGlobalObject`** membrane is unreachable because the `AudioContext` never leaves
+   `state=suspended` here and the console turns `ENABLE_WEB_AUDIO` off.
+1. ~~**Next: shape with an allocation whose byte 8 *is* page data, and put the free in the reply's job.**~~
+   **DONE 2026-10-30 — the sixth scheme lands, and the free belongs in the getter, not the reply: the element
+   reuses the buffer a `structuredClone()` frees at the end of its own call, so the field is page bytes and ASAN
+   names the address they encode (`docs/94`).** `StringImpl` was the wrong vehicle for two reasons this run
+   measured: `+8` is `m_data8` (`StringImpl.h:161-171`), so a freed `StringImpl` hands the element a *pointer*,
+   and a `Blob` body's free is GC-bound. The vehicle that works is the serializer's own output buffer: `arm=clone`
+   runs `structuredClone(<16-bit string>)` as the last statement of the getter, the stream is
+   `[version=13/4B][StringTag/1B][length|8bitFlag/4B][characters]`, and element `+8` reads stream bytes 8..15.
+   Measured, quarantine off, `max_malloc_fill_size=0`, every arm on the drop's file
+   (`4e3d9ea56468dfa59230d48cea4b5321`, lib relinked 10:23:06, `strings | grep -c "[IBT]"` = 0):
+   `'A','B',NUL…,U+0100` → `SEGV on unknown address 0x000042004100` (2/2); `'C','D'` →
+   `0x000044004300`; the 8-bit spelling → `0x000043424180` (the low byte is `StringDataIs8BitFlag`); all-NUL
+   characters → **no crash at all**, the message arrives as `ImageBitmap:w0h0` (`w=0 h=0`) — `docs/92` §4's
+   detached-bitmap branch, measured. Controls: a 3-unit string (stream 15 B → capacity 16, class 16) does not
+   take the slot (no address named), and the same 8-unit arm with the ASAN malloc fill on does not either, so the
+   value demonstrably comes from stale block content. This also settles the disputed point in `docs/93`: the
+   element is built in the **sender** (`ImageBitmap::detachBitmaps`, `SerializedScriptValue.cpp:5490`), because
+   it reuses a block freed inside the getter and not one freed by the reply's dispatch. Still a read-only,
+   non-JS-observable dereference — a DoS with a page-chosen address, and the field is 56 controlled bits
+   (`0x00 c0h c0l c1h c1l c2h c2l c3l`). Page `research/fuzz-cssom/caps14.html`
+   (md5 `5e6619afdace5c68d4f94aba1bae55a2`), runner `c14run.sh` (`fa5ee19c60c2c77793340c23a11f4575`), gdb probe
+   `c14gdb.sh` (`6abdc8e069e43e905bc3ab13dbc663a2`); logs `/tmp/S_c14_cl*.log`, `/tmp/G_gdb*.log`.
+   Original text: **shape with an allocation whose byte 8 *is* page data, and put the free in the reply's job.**
+   A 32-byte `SharedBuffer` body does what a `StringImpl` cannot: `new Blob([new Uint8Array(32)])` puts our bytes
+   at `+0`…`+31`, so `+8` can be `0x41…`, `+24` decides engagement and a zeroed payload produces the
+   `ImageBitmapBacking.cpp:83` early return and a delivered message. The free is the hard half: the blob body dies
+   with its wrapper, so the churn has to run in the job that *decodes the reply*.
+1. ~~**Next: give the page-chosen pointer something to point at — hunt one page-reachable heap-address disclosure.**~~
+   **DONE 2026-10-30 — negative on every surface the item named, and the sweep also found a second
+   source-level deviation (`docs/95`).** Two runs per part, 193 beacon records (180 probes), scored against
+   `/proc/<pid>/maps`: 183 byte-identical across ASLR after the URL port is normalised and the 10 that change
+   are clocks/UUIDs/`Math.random`, none in a mapping; no entry anywhere contains a ≥10-digit hex token
+   except the detector's own control. Readback surfaces are 15/15
+   `nz=0/64`; truncated/corrupt PNG/JPEG, SVG filters, `feTile`, canvas filters and bitmap resizes give no
+   pointer-shaped word (detector calibrated: `det_ctl pos=1` inside `0x610000000000`, `neg=0`).
+   `decodeAudioData` fails `EncodingError` on five WAVs. Side find: `ArrayBufferView::byteOffset()/
+   byteLength()` invert the bounds test (upstream has no `!`), but `toWrapped` refuses all resizable views,
+   so an OOB view never reaches them — measured, `TypeError: Underlying ArrayBuffer has been detached from
+   the view or out-of-bounds`. The item's premise stands: **no API in this build hands JS an address**, so
+   the disclosure has to come from a memory-safety bug. Superseded by the new item 1 above.
+   Original text: the slot now yields a virtual call (`buffer->sinkIntoImageBuffer()`, `ImageBuffer.cpp:119`) through a value the
+   page writes, so it crashes at whatever address the page names and nowhere else. Weaponising it needs one
+   address: a mapped object whose first 8 bytes the page also controls (a fake vtable), or a live
+   `SerializedImageBuffer` to re-sink (which would make `width()`/`height()` read from attacker-chosen memory —
+   a JS-observable read). Neither is reachable without a disclosure, and this programme has never hunted one
+   directly. Sweep the value-producing boundaries the audits only *assumed* clean, one arm each, scored on a
+   JS-visible number/string that equals an address measured in the same run and that **moves with ASLR** between
+   two runs: `structuredClone`/`postMessage` failure texts (`DataCloneError` messages quote property names),
+   `DOMException`/`Error().stack`, `ImageBitmap` crossing a worker (identity, `width` of a failed transfer),
+   `URL`/`performance`/`Intl` strings, and the `MessageEvent` `origin`/`source` fields. **Verify:** a beacon whose
+   value changes between two runs of the same page and matches a heap or library address printed by the same
+   build (the `[IBT]`-style instrument or the gdb probe); a value that is stable across ASLR is a constant, not a
+   leak, and must be recorded as a negative. Do **not** re-enter the console for this.
+1. ~~**Next: the split-dump shape — a native whose *length* is written at one point in the walk and whose
+   *bytes* are written at another, with a page getter running in between.**~~ **DONE 2026-10-30 — ImageBitmap's
+   derived length is closed by construction, and the one split that exists is the transfer's out-of-band
+   backing store, which crashes the WebProcess 9/9 over three transports (`docs/92`).** Both sides call the
+   *same* truncating `IntSize::scale` (`ImageBufferBackend.h:163-170` on the writer via
+   `getPixelBuffer` → `toBackendCoordinates`, `IntSize.h:95-104` on the reader), the reader then demands
+   `computeBufferSize(format, imageDataSize) == arrayBuffer->byteLength()` **exactly**
+   (`ByteArrayPixelBuffer.cpp:61-62`), and every page-reachable creator calls the 4-argument
+   `ImageBitmap::createImageBuffer` whose `resolutionScale` defaults to 1 (the only 5-argument call site in
+   the tree is the reader itself) — so arm (c) has no page-side input, and `OffscreenCanvas`/`WebCodecsVideoFrame`
+   are **measured absent** (`oc=undefined&vf=undefined`), so arm (d) is compiled out. The split that is real:
+   the transfer list is validated **before** the walk (`:5397-5399`), `dumpImageBitmap` writes the tag from
+   the transfer map **during** it (`:1486-1491`), and `ImageBitmap::detachBitmaps` takes the backing stores
+   **after** it (`:5481`) — so a getter that calls `close()` in between leaves a **disengaged**
+   `std::optional<ImageBitmapBacking>` at that index, and `readTransferredImageBitmap` calls
+   `m_backingStores.at(index)->connect(...)` (`:4034`) with no engagement check. `connect()`'s guard reads a
+   field of an object that was never constructed (`ImageBitmapBacking.cpp:83`); in the ASAN build that field
+   is the malloc fill, so the deref lands at `ImageBuffer.cpp:119` — `SEGV` on `0xbebebebebebebe`. Measured
+   9/9: MessagePort 5 (`ImageBitmapBacking.cpp:91` ← `Chrome::sinkIntoImageBuffer`), `window.postMessage` 2
+   (same), document→worker 2 (`:88` ← `WebWorkerClient::sinkIntoImageBuffer`, thread T9), with four controls
+   (no close → 8×8 bitmap arrives; getter closes a **different** bitmap → no crash; closed before the call →
+   `DataCloneError`; value-path close-before-dump → `DataCloneError`). The mechanism is corroborated by a
+   concurrent session's instrumentation, which printed the element: `sizeof=32 size=1 cap=1`, engagement flag
+   `0x00` at byte 24, `0xbe` everywhere else. DoS, not a primitive — the pointer is uninitialized memory, not
+   attacker bytes. Pages `research/fuzz-cssom/caps13.html` (md5 `e2f28fcf10136e73ce5d1923ccf4bc4d`), runner
+   `c13run.sh` (md5 `f72c516986aa678ded9832273137d6fa`), `c13rep.sh`; logs `data/imagebitmap-split/`.
+   Original text: `docs/89`-`docs/91` spent
+   three runs on the one instance they found (`ArrayBufferView`: view header at dump, buffer contents at
+   transfer) and it is now closed three ways (abort, OOB-but-clamped view, inert null). The shape
+   generalises, and the serializer has exactly one other page-reachable native whose length is
+   *derived* rather than carried: **`ImageBitmap`**, whose copy path dumps
+   `serializationState/logicalWidth/logicalHeight/resolutionScale/colorSpace` and then a pixel
+   `ArrayBuffer` (`dumpImageBitmap`, `SerializedScriptValue.cpp:1484-1534`, the writes at :1521-1533), while the reader re-derives
+   `imageDataSize = logicalSize.scale(resolutionScale)` and hands it to
+   `ByteArrayPixelBuffer::tryCreate` (`readImageBitmap`, `:4166-4202`). Read first, then one arm per
+   candidate, in this order: (a) `dumpImageBitmap`'s null-`buffer()` path — a getter that calls
+   `bitmap.close()` **before** the bitmap is dumped (expect a clean `DataCloneError`/`ValidationError`,
+   which is the control); (b) the same `close()` **after** the bitmap is dumped and before the transfer
+   detaches, over both transports (the SW path truncates, the port path does not — `docs/91` §3);
+   (c) a `resolutionScale` of 0/`Infinity`/`NaN` and a `logicalSize` at `IntSize` limits (the reader
+   scales an `IntSize` by a double — `tryCreate` is the only length check); (d) `WebCodecsVideoFrame`
+   and `OffscreenCanvas` only if their build flags are on, which must be **measured** in the same run,
+   not assumed (`docs/77`'s lesson).
+   **Verify:** a table of every `write(...)` pair in `dumpImageBitmap`/`readImageBitmap` and what each
+   side computes from it; then, for each arm, the beacon must name the *arrived* bitmap's
+   `width/height`/`close()`d-ness and the pixel buffer's length, and the run must be scored from
+   `EXIT` + an ASAN/`WTFCrash` frame, never from a beacon. A negative (every disagreement is caught by
+   `tryCreate`) is the expected outcome and must be written as such — the value of the action is the
+   *rule* ("which natives have a derived length, and which check it"), not a bug.
+   Do **not** re-enter the console for this.
+1. ~~**Next: stop auditing this generator and take the one structural shape `docs/90` opened — a wrapper
+   creation that returns null and leaves a pending exception, whose null result the engine then stores
+   and uses.**~~ **DONE 2026-10-30 — the null is stored, is reachable through the object pool, is
+   page-observable as an ordinary `null`, and is inert; this shape cannot reach a type confusion
+   (`docs/91`).** Audited: 20 `toJS`/`toJSNewlyCreated`/`wrap` call sites in
+   `SerializedScriptValue.cpp`, exactly one family unchecked (`readArrayBufferViewImpl`'s twelve
+   `wrappedAs` arms) and one more unchecked in principle (`cryptoKey = getJSValue(result.get())`,
+   `:3848`). The native can be null in only two ways and only `DataView` can throw, because
+   `DataView::wrapImpl` calls the **verifying** `JSDataView::create` while
+   `GenericTypedArrayView::wrapImpl` calls the **non-verifying** `create` overload
+   (`runtime/DataView.cpp:67` vs `GenericTypedArrayViewInlines.h:145`). Measured, 23 runs over 16 arms,
+   quarantine off: over `client.postMessage` a shrunk resizable buffer arrives **non-resizable**
+   (`sw12&posted=1&bl=0&mx=0`), so the same payload that **aborts** at `MessagePort.cpp:295` over a
+   `MessagePort` (3/3 + a final-build re-run) arrives as **`null`** (2/2 + re-run) — and a typed array
+   arrives as an empty out-of-bounds object over the port (`vb0 bb0`, write dropped) but as `null` over
+   the SW path. The null is **in the object pool**: with the view repeated four times (one dump + three
+   `ObjectReferenceTag`s) all four slots are `null` and `a===b`, `a===cc[0]`, `a===d`
+   (`F_POOLSW`: `a=tn1 … ab1&ac01&ad1`), `new Map([[a,1]]).size` is 1 and `JSON.stringify` renders
+   `null` — the only throw is the page's own `null.byteLength` `TypeError`. It is inert because the
+   deserializer's only typed consumer of a pooled value re-checks `inherits<JSArrayBuffer>()`
+   (`:3290-3293`, false for `jsNull()`), the other four `readTerminal()` sites are value positions, and
+   an out-of-bounds view is clamped by `viewByteLength` (`JSDataView.h:59-78`) and cannot be
+   re-serialized (`:1376`). Auto-length is a **clean `messageerror`** on that transport in both
+   directions (`:3311-3315` tests the arriving buffer's resizability), so the explicit-length spelling
+   is the only input that reaches the throw. CryptoKey measured on three key classes (extractable HMAC,
+   non-extractable HMAC, ECDSA P-256 pair): all arrive as real `CryptoKey`s, so that site has no
+   page-side null. Pages `research/fuzz-cssom/caps12.html` (md5
+   `1d19801f33e75f07000abbd045601e4f`), `sw12.js` (md5 `20e217ce9debe8ba27023cbd61430dbd`), runner
+   `c12run.sh` (md5 `1a8e167f746ca95796be9b8e9fb0c481`); logs `data/deser-null/`.
+   Original text: `readArrayBufferViewImpl` is exactly that shape: `toJS(..., wrappedAs(...))` returns
+   `jsNull()` while a `RangeError`/`TypeError` is pending, `readArrayBufferViewImpl` returns **true**,
+   the message is built and the process dies later in a `RELEASE_ASSERT` that was written for a
+   different case. The question for this action is not "how many callers assert" (done) but **how many
+   places in the deserializer — and in the DOM bindings it calls — can continue after a failed wrapper
+   creation**, and whether any of them can leave a slot that page script then observes as an object of
+   the wrong type (a null in an object pool, a `Blob` with a null body, a `Map` key that is null where
+   the payload says view). That is the only shape in this drop that could turn a fail-silent path into
+   a type confusion, which is what stage criterion 3 needs. Audit, then measure: for each site a
+   `mode=` arm on `caps10.html`'s pattern whose verification is that the *arrived* message's slot is
+   what the payload wrote (a beacon naming the slot's type and value), never that a beacon fired.
+   **Verify:** a table of `toJS`/`toJSNewlyCreated`/`wrap` call sites in `SerializedScriptValue.cpp`
+   whose result is not null-checked, each one read; then for every one that a page can reach, one arm
+   in which a *successful* message proves the null is stored (beacon the slot) and one where the slot is
+   then used by page script without a throw. Record the negative as carefully as the positive: if every
+   null is inert (as the `jsNull` view already is), say so and say why the search is finished.
+   Do **not** re-enter the console for this.
 1. ~~**Probe the one IDL on this build that really carries a transfer list —
    `Worker.postMessage(message, [buf])` — where `m_arrayBufferContentsArray` is actually read.**~~ **DONE
    2026-10-30 — the transfer is real, the walk provably runs before the detach, and the shrink that makes

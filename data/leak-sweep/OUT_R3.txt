@@ -1,0 +1,33 @@
+=== R3 port=12985 secs=30 q=
+--- beacons (in order):
+BOOT+raster
+det_ctl=pos=nz=4/16 ptr=1[@0=0x0000610000010540] neg=nz=4/16 ptr=0
+f_blur=nz=6912/16384 ptr=0
+fr_blur=nz=128/16384 ptr=0
+f_blur2=nz=6912/16384 ptr=0
+fr_blur2=nz=128/16384 ptr=0
+f_shadow=nz=6912/16384 ptr=0
+fr_shadow=nz=128/16384 ptr=0
+f_bright=nz=6912/16384 ptr=0
+fr_bright=nz=128/16384 ptr=0
+f_multi=nz=6912/16384 ptr=0
+fr_multi=nz=128/16384 ptr=0
+o_rs3=3x3 nz=27/65536 ptr=2[@6=0x000071800080aa5a,@1030=0x000071c80036aaa3]
+o_rs7=7x7 nz=147/65536 ptr=0
+o_rs128=128x128 nz=28812/65536 ptr=0
+o_crop=63x63 nz=7201/65536 ptr=0
+put_clip=nz=72/16384 ptr=0
+svg_tile=200x200 nz=3200/160000 ptr=0
+ac_type=function
+ac_state=suspended rate=44100
+au_full=FAIL EncodingError: Decoding failed
+au_t60=FAIL EncodingError: Decoding failed
+au_t95=FAIL EncodingError: Decoding failed
+au_f441=FAIL EncodingError: Decoding failed
+au_f441s=FAIL EncodingError: Decoding failed
+au_create=nz=0/4096 ptr=0
+DONE=sent=25
+--- maps samples: 21
+--- crash/abort:
+  access: none
+EXIT=124

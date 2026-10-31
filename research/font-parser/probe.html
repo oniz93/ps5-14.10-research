@@ -1,0 +1,24 @@
+<!doctype html><meta charset=utf-8><body style=margin:0>
+<div id=out></div><script>
+const log=m=>{new Image().src="/ev?m="+encodeURIComponent(m)};
+(async()=>{
+ for (const arm of ["ctl","VT-witness"]) {
+  const f=new FontFace("p_"+arm,"url(f/"+arm+".ttf)");
+  document.fonts.add(f);
+  await f.load().then(()=>{},()=>{});
+  for (const to of ["mixed","upright"]) {
+   for (const txt of ["AVAWA","\u4e2d\u6587\u5b57"]) {
+    const d=document.createElement("div");
+    d.style.cssText="position:absolute;left:-9999px;top:0;font-size:24px;font-family:\"p_"+arm+"\",monospace;writing-mode:vertical-rl;text-orientation:"+to+";";
+    d.textContent=txt; document.body.appendChild(d);
+    const h=d.offsetHeight,w=d.offsetWidth;
+    const r=document.createRange(); r.setStart(d.firstChild,0); r.setEnd(d.firstChild,1);
+    const rr=r.getBoundingClientRect();
+    log("P arm="+arm+" to="+to+" txt="+(txt.charCodeAt(0)>0x1000?"cjk":"lat")+" h="+h+" w="+w+" c0y="+rr.top.toFixed(1)+" c0h="+rr.height.toFixed(1)+" c0w="+rr.width.toFixed(1));
+    d.remove();
+   }
+  }
+ }
+ log("PDONE");
+})();
+</script>

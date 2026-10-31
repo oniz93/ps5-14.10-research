@@ -1,0 +1,119 @@
+BOOT+glyph
+det_ctl=pos=nz=4/16 ptr=1[@0=0x0000610000010540] neg=nz=4/16 ptr=0
+cap=letterSpacing=absent wordSpacing=absent fontKerning=absent fontStretch=absent fontVariantCaps=absent textRendering=absent direction=ltr font=10px sans-se filter=absent
+cap2=OffscreenCanvas=undefined Path2D=function FontFace=function fonts=yes measure=function
+tm_fields=n=12 width,actualBoundingBoxLeft,actualBoundingBoxRight,fontBoundingBoxAscent,fontBoundingBoxDescent,actualBoundingBoxAscent,actualBoundingBoxDescent,emHeightAscent,emHeightDescent,hangingBaseline,alphabeticBaseline,ideographicBaseline
+face_gA=st=loaded load=loaded chk=true
+face_gB=st=loaded load=loaded chk=true
+face_gC=st=loaded load=loaded chk=true
+face_gD=st=loaded load=loaded chk=true
+face_gE=st=error load=rejected:NetworkError chk=true
+face_gF=st=error load=rejected:NetworkError chk=true
+face_gG=st=error load=rejected:NetworkError chk=true
+w_gA=w=182.7188 ff=16px gA
+w_gB=w=161.0000 ff=16px gB
+w_gC=w=173.8400 ff=16px gC
+w_gD=w=182.7188 ff=16px gD
+w_gE=w=173.8400 ff=16px gE
+w_gF=w=173.8400 ff=16px gF
+w_gG=w=173.8400 ff=16px gG
+r0=ink[px=559/amax=248] all[nz=2236/30720 ptr=14[@18290=0x000075ffffffc8ff,@18770=0x000078ffffff82ff,@19250=0x000078ffffffdcff]] band[nz=2236/15360 ptr=14[@6770=0x000075ffffffc8ff,@7250=0x000078ffffff82ff,@7730=0x000078ffffffdcff]] marg[nz=84/2560 ptr=2[@1446=0x000070ffffffb9ff,@1606=0x00007dffffffc0ff
+r1=ink[px=372/amax=255] all[nz=1488/30720 ptr=10[@16394=0x00006bfffffffaff,@16858=0x000079ffffff86ff,@19266=0x00006efffffff0ff]] band[nz=1488/15360 ptr=10[@4874=0x00006bfffffffaff,@5338=0x000079ffffff86ff,@7746=0x00006efffffff0ff]] marg[nz=0/2560 ptr=0]
+r2=ink[px=118/amax=233] all[nz=472/30720 ptr=3[@19218=0x000078ffffffdcff,@19266=0x000065ffffffbaff,@19742=0x000069ffffffb2ff]] band[nz=472/15360 ptr=3[@7698=0x000078ffffffdcff,@7746=0x000065ffffffbaff,@8222=0x000069ffffffb2ff]] marg[nz=0/2560 ptr=0]
+r3=ink[px=361/amax=228] all[nz=1444/30720 ptr=4[@16474=0x00006cffffffccff,@17330=0x00007effffff57ff,@19314=0x00007cffffff9bff]] band[nz=1444/15360 ptr=4[@4954=0x00006cffffffccff,@5810=0x00007effffff57ff,@7794=0x00007cffffff9bff]] marg[nz=0/2560 ptr=0]
+r4=ink[px=114/amax=255] all[nz=456/30720 ptr=3[@17770=0x000070ffffff6bff,@19714=0x000068ffffffe3ff,@20666=0x00006bffffff50ff]] band[nz=456/15360 ptr=3[@6250=0x000070ffffff6bff,@8194=0x000068ffffffe3ff,@9146=0x00006bffffff50ff]] marg[nz=0/2560 ptr=0]
+r5=ink[px=89/amax=255] all[nz=356/30720 ptr=0] band[nz=356/15360 ptr=0] marg[nz=0/2560 ptr=0]
+r6=ink[px=183/amax=255] all[nz=729/30720 ptr=2[@17846=0x00006e17b9fcda17,@20246=0x00006414bafcff1e]] band[nz=729/15360 ptr=2[@6326=0x00006e17b9fcda17,@8726=0x00006414bafcff1e]] marg[nz=0/2560 ptr=0]
+r10=ink[px=671/amax=255] all[nz=2684/30720 ptr=17[@17498=0x000069ffffffdaff,@17858=0x000069ffffffccff,@18338=0x000068ffffffccff]] band[nz=2684/15360 ptr=17[@5978=0x000069ffffffdaff,@6338=0x000069ffffffccff,@6818=0x000068ffffffccff]] marg[nz=112/2560 ptr=2[@1602=0x000075ffffffecff,@1486=0x00007bffffffc8f
+r11=ink[px=599/amax=255] all[nz=2396/30720 ptr=13[@15434=0x000076ffffffe1ff,@16226=0x00007bffffffa0ff,@17218=0x000068ffffffeaff]] band[nz=2396/15360 ptr=13[@3914=0x000076ffffffe1ff,@4706=0x00007bffffffa0ff,@5698=0x000068ffffffeaff]] marg[nz=0/2560 ptr=0]
+r12=ink[px=181/amax=255] all[nz=724/30720 ptr=7[@16858=0x000062ffffffdcff,@18810=0x000065ffffffedff,@19258=0x000079ffffffadff]] band[nz=724/15360 ptr=7[@5338=0x000062ffffffdcff,@7290=0x000065ffffffedff,@7738=0x000079ffffffadff]] marg[nz=0/2560 ptr=0]
+r13=ink[px=563/amax=255] all[nz=2252/30720 ptr=21[@14426=0x00006bffffff9fff,@14906=0x00006bffffff9fff,@15490=0x000061ffffff77ff]] band[nz=2252/15360 ptr=21[@2906=0x00006bffffff9fff,@3386=0x00006bffffff9fff,@3970=0x000061ffffff77ff]] marg[nz=0/2560 ptr=0]
+r14=ink[px=177/amax=255] all[nz=708/30720 ptr=4[@17778=0x000077ffffffedff,@17866=0x000065fffffffbff,@18726=0x000072ffffffbaff]] band[nz=708/15360 ptr=4[@6258=0x000077ffffffedff,@6346=0x000065fffffffbff,@7206=0x000072ffffffbaff]] marg[nz=0/2560 ptr=0]
+r15=ink[px=134/amax=255] all[nz=536/30720 ptr=3[@19234=0x000062ffffffcfff,@16822=0x000060ffffffb4ff,@18742=0x000060fffffffeff]] band[nz=536/15360 ptr=3[@7714=0x000062ffffffcfff,@5302=0x000060ffffffb4ff,@7222=0x000060fffffffeff]] marg[nz=0/2560 ptr=0]
+r16=ink[px=314/amax=255] all[nz=1251/30720 ptr=5[@14986=0x0000642196dbfe24,@15410=0x00006d23a1f3fe2b,@17402=0x00006911b8fcfb1e]] band[nz=1251/15360 ptr=5[@3466=0x0000642196dbfe24,@3890=0x00006d23a1f3fe2b,@5882=0x00006911b8fcfb1e]] marg[nz=0/2560 ptr=0]
+r20=ink[px=781/amax=255] all[nz=3124/30720 ptr=33[@16122=0x000070fffffff8ff,@16602=0x000070fffffffdff,@17082=0x000070ffffffffff]] band[nz=3124/15360 ptr=33[@4602=0x000070fffffff8ff,@5082=0x000070fffffffdff,@5562=0x000070ffffffffff]] marg[nz=268/2560 ptr=0]
+r21=ink[px=689/amax=255] all[nz=2756/30720 ptr=16[@15386=0x000067ffffffffff,@15978=0x00006dffffffffff,@16970=0x000078ffffffe4ff]] band[nz=2756/15360 ptr=16[@3866=0x000067ffffffffff,@4458=0x00006dffffffffff,@5450=0x000078ffffffe4ff]] marg[nz=224/2560 ptr=2[@1514=0x000062ffffff0000,@1646=0x000068ffffffdff
+r22=ink[px=230/amax=255] all[nz=920/30720 ptr=3[@14466=0x00006cffffffffff,@15906=0x000079fffffff9ff,@18830=0x000076ffffffffff]] band[nz=920/15360 ptr=3[@2946=0x00006cffffffffff,@4386=0x000079fffffff9ff,@7310=0x000076ffffffffff]] marg[nz=0/2560 ptr=0]
+r23=ink[px=688/amax=255] all[nz=2752/30720 ptr=6[@14646=0x00007ffffffff5ff,@15126=0x00007fffffffafff,@15470=0x000062ffffffedff]] band[nz=2752/15360 ptr=6[@3126=0x00007ffffffff5ff,@3606=0x00007fffffffafff,@3950=0x000062ffffffedff]] marg[nz=0/2560 ptr=0]
+r24=ink[px=214/amax=255] all[nz=856/30720 ptr=3[@17886=0x00007dffffffffff,@18262=0x000078ffffffebff,@18862=0x00006efffffff7ff]] band[nz=856/15360 ptr=3[@6366=0x00007dffffffffff,@6742=0x000078ffffffebff,@7342=0x00006efffffff7ff]] marg[nz=0/2560 ptr=0]
+r25=ink[px=166/amax=255] all[nz=664/30720 ptr=7[@13994=0x000061fffffff3ff,@14474=0x000065ffffffd3ff,@15898=0x000074ffffffccff]] band[nz=664/15360 ptr=7[@2474=0x000061fffffff3ff,@2954=0x000065ffffffd3ff,@4378=0x000074ffffffccff]] marg[nz=0/2560 ptr=0]
+r26=ink[px=413/amax=255] all[nz=1644/30720 ptr=4[@15482=0x0000641e8ed6ff25,@18786=0x00006d0b95ecff22,@20218=0x00006c0e97f0f310]] band[nz=1644/15360 ptr=4[@3962=0x0000641e8ed6ff25,@7266=0x00006d0b95ecff22,@8698=0x00006c0e97f0f310]] marg[nz=0/2560 ptr=0]
+r30=ink[px=1152/amax=255] all[nz=4608/30720 ptr=24[@14570=0x000070fffffff2ff,@19626=0x00007affffffffff,@20154=0x000073ffffff95ff]] band[nz=4608/15360 ptr=24[@3050=0x000070fffffff2ff,@8106=0x00007affffffffff,@8634=0x000073ffffff95ff]] marg[nz=424/2560 ptr=1[@1674=0x000073ffffff95ff]]
+r31=ink[px=1130/amax=255] all[nz=4520/30720 ptr=36[@12802=0x000078ffffffffff,@13282=0x000078ffffffffff,@14514=0x000078ffffffffff]] band[nz=4520/15360 ptr=36[@1282=0x000078ffffffffff,@1762=0x000078ffffffffff,@2994=0x000078ffffffffff]] marg[nz=256/2560 ptr=0]
+r32=ink[px=463/amax=255] all[nz=1852/30720 ptr=2[@16002=0x00006cffffffffff,@16906=0x000076ffffffffff]] band[nz=1852/15360 ptr=2[@4482=0x00006cffffffffff,@5386=0x000076ffffffffff]] marg[nz=0/2560 ptr=0]
+r33=ink[px=1330/amax=255] all[nz=5320/30720 ptr=25[@13514=0x00006fffffffffff,@13602=0x000067ffffffffff,@13994=0x00006fffffffffff]] band[nz=5296/15360 ptr=25[@1994=0x00006fffffffffff,@2082=0x000067ffffffffff,@2474=0x00006fffffffffff]] marg[nz=0/2560 ptr=0]
+r34=ink[px=522/amax=255] all[nz=2088/30720 ptr=22[@12722=0x000060ffffffffff,@13202=0x000060ffffffffff,@13682=0x000060ffffffffff]] band[nz=2088/15360 ptr=22[@1202=0x000060ffffffffff,@1682=0x000060ffffffffff,@2162=0x000060ffffffffff]] marg[nz=0/2560 ptr=0]
+r35=ink[px=364/amax=255] all[nz=1456/30720 ptr=1[@17322=0x000060ffffffffff]] band[nz=1428/15360 ptr=1[@5802=0x000060ffffffffff]] marg[nz=0/2560 ptr=0]
+r36=ink[px=774/amax=255] all[nz=3079/30720 ptr=3[@12562=0x00007a23a3f4fd28,@13046=0x00007923a2f4ff28,@14494=0x0000721498efff28]] band[nz=3061/15360 ptr=3[@1042=0x00007a23a3f4fd28,@1526=0x00007923a2f4ff28,@2974=0x0000721498efff28]] marg[nz=0/2560 ptr=0]
+r40=ink[px=865/amax=255] all[nz=3460/30720 ptr=18[@14450=0x00007fffffffffff,@14970=0x000077fffffff3ff,@15346=0x000075fffffff5ff]] band[nz=3460/15360 ptr=18[@2930=0x00007fffffffffff,@3450=0x000077fffffff3ff,@3826=0x000075fffffff5ff]] marg[nz=280/2560 ptr=2[@1266=0x000075fffffff5ff,@1586=0x00007efffffffff
+r41=ink[px=846/amax=255] all[nz=3384/30720 ptr=17[@13434=0x000078ffffffffff,@15474=0x000068ffffffffff,@15506=0x000065ffffffffff]] band[nz=3384/15360 ptr=17[@1914=0x000078ffffffffff,@3954=0x000068ffffffffff,@3986=0x000065ffffffffff]] marg[nz=356/2560 ptr=2[@1114=0x000078ffffffffff,@1546=0x00006afffffffff
+r42=ink[px=297/amax=255] all[nz=1188/30720 ptr=6[@14914=0x000077fffffff3ff,@15010=0x000075fffffff5ff,@18802=0x00007cffffff3fff]] band[nz=1188/15360 ptr=6[@3394=0x000077fffffff3ff,@3490=0x000075fffffff5ff,@7282=0x00007cffffff3fff]] marg[nz=0/2560 ptr=0]
+r43=ink[px=914/amax=255] all[nz=3656/30720 ptr=15[@12530=0x00007afffffffbff,@14954=0x00006bfffffffcff,@14986=0x00006bffffffffff]] band[nz=3656/15360 ptr=15[@1010=0x00007afffffffbff,@3434=0x00006bfffffffcff,@3466=0x00006bffffffffff]] marg[nz=0/2560 ptr=0]
+r44=ink[px=306/amax=255] all[nz=1224/30720 ptr=9[@16042=0x000065ffffffffff,@13646=0x000065ffffffffff,@14582=0x00007fffffffffff]] band[nz=1224/15360 ptr=9[@4522=0x000065ffffffffff,@2126=0x000065ffffffffff,@3062=0x00007fffffffffff]] marg[nz=0/2560 ptr=0]
+r45=ink[px=244/amax=255] all[nz=976/30720 ptr=2[@18754=0x000066ffffffffff,@18294=0x00006efffffffeff]] band[nz=976/15360 ptr=2[@7234=0x000066ffffffffff,@6774=0x00006efffffffeff]] marg[nz=0/2560 ptr=0]
+r46=ink[px=605/amax=255] all[nz=2408/30720 ptr=6[@14562=0x00006f208cd5ff23,@15450=0x0000711297ecff29,@15930=0x00007f1098eeff29]] band[nz=2408/15360 ptr=6[@3042=0x00006f208cd5ff23,@3930=0x0000711297ecff29,@4410=0x00007f1098eeff29]] marg[nz=0/2560 ptr=0]
+r50=ink[px=561/amax=248] all[nz=2244/30720 ptr=5[@16594=0x00007cffffff0000,@18170=0x000078ffffffcbff,@17574=0x000071ffffff7bff]] band[nz=2244/15360 ptr=5[@5074=0x00007cffffff0000,@6650=0x000078ffffffcbff,@6054=0x000071ffffff7bff]] marg[nz=0/2560 ptr=0]
+r51=ink[px=377/amax=255] all[nz=1508/30720 ptr=10[@16618=0x000069ffffffd0ff,@17338=0x00006effffff81ff,@17778=0x00006fffffff96ff]] band[nz=1508/15360 ptr=10[@5098=0x000069ffffffd0ff,@5818=0x00006effffff81ff,@6258=0x00006fffffff96ff]] marg[nz=0/2560 ptr=0]
+r52=ink[px=114/amax=251] all[nz=456/30720 ptr=2[@16382=0x00007bffffff21ff,@19742=0x000060ffffffb2ff]] band[nz=456/15360 ptr=2[@4862=0x00007bffffff21ff,@8222=0x000060ffffffb2ff]] marg[nz=0/2560 ptr=0]
+r53=ink[px=361/amax=228] all[nz=1444/30720 ptr=4[@16474=0x00006cffffffccff,@17330=0x00007effffff57ff,@19314=0x00007cffffff9bff]] band[nz=1444/15360 ptr=4[@4954=0x00006cffffffccff,@5810=0x00007effffff57ff,@7794=0x00007cffffff9bff]] marg[nz=0/2560 ptr=0]
+r54=ink[px=114/amax=255] all[nz=456/30720 ptr=3[@17770=0x000070ffffff6bff,@19714=0x000068ffffffe3ff,@20666=0x00006bffffff50ff]] band[nz=456/15360 ptr=3[@6250=0x000070ffffff6bff,@8194=0x000068ffffffe3ff,@9146=0x00006bffffff50ff]] marg[nz=0/2560 ptr=0]
+r55=ink[px=89/amax=255] all[nz=356/30720 ptr=0] band[nz=356/15360 ptr=0] marg[nz=0/2560 ptr=0]
+r56=ink[px=183/amax=255] all[nz=729/30720 ptr=2[@17846=0x00006e17b9fcda17,@20246=0x00006414bafcff1e]] band[nz=729/15360 ptr=2[@6326=0x00006e17b9fcda17,@8726=0x00006414bafcff1e]] marg[nz=0/2560 ptr=0]
+r60=ink[px=745/amax=255] all[nz=2980/30720 ptr=21[@16186=0x00007effffffe0ff,@16218=0x000072fffffff2ff,@16658=0x000068ffffffffff]] band[nz=2980/15360 ptr=21[@4666=0x00007effffffe0ff,@4698=0x000072fffffff2ff,@5138=0x000068ffffffffff]] marg[nz=308/2560 ptr=0]
+r61=ink[px=665/amax=255] all[nz=2660/30720 ptr=28[@15834=0x000069ffffff0000,@15866=0x000066fffffff1ff,@15970=0x000077fffffff6ff]] band[nz=2660/15360 ptr=28[@4314=0x000069ffffff0000,@4346=0x000066fffffff1ff,@4450=0x000077fffffff6ff]] marg[nz=244/2560 ptr=1[@1246=0x00006cffffffedff]]
+r62=ink[px=208/amax=255] all[nz=832/30720 ptr=5[@14898=0x000068ffffffbbff,@15938=0x000072fffffff2ff,@17346=0x000068ffffffffff]] band[nz=832/15360 ptr=5[@3378=0x000068ffffffbbff,@4418=0x000072fffffff2ff,@5826=0x000068ffffffffff]] marg[nz=0/2560 ptr=0]
+r63=ink[px=691/amax=255] all[nz=2764/30720 ptr=18[@15002=0x000079ffffffebff,@15922=0x000071ffffffe3ff,@16554=0x000060fffffff3ff]] band[nz=2764/15360 ptr=18[@3482=0x000079ffffffebff,@4402=0x000071ffffffe3ff,@5034=0x000060fffffff3ff]] marg[nz=0/2560 ptr=0]
+r64=ink[px=222/amax=255] all[nz=888/30720 ptr=3[@17410=0x000066fffffffcff,@17302=0x000066fffffff3ff,@18766=0x000074ffffffffff]] band[nz=888/15360 ptr=3[@5890=0x000066fffffffcff,@5782=0x000066fffffff3ff,@7246=0x000074ffffffffff]] marg[nz=0/2560 ptr=0]
+r65=ink[px=160/amax=255] all[nz=640/30720 ptr=9[@19706=0x00006fffffff8aff,@15918=0x000064ffffffe8ff,@16398=0x000064ffffffe8ff]] band[nz=640/15360 ptr=9[@8186=0x00006fffffff8aff,@4398=0x000064ffffffe8ff,@4878=0x000064ffffffe8ff]] marg[nz=0/2560 ptr=0]
+r66=ink[px=436/amax=255] all[nz=1738/30720 ptr=5[@15426=0x00007b1d9ff2ff2b,@17426=0x00006811b7fcff1f,@19826=0x00006411b5fcff1f]] band[nz=1738/15360 ptr=5[@3906=0x00007b1d9ff2ff2b,@5906=0x00006811b7fcff1f,@8306=0x00006411b5fcff1f]] marg[nz=0/2560 ptr=0]
+r70=ink[px=668/amax=255] all[nz=2672/30720 ptr=23[@15394=0x000068fffffffcff,@15874=0x000068fffffffcff,@16354=0x000068fffffffcff]] band[nz=2672/15360 ptr=23[@3874=0x000068fffffffcff,@4354=0x000068fffffffcff,@4834=0x000068fffffffcff]] marg[nz=220/2560 ptr=1[@1650=0x00006fffffff84ff]]
+r71=ink[px=607/amax=255] all[nz=2428/30720 ptr=34[@15466=0x000064ffffffffff,@16258=0x00006cffffffbbff,@16290=0x000071fffffffaff]] band[nz=2428/15360 ptr=34[@3946=0x000064ffffffffff,@4738=0x00006cffffffbbff,@4770=0x000071fffffffaff]] marg[nz=128/2560 ptr=2[@1330=0x000071fffffffaff,@1410=0x00007bffffffe3f
+r72=ink[px=184/amax=255] all[nz=736/30720 ptr=8[@16898=0x00007dffffffe9ff,@17306=0x000074ffffffd0ff,@18282=0x000078ffffffecff]] band[nz=736/15360 ptr=8[@5378=0x00007dffffffe9ff,@5786=0x000074ffffffd0ff,@6762=0x000078ffffffecff]] marg[nz=0/2560 ptr=0]
+r73=ink[px=582/amax=255] all[nz=2328/30720 ptr=10[@15042=0x000065ffffffbfff,@15154=0x000065ffffffbfff,@15946=0x000074ffffffbfff]] band[nz=2328/15360 ptr=10[@3522=0x000065ffffffbfff,@3634=0x000065ffffffbfff,@4426=0x000074ffffffbfff]] marg[nz=0/2560 ptr=0]
+r74=ink[px=195/amax=255] all[nz=780/30720 ptr=1[@20242=0x000078fffffffeff]] band[nz=780/15360 ptr=1[@8722=0x000078fffffffeff]] marg[nz=0/2560 ptr=0]
+r75=ink[px=144/amax=255] all[nz=576/30720 ptr=8[@16390=0x000060ffffffc4ff,@16870=0x000060ffffffc4ff,@17350=0x000060ffffffd3ff]] band[nz=576/15360 ptr=8[@4870=0x000060ffffffc4ff,@5350=0x000060ffffffc4ff,@5830=0x000060ffffffd3ff]] marg[nz=0/2560 ptr=0]
+r76=ink[px=338/amax=255] all[nz=1346/30720 ptr=5[@14930=0x00007223a1f3f929,@19258=0x00006d0e98f0fe21,@15414=0x00007822a3f4ff2b]] band[nz=1346/15360 ptr=5[@3410=0x00007223a1f3f929,@7738=0x00006d0e98f0fe21,@3894=0x00007822a3f4ff2b]] marg[nz=0/2560 ptr=0]
+r80=ink[px=648/amax=255] all[nz=2592/30720 ptr=23[@16210=0x000072ffffff29ff,@16794=0x000075ffffffe0ff,@16954=0x000070ffffffb8ff]] band[nz=2592/15360 ptr=23[@4690=0x000072ffffff29ff,@5274=0x000075ffffffe0ff,@5434=0x000070ffffffb8ff]] marg[nz=244/2560 ptr=0]
+r81=ink[px=496/amax=255] all[nz=1984/30720 ptr=21[@15946=0x000077ffffffbeff,@16002=0x000071ffffffc4ff,@16098=0x000070ffffffb9ff]] band[nz=1984/15360 ptr=21[@4426=0x000077ffffffbeff,@4482=0x000071ffffffc4ff,@4578=0x000070ffffffb9ff]] marg[nz=0/2560 ptr=0]
+r82=ink[px=145/amax=254] all[nz=580/30720 ptr=5[@15854=0x00006affffff85ff,@17302=0x000067ffffffcbff,@17782=0x00007bffffffafff]] band[nz=580/15360 ptr=5[@4334=0x00006affffff85ff,@5782=0x000067ffffffcbff,@6262=0x00007bffffffafff]] marg[nz=0/2560 ptr=0]
+r83=ink[px=524/amax=255] all[nz=2096/30720 ptr=8[@15938=0x00007affffffbfff,@20258=0x000060ffffffe3ff,@15510=0x00006effffffbfff]] band[nz=2096/15360 ptr=8[@4418=0x00007affffffbfff,@8738=0x000060ffffffe3ff,@3990=0x00006effffffbfff]] marg[nz=0/2560 ptr=0]
+r84=ink[px=169/amax=255] all[nz=676/30720 ptr=6[@18258=0x000069ffffffd1ff,@18346=0x000067fffffffeff,@19250=0x000077ffffffe3ff]] band[nz=676/15360 ptr=6[@6738=0x000069ffffffd1ff,@6826=0x000067fffffffeff,@7730=0x000077ffffffe3ff]] marg[nz=0/2560 ptr=0]
+r85=ink[px=125/amax=255] all[nz=500/30720 ptr=0] band[nz=500/15360 ptr=0] marg[nz=0/2560 ptr=0]
+r86=ink[px=301/amax=255] all[nz=1190/30720 ptr=3[@20682=0x0000650c97efcd11,@15462=0x0000611f90d7ff28,@19254=0x0000610d98ecfd21]] band[nz=1190/15360 ptr=3[@9162=0x0000650c97efcd11,@3942=0x0000611f90d7ff28,@7734=0x0000610d98ecfd21]] marg[nz=0/2560 ptr=0]
+k_feat=ink[px=777/amax=255] nz=3108/40960 ptr=13[@18010=0x00007cffffffacff,@19050=0x000079ffffffffff,@19226=0x00007affffffffff]
+k_liga=ink[px=777/amax=255] nz=3108/40960 ptr=13[@18010=0x00007cffffffacff,@19050=0x000079ffffffffff,@19226=0x00007affffffffff]
+k_stretch=ink[px=777/amax=255] nz=3108/40960 ptr=13[@18010=0x00007cffffffacff,@19050=0x000079ffffffffff,@19226=0x00007affffffffff]
+k_track=ink[px=777/amax=255] nz=3108/40960 ptr=13[@18010=0x00007cffffffacff,@19050=0x000079ffffffffff,@19226=0x00007affffffffff]
+k_tr=ink[px=777/amax=255] nz=3108/40960 ptr=13[@18010=0x00007cffffffacff,@19050=0x000079ffffffffff,@19226=0x00007affffffffff]
+k_dir=ink[px=0/amax=0] nz=0/40960 ptr=0
+k_base=ink[px=777/amax=255] nz=3108/40960 ptr=13[@21210=0x00007cffffffacff,@22250=0x000079ffffffffff,@22426=0x00007affffffffff]
+k_scale=ink[px=759/amax=255] nz=3036/40960 ptr=18[@27610=0x00007cffffffacff,@27818=0x000075ffffff9cff,@27986=0x000079ffffff7fff]
+k_rotate=ink[px=176/amax=255] nz=704/40960 ptr=7[@4874=0x000078ffffffdfff,@4938=0x00006affffffe6ff,@6218=0x000061fffffff5ff]
+k_stroke=ink[px=1535/amax=255] nz=6140/40960 ptr=22[@18010=0x00007cffffffacff,@18538=0x000063ffffffd1ff,@19178=0x000063ffffff51ff]
+k_shadow=ink[px=2851/amax=255] nz=9330/40960 ptr=0
+k_smooth=ink[px=615/amax=255] nz=2460/40960 ptr=13[@19274=0x000077ffffff8aff,@19554=0x000078ffffffbdff,@19938=0x000069fffffff4ff]
+big_run=chars=4096 px=2582/amax=255 nz=10328/196608 ptr=82[@46746=0x000060ffffff60ff,@47002=0x00007affffff93ff,@48186=0x000061ffffff0bff]
+huge_size=px=24329/amax=255 nz=97316/524288 ptr=86[@66418=0x000073ffffffffff,@78338=0x000071ffffffffff,@82794=0x000071ffffffffff]
+tiny_size=px=84/amax=44 nz=336/65536 ptr=0
+odd1=w=1 solid=1 nz=12/12 ptr=0
+odd2=w=2 solid=1 nz=24/24 ptr=0
+odd3=w=3 solid=1 nz=36/36 ptr=0
+odd5=w=5 solid=1 nz=60/60 ptr=0
+odd7=w=7 solid=1 nz=84/84 ptr=0
+odd13=w=13 solid=1 nz=156/156 ptr=0
+odd33=w=33 solid=1 nz=396/396 ptr=0
+odd37=w=37 solid=1 nz=444/444 ptr=0
+odd101=w=101 solid=1 nz=1212/1212 ptr=0
+odd257=w=257 solid=1 nz=3084/3084 ptr=0
+odd509=w=509 solid=1 nz=6108/6108 ptr=0
+clip_rect=len=6400 w=40 nz=504/6400 ptr=3[@5202=0x00007fffffffcaff,@5006=0x000062ffffffe6ff,@5838=0x000071ffffffe7ff]
+corner1=nz=0/4 ptr=0
+svg_text=nat=160x64 ink[px=1220/amax=255] nz=4602/40960 ptr=51[@17618=0x000061ffffffb2ff,@18074=0x000060ffffffffff,@18714=0x000060ffffffffff]
+dom_rect=w=1008.000 h=15.000 rects=1008.000 rw=283.013
+dom_tm=9px gA:w75.319/a7.00/d1.00/fa8.00 13.37px gA:w107.018/a11.00/d2.00/fa12.00 16px gB:w117.156/a12.00/d1.00/fa14.00 16px gC:w121.920/a12.00/d1.00/fa19.00 14px gD:w114.830/a11.00/d2.00/fa13.00
+png=len=2042 h=110399503498536e head=data:image/png;base64,
+jpeg=len=3471 h=acb89e6c70766cd2 head=data:image/jpeg;base64
+ghost=33x17:d0 red0 37x19:d0 red0 101x23:d0 red0 257x29:d0 red0
+canary=painted_ok=533/533 fresh=32 nz_bytes=3424 canary_found=0
+churn=n=48 painted=48 with_ptr=48
+DONE=sent=117
