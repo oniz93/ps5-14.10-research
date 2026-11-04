@@ -5,6 +5,15 @@ the platform starts and how its software is put together.
 
 **This repository is a status page. It publishes no research content.**
 
+## Where the work stands
+
+The programme runs from the platform's boot path, through the browser engine, to the system
+software underneath it. [`STATUS.md`](STATUS.md) tracks a stage for each part of that arc, so
+the page says where attention currently is without saying what has been achieved.
+
+States record research activity, not capability. No stage here is an announcement that
+something works — that would be the very thing this repository exists to avoid publishing.
+
 ## What is here
 
 | File | What it is |
