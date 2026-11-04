@@ -9,7 +9,7 @@ Private notebook; this page carries phase-level status only.
 | 1 | Boot-chain and container-format documentation | complete |
 | 2 | Read-only inspection tooling | complete |
 | 3 | Browser-engine memory-safety study | in progress |
-| 4 | Console validation | not started |
+| 4 | Console validation | in progress |
 
 Notes, measurements, and tooling stay in the private notebook. Nothing here is derived from them in a form that could be reproduced.
 
