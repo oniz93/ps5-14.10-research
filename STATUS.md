@@ -1,6 +1,6 @@
 # Status
 
-**Last updated:** 2026-11-03
+**Last updated:** 2026-11-05
 
 Private notebook; this page carries phase-level status only.
 
@@ -21,7 +21,7 @@ The programme runs from the platform's boot path, through the browser engine, to
 | 2 | Read-only inspection tooling | complete |
 | 3 | Browser-engine memory safety | in progress |
 | 4 | Process isolation on the target | not started |
-| 5 | System software behaviour | not started |
+| 5 | System software behaviour | in progress |
 
 Notes, measurements, and tooling stay in the private notebook. Nothing here is derived from them in a form that could be reproduced.
 

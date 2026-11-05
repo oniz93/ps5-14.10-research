@@ -3,6 +3,10 @@
 Phase-level changes to this page only. The private notebook has its own history and is not
 mirrored.
 
+## 2026-11-05
+
+- The system-software stage moved to in progress. No other change, and no new content.
+
 ## 2026-11-03
 
 - Added a stage view of the research arc to [`STATUS.md`](STATUS.md), from boot path through the
