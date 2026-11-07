@@ -14,6 +14,19 @@ the page says where attention currently is without saying what has been achieved
 States record research activity, not capability. No stage here is an announcement that
 something works — that would be the very thing this repository exists to avoid publishing.
 
+| Stage | Research area | State |
+|---|---|---|
+| 1 | Boot-chain and container format | complete |
+| 2 | Read-only inspection tooling | complete |
+| 3 | Browser-engine memory safety | in progress |
+| 4 | Process isolation on the target | not started |
+| 5 | System software behaviour | in progress |
+| 6 | Component survey (read-only) | in progress |
+
+This is the same table [`STATUS.md`](STATUS.md) carries, repeated here so the current state
+can be read and parsed without opening a second file. Where the two ever disagree,
+[`STATUS.md`](STATUS.md) is the rendered one.
+
 ## What is here
 
 | File | What it is |
