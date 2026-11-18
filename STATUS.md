@@ -11,14 +11,18 @@ system software underneath it. Three of its six stages are open at once, and the
 gravity has moved: the last update was cataloguing, this one is testing. No stage here is an
 announcement that something works.
 
-| Stage | Research area | State | Current attention |
-|---|---|---|---|
-| 1 | Boot-chain and container format | complete | — |
-| 2 | Read-only inspection tooling | complete | — |
-| 3 | Browser-engine memory safety | in progress | steady; one line paused on an environment constraint |
-| 4 | Process isolation on the target | not started | gated behind stage 3 |
-| 5 | System software behaviour | in progress | the bulk of current work |
-| 6 | Component survey (read-only) | in progress | widening, slowly |
+| Stage | Status |
+|---|---|
+| 1. Boot-chain and container format | complete |
+| 2. Read-only inspection tooling | complete |
+| 3. Browser-engine memory safety | in progress |
+| 4. Process isolation on the target | not started |
+| 5. System software behaviour | in progress |
+| 6. Component survey (read-only) | in progress |
+
+Where attention is, in the same order: stage 5 carries the bulk of the work, stage 6 keeps
+widening its catalogue, stage 3 is steady with one line paused on an environment
+constraint, and stage 4 stays shut until stage 3 opens it.
 
 **What moved since 6 November.** Stage 5 turned from reading the system software into
 testing it: questions are now settled by measuring the retail console rather than by argument,

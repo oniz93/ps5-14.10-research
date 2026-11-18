@@ -13,6 +13,9 @@ mirrored.
   changed state, and no new content was published.
 - Retired the older five-row table, which duplicated the stage view under different labels. One
   view, one vocabulary.
+- Stage table reduced to two columns, stage and status. The extra columns made a mechanical
+  reader take the stage number as the name and the research area as the status, so the whole
+  view read as six untouched stages.
 
 ## 2026-11-06
 
